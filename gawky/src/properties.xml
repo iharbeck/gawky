@@ -7,7 +7,7 @@
   	<v>9</v>
   	<l>/work/gawky/log/logfile</l>
   	<M>10</M>
-  	<keystore>/work/madlib/etc/keystore</keystore>
+  	<keystore>/work/gawky/etc/keystore</keystore>
   	<storepass>password</storepass>
   	<keypass>password</keypass>
   

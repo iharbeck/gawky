@@ -26,7 +26,7 @@ public class ContextLoaderListener implements ServletContextListener {
 		try {
 			Option.init();
 		} catch (Exception e) {
-			arg0.getServletContext().log("Init madlib failed", e);
+			arg0.getServletContext().log("Init gawky failed", e);
 		}
 	}
 
