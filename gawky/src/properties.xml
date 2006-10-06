@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<config>
+
+  	<p>31680</p>
+  	<host>localhost</host>
+  	<v>9</v>
+  	<l>/work/gawky/log/logfile</l>
+  	<M>10</M>
+  	<keystore>/work/madlib/etc/keystore</keystore>
+  	<storepass>password</storepass>
+  	<keypass>password</keypass>
+  
+  	<base>
+   		<hello>world</hello>
+  	</base>
+  
+	<db>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<url>jdbc:mysql://localhost/test</url>
+		<user>root</user> 
+		<password>root</password>
+	</db>
+
+	<mail>
+		<user>mailuser</user>
+		<password>mailpass</password>
+		<server>amx1.bertelsmann.de</server>
+  		<from></from>
+  		<fromalias></fromalias>
+  		<subject></subject>
+	</mail>
+
+</config>

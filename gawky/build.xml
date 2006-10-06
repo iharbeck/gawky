@@ -1,0 +1,90 @@
+<project name="strutter" default="jar" basedir=".">
+
+	<property name="name" value="gawky" />
+	<property name="version" value="-0.1.5" />
+	
+	<property name="bin" value="bin" />     
+	<property name="src" value="src" />     
+	<property name="base" value="." />     
+	
+	
+	<target name="jar">
+		 <delete>
+		 	<fileset dir="bin" includes="${name}-?.?.*.jar"/>
+			<fileset dir="bin" includes="${name}-servicecrm-?.?.*.jar"/>
+			<fileset dir="bin" includes="${name}-serviceoliva-?.?.*.jar"/>
+			<fileset dir="bin" includes="${name}-servicefias-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-message-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-database-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-mail-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-web-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-global-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-comm-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-file-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-net-?.?.*.jar"/>
+		 </delete>
+         <jar destfile="bin/${name}${version}.jar">
+         	<fileset dir="${bin}" >
+         	</fileset>
+         	<fileset dir="${src}" >
+         	</fileset>
+         </jar>
+         <jar destfile="bin/${name}-servicecrm${version}.jar">
+         	<fileset dir="${bin}" >
+         		<include name="gawky/service/crm/**"/>
+         	</fileset>
+         </jar>
+		<jar destfile="bin/${name}-serviceoliva${version}.jar">
+         	<fileset dir="${bin}" >
+         		<include name="gawky/service/oliva/**"/>
+         	</fileset>
+         </jar>
+		<jar destfile="bin/${name}-servicefias${version}.jar">
+		         	<fileset dir="${bin}" >
+		         		<include name="gawky/service/fias/**"/>
+		         	</fileset>
+		         </jar>
+		<jar destfile="bin/${name}-message${version}.jar">
+         	<fileset dir="${bin}" >
+         		<include name="gawky/message/**"/>
+         	</fileset>
+        </jar>
+		<jar destfile="bin/${name}-database${version}.jar">
+         	<fileset dir="${bin}" >
+         		<include name="gawky/database/**"/>
+         	</fileset>
+        </jar>
+		<jar destfile="bin/${name}-mail${version}.jar">
+         	<fileset dir="${bin}" >
+         		<include name="gawky/mail/**"/>
+         	</fileset>
+        </jar>
+		<jar destfile="bin/${name}-web${version}.jar">
+         	<fileset dir="${bin}" >
+         		<include name="gawky/web/**"/>
+         	</fileset>
+        </jar>
+		<jar destfile="bin/${name}-global${version}.jar">
+	     	<fileset dir="${bin}" >
+	     		<include name="gawky/global/**"/>
+	     	</fileset>
+	    </jar>
+		<jar destfile="bin/${name}-comm${version}.jar">
+	     	<fileset dir="${bin}" >
+	     		<include name="gawky/comm/**"/>
+	     	</fileset>
+	    </jar>
+		<jar destfile="bin/${name}-file${version}.jar">
+	     	<fileset dir="${bin}" >
+	     		<include name="gawky/file/**"/>
+	     	</fileset>
+		</jar>
+		<jar destfile="bin/${name}-net${version}.jar">
+	     	<fileset dir="${bin}" >
+	     		<include name="gawky/file/**"/>
+	     	</fileset>
+		</jar>	
+	</target>
+	
+	
+</project>

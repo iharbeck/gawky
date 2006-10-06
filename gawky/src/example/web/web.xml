@@ -1,0 +1,9 @@
+/**
+ * Add to web.xml Initialisiert Option parameter
+ *
+ *  <listener>
+ *     <listener-class>gawky.web.ContextLoaderListener</listener-class>
+ *  </listener>
+ * 
+ *
+ */
