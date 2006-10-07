@@ -1,6 +1,5 @@
 package example.message.filereader;
 
-
 import gawky.file.CancelException;
 import gawky.file.LineHandler;
 import gawky.file.LineReader;
@@ -8,7 +7,6 @@ import gawky.file.Locator;
 import gawky.message.parser.ParserException;
 
 import org.apache.log4j.Logger;
-
 
 public class TestAddressReader implements LineHandler 
 {
@@ -18,7 +16,6 @@ public class TestAddressReader implements LineHandler
 	{
 		try {
 			Address address = new Address();
-		
 			address.parse(line);
 			
 			// do something
