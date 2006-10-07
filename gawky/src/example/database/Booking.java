@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 
 
 /**
- * @author harb05
+ * @author Ingo Harbeck
  *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments

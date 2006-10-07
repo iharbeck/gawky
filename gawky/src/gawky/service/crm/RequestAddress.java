@@ -15,7 +15,7 @@ import gawky.message.part.Reserved;
 
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class RequestAddress extends Part 
 {

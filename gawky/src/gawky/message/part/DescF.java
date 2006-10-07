@@ -4,7 +4,7 @@ package gawky.message.part;
 /**
  * Fixed length Part
  * 
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 public class DescF extends Desc 

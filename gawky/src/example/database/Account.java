@@ -17,7 +17,7 @@ import java.util.Date;
 
 
 /**
- * @author harb05
+ * @author Ingo Harbeck
  * Objectlayer for Database access.
  */
 

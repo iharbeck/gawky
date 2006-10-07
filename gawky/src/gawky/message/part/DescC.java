@@ -3,7 +3,7 @@ package gawky.message.part;
 /**
  * Constant Part
  * 
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 public class DescC extends Desc {

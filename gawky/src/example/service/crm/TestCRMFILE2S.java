@@ -7,26 +7,26 @@
 package example.service.crm;
 
 import gawky.comm.Client;
+import gawky.file.CancelException;
 import gawky.file.LineHandler;
 import gawky.file.LineReader;
 import gawky.global.Constant;
 import gawky.service.crm.Response;
 
+import org.apache.log4j.Logger;
+
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class TestCRMFILE2S implements LineHandler {
     
-    /** Creates a new instance of go */
-    
-	static long start;
+	static final Logger log = Logger.getLogger(TestCRMFILE2S.class);
+
 	static Client client;
 	
     public static void main(String[] args) throws Exception
     {
-       start = System.currentTimeMillis();
-       
        String file = "d:/ss_settlements20060825.ss1";
        
        // Plainsocket
@@ -37,23 +37,25 @@ public class TestCRMFILE2S implements LineHandler {
        System.exit(0);
     }
 
-	public void processLine(String line) throws Exception {
+	public void processLine(String line) throws CancelException 
+	{
+		log.info( line );
 
 		if(!line.startsWith("HEAD"))
     		return;
 
-		System.out.println( line );
-		
-        String tmp = client.sendRequestPlain(line, Constant.ENCODE_ISO, 5000); 
-        
-        System.out.println(System.currentTimeMillis() - start);
-
-        System.out.println("response: " + tmp);
-       
-        Response response = new Response(tmp);
-
-        System.out.println("returncode: " + response.getReturn_code());
-        System.out.println("reasoncode: " + response.getReason_code());
+		try 
+		{
+	        String tmp = client.sendRequestPlain(line, Constant.ENCODE_ISO, 5000); 
+	        log.info("response: " + tmp);
+	       
+	        Response response = new Response(tmp);
+	
+	        log.info("returncode: " + response.getReturn_code());
+	        log.info("reasoncode: " + response.getReason_code());
+		} 
+		catch (Exception e) {
+		}
 	}
     
 }

@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 public class Parser 

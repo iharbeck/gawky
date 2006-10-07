@@ -1,12 +1,7 @@
 package gawky.service.oliva;
 
 /**
- * Überschrift: OLIVAData<p>
- * Beschreibung: String generator and Parser for Oliva requests<p>
- * Copyright: Copyright (c) 2001<p>
- * Organisation: Bertelsmann Mediasystems<p>
  * @author Ingo Harbeck
- * @version 1.0
  */
 
 import gawky.message.Formatter;

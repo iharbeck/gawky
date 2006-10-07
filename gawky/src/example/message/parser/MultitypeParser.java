@@ -9,7 +9,7 @@ import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
 /**
- * @author HARB05
+ * @author Ingo Harbeck
  */
 
 public class MultitypeParser 

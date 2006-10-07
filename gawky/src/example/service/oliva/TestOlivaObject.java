@@ -15,7 +15,7 @@ import gawky.service.oliva.Response10;
 
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class TestOlivaObject {
     

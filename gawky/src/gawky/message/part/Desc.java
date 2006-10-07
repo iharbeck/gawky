@@ -3,7 +3,7 @@ package gawky.message.part;
 /**
  * Generic Part
  * 
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 public class Desc 

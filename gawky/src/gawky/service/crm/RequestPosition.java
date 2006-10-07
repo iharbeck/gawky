@@ -14,7 +14,7 @@ import gawky.message.part.Part;
 
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class RequestPosition extends Part 
 {

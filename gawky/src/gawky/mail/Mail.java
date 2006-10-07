@@ -215,7 +215,7 @@ public class Mail
  * 
  * Datasource Wrapper for attachment handling
  * 
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 class ByteArrayDataSource implements DataSource

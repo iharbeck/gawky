@@ -7,7 +7,7 @@
 package gawky.service.crm;
 
 
-import gawky.message.parser.Parser;
+import gawky.message.parser.ParserException;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
@@ -19,7 +19,7 @@ import java.util.Date;
 
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class Response extends Part {
   
@@ -64,13 +64,10 @@ public class Response extends Part {
 			new DescF(Desc.FMT_A, Desc.CODE_O, 100,"redirect_url")
 		}; 
 	}
-
-
 	
-	public Response(String str) throws Exception
+	public Response(String str) throws ParserException
     {
- 	   Parser parser = new Parser();
-	   parser.parse(str, this);		
+ 	   super(str);		
     }
 	
     private String record_length                    = "";

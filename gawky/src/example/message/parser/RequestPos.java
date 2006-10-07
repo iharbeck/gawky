@@ -11,7 +11,7 @@ import gawky.message.part.DescC;
 import gawky.message.part.Part;
 
 /**
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 public class RequestPos extends Part {

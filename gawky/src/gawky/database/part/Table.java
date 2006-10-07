@@ -3,6 +3,7 @@ package gawky.database.part;
 
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
+import gawky.message.parser.ParserException;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -12,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
-
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
  * 
  * TODO: find  nach id
  * 		 query mit  custom where
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 
@@ -45,6 +45,15 @@ public abstract class Table extends Part
 	
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
+	
+
+	public Table() {
+    }
+
+	public Table(String str) throws ParserException
+    {
+ 	   super(str);		
+    }
 	
 	public void setDescID(int idindex, IDGenerator idgenerator) {
 		this.idindex = idindex;

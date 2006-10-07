@@ -15,7 +15,7 @@ import javax.servlet.ServletContextListener;
  *     <listener-class>gawky.web.ContextLoaderListener</listener-class>
  *  </listener>
  * 
- * @author HARB05
+ * @author Ingo Harbeck
  *
  */
 

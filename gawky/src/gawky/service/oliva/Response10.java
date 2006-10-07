@@ -1,16 +1,10 @@
 package gawky.service.oliva;
 
 /**
- * Überschrift: OLIVAData<p>
- * Beschreibung: String generator and Parser for Oliva requests<p>
- * Copyright: Copyright (c) 2001<p>
- * Organisation: Bertelsmann Mediasystems<p>
  * @author Ingo Harbeck
- * @version 1.0
  */
 
 
-import gawky.message.parser.Parser;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
@@ -20,7 +14,6 @@ import gawky.message.part.Reserved;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 
 /**
@@ -59,28 +52,25 @@ public class Response10 extends Part
 	
 	public Response10(String str) throws Exception
     {
- 	   Parser parser = new Parser();
-	   parser.parse(str, this);		
+ 	   super(str);		
     }
 	
-	
-	
-  // Response
-  private String record_length;
-  private String return_code;
-  private String reason_code;
-  private String details;
-  private String transaction_id;
-  private String sequence_number;
-  private String return_field_1;
-  private String return_field_2;
-  private String return_text1;
-  private String return_text2;
-  private String message;
-  private String client_id;
-  private String sub_code;
-	
-  public Date   date = null;
+	// Response
+	private String record_length;
+	private String return_code;
+	private String reason_code;
+	private String details;
+	private String transaction_id;
+	private String sequence_number;
+	private String return_field_1;
+	private String return_field_2;
+	private String return_text1;
+	private String return_text2;
+	private String message;
+	private String client_id;
+	private String sub_code;
+		
+	public Date   date = null;
 
   
   

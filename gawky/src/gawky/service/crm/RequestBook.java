@@ -12,7 +12,7 @@ import gawky.message.part.DescF;
 import gawky.message.part.Part;
 
 /**
- * @author harb05
+ * @author Ingo Harbeck
  *
  */
 public class RequestBook extends Part

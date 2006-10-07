@@ -1,4 +1,4 @@
-package example.message.Xilereader;
+package example.message.filereader;
 
 import gawky.message.part.Desc;
 import gawky.message.part.DescF;

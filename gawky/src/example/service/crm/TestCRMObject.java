@@ -24,7 +24,7 @@ import java.net.Socket;
 
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class TestCRMObject {
     

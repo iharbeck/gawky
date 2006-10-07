@@ -3,6 +3,7 @@ package gawky.message.part;
 
 import gawky.message.generator.Generator;
 import gawky.message.parser.Parser;
+import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 
 public abstract class Part 
 {
+	Parser parser = new Parser();
+
 	static HashMap hs = new HashMap(); 
 	
 	abstract public Desc[] getDesc();
@@ -43,16 +46,26 @@ public abstract class Part
 		return toString().getBytes();
 	}
 	
-	public Part parse(String str) throws Exception
+	
+	public Part parse(String str) throws ParserException
 	{
-		Parser parser = new Parser();
 		parser.parse(str, this);
 		return this;
 	}
 	
-	public Part parse(Parser parser, String str) throws Exception
+	public Part parse(Parser parser, String str) throws ParserException
 	{
 		parser.parse(parser.getNext(), this);
 		return this;
 	}
+	
+	public Part(String str) throws ParserException
+    {
+	   parser.parse(str, this);		
+    }
+	
+	public Part() 
+    {
+    }
+
 }

@@ -13,6 +13,7 @@ public class LineReader {
 		try {   
 		    while((line = is.readLine()) != null)
 		    	handler.processLine(line);
+		} catch (CancelException e) {
 	    } finally {
 	    	is.close();
 	    }

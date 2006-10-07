@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class RequestPayment extends Part 
 {

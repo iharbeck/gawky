@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author  harb05
+ * @author  Ingo Harbeck
  */
 public class Request {
     
