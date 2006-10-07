@@ -1,86 +1,127 @@
 package gawky.net;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
+import org.apache.log4j.Logger;
 
-public class FTPFactory {
-
-	String REMOTE_DIR_SOURCE = "";
-	String REMOTE_DIR_ARCHIV = "";
-	
-	String LOCAL_DIR = "";
-
+public class FTPFactory 
+{
+	private static Logger log = Logger.getLogger(FTPFactory.class);
 	
 	FTPClient ftp = null;
+	String localdir;
 	
 	public FTPFactory(String server, String user, String pass) throws Exception 
 	{
+		log.info("Login to FTP: " + server);
 		ftp = new FTPClient();
 
 		//Connect to FTP Server
 		ftp.connect(server);
 		ftp.login(user, pass);
 		
-		System.out.println(ftp.getStatus());
+		checkReply("FTP server refused connection." + server);
+
+		modeBINARY();
 	}
 
 	public void close() throws Exception
 	{
 		ftp.logout();
 		ftp.disconnect();
+		log.info("FTP Connection closed");
 	}
 
-	public void list() throws Exception
+	public void retrieveFiles() throws Exception
 	{
-		ftp.setFileTransferMode(FTP.ASCII_FILE_TYPE);
-
+		retrieveFiles(null);
+	}
+	
+	public String[] retrieveFiles(String filefilter) throws Exception
+	{
 		FTPFile ftpFileList [] = null;
 	
-		ftpFileList = ftp.listFiles("/public_html/*.jsp");
+		ftpFileList = ftp.listFiles();
 
+		ArrayList files = new ArrayList();
+		
 		for(int i=0; i < ftpFileList.length; i++)
 		{
-			String file = ftpFileList[i].getName();
-			System.out.println(file);
+			if(!ftpFileList[i].isFile() || (filefilter != null &&
+			   !ftpFileList[i].getName().matches(".*\\" + filefilter)))
+				continue;
 			
-			FileOutputStream fos = new FileOutputStream("c:/dd/" + file); 
+			String file = ftpFileList[i].getName();
+		
+			files.add(file);
+			log.info("downloading: " + file);
+			
+			FileOutputStream fos = new FileOutputStream(localdir + file); 
 			
 			ftp.retrieveFile(file, fos);
 		}
+		
+		return (String[])files.toArray(new String[files.size()]);
+	}
+
+	public void renameRemoteFile(String src, String dest) throws Exception
+	{
+		ftp.rename(src, dest);
+
+		checkReply("rename failed:" + src);
 	}
 	
-	public static void main(String[] args) throws Exception {
-		
-		
-		/***
-		 *  sendFile();
-		 *  
-		 *  retrieveFile();
-		 *  retrieveFiles();
-		 *  
-		 *  moveFile(); (rename)
-		 *  
-		 */
-		
-		FTPFactory f = new FTPFactory("ftp.brillenmacher.com", "user768", "yrrpejqu");
-		
+	public final void checkReply(String info) throws Exception {
+		if(!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+	        log.error(info);
+	        throw new Exception(info);
+		}
+	}
 	
-		f.list();
-//		
-//		String file = "c:/work/" + ftpFileList[0].getName();
-//		
-//		FileOutputStream fos = new FileOutputStream( file ); 
-//
-//		ftp.setFileTransferMode(FTP.ASCII_FILE_TYPE);
-//		ftp.retrieveFile( ftpFileList[0].getName(), fos );
-//		
-//		ftp.rename("", "");
-//		
-//		ftp.deleteFile(ftpFileList[0].getName());
+	public void sendLocalFile(String src) throws Exception
+	{
+		String tmp_prefix = ".temp";
+		File f = new File(src);
+		FileInputStream is = new FileInputStream(src);
+		ftp.storeFile(f.getName() + tmp_prefix, is);
+
+		renameRemoteFile(f.getName() + tmp_prefix, f.getName());
+		is.close();
+
+		checkReply("send failed: " + f.getName());
+	}
+	
+	public void changeRemoteDir(String path) throws Exception {
+		ftp.changeWorkingDirectory(path);
 		
-		f.close();
+		checkReply("set remote dir failed: " + path);
+	}
+
+	public void changeLocalDir(String path) throws Exception {
+		localdir = path;
+		
+		if(!localdir.endsWith("/"))
+			localdir += "/";
+	}
+	
+	public void modeASCII() throws Exception {
+		ftp.setFileTransferMode(FTP.ASCII_FILE_TYPE);
+	}
+
+	public void modeBINARY() throws Exception {
+		ftp.setFileTransferMode(FTP.BINARY_FILE_TYPE);
+	}
+	
+	public void deleteRemoteFile(String path) throws Exception {
+		ftp.deleteFile(path);
+		
+		checkReply("delete failed: " + path);
 	}
 }

@@ -75,6 +75,11 @@ public class Parser
 					if(desc.len > 0 && desc.code != Desc.CODE_O)
 						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
 					
+					// Optionale Felder mit zu kurzem Wert gefüllt !!!
+					log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
+
+					value = str.substring(start);
+					storeValue(bean, i, desc, value);
 					return;
 				}
 				value = str.substring(start, start+desc.len);
@@ -162,18 +167,21 @@ public class Parser
 					break;
 			}
 			
-			try {
-				log.info("value " + i + " : " + desc.name + " <" + value + ">");
-				if(desc.format != Desc.FMT_CONSTANT)
-					PropertyUtils.setSimpleProperty(bean, desc.name, value);
-			} catch (Exception e) {	 
-				throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
-			}
+		    storeValue(bean, i, desc, value);
 		}		
 		
 		return;
 	}
 	 
+	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException {
+		try {
+			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
+			if(desc.format != Desc.FMT_CONSTANT)
+				PropertyUtils.setSimpleProperty(bean, desc.name, value);
+		} catch (Exception e) {	 
+			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
+		}
+	}
 	 
 	final boolean fmt_ascii(String value) {
 		return true; //value.matches("[\\w\\söäüÖÄÜß]*"); 
