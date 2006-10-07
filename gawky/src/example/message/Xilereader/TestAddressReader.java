@@ -1,4 +1,4 @@
-package example.message.Filereader;
+package example.message.Xilereader;
 
 
 import gawky.file.LineHandler;
