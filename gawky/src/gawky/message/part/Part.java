@@ -19,8 +19,11 @@ public abstract class Part
 	abstract public Desc[] getDesc();
 
 	// Cache Desc Arrays
-	public final Desc[] _getDesc() 
+	public final Desc[] getCachedDesc() 
 	{
+		if(this instanceof NotCacheable)
+			return getDesc();
+		
 		String key = this.getClass().getName();
 		Desc[] desc = (Desc[])hs.get(key); 
 		if(desc == null) {

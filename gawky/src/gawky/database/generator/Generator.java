@@ -52,7 +52,7 @@ public class Generator
 	
 	public String generateInsertSQL(Table bean)
 	{
-		Desc   descs[] = bean._getDesc();
+		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
 		String sql  = "INSERT into " + bean.getTableName() + " ( " + customcolumns;
@@ -89,10 +89,45 @@ public class Generator
 		return sql;
 	}
 	
+	public String generateCreateSQL(Table bean)
+	{
+		Desc   descs[] = bean.getCachedDesc();
+		Desc   desc;
+		
+		String sql  = "CREATE TABLE " + bean.getTableName() + " ( ";
+		
+		for(int i = 0; i < descs.length; i++)
+		{
+			desc = descs[i];
+		
+			if(desc.dbname == null) 
+				continue;
+
+			if(desc == bean.getDescID()) // ID Element überspringen
+				continue;
+			
+			sql    += desc.dbname;  // column name
+			sql    += " varchar(" + desc.len + ")";
+			
+			if(i < descs.length-1) { // beim letzten ohne Komma
+				sql    += ",";
+			} else if(bean.getDescID() != null) { // ID definiert
+			    sql    += "," + bean.getDescID().dbname;
+			    //params += "," + bean.getIdgenerator().getSequence(); // generate Methode einfügen
+			} 
+		}
+		
+		sql += " ) ";
+		
+		log.debug(sql);
+		
+		return sql;
+	}
+	
 	// NEW
 	public String generateFindSQL(Table bean)
 	{
-		Desc   descs[] = bean._getDesc();
+		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
 		String sql  = "SELECT ";
@@ -142,7 +177,7 @@ public class Generator
 	// NEW
 	public String generateUpdateSQL(Table bean)
 	{
-		Desc   descs[] = bean._getDesc();
+		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
 		String sql  = "UPDATE " + bean.getTableName() + " SET ";
@@ -176,7 +211,7 @@ public class Generator
 	
 	public void fillPreparedStatement(PreparedStatement stmt, Table bean)
 	{
-		Desc   descs[] = bean._getDesc();
+		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
 		int setter = 0;

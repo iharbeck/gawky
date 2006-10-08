@@ -28,4 +28,6 @@ public class Address extends Part {
 	public void setVorname(String vorname) {
 		this.vorname = vorname;
 	}
+	
+
 }

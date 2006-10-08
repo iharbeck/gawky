@@ -19,7 +19,7 @@ public class Generator
 			return "";
 		
 		String str = "";
-		Desc   descs[] = bean._getDesc();
+		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
 		try 

@@ -4,7 +4,7 @@ import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.Part;
 
-public class SamplePart extends Part {
+public class SamplePart extends Part /* implements NotCacheable */ {
 
 	// Record definition
 	public Desc[] getDesc() {
@@ -14,8 +14,8 @@ public class SamplePart extends Part {
 			new Desc(Desc.FMT_A,      Desc.CODE_F, 10, "feld2"),
 			new Desc(Desc.FMT_A,      Desc.CODE_F, 10, "feld3"),
 			new Desc(Desc.FMT_BINARY, Desc.CODE_F, 4,  "feld4"),
-			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "feld5", Desc.END),
-			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "feld6", Desc.END),
+			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "feld5", "TOT"),
+			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "feld6", "DDS"),
 			new Desc(Desc.FMT_A,      Desc.CODE_O, 8,  "feld7")
 		};
 	}

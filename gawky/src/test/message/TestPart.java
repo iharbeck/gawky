@@ -11,8 +11,8 @@ public class TestPart extends TestCase {
 	    			 "1234567890" +
 	    			 "1234567890" +
 	    			 "1010" + 
-	    			 "abc" + '\001' + 
-	    			 "abc" + '\001' +
+	    			 "abc" + "TOT" + 
+	    			 "abc" + "DDS" +
 	    			 "alpha";
 	    
 	    SamplePart samplepart = new SamplePart();

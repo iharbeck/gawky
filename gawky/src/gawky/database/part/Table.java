@@ -63,7 +63,7 @@ public abstract class Table extends Part
 	public Desc getDescID() {
 		if(idindex == -1)
 			return null;
-		return _getDesc()[idindex];
+		return getCachedDesc()[idindex];
 	}
 	
 	

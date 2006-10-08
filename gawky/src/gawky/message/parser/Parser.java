@@ -47,7 +47,7 @@ public class Parser
 		// store for splitting records 
 		line = str;
 		
-		Desc   descs[] = ((Part)bean)._getDesc();
+		Desc   descs[] = ((Part)bean).getCachedDesc();
 		Desc   desc;
 		String value = "";
 		
@@ -106,7 +106,8 @@ public class Parser
 				else
 					value = str.substring(start);
 				
-				start = end+1;
+				//start = end+1;
+				start = end + desc.delimiter.length();  // Multicharacter delimiter
 
 				position = start;
 
