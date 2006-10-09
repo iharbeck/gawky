@@ -5,7 +5,7 @@ public class IDGenerator {
 	String seq = null;
 	
 	public IDGenerator() {
-		this.seq = "?";
+		this.seq = "";
 	}
 	public IDGenerator(String seq) {
 		this.seq = seq;
@@ -14,4 +14,11 @@ public class IDGenerator {
 		return seq;
 	}
 	
+	public long getGeneratedID() {
+		
+		// ORACLE -> 
+		// MYSQL  ->
+		// manuel -> referenz
+		return 0;
+	}
 }

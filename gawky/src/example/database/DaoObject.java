@@ -10,16 +10,15 @@ import gawky.message.part.DescV;
 
 import java.sql.Connection;
 
-
-
 public class DaoObject extends Table {
 
 	//Record definition
 	public Desc[] getDesc() {
 		
-		// set ID
-		  setDescID(0, new IDGenerator("?")); // Manual set ID
-		//setDescID(0, new IDGenerator("mymy.nextval"));  // ORACLE
+		// ### SET ID ###
+		// setDescID(0, null); // Manual set ID
+		setDescID(0, new IDGenerator(null)); // MYSQL auto column
+		// setDescID(0, new IDGenerator("mymy.nextval"));  // ORACLE
 		
 		return new Desc[]  {
 			new DescV("kunde_id"),

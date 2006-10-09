@@ -21,10 +21,9 @@ import org.apache.log4j.Logger;
 /**
  * Persistence Layer for Part based Objects
  * 
- * Insert / Update
+ * Insert / Update / Delete / Find
  * 
- * TODO: find  nach id
- * 		 query mit  custom where
+ * TODO: query mit  custom where
  * @author Ingo Harbeck
  *
  */

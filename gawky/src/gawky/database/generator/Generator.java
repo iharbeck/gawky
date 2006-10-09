@@ -65,7 +65,7 @@ public class Generator
 			if(desc.dbname == null)
 				continue;
 
-			if(desc == bean.getDescID()) // ID Element überspringen
+			if(desc == bean.getDescID() && bean.getIdgenerator() != null) // ID Element überspringen
 				continue;
 			
 			sql    += desc.dbname;  // column name
@@ -74,7 +74,12 @@ public class Generator
 			if(i < descs.length-1) { // beim letzten ohne Komma
 				sql    += ",";
 				params += ",";
-			} else if(bean.getDescID() != null) { // ID definiert
+			} else if(bean.getDescID() != null && bean.getIdgenerator() != null && bean.getIdgenerator().getSequence() != null) { 
+				// ID definiert
+				
+				// ## bean.getIdgenerator() == null 			 --> manual id
+				// ## bean.getIdgenerator().getSequence == null  --> autocolumn
+				
 			    sql    += "," + bean.getDescID().dbname;
 			    params += "," + bean.getIdgenerator().getSequence(); // generate Methode einfügen
 			} 
@@ -89,6 +94,10 @@ public class Generator
 		return sql;
 	}
 	
+	
+	/**
+	 * 		TODO
+	 */
 	public String generateCreateSQL(Table bean)
 	{
 		Desc   descs[] = bean.getCachedDesc();
@@ -124,7 +133,6 @@ public class Generator
 		return sql;
 	}
 	
-	// NEW
 	public String generateFindSQL(Table bean)
 	{
 		Desc   descs[] = bean.getCachedDesc();
@@ -160,7 +168,6 @@ public class Generator
 		
 	}
 	
-	// NEW
 	public String generateDeleteSQL(Table bean)
 	{
 		String sql  = "DELETE FROM " + bean.getTableName();

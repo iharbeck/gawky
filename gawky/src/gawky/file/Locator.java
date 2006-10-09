@@ -4,7 +4,11 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class Locator {
-
+	
+	public static final String findBinROOT() {
+		return findPath("");
+	}
+	
 	public static final String findPath(String filename) {
 		return findPath("/" + filename, Locator.class);
 	}
