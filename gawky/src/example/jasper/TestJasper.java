@@ -11,10 +11,10 @@ public class TestJasper
 	
 		bean.setOwner("Meiermann");
 		
-		bean.pos.add(new Sample("user1"));
-		bean.pos.add(new Sample("user2"));
-		bean.pos.add(new Sample("user3"));
-		bean.pos.add(new Sample("user4"));
+		bean.getPos().add(new Sample("user1"));
+		bean.getPos().add(new Sample("user2"));
+		bean.getPos().add(new Sample("user3"));
+		bean.getPos().add(new Sample("user4"));
 
 		// Datasource erstellen
 		JRBeanUtilDataSource ds = new JRBeanUtilDataSource(bean, bean.pos.size());
