@@ -1,6 +1,8 @@
 package gawky.jasper;
 
 
+import gawky.file.Locator;
+
 import java.util.HashMap;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -36,4 +38,18 @@ public class PDFGenerator {
 		JasperExportManager.exportReportToPdfFile(jasperPrint, outputFileName);
 	}
 
+	
+	public static void main(String[] args) throws Exception 
+	{
+		// Reporttemplate
+		String path = Locator.findPath("") +  "../report/";
+
+		String jasperFileName = path + "test.jasper";  // alternativ :jrxml wird automatisch von "PDFGenerator" compiliert
+		String outputFileName = path + "test.pdf"; 
+		
+		
+		PDFGenerator.generateFile(null, 10, jasperFileName, outputFileName);
+		
+		System.out.println("done!");
+	}
 }
