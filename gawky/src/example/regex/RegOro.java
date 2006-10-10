@@ -1,4 +1,4 @@
-package example;
+package example.regex;
 
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.MatchResult;
