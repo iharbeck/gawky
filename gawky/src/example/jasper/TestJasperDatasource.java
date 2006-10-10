@@ -2,7 +2,7 @@ package example.jasper;
 
 import gawky.jasper.JRBeanUtilDataSource;
 
-public class TestJasper 
+public class TestJasperDatasource 
 {
 	public static void main(String[] args) throws Exception {
 
