@@ -1,5 +1,11 @@
 package gawky.database.generator;
 
+
+import java.sql.Connection;
+
+import gawky.database.DB;
+import gawky.database.part.Table;
+
 public class IDGenerator {
 
 	String seq = null;
@@ -14,11 +20,26 @@ public class IDGenerator {
 		return seq;
 	}
 	
-	public long getGeneratedID() {
+	public String getGeneratedID(Connection conn, Table table) throws Exception{
+			
+		//manuel -> referenz
 		
+		if(table.getDialect() == null)
+			throw new Exception();
+
 		// ORACLE -> 
 		// MYSQL  ->
-		// manuel -> referenz
-		return 0;
+		
+		return DB.getString(conn, table.getDialect().getLastIDQuery(seq));
+	}
+	
+	public final static IDGenerator ID_SEQUENCE(String seq_name)
+	{
+		return new IDGenerator(seq_name);
+	}
+	
+	public final static IDGenerator ID_AUTO()
+	{
+		return new IDGenerator(null);
 	}
 }

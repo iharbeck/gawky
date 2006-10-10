@@ -1,6 +1,8 @@
 package gawky.database.part;
 
 
+import gawky.database.dialect.Dialect;
+import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
 import gawky.message.parser.ParserException;
@@ -45,6 +47,7 @@ public abstract class Table extends Part
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
 	
+	Dialect dialect = new MySQL();
 
 	public Table() {
     }
@@ -53,6 +56,11 @@ public abstract class Table extends Part
     {
  	   super(str);		
     }
+	
+	public void setDescID(int idindex) {
+		this.idindex = idindex;
+		this.idgenerator = null;
+	}
 	
 	public void setDescID(int idindex, IDGenerator idgenerator) {
 		this.idindex = idindex;
@@ -149,6 +157,17 @@ public abstract class Table extends Part
 		fillPreparedStatement(stmt);
 		
 		stmt.execute();
+		
+		try {
+			// versuche to generierte ID zu ermitteln und im Object abzulegen
+			PropertyUtils.setSimpleProperty(
+					this, 
+					this.getDescID().name, 
+					getIdgenerator().getGeneratedID(conn, this)
+			);
+		} catch (Exception e) {
+			//log.error(e);
+		}
 	}
 
 	public void find(Connection conn, long id) throws Exception 
@@ -217,5 +236,11 @@ public abstract class Table extends Part
 	
 	public IDGenerator getIdgenerator() {
 		return idgenerator;
+	}
+	public Dialect getDialect() {
+		return dialect;
+	}
+	public void setDialect(Dialect dialect) {
+		this.dialect = dialect;
 	}
 }

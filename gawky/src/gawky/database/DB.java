@@ -89,6 +89,28 @@ public class DB
 		return (String)val;
 	}
 	
+    
+    /**
+     * get Long
+     */
+    
+	public static String getString(Connection conn, String sql) throws Exception
+	{
+		ResultSet rset = null;
+		PreparedStatement stmt_select = null;
+		
+		try {
+			stmt_select = conn.prepareStatement(sql);
+			rset 	    = stmt_select.executeQuery();
+
+			rset.next();
+			return rset.getString(1);
+		} finally {
+			doClose(stmt_select); 
+			doClose(rset);
+		}
+	}
+    
     /**
      * Row als Hashtable
      */

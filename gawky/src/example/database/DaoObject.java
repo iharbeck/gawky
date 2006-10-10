@@ -2,6 +2,7 @@ package example.database;
 
 
 import gawky.database.DB;
+import gawky.database.dialect.MySQL;
 import gawky.database.generator.IDGenerator;
 import gawky.database.part.Table;
 import gawky.global.Option;
@@ -16,9 +17,12 @@ public class DaoObject extends Table {
 	public Desc[] getDesc() {
 		
 		// ### SET ID ###
-		// setDescID(0, null); // Manual set ID
-		setDescID(0, new IDGenerator(null)); // MYSQL auto column
-		// setDescID(0, new IDGenerator("mymy.nextval"));  // ORACLE
+		
+		// setDescID(0); // Manual set ID
+		setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
+		setDescID(0, IDGenerator.ID_AUTO());                    // MYSQL auto column
+		
+		setDialect(new MySQL());
 		
 		return new Desc[]  {
 			new DescV("kunde_id"),
@@ -37,15 +41,16 @@ public class DaoObject extends Table {
 		
 		DaoObject daoobject = new DaoObject();
 		
-		daoobject.find(conn, 16);
-		daoobject.find(conn, 16);
-		daoobject.find(conn, 16);
+		daoobject.setName("HELO");
+		daoobject.insert(conn);
+		
+		daoobject.find(conn, 30);
 		
 		try {
-			daoobject.delete(conn);
+			//daoobject.delete(conn);
 		} catch (Exception e) {}
 		
-		daoobject.setKunde_id("16");
+		//daoobject.setKunde_id("16");
 		daoobject.setName("INGO");
 		daoobject.insert(conn);
 		
