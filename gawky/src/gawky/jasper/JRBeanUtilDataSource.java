@@ -5,9 +5,12 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 
 public class JRBeanUtilDataSource implements JRDataSource
 {
+	static final Logger log = Logger.getLogger(JRBeanUtilDataSource.class);
+	
 	Object data;
 
 	int rows = 0;
@@ -24,6 +27,7 @@ public class JRBeanUtilDataSource implements JRDataSource
 			path = path.replaceAll("\\[x\\]", "[" + (row) + "]");
 			return BeanUtils.getProperty(bean, path);
 		} catch (Exception e) {
+			log.info(e);
 			return "$$" + path + "$$";
 		} 
 	}
