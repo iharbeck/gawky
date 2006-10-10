@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -28,7 +29,6 @@ import javax.mail.internet.MimeUtility;
 
 
 import org.apache.log4j.Logger;
-
 
 
 /**
@@ -66,7 +66,7 @@ public class Mail
         String server   = Option.getProperty(DEFAULT_SERVER);
         
         return sendMailGeneric(username, password, server, 
-                		   from, fromalias, to, toalias, subject, message, false, null, null, hash);
+                		   from, fromalias, to, toalias, subject, message, false, null, null, false, hash);
     }
     
     public static int sendMailAttachStream(
@@ -75,13 +75,25 @@ public class Mail
             String subject, String message,
             InputStream stream, String attachName) 
     {
+    	return sendMailAttachStream(
+                 from,     fromalias,
+                 to,       toalias,
+                 subject,  message,
+                 stream,  attachName, false);
+    }
+    public static int sendMailAttachStream(
+            String from,    String fromalias,
+            String to,      String toalias,
+            String subject, String message,
+            InputStream stream, String attachName, boolean dozip) 
+    {
         String username = Option.getProperty(DEFAULT_USER);
         String password = Option.getProperty(DEFAULT_PASSWORD);
         String server   = Option.getProperty(DEFAULT_SERVER);
         
         return sendMailGeneric(username, password, server, 
                            from, fromalias, to, toalias, subject, message, 
-                           false, stream, attachName, null);
+                           false, stream, attachName, dozip, null);
     }
  
     public static int sendSimpleMail(
@@ -95,7 +107,7 @@ public class Mail
         
     	return sendMailGeneric(username, password, server, 
                            from, fromalias, to, toalias, subject, message, 
-                           false, null, null, null);
+                           false, null, null, false, null);
     }
 
     public static int sendMailGeneric(
@@ -105,6 +117,7 @@ public class Mail
             boolean html,
             InputStream stream, 
             String attachName,
+            boolean dozip,
             Hashtable templateparameter
             ) 
     {
@@ -161,7 +174,28 @@ public class Mail
 			    
 			    //ByteArrayOutputStream bout = new ByteArrayOutputStream();
 			    
-			    javax.activation.DataSource source =  new ByteArrayDataSource(stream, "plain/text");
+			    
+			    javax.activation.DataSource source = null;
+			    
+			    if(!dozip)
+			    {
+			    	// ohne zip
+			    	source =  new ByteArrayDataSource(stream, "plain/text");
+			    } else {
+				    // gzip
+				    
+				    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+				    GZIPOutputStream out = new GZIPOutputStream(bout);
+				    
+				    int ch;
+		            while((ch = stream.read()) != -1) 
+		                out.write(ch);
+		            
+				    out.finish();
+				    out.close();
+				    source = new ByteArrayDataSource(bout.toByteArray(), "plain/text");
+			    }
+			    
 			    
 			    messageBodyPart.setDataHandler(new DataHandler(source));
 			    messageBodyPart.setFileName(attachName);
@@ -190,6 +224,7 @@ public class Mail
         
         return STATUS_OK;
     }
+    
     
     /**
      * replace {key} with corresponding HashValue
