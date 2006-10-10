@@ -18,8 +18,8 @@ public class DaoObject extends Table {
 		
 		// ### SET ID ###
 		
-		// setDescID(0); // Manual set ID
-		setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
+		//setDescID(0); // Manual set ID
+		//setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
 		setDescID(0, IDGenerator.ID_AUTO());                    // MYSQL auto column
 		
 		setDialect(new MySQL());
