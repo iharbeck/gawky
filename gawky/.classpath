@@ -8,15 +8,15 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/activation.jar"/>
-	<classpathentry kind="lib" path="lib/mailapi.jar"/>
-	<classpathentry kind="lib" path="lib/smtp.jar"/>
-	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-3.1.11-bin.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/jasperreports-1.2.7.jar"/>
+	<classpathentry kind="lib" path="lib/database/mysql-connector-java-3.1.11-bin.jar"/>
+	<classpathentry kind="lib" path="lib/jasper/jasperreports-1.2.7.jar"/>
+	<classpathentry kind="lib" path="lib/mail/activation.jar"/>
+	<classpathentry kind="lib" path="lib/mail/mailapi.jar"/>
+	<classpathentry kind="lib" path="lib/mail/smtp.jar"/>
+	<classpathentry kind="lib" path="lib/web/servlet-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
