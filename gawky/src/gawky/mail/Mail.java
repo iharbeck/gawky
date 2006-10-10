@@ -81,6 +81,7 @@ public class Mail
                  subject,  message,
                  stream,  attachName, false);
     }
+    
     public static int sendMailAttachStream(
             String from,    String fromalias,
             String to,      String toalias,
