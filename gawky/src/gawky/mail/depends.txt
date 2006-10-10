@@ -1,4 +1,5 @@
 gawky-global.jar
 mail.jar
 activation.jar
+smtp.jar
 log4j-1.2.11.jar
