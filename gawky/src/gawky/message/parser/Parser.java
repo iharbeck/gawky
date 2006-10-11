@@ -86,24 +86,29 @@ public class Parser
 			} 
 			else // variable 
 			{   
+				// TODO spezial indexOf (Ende markiert durch Feld eines anderen Typs)
+				// auf Zahl folgt ein CHAR
 				end = str.indexOf(desc.delimiter, start);
 				
 				if(end > max || end == -1) // Feld zu kurz wenn nicht option
 				{
-					position = max;
+					//position = max;
 
 					if(desc.len > 0 && desc.code != Desc.CODE_O)
 						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
 
-					if(end == -1)
-						return;
+					if(end == -1) {
+						// enventuell fehlt einfach nur der Delimiter am Zeilenende
+						value = str.substring(start);
+						storeValue(bean, i, desc, value);
+					}
+					// am Ende der Zeile angekommen
+					return;
 				}
-				if(end != -1)
-					value = str.substring(start, end);
-				else
-					value = str.substring(start);
+
+				value = str.substring(start, end);
 				
-				//start = end+1;
+				// Delimiter überspringen (siehe TODO in diesem Fall nicht)
 				start = end + desc.delimiter.length();  // Multicharacter delimiter
 
 				position = start;
