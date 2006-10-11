@@ -34,19 +34,32 @@
          	<fileset dir="${bin}" >
          		<include name="gawky/service/crm/**"/>
          	</fileset>
+     		<fileset dir="${src}" >
+         		<include name="gawky/service/crm/**"/>
+     		</fileset>
+
          </jar>
 		<jar destfile="bin/${name}-serviceoliva${version}.jar">
          	<fileset dir="${bin}" >
          		<include name="gawky/service/oliva/**"/>
          	</fileset>
+     		<fileset dir="${src}" >
+         		<include name="gawky/service/oliva/**"/>
+     		</fileset>
          </jar>
 		<jar destfile="bin/${name}-servicefias${version}.jar">
-		         	<fileset dir="${bin}" >
-		         		<include name="gawky/service/fias/**"/>
-		         	</fileset>
-		         </jar>
+         	<fileset dir="${bin}" >
+         		<include name="gawky/service/fias/**"/>
+         	</fileset>
+         	<fileset dir="${src}" >
+         		<include name="gawky/service/fias/**"/>
+         	</fileset>
+        </jar>
 		<jar destfile="bin/${name}-message${version}.jar">
          	<fileset dir="${bin}" >
+         		<include name="gawky/message/**"/>
+         	</fileset>
+			<fileset dir="${src}" >
          		<include name="gawky/message/**"/>
          	</fileset>
         </jar>
@@ -54,14 +67,23 @@
          	<fileset dir="${bin}" >
          		<include name="gawky/database/**"/>
          	</fileset>
+         	<fileset dir="${src}" >
+         		<include name="gawky/database/**"/>
+         	</fileset>
         </jar>
 		<jar destfile="bin/${name}-mail${version}.jar">
          	<fileset dir="${bin}" >
          		<include name="gawky/mail/**"/>
          	</fileset>
+     		<fileset dir="${src}" >
+         		<include name="gawky/mail/**"/>
+     		</fileset>
         </jar>
 		<jar destfile="bin/${name}-web${version}.jar">
          	<fileset dir="${bin}" >
+         		<include name="gawky/web/**"/>
+         	</fileset>
+         	<fileset dir="${src}" >
          		<include name="gawky/web/**"/>
          	</fileset>
         </jar>
@@ -69,9 +91,15 @@
 	     	<fileset dir="${bin}" >
 	     		<include name="gawky/global/**"/>
 	     	</fileset>
+	     	<fileset dir="${src}" >
+	     		<include name="gawky/global/**"/>
+	     	</fileset>
 	    </jar>
 		<jar destfile="bin/${name}-comm${version}.jar">
 	     	<fileset dir="${bin}" >
+	     		<include name="gawky/comm/**"/>
+	     	</fileset>
+	     	<fileset dir="${src}" >
 	     		<include name="gawky/comm/**"/>
 	     	</fileset>
 	    </jar>
@@ -79,14 +107,23 @@
 	     	<fileset dir="${bin}" >
 	     		<include name="gawky/file/**"/>
 	     	</fileset>
+	     	<fileset dir="${src}" >
+	     		<include name="gawky/file/**"/>
+	     	</fileset>
 		</jar>
 		<jar destfile="bin/${name}-net${version}.jar">
 	     	<fileset dir="${bin}" >
 	     		<include name="gawky/file/**"/>
 	     	</fileset>
+	     	<fileset dir="${src}" >
+	     		<include name="gawky/file/**"/>
+	     	</fileset>
 		</jar>
 		<jar destfile="bin/${name}-jasper${version}.jar">
 	     	<fileset dir="${bin}" >
+	     		<include name="gawky/jasper/**"/>
+	     	</fileset>
+	     	<fileset dir="${src}" >
 	     		<include name="gawky/jasper/**"/>
 	     	</fileset>
 		</jar>	

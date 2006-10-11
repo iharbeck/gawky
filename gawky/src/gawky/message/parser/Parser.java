@@ -22,9 +22,6 @@ public class Parser
 	private int position = 0;
 	private String line;
 	
-	//static int SUCCESS = 0;
-
-
 	SimpleDateFormat df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
 	SimpleDateFormat df_HHMMSS = new SimpleDateFormat("HHmmss");
 	

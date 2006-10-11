@@ -29,6 +29,7 @@ import javax.mail.internet.MimeUtility;
 
 
 import org.apache.log4j.Logger;
+import com.sun.java_cup.internal.internal_error;
 
 
 /**
@@ -46,8 +47,7 @@ public class Mail
     
     private static String charset     = Constant.ENCODE_ISO;
     private static String charsettext = Constant.ENCODE_ISO; 
-    
-    private static String encoding = null;
+    private static String encoding    = Constant.ENCODE_ISO;
     
     // dependency on Option Class. Alias in XML config file:
     // call sendMailGeneric if Option Class is not used
@@ -150,8 +150,16 @@ public class Mail
             
             //TO
             msg.setFrom(new InternetAddress(from, nfromalias));
-    	    msg.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to, ntoalias));
-    	    
+            
+            String[] tos = to.split("\\s*;\\s*");
+            String[] ntoaliass = ntoalias.split("\\s*;\\s*");
+            
+            try {
+            	for(int i=0; i < tos.length; i++)
+            		msg.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(tos[i], ntoaliass[i]));
+            } catch(Exception e) {
+            	log.error(e);
+            }
     	    //FROM
     	    msg.setSubject(nsubject);
     	    

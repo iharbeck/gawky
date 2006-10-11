@@ -40,7 +40,7 @@ public class Option
 		if(cmd != null && cmd.hasOption(alias))
 			return cmd.getOptionValue(alias);
 		else if(config != null)
-			return config.getString(alias);
+			return config.getString(alias, def);
 		else
 			return def;
 	}

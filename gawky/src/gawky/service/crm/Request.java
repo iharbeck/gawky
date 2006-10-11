@@ -98,10 +98,10 @@ public class Request {
     {
         String ret = "";
         
-        ret = paym.toString() 
+        ret = ((paym == null) ? "" : paym.toString())
             + getPositions()
-            + urlr.toString() 
-            + addr.toString() 
+            + ((urlr == null) ? "" : urlr.toString()) 
+            + ((addr == null) ? "" : addr.toString() )
 			+ getBooks(); 
         
         try 
