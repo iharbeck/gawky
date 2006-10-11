@@ -52,7 +52,7 @@ public class Response10 extends Part
 	
 	public Response10(String str) throws Exception
     {
- 	   super(str);		
+ 	   parse(str);		
     }
 	
 	// Response

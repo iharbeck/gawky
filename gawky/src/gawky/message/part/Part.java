@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public abstract class Part 
 {
-	Parser parser = new Parser();
+    Parser parser = new Parser();
 
 	static HashMap hs = new HashMap(); 
 	
@@ -61,11 +61,6 @@ public abstract class Part
 		parser.parse(parser.getNext(), this);
 		return this;
 	}
-	
-	public Part(String str) throws ParserException
-    {
-	   parser.parse(str, this);		
-    }
 	
 	public Part() 
     {

@@ -46,7 +46,7 @@ public class Response extends Part
 	
 	public Response(String str) throws ParserException
     {
- 	   super(str);		
+ 	   parse(str);		
     }
 	
 	// Response

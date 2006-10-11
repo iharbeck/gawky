@@ -52,11 +52,6 @@ public abstract class Table extends Part
 	public Table() {
     }
 
-	public Table(String str) throws ParserException
-    {
- 	   super(str);		
-    }
-	
 	public void setDescID(int idindex) {
 		this.idindex = idindex;
 		this.idgenerator = null;

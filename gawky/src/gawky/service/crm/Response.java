@@ -11,6 +11,7 @@ import gawky.message.parser.ParserException;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
+import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
 import java.text.SimpleDateFormat;
@@ -48,26 +49,26 @@ public class Response extends Part {
 			new DescF(Desc.FMT_A, Desc.CODE_R, 1,  "negative_entry_list"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 16, "return_field_1"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 16, "return_field_2"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "title"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "name"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "name_2"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "street"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "street_number"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 16, "po_box"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 10, "zip"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "city"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "region"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 3,  "country"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 40, "company_name"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 4,  "identity_score"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 4,  "micro_geographic_score"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 100,"redirect_url")
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "title"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "name"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "name_2"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "street"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "street_number"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 16, "po_box"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 10, "zip"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "city"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "region"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 3,  "country"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 40, "company_name"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 4,  "identity_score"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 4,  "micro_geographic_score"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 100,"redirect_url")
 		}; 
 	}
 	
 	public Response(String str) throws ParserException
     {
- 	   super(str);		
+		parse(str);		
     }
 	
     private String record_length                    = "";

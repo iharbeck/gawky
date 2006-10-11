@@ -95,7 +95,7 @@ public class Parser
 					if(desc.len > 0 && desc.code != Desc.CODE_O)
 						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
 
-					if(end != -1)
+					if(end == -1)
 						return;
 				}
 				if(end != -1)
