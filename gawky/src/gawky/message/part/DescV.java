@@ -28,6 +28,11 @@ public class DescV extends Desc
 		super(Desc.FMT_A, Desc.CODE_O, 0, name, delimiter);
 	}
 	
+	public DescV(int len, String name, String delimiter)
+	{	
+		super(Desc.FMT_A, Desc.CODE_O, len, name, delimiter);
+	}
+	
 	public DescV(char code, String name, String delimiter)
 	{	
 		super(code, Desc.CODE_O, 0, name, delimiter);

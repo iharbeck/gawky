@@ -3,39 +3,15 @@ package gawky.message.parser;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
-import java.text.SimpleDateFormat;
-
-
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 
 /**
  * @author Ingo Harbeck
  *
  */
-public class Parser 
+public class FreakParser extends Parser
 {
-	private static Logger log = Logger.getLogger(Parser.class);
-	
-	int    position = 0;
-	String line;
-	
-	SimpleDateFormat df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
-	SimpleDateFormat df_HHMMSS = new SimpleDateFormat("HHmmss");
-	
-
-	public void setDateFormat(String format) {
-		df_YYYYMMDD = new SimpleDateFormat(format);
-	}
-	
-	public void setTimeFormat(String format) {
-		df_HHMMSS   = new SimpleDateFormat(format); 
-	}
-	
-	public String getNext()
-	{
-		return line.substring(position);
-	}
+	private static Logger log = Logger.getLogger(FreakParser.class);
 	
 	public void parse(String str, Object bean) throws ParserException
 	{
@@ -84,7 +60,12 @@ public class Parser
 			} 
 			else // variable 
 			{   
-				end = str.indexOf(desc.delimiter, start);
+				// spezial indexOf (Ende markiert durch Feld eines anderen Typs)
+				// auf Zahl folgt ein CHAR
+				
+				//??? end = str.indexOf(desc.delimiter, start);
+				
+				end = indexOF(str, desc.delimiter, start);
 				
 				if(end > max || end == -1) // Feld zu kurz wenn nicht option
 				{
@@ -102,9 +83,14 @@ public class Parser
 					return;
 				}
 
+				// Sonderfall Freak Parser 
+				// dann wird auch kein delimiter vorhanden sein und darf nicht übersprungen werden
+				end = Math.min(start+desc.len, end);
+				
 				value = str.substring(start, end);
 				
-				start = end + desc.delimiter.length();  // Multicharacter delimiter
+				// Delimiter überspringen 
+				start = end; // + desc.delimiter.length();  // Multicharacter delimiter
 
 				position = start;
 
@@ -120,10 +106,9 @@ public class Parser
 			// Optional Field
 			else if(desc.code == Desc.CODE_O && value.equals(""))
 			{
-				storeValue(bean, i, desc, value);		
+				storeValue(bean, i, desc, value);
 				continue;
-			}
-			
+			}		
 			// Inhaltlich prüfung						
 		    switch (desc.format) { 
 				case Desc.FMT_ASCII :
@@ -173,66 +158,38 @@ public class Parser
 		
 		return;
 	}
-	 
-	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException {
-		try {
-			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
-			if(desc.format != Desc.FMT_CONSTANT)
-				PropertyUtils.setSimpleProperty(bean, desc.name, value);
-		} catch (Exception e) {	 
-			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
-		}
-	}
-	 
-	final boolean fmt_ascii(String value) {
-		return true; //value.matches("[\\w\\söäüÖÄÜß]*"); 
+	
+	public static void main(String[] args) throws Exception {
+
+		
+		FreakParser parser = new FreakParser();
+		
+		FreakParserBean bean = new FreakParserBean();
+		
+	    parser.parse("1.3AB456CD", bean);
+	    System.out.println(bean);
+	    
+	    parser.parse("1235555A456CD", bean);
+	    System.out.println(bean);
 	}
 	
-	final boolean fmt_digit(String value) {
-		return value.matches("[\\d,\\.+-]*"); 
-	}
-	
-	final boolean fmt_blank(String value) {
-		return value.equals(""); 
-	} 
-	
-	final boolean fmt_blank_zero(String value) {
-		return value.matches("[\\s0]*"); 
-	}
-
-	final boolean fmt_binary(String value) {
-		return value.matches("[01]*"); 
-	}
-
-	final boolean fmt_upper(String value) {
-		return value.matches("[A-Z]*"); 
-	}
-
-	final boolean fmt_lower(String value) {
-		return value.matches("[a-z]*"); 
-	}
-
-	final boolean fmt_blank_letter(String value)	{
-		return value.matches("[\\p{Lower}\\p{Upper}\\s]*"); 
-	}
-
-	final boolean fmt_DATE(String value)
+	public final int indexOF(String str, String end, int start) 
 	{
-		try	{
-			df_YYYYMMDD.parse(value);
-			return true; 
-		} catch (Exception e) {
-			return false;
-		}
+		if(end.charAt(0) == '#')
+			return indexOfField(str, end.substring(1), start);
+		else
+			return str.indexOf(end, start);
+	}	
+	
+	public final int indexOfField(String str, String end, int start) 
+	{
+		int max = str.length();
+		
+		for(int i=start; i < max; i++)
+			if( Character.toString(str.charAt(i)).matches(end))
+				return i;
+		
+		return -1;
 	}
 
-	final boolean fmt_TIME(String value)
-	{
-		try {
-			df_HHMMSS.parse(value);
-			return true; 
-		} catch (Exception e) {
-			return false;
-		} 
-	}
 }

@@ -16,43 +16,44 @@ public class Desc
 	public static final String ENDHASH  = new String(new char[] {'#'});
 	
 	// FORMAT
-	public static final char FMT_C          = 'C';    //'C'
-	public static final char FMT_CONSTANT   = 'C';    //'C'
+	public static final char FMT_C          = 'C';    
+	public static final char FMT_CONSTANT   = 'C';    
 	
-	public static final char FMT_A          = 'A';    //'A'
-	public static final char FMT_ASCII      = 'A';    //'A'
+	public static final char FMT_A          = 'A';    
+	public static final char FMT_ASCII      = 'A';    
 	
-	public static final char FMT_X          = 'X';    //'X'
-	public static final char FMT_UNICODE    = 'X';    //'X'
+	public static final char FMT_L          = 'L';    
+	public static final char FMT_LETTER     = 'L';    
 	
-	public static final char FMT_9          = '9';    //'9'
-	public static final char FMT_DIGIT      = '9';    //'9'
+	public static final char FMT_X          = 'X';    
+	public static final char FMT_UNICODE    = 'X';    
 	
-	public static final char FMT_BLANK      = ' ';    //' '
+	public static final char FMT_9          = '9';    
+	public static final char FMT_DIGIT      = '9';    
 	
-	public static final char FMT_0          = '0'; //'0'
-	public static final char FMT_BLANK_ZERO = '0'; //'0'
+	public static final char FMT_BLANK      = ' ';    
 	
-	public static final char FMT_1          = '1';   //'1'
-	public static final char FMT_BINARY     = '1';   //'1'
+	public static final char FMT_0          = '0'; 
+	public static final char FMT_BLANK_ZERO = '0'; 
 	
-	public static final char FMT_T          = 'T';   //'T'
+	public static final char FMT_1          = '1';   
+	public static final char FMT_BINARY     = '1';   
+	
+	public static final char FMT_T          = 'T';   
 	public static final char FMT_TIME       = 'T';   //'T' //000000 and 235959
 	
-	public static final char FMT_D          = 'D';   //'D'
+	public static final char FMT_D          = 'D';   
 	public static final char FMT_DATE       = 'D';   //'D'//00000000 valid if not R
 	
-	public static final char FMT_U          = 'U';   //'U'
-	public static final char FMT_UPPER      = 'U';   //'U'
+	public static final char FMT_UPPER      = 'U';   
 	
-	public static final char FMT_L          = 'L';   //'L'
-	public static final char FMT_LOWER      = 'L';   //'L'
+	public static final char FMT_LOWER      = 'l';   
 	
-	public static final char FMT_B            = 'B'; //'B'
-	public static final char FMT_BLANK_LETTER = 'B'; //'B'
+	public static final char FMT_B            = 'B'; 
+	public static final char FMT_BLANK_LETTER = 'B'; 
 	
-	public static final char FMT_Q   = '?';  //'?'
-	public static final char FMT_RAW = '?';  //'?'
+	public static final char FMT_Q   = '?';  
+	public static final char FMT_RAW = '?';  
 	
 	
 	// CODE
