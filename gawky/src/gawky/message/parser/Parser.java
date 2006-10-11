@@ -112,8 +112,6 @@ public class Parser
 					throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
 			}
 	
-			//value = value.trim();		
-			
 			// Required Field
 			if(desc.code == Desc.CODE_R && value.equals(""))
 				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);

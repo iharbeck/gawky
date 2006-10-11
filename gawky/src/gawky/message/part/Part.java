@@ -9,7 +9,8 @@ import java.util.HashMap;
 
 public abstract class Part 
 {
-    Parser parser = new Parser();
+    private Parser    parser;
+    private Generator generator;
 
 	static HashMap hs = new HashMap(); 
 	
@@ -33,7 +34,15 @@ public abstract class Part
 	
 	public final String toString()
 	{
-		return Generator.generateString(this);
+		return getGenerator().generateString(this);
+	}
+	
+	/**
+	 * for Tuning just one parser
+	 */
+	public final String toString(Generator extgenerator)
+	{
+		return extgenerator.generateString(this);
 	}
 	
 	public final byte[] getBytes(String charset) throws UnsupportedEncodingException
@@ -46,16 +55,30 @@ public abstract class Part
 		return toString().getBytes();
 	}
 	
-	
-	public Part parse(String str) throws ParserException
-	{
-		parser.parse(str, this);
-		return this;
+	public final Generator getGenerator() {
+		if(generator == null)
+			return new Generator();
+		else
+			return generator;
 	}
-	
-	public Part parse(Parser parser, String str) throws ParserException
+
+	public final Parser getParser() {
+		if(parser == null)
+			return new Parser();
+		else
+			return parser;
+	}
+
+	public final void parse(String str) throws ParserException
 	{
-		parser.parse(parser.getNext(), this);
-		return this;
+		getParser().parse(str, this);
+	}
+
+	/**
+	 * for Tuning just one parser
+	 */
+	public final void parse(Parser extparser, String str) throws ParserException
+	{
+		extparser.parse(str, this);
 	}
 }

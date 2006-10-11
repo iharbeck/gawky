@@ -9,9 +9,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 
 
-public class Generator 
+public class FreakGenerator extends Generator
 {
-	private static Logger log = Logger.getLogger(Generator.class);
+	private static Logger log = Logger.getLogger(FreakGenerator.class);
 	
 	public String generateString(Part bean)
 	{
@@ -27,6 +27,11 @@ public class Generator
 			for(int i = 0; i < descs.length; i++)
 			{
 				desc = descs[i];
+		
+				String delimiter = desc.delimiter;
+				
+				if(delimiter != null && delimiter.length() > 0 && (delimiter.charAt(0) == '#' || delimiter.charAt(0) == '%'))
+					delimiter = "";
 				
 				String val = null;
 				
@@ -38,19 +43,19 @@ public class Generator
 				if(desc.format == Desc.FMT_DIGIT)
 				{
 					str += Formatter.getStringN(desc.len, val);
-					if(desc.delimiter != null)
-						str += desc.delimiter;
+					if(delimiter != null)
+						str += delimiter;
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von rechts mit null füllen
 					str += Formatter.getStringNL(desc.len, val);
-					if(desc.delimiter != null)
-						str += desc.delimiter;					
+					if(delimiter != null)
+						str += delimiter;					
 				}
 				else
 				{
-					if(desc.delimiter != null)
-						str += Formatter.getStringV(desc.len, val, desc.delimiter);
+					if(delimiter != null)
+						str += Formatter.getStringV(desc.len, val, delimiter);
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)

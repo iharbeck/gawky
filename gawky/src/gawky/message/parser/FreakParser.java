@@ -3,6 +3,9 @@ package gawky.message.parser;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -12,6 +15,8 @@ import org.apache.log4j.Logger;
 public class FreakParser extends Parser
 {
 	private static Logger log = Logger.getLogger(FreakParser.class);
+	
+	boolean hasDelimiter;
 	
 	public void parse(String str, Object bean) throws ParserException
 	{
@@ -65,7 +70,7 @@ public class FreakParser extends Parser
 				
 				//??? end = str.indexOf(desc.delimiter, start);
 				
-				end = indexOF(str, desc.delimiter, start);
+				end = indexOf(str, desc.delimiter, start);
 				
 				if(end > max || end == -1) // Feld zu kurz wenn nicht option
 				{
@@ -83,14 +88,16 @@ public class FreakParser extends Parser
 					return;
 				}
 
-				// Sonderfall Freak Parser 
-				// dann wird auch kein delimiter vorhanden sein und darf nicht übersprungen werden
-				end = Math.min(start+desc.len, end);
+				if(desc.len > 0)
+					end = Math.min(start+desc.len, end);
 				
 				value = str.substring(start, end);
 				
-				// Delimiter überspringen 
-				start = end; // + desc.delimiter.length();  // Multicharacter delimiter
+				start = end; 
+				
+				// Delimiter überspringen / set by indexOf
+				if(hasDelimiter)
+					start += desc.delimiter.length();  // Multicharacter delimiter
 
 				position = start;
 
@@ -98,8 +105,6 @@ public class FreakParser extends Parser
 					throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
 			}
 	
-			//value = value.trim();		
-			
 			// Required Field
 			if(desc.code == Desc.CODE_R && value.equals(""))
 				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
@@ -159,37 +164,42 @@ public class FreakParser extends Parser
 		return;
 	}
 	
-	public static void main(String[] args) throws Exception {
-
-		
-		FreakParser parser = new FreakParser();
-		
-		FreakParserBean bean = new FreakParserBean();
-		
-	    parser.parse("1.3AB456CD", bean);
-	    System.out.println(bean);
-	    
-	    parser.parse("1235555A456CD", bean);
-	    System.out.println(bean);
-	}
-	
-	public final int indexOF(String str, String end, int start) 
+	public final int indexOf(String str, String end, int start) 
 	{
-		if(end.charAt(0) == '#')
+		if(end.charAt(0) == '#') {
+			hasDelimiter = false;
 			return indexOfField(str, end.substring(1), start);
-		else
+		}	
+		else if(end.charAt(0) == '%') {
+			hasDelimiter = false;
+			return indexOfPattern(str, end.substring(1), start);
+		}
+		else{
+			hasDelimiter = true;
 			return str.indexOf(end, start);
+		}
 	}	
 	
-	public final int indexOfField(String str, String end, int start) 
+	public final int indexOfField(String str, String delimiter, int start) 
 	{
 		int max = str.length();
-		
 		for(int i=start; i < max; i++)
-			if( Character.toString(str.charAt(i)).matches(end))
+			if( Character.toString(str.charAt(i)).matches(delimiter))
 				return i;
 		
 		return -1;
+	}
+	
+	public final int indexOfPattern(String str, String patternstr, int start) 
+	{
+	   Pattern pattern = Pattern.compile(patternstr);
+	       
+	   Matcher matcher = pattern.matcher(str.substring(start));
+	   if (matcher.find()) {  
+		   //System.out.println( matcher.group(0) );
+		   return matcher.end() + start;
+	   }
+	   return -1;
 	}
 
 }
