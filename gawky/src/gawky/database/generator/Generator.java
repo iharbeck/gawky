@@ -96,7 +96,7 @@ public class Generator
 	
 	
 	/**
-	 * 		TODO
+	 * 		TODO Dialect einfügen
 	 */
 	public String generateCreateSQL(Table bean)
 	{

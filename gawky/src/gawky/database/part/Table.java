@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
  * 
  * Insert / Update / Delete / Find
  * 
- * TODO: query mit  custom where
+ * TODO query mit custom where
  * @author Ingo Harbeck
  *
  */

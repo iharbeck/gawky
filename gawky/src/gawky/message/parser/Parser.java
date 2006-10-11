@@ -57,7 +57,7 @@ public class Parser
 		{
 			desc = descs[i];
 			
-			//DISCUSS: example - ID not in Importfile but later in DB
+			// DISCUSS example - ID not in Importfile but later in DB
 			if(desc.skipparsing) 
 				continue;
 			
@@ -108,7 +108,7 @@ public class Parser
 
 				value = str.substring(start, end);
 				
-				// Delimiter überspringen (siehe TODO in diesem Fall nicht)
+				// Delimiter überspringen (siehe discuss in diesem Fall nicht)
 				start = end + desc.delimiter.length();  // Multicharacter delimiter
 
 				position = start;
