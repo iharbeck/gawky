@@ -1,14 +1,11 @@
 package gawky.message.part;
 
-
 import gawky.message.generator.Generator;
 import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-
-
 
 public abstract class Part 
 {
@@ -61,9 +58,4 @@ public abstract class Part
 		parser.parse(parser.getNext(), this);
 		return this;
 	}
-	
-	public Part() 
-    {
-    }
-
 }

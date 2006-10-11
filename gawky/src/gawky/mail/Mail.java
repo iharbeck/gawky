@@ -27,9 +27,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
-
 import org.apache.log4j.Logger;
-import com.sun.java_cup.internal.internal_error;
 
 
 /**

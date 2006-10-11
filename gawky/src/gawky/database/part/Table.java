@@ -5,7 +5,6 @@ import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
-import gawky.message.parser.ParserException;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -48,9 +47,6 @@ public abstract class Table extends Part
 	abstract public String getTableName();
 	
 	Dialect dialect = new MySQL();
-
-	public Table() {
-    }
 
 	public void setDescID(int idindex) {
 		this.idindex = idindex;
