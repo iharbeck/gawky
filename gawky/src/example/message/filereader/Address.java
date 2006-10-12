@@ -2,7 +2,6 @@ package example.message.filereader;
 
 import gawky.message.part.Desc;
 import gawky.message.part.DescF;
-import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
 public class Address extends Part {

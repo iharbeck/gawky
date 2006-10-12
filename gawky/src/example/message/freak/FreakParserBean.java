@@ -7,13 +7,12 @@ import gawky.message.part.DescF;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
-public class FreakParserBean extends Part {
-
+public class FreakParserBean extends Part 
+{
 	final String DELIMITER_LETTER    = "#[A-Z]";
 	final String DELIMITER_NUMBER    = "#[0-9]";
 	final String DELIMITER_NOTNUMBER = "#[^0-9]";
 	final String PATTERN_CURRENCY    = "%[0-9]*,[0-9]{0,2}"; // ####,##
-	
 	
 	public Desc[] getDesc() {
 		return new Desc[] {
