@@ -98,7 +98,10 @@ public class Option
 	
 	public static int getPort()
 	{
-		return Integer.parseInt(getProperty(PORT));
+		if(Option.hasProperty(PORT))
+			return Integer.parseInt(getProperty(PORT));
+		else 
+			return 3000;
 	}
 	
 	public static String getHost()
@@ -164,12 +167,12 @@ public class Option
 		// set loglevel default = ALL (9)
 		Logger.getRootLogger().setLevel( Option.getLoglevel() );
 
-		// verify port range
-		if(Option.getPort() > 49151 || Option.getPort() < 5001)
-		{
-			Logger.getLogger(Option.class).fatal(" check port number (5001-49151) ");
-			throw new Exception("Invalid Portrange");
-		}	
+//		// verify port range
+//		if(Option.getPort() > 49151 || Option.getPort() < 5001)
+//		{
+//			Logger.getLogger(Option.class).fatal(" check port number (5001-49151) ");
+//			throw new Exception("Invalid Portrange");
+//		}	
 		
 		initdone = true;
 		

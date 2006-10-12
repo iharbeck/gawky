@@ -20,6 +20,11 @@
 		<url>jdbc:mysql://localhost/test</url>
 		<user>root</user> 
 		<password>root</password>
+		
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@hostname:port:sid</url>
+		<user>root</user> 
+		<password>root</password>
 	</db>
 
 	<mail>

@@ -94,6 +94,23 @@ public class DB
      * get Long
      */
     
+    public static String getString(String sql)
+	{
+		Connection conn = null;
+		
+		try 
+		{
+			conn = DB.getConnection(0);
+			return getString(conn, sql);
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			doClose(conn);
+		}
+		
+		return null;
+	}
+    
 	public static String getString(Connection conn, String sql) throws Exception
 	{
 		ResultSet rset = null;
@@ -114,12 +131,28 @@ public class DB
     /**
      * Row als Hashtable
      */
-    
+	
+	
 	public static Hashtable getRow(String sql, String[] params)
 	{
-		Hashtable hs = null;
-		
 		Connection conn = null;
+		
+		try 
+		{
+			conn = DB.getConnection(0);
+			return getRow(conn, sql, params);
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			doClose(conn);
+		}
+		
+		return null;
+	}
+    
+	public static Hashtable getRow(Connection conn, String sql, String[] params)
+	{
+		Hashtable hs = null;
 		
 		ResultSet rset = null;
 
@@ -156,7 +189,6 @@ public class DB
 		} finally {
 			doClose(stmt_select); 
 			doClose(rset);
-			doClose(conn);
 		}
 		
 		return hs;
@@ -168,9 +200,25 @@ public class DB
 	
 	public static ArrayList getRowList(String sql, String[] params)
 	{
+		Connection conn = null;
+		
+		try 
+		{
+			conn = DB.getConnection(0);
+			return getRowList(conn, sql, params);
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			doClose(conn);
+		}
+		
+		return null;
+	}
+	
+	public static ArrayList getRowList(Connection conn, String sql, String[] params)
+	{
 		ArrayList al = new ArrayList();
 		
-		Connection conn = null;
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
 		
@@ -204,7 +252,6 @@ public class DB
 		} finally {
 			doClose(stmt_select); 
 			doClose(rset);
-			doClose(conn);
 		}
 		
 		return al;
@@ -214,12 +261,28 @@ public class DB
 	 * Firstvalue des SELECT als ArrayList
 	 * 
 	 */
+	
 	public static ArrayList getList(String sql, String[] params)
+	{
+		Connection conn = null;
+		
+		try 
+		{
+			conn = DB.getConnection(0);
+			return getList(conn, sql, params);
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			doClose(conn);
+		}
+		
+		return null;
+	}
+	
+	public static ArrayList getList(Connection conn, String sql, String[] params)
 	{
 		ArrayList al = new ArrayList();
 		
-		
-		Connection conn = null;
 		
 		ResultSet rset = null;
 
@@ -247,7 +310,6 @@ public class DB
 		} finally {
 			doClose(stmt_select); 
 			doClose(rset);
-			doClose(conn);
 		}
 		
 		return al;
