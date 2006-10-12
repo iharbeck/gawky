@@ -112,7 +112,7 @@ public class Option
 	public static Level getLoglevel()
 	{
 		if(!Option.hasProperty(VERBOSE))
-			return Level.ALL; 
+			return Level.OFF; 
 		
 		switch (Option.getProperty(VERBOSE).charAt(0)) 
 		{
@@ -122,7 +122,7 @@ public class Option
 			case '3' : return Level.WARN;
 			case '4' : return Level.INFO;
 			case '5' : return Level.DEBUG;
-			default: return Level.OFF;
+			default: return Level.ALL;
 		}
 	}
 	
