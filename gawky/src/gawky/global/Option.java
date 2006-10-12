@@ -122,7 +122,7 @@ public class Option
 			case '3' : return Level.WARN;
 			case '4' : return Level.INFO;
 			case '5' : return Level.DEBUG;
-			default: return Level.ALL;
+			default: return Level.OFF;
 		}
 	}
 	
