@@ -16,16 +16,24 @@ public class PDFGenerator {
 	/**
 	 * @param args
 	 */
+	
+	static HashMap compiledreportcache = new HashMap();
+	
 	public static void generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName) throws Exception
 	{
 		JasperPrint jasperPrint = null;
 		
 		if(jasperFileName.endsWith("jrxml")) 
 		{
-			// TODO Cache compiled report
-			JasperReport jasperReport = JasperCompileManager.compileReport(jasperFileName);    
+			JasperReport jasperReport = (JasperReport)compiledreportcache.get(jasperFileName);
+			
+			if(jasperReport  == null)
+			{
+				jasperReport = JasperCompileManager.compileReport(jasperFileName);    
+				compiledreportcache.put(jasperFileName, jasperReport);
+			}
 			jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), 
-					new JRBeanUtilDataSource(reportdata, rows)
+				new JRBeanUtilDataSource(reportdata, rows)
 			);
 		} 
 		else 
