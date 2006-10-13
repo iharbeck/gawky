@@ -136,13 +136,26 @@ public class Option
 		init(PROPERTY_FILE, "Properties", new String[0]);
 	}
 	
+	public static boolean isClassInPath(String classname, String info) {
+		try {
+			Class.forName(classname);
+			return true;
+		} catch (Exception e) {
+			if(info != null)
+				log.info(info);
+			return false;
+		}
+	}
+	
 	public static void init(String propfile, String processname, String args[]) throws Exception
 	{
 		if(initdone)
 			return;
-		
+	
 		propertyparser(propfile);
-		cmdparser(processname, args);
+		
+		if(isClassInPath("org.apache.commons.cli.CommandLineParser", "Commandline parser disabled Lib is missing!"))
+			cmdparser(processname, args);
 		
 		if(cmd.hasOption(HELP))
 		{
@@ -154,12 +167,12 @@ public class Option
 		}
 		
 		// overwrite logfile default
-		String logfile = Option.getProperty(LOGFILE);
 		
-		try {
-
-			// Suche nach LOG4J Klassen
-			Class.forName("org.apache.log4j.Logger");
+		// Suche nach LOG4J Klassen
+		if(isClassInPath("org.apache.log4j.Logger", "LOG4J wurde nicht gefunden Parameter werden ignoriert!"))
+		{
+			// logfile setzen
+			String logfile = Option.getProperty(LOGFILE);
 		
 			if(logfile != null)
 			{
@@ -174,8 +187,6 @@ public class Option
 			// set loglevel default = ERROR
 			Logger.getRootLogger().setLevel( Option.getLoglevel() );
 
-		} catch (Exception e) {
-			log.error("LOG4J wurde nicht gefunden Parameter werden ignoriert!");
 		}
 		
 		initdone = true;
