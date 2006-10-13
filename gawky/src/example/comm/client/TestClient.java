@@ -2,7 +2,8 @@ package example.comm.client;
 
 
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import example.message.parser.RequestHead;
 import gawky.comm.Client;
@@ -10,7 +11,7 @@ import gawky.global.Option;
 
 public class TestClient {
 
-	static final Logger log = Logger.getLogger(TestClient.class);
+	private static Log log = LogFactory.getLog(TestClient.class);
 	
 	/**
 	 * @param args

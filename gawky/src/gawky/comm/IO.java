@@ -13,13 +13,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class IO 
 {
-	static final Logger log = Logger.getLogger(IO.class);
+	private static Log log = LogFactory.getLog(IO.class);
 
 	public static String readLine(Socket s) throws SocketTimeoutException, Exception
 	{

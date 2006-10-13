@@ -6,7 +6,8 @@ import gawky.message.part.Part;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Ingo Harbeck
@@ -14,7 +15,8 @@ import org.apache.log4j.Logger;
  */
 public class FreakParser extends Parser
 {
-	private static Logger log = Logger.getLogger(FreakParser.class);
+	private static Log log = LogFactory.getLog(FreakParser.class);
+
 	
 	boolean hasDelimiter;
 	

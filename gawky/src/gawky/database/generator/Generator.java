@@ -11,15 +11,15 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class Generator 
 {
-	private static Logger log = Logger.getLogger(Generator.class);
-	
+	private static Log log = LogFactory.getLog(Generator.class);	
+
 	SimpleDateFormat df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
 	SimpleDateFormat df_HHMMSS = new SimpleDateFormat("HHmmss");
 	

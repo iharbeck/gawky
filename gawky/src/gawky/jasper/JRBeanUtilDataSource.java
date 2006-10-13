@@ -5,12 +5,13 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class JRBeanUtilDataSource implements JRDataSource
 {
-	static final Logger log = Logger.getLogger(JRBeanUtilDataSource.class);
-	
+	private static Log log = LogFactory.getLog(JRBeanUtilDataSource.class);
+
 	Object data;
 
 	int rows = 0;

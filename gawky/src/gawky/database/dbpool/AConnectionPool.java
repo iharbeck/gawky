@@ -6,12 +6,13 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 class ConnectionReaper extends Thread 
 {
-	static final Logger log = Logger.getLogger(ConnectionReaper.class);
+	private static Log log = LogFactory.getLog(ConnectionReaper.class);
 
     private AConnectionPool pool;
     private long delay;

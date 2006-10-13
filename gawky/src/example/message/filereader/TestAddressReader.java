@@ -6,11 +6,12 @@ import gawky.file.LineReader;
 import gawky.file.Locator;
 import gawky.message.parser.ParserException;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class TestAddressReader implements LineHandler 
 {
-	static final Logger log = Logger.getLogger(TestAddressReader.class);
+	private static Log log = LogFactory.getLog(TestAddressReader.class);
 	
 	public void processLine(String line) throws CancelException 
 	{

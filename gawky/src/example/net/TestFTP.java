@@ -1,13 +1,14 @@
 package example.net;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import gawky.net.FTPFactory;
 
 public class TestFTP {
 
-	private static Logger log = Logger.getLogger(TestFTP.class);
-
+	private static Log log = LogFactory.getLog(TestFTP.class);
+	
 	public static void main(String[] args) throws Exception 
 	{
 		FTPFactory f = new FTPFactory("localhost", "root", "root");

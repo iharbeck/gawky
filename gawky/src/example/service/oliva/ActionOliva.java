@@ -2,7 +2,8 @@ package example.service.oliva;
 
 
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import example.global.Session;
 import gawky.comm.Client;
@@ -13,8 +14,8 @@ import gawky.service.oliva.Response;
 
 public class ActionOliva 
 {
-	private static Logger log = Logger.getLogger(ActionOliva.class);
-	
+	private static final Log log = LogFactory.getLog(ActionOliva.class);
+
 	public static void doSettlement(Session session)
 	{
 	  // REQUEST Object 

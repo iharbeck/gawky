@@ -21,13 +21,13 @@ import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class Server extends Parameter
 {
-	static final Logger log = Logger.getLogger(Server.class);
+	private static Log log = LogFactory.getLog(Server.class);
 
 	
 	protected static ThreadGroup threads = new ThreadGroup("Worker");
@@ -124,8 +124,6 @@ public class Server extends Parameter
 
     public class Worker extends Thread
     {
-    	private Logger log = Logger.getLogger(Worker.class);
-    	
         private Socket socket = null;
         private ThreadWorker action;
         
@@ -187,7 +185,7 @@ public class Server extends Parameter
 
 class ShutdownHook extends Thread 
 {
-	static final Logger log = Logger.getLogger(ShutdownHook.class);
+	private static Log log = LogFactory.getLog(ShutdownHook.class);
 	
     public void run() 
     {

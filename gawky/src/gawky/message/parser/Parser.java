@@ -5,9 +5,9 @@ import gawky.message.part.Part;
 
 import java.text.SimpleDateFormat;
 
-
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Ingo Harbeck
@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 public class Parser 
 {
-	private static Logger log = Logger.getLogger(Parser.class);
+	private static Log log = LogFactory.getLog(Parser.class);
 	
 	int    position = 0;
 	String line;

@@ -27,7 +27,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -36,7 +37,7 @@ import org.apache.log4j.Logger;
  */
 public class Mail 
 {
-	static final Logger log = Logger.getLogger(Mail.class);
+	private static Log log = LogFactory.getLog(Mail.class);
 
     public static int ERROR_INVALIDADDRESS = 1;
     public static int ERROR_SENDFAILED = 2;

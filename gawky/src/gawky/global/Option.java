@@ -6,14 +6,16 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Option 
 {
-	static final Logger log = Logger.getLogger(Option.class);
-
+	private static Log log = LogFactory.getLog(Option.class);
+	
 	//ArrayList options = new ArrayList();
 	
 	private static String HOST    = "host";
@@ -153,26 +155,27 @@ public class Option
 		// overwrite logfile default
 		String logfile = Option.getProperty(LOGFILE);
 		
-		if(logfile != null)
-		{
-			FileAppender fa = (FileAppender) Logger.getRootLogger().getAppender("file");
-			if(fa != null)
-			{
-				fa.setFile(logfile);
-				fa.activateOptions();
-			}
-		}
-		
-				
-		// set loglevel default = ALL (9)
-		Logger.getRootLogger().setLevel( Option.getLoglevel() );
+		try {
 
-//		// verify port range
-//		if(Option.getPort() > 49151 || Option.getPort() < 5001)
-//		{
-//			Logger.getLogger(Option.class).fatal(" check port number (5001-49151) ");
-//			throw new Exception("Invalid Portrange");
-//		}	
+			// Suche nach LOG4J Klassen
+			Class.forName("org.apache.log4j.Logger");
+		
+			if(logfile != null)
+			{
+				FileAppender fa = (FileAppender) Logger.getRootLogger().getAppender("file");
+				if(fa != null)
+				{
+					fa.setFile(logfile);
+					fa.activateOptions();
+				}
+			}
+			
+			// set loglevel default = ERROR
+			Logger.getRootLogger().setLevel( Option.getLoglevel() );
+
+		} catch (Exception e) {
+			log.error("LOG4J wurde nicht gefunden Parameter werden ignoriert!");
+		}
 		
 		initdone = true;
 		

@@ -16,7 +16,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
 
 public abstract class Table extends Part 
 {
-	private static Logger log = Logger.getLogger(Table.class);
+	private static Log log = LogFactory.getLog(Table.class);
 	
 	private static final int SQL_INSERT = 0;
 	private static final int SQL_FIND   = 1;

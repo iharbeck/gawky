@@ -3,8 +3,8 @@ package example.comm.client;
 
 import java.net.Socket;
 
-
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import example.message.parser.RequestHead;
 import gawky.comm.Client;
@@ -13,8 +13,7 @@ import gawky.global.Option;
 
 public class TestClientOneSocket {
 
-	static final Logger log = Logger.getLogger(TestClientOneSocket.class);
-	
+	private static Log log = LogFactory.getLog(TestClientOneSocket.class);
 	/**
 	 * @param args
 	 */

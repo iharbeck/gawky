@@ -1,13 +1,6 @@
 package example.comm.server;
 
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-
-
-import org.apache.log4j.Logger;
-
 import example.global.Session;
 import example.message.parser.MultitypeParser;
 import example.message.parser.ResponseRes;
@@ -19,9 +12,17 @@ import gawky.global.Constant;
 import gawky.global.Option;
 import gawky.message.parser.ParserException;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class TestServer implements ThreadWorker 
 {
-	protected static Logger log = Logger.getLogger(TestServer.class);
+	private static Log log = LogFactory.getLog(TestServer.class);
+
 	
 	public void execute(Server.Worker thread, Socket s) throws Exception
 	{

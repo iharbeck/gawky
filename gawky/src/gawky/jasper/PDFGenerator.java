@@ -11,11 +11,12 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class PDFGenerator {
 
-	/**
-	 * @param args
-	 */
+	private static Log log = LogFactory.getLog(PDFGenerator.class);
 	
 	static HashMap compiledreportcache = new HashMap();
 	

@@ -2,7 +2,8 @@ package example.message.parser;
 
 
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import example.global.Session;
 import gawky.message.parser.Parser;
@@ -14,8 +15,8 @@ import gawky.message.parser.ParserException;
 
 public class MultitypeParser 
 {
-	private static Logger log = Logger.getLogger(MultitypeParser.class);
-	
+	private static Log log = LogFactory.getLog(MultitypeParser.class);
+
 	public final static int ERROR_MISSING_HEAD      = 2000;
 	
 	static {

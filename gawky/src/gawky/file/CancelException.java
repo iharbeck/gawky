@@ -5,16 +5,16 @@ import gawky.message.part.Desc;
 
 import java.util.HashMap;
 
-
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class CancelException extends Exception 
 {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(CancelException.class);
-
+	private static Log log = LogFactory.getLog(CancelException.class);
+	
 	private int retcode;
 
 	static HashMap errors = new HashMap();

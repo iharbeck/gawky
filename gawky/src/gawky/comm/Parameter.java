@@ -5,13 +5,13 @@ import gawky.global.Option;
 
 import java.security.Security;
 
-
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class Parameter 
 {
-	static final Logger log = Logger.getLogger(Parameter.class);
+	private static Log log = LogFactory.getLog(Parameter.class);
 
 	
 	public static int port    = 0;

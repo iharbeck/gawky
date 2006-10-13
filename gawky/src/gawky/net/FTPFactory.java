@@ -5,16 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;
 
 public class FTPFactory 
 {
-	private static Logger log = Logger.getLogger(FTPFactory.class);
-	
+	private static Log log = LogFactory.getLog(FTPFactory.class);
+
 	FTPClient ftp = null;
 	String localdir;
 	

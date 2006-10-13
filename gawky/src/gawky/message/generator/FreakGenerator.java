@@ -6,12 +6,13 @@ import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class FreakGenerator extends Generator
 {
-	private static Logger log = Logger.getLogger(FreakGenerator.class);
+	private static Log log = LogFactory.getLog(FreakGenerator.class);
 	
 	public String generateString(Part bean)
 	{

@@ -5,16 +5,16 @@ import gawky.message.part.Desc;
 
 import java.util.HashMap;
 
-
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class ParserException extends Exception 
 {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(ParserException.class);
-
+	private static Log log = LogFactory.getLog(ParserException.class);
+	
 	private int retcode;
 
 	static HashMap errors = new HashMap();

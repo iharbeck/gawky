@@ -13,7 +13,8 @@ import gawky.file.LineReader;
 import gawky.global.Constant;
 import gawky.service.crm.Response;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -21,7 +22,7 @@ import org.apache.log4j.Logger;
  */
 public class TestCRMFILE2S implements LineHandler {
     
-	static final Logger log = Logger.getLogger(TestCRMFILE2S.class);
+	private static final Log log = LogFactory.getLog(TestCRMFILE2S.class);
 
 	static Client client;
 	
