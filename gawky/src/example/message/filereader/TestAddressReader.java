@@ -4,6 +4,7 @@ import gawky.file.CancelException;
 import gawky.file.LineHandler;
 import gawky.file.LineReader;
 import gawky.file.Locator;
+import gawky.global.Option;
 import gawky.message.parser.ParserException;
 
 import org.apache.commons.logging.Log;
@@ -28,6 +29,8 @@ public class TestAddressReader implements LineHandler
 
 	public static void main(String[] args) throws Exception 
 	{
+		Option.init();
+		
 		String filename = Locator.findPath("data.dat", TestAddressReader.class);
 	
 		LineReader.processFile(filename, new TestAddressReader());
