@@ -16,7 +16,8 @@ public class Option
 {
 	private static Log log = LogFactory.getLog(Option.class);
 	
-	//ArrayList options = new ArrayList();
+	// create Options object
+	public static Options options = new Options();
 	
 	private static String HOST    = "host";
 	private static String PORT    = "p";
@@ -200,8 +201,7 @@ public class Option
 		}
 	}
 	
-	//	 create Options object
-	public static Options options = new Options();
+	
 	
 	static void initOption() 
 	{
