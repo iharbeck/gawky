@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class AConnectionDriver implements Driver 
 {
-    private String URL_PREFIX = "jdbc:bms:";
+    public static String URL_PREFIX = "jdbc:bms:";
     private static final int MAJOR_VERSION = 1;
     private static final int MINOR_VERSION = 3;
     private static final long timeout = 50000;

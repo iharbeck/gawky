@@ -1,6 +1,6 @@
 package gawky.database;
 
-
+import gawky.database.dbpool.AConnectionDriver;
 import gawky.global.Option;
 
 import java.sql.Connection;
@@ -32,31 +32,29 @@ public class DB
 		
 		log.info("Datenbanken: " + dbc);
 		
-	    	for(int i=0; i < dbc; i++) 
-	    	{
-	    		String dburl    = Option.getProperty("db(" + i + ").url");
-				String dbpass   = Option.getProperty("db(" + i + ").password");
-				String dbuser   = Option.getProperty("db(" + i + ").user");
-				String dbdriver = Option.getProperty("db(" + i + ").driver");
-	
-		        log.info("Register: " + dburl);
-		        try {
-		        	new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000);
-		    	} catch (Exception e) {
-			        log.error("Pooleinrichtung: " + e.getMessage());
-				}
-	    	}
-		
-		
+    	for(int i=0; i < dbc; i++) 
+    	{
+    		String dburl    = Option.getProperty("db(" + i + ").url");
+			String dbpass   = Option.getProperty("db(" + i + ").password");
+			String dbuser   = Option.getProperty("db(" + i + ").user");
+			String dbdriver = Option.getProperty("db(" + i + ").driver");
+
+	        log.info("Register: " + dburl);
+	        try {
+	        	new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000);
+	    	} catch (Exception e) {
+		        log.error("Pooleinrichtung: " + e.getMessage());
+			}
+    	}
 	}
 	
     // Verbindung aus Connectionpool holen
     static public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:bms:pool0");
+        return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
     }
     
     static public Connection getConnection(int number) throws SQLException {
-    	return DriverManager.getConnection("jdbc:bms:pool" + number);
+    	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
     }
 
     public static boolean isDBAvailable()
@@ -338,40 +336,6 @@ public class DB
 
 /*
  
-  
-//			log.debug("Parameter initialisieren ");
-//		
-//			List dbs = Option.config.getList("db.driver");
-//			
-//			System.out.println("Datenbanken: " + dbs.size());
-//			
-//			db_driver   = Option.getProperties("db(0).driver");
-//			db_url 	    = Option.getProperties("db(0).url");
-//			db_user     = Option.getProperties("db(0).user");
-//			db_password = Option.getProperties("db(0).password");
-//			
-//			db_config   = Option.getProperties("db(0).config");
-//		
-//		try {
-//            System.out.println("Init Pool");
-//            for(int i = 0; i < db_driver.length; i++)
-//            {
-//            	Class.forName(db_driver[i]);
-//            	
-//            	long time = 50000000;
-////            	if(db_time.length > 0)
-////            		time = Long.parseLong(db_time[i]);
-////            	
-////            	new gawky.dbpool.AConnectionDriver(db_driver[i], db_url[i], db_user[i], db_password[i], "pool" + i, time);
-//            	System.out.println(db_url[i]);
-//            }	
-//            System.out.println("Pool done");
-//		} catch(Exception e) {
-//            System.out.println("Problem bei Pooleinrichtung: " + e);
-//        }
-	} 
-    
-    // Verbindung aus Connectionpool holen
     static final public Connection getConnection() throws Exception {
     	//return DriverManager.getConnection("jdbc:bms:pool0");
     	return getDBSession(0).connection();
@@ -385,21 +349,6 @@ public class DB
     private static SessionFactory[] sessionFactory; 
 	
 	static {
-	      System.out.println("Initializing Datasources");
-	      
-			List dbs = Option.config.getList("db.driver");
-			
-			int dbc = dbs.size();
-			System.out.println("Datenbanken: " + dbc);
-			
-//			db_driver   = Option.getProperties("db(0).driver");
-//			db_url 	    = Option.getProperties("db(0).url");
-//			db_user     = Option.getProperties("db(0).user");
-//			db_password = Option.getProperties("db(0).password");
-//			
-//			db_config   = Option.getProperties("db(0).config");
-
-			
 	      try {
 	    	sessionFactory  = new SessionFactory[dbc];
 	    	
@@ -419,15 +368,8 @@ public class DB
 				.setProperty("hibernate.connection.username", Option.getProperty("db(" + i + ").user"))
 				.setProperty("hibernate.connection.driver_class", Option.getProperty("db(" + i + ").driver"));
 
-		        System.out.println(dburl);
-		        
 		    	sessionFactory[i] = cfg.buildSessionFactory();
 	    	}
-		  } catch (Exception e) {
-		    e.printStackTrace();
-		  }
-		  
-		  System.out.println("Finished Initializing Datasources");
 	 }
 
 	 public static Session getDBSession() throws Exception
