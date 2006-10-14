@@ -14,14 +14,14 @@ public class Parameter
 	private static Log log = LogFactory.getLog(Parameter.class);
 
 	
-	public static int port    = 0;
-	public static String host = "";
+	public int port    = 0;
+	public String host = "";
 	
-    static String keystore  = null;
-    static String storepass = null;
-    static String keypass   = null;
+    String keystore  = null;
+    String storepass = null;
+    String keypass   = null;
  
-    static boolean ssl = false;
+    boolean ssl = false;
     
     public void initServer(String _host, int _port)
     {

@@ -165,7 +165,7 @@ public class TestCRMObject {
        Socket socket = null;
        
 		try {
-	    	socket = new Socket(Client.host, Client.port);
+	    	socket = new Socket(client.host, client.port);
 
 	    	IO.writeLine(socket, r, ENC);
 	    	

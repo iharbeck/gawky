@@ -16,8 +16,7 @@ public class Option
 {
 	private static Log log = LogFactory.getLog(Option.class);
 	
-	// create Options object
-	public static Options options = new Options();
+	static boolean initdone = false;
 	
 	private static String HOST    = "host";
 	private static String PORT    = "p";
@@ -28,10 +27,11 @@ public class Option
 	private static String VALIDIP = "i";
 	private static String SSLMODE = "s";
 	
+	static XMLConfiguration config = null;
 	private static String PROPERTY_FILE = "properties.xml";
 	
-	static CommandLine cmd = null;
-	static XMLConfiguration config = null;
+	static CommandLine cmd     = null;
+	static Options     options = null;
 
 	
 	/**
@@ -53,7 +53,6 @@ public class Option
 		return getProperty(alias, null);
 	}
 	
-	
 	public static String[] getProperties(String alias)
 	{
 		if(cmd != null && cmd.hasOption(alias))
@@ -67,52 +66,11 @@ public class Option
 	
 	public static boolean hasProperty(String alias)
 	{
-		return cmd.hasOption(alias) || "1".equals(config.getString(alias)) || config.getString(alias) != null;
+		return (cmd != null && cmd.hasOption(alias)) ||
+			   (config != null && (config.getString(alias) != null || "1".equals(config.getString(alias))));
 	}
 	
-	/**
-	 * Check for allowed Address
-	 * @param addr
-	 * @return
-	 */
-	public static boolean isValidIP(String addr) 
-	{
-		String val[] = Option.getProperties(VALIDIP);
-		
-		if(val == null)
-			return true;
-
-		for(int i=0 ; i< val.length; i++)
-		{
-			if(val[i].equals(addr))
-				return false;
-		}
-
-		return true;
-	}
-	
-	public static int getTimeout()
-	{
-		if(Option.hasProperty(TIMEOUT))
-			return Integer.parseInt(getProperty(TIMEOUT)) * 100;
-		else 
-			return 10000;
-	}
-	
-	public static int getPort()
-	{
-		if(Option.hasProperty(PORT))
-			return Integer.parseInt(getProperty(PORT));
-		else 
-			return 3000;
-	}
-	
-	public static String getHost()
-	{
-		return Option.getProperty(HOST);
-	}
-	
-	public static Level getLoglevel()
+	private static Level getLoglevel()
 	{
 		if(!Option.hasProperty(VERBOSE))
 			return Level.ERROR; 
@@ -129,14 +87,12 @@ public class Option
 		}
 	}
 	
-	static boolean initdone = false;
-	
 	public static void init() throws Exception
 	{
 		init(PROPERTY_FILE, "Properties", new String[0]);
 	}
 	
-	public static boolean isClassInPath(String classname, String info) {
+	private static boolean isClassInPath(String classname, String info) {
 		try {
 			Class.forName(classname);
 			return true;
@@ -152,18 +108,40 @@ public class Option
 		if(initdone)
 			return;
 	
-		propertyparser(propfile);
+
+		// Properties parsen
+		try {
+			// XML Configfile
+			config = new XMLConfiguration(propfile);
+			// Property Configfile
+			// config = new PropertiesConfiguration("TestServer.properties");
+			
+		} catch(Exception e) {
+			Logger.getLogger(Option.class).error(e);
+			throw e;
+		}
+		
 		
 		if(isClassInPath("org.apache.commons.cli.CommandLineParser", "Commandline parser disabled Lib is missing!"))
-			cmdparser(processname, args);
-		
-		if(cmd.hasOption(HELP))
 		{
-			// automatically generate the help statement
-			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( processname, options );
+			initOption();
 			
-			System.exit(0);
+			try {			
+				CommandLineParser parser = new PosixParser();
+				cmd = parser.parse( options, args);
+			} catch (Exception e) {
+				log.error(e);
+				throw e;
+			}
+		
+			if(cmd.hasOption(HELP))
+			{
+				// automatically generate the help statement
+				HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp( processname, options );
+				
+				System.exit(0);
+			}
 		}
 		
 		// overwrite logfile default
@@ -186,7 +164,6 @@ public class Option
 			
 			// set loglevel default = ERROR
 			Logger.getRootLogger().setLevel( Option.getLoglevel() );
-
 		}
 		
 		initdone = true;
@@ -194,30 +171,20 @@ public class Option
 		return; 
 	}
 	
-	// Property File parsen
-	static void propertyparser(String propfile) throws Exception
-	{
-		try {
-			// XML Configfile
-			config = new XMLConfiguration(propfile);
-
-			// Alternative
-
-			// Property Configfile
-			// PropertiesConfiguration config = new PropertiesConfiguration("TestServer.properties");
-			
-		} catch(Exception e) {
-			Logger.getLogger(Option.class).error(e);
-			throw e;
-		}
+	public static Options getOptions() {
+		if(options == null)
+			options = new Options();
+		
+		return options;
 	}
 	
-	
-	
-	static void initOption() 
+	private static void initOption() 
 	{
 		// check if options already registered
 		// add default options (shorty, value, description)
+
+		if(options == null)
+			options = new Options();
 		
 		if(!options.hasOption(PORT)) 
 			options.addOption(PORT, PORT, true,  "set listener port number (5001-49151)");
@@ -265,35 +232,47 @@ public class Option
 			options.addOption(SSLMODE, SSLMODE, true,  "run in SSL mode");
 	}
 	
-	// Commandozeile parsen
-	static boolean cmdparser(String processname, String args[]) throws Exception
+	
+	
+	/**
+	 * Check for allowed Address
+	 * @param addr
+	 * @return
+	 */
+	public static boolean isValidIP(String addr) 
 	{
-		try {			
-			initOption();
-			
-			CommandLineParser parser = new PosixParser();
-			cmd = parser.parse( options, args);
-		} catch (Exception e) {
-			Logger.getLogger(Option.class).error(e);
-			throw e;
+		String val[] = getProperties(VALIDIP);
+		
+		if(val == null)
+			return true;
+
+		for(int i=0 ; i< val.length; i++)
+		{
+			if(val[i].equals(addr))
+				return false;
 		}
+
 		return true;
 	}
-
-	public static CommandLine getCmd() {
-		return cmd;
-	}
-
-	public static void setCmd(CommandLine cmd) {
-		Option.cmd = cmd;
-	}
-
-	public static XMLConfiguration getConfig() {
-		return config;
-	}
-
-	public static void setConfig(XMLConfiguration config) {
-		Option.config = config;
+	
+	public static int getTimeout()
+	{
+		if(hasProperty(TIMEOUT))
+			return Integer.parseInt(getProperty(TIMEOUT)) * 100;
+		else 
+			return 10000;
 	}
 	
+	public static int getPort()
+	{
+		if(hasProperty(PORT))
+			return Integer.parseInt(getProperty(PORT));
+		else 
+			return 3000;
+	}
+	
+	public static String getHost()
+	{
+		return getProperty(HOST);
+	}
 }

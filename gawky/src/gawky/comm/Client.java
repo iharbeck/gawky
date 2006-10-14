@@ -1,7 +1,3 @@
-/*
- * Created on 12.02.2005
- *
- */
 package gawky.comm;
 
 
@@ -115,8 +111,8 @@ public class Client extends Parameter
     	   kmf = KeyManagerFactory.getInstance("SunX509");
     	   ks  = KeyStore.getInstance("JKS");
     	   
-    	   ks.load(new FileInputStream(Client.keystore), Client.storepass.toCharArray());
-    	   kmf.init(ks, Client.keypass.toCharArray());
+    	   ks.load(new FileInputStream(keystore), storepass.toCharArray());
+    	   kmf.init(ks, keypass.toCharArray());
     	   
     	   TrustManagerFactory tmf;
     	   TrustManager[] tm;

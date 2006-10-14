@@ -1,6 +1,5 @@
 package example.comm.client;
 
-
 import java.net.Socket;
 
 import org.apache.commons.logging.Log;
@@ -11,12 +10,10 @@ import gawky.comm.Client;
 import gawky.global.Constant;
 import gawky.global.Option;
 
-public class TestClientOneSocket {
-
+public class TestClientOneSocket 
+{
 	private static Log log = LogFactory.getLog(TestClientOneSocket.class);
-	/**
-	 * @param args
-	 */
+
 	public static void main(String[] args)throws Exception 
 	{
 		Option.init("properties.xml", "TestServer", args);
@@ -45,7 +42,7 @@ public class TestClientOneSocket {
         Socket socket = null;
         
 		try {
-	    	socket = new Socket(Option.getHost(), Option.getPort());
+	    	socket = new Socket(client.host, client.port);
 
 	    	client.setAll(false);
 	    	

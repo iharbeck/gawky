@@ -68,7 +68,7 @@ public class Server extends Parameter
         Runtime.getRuntime().addShutdownHook(sh);
 
         try {
-	        if(!Server.ssl)
+	        if(!ssl)
 	            ss = new ServerSocket(port);  // Default Socket
 	        else
 	        {

@@ -29,9 +29,8 @@ public class DB
 	
 	static 
 	{
-		List dbs = Option.getConfig().getList("db.driver");
+		int dbc = Option.getProperties("db.driver").length;
 		
-		int dbc = dbs.size();
 		log.info("Datenbanken: " + dbc);
 		
 	    try {

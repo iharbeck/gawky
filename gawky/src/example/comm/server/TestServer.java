@@ -80,10 +80,10 @@ public class TestServer implements ThreadWorker
 		Server server = new Server(TestServer.class);
 		
 		// Secure Socket Server
-	    //new Server(port, keystore, storepass, keypass);
+//	    new Server(port, keystore, storepass, keypass, class);
 		
 	    // Plain Socket Server
-	    //new Server(Option.getPort());
+//	    new Server(Option.getPort(), class);
 		
     	server.start();
 	}
