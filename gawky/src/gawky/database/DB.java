@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,30 +26,30 @@ public class DB
 {
 	private static Log log = LogFactory.getLog(DB.class);
 	
-	static 
+	public static void init() 
 	{
 		int dbc = Option.getProperties("db.driver").length;
 		
 		log.info("Datenbanken: " + dbc);
 		
-	    try {
 	    	for(int i=0; i < dbc; i++) 
 	    	{
 	    		String dburl    = Option.getProperty("db(" + i + ").url");
-	    		//String dbconfig = Option.getProperty("db(" + i + ").config", null);  // "hibernate.cfg.xml"
 				String dbpass   = Option.getProperty("db(" + i + ").password");
 				String dbuser   = Option.getProperty("db(" + i + ").user");
 				String dbdriver = Option.getProperty("db(" + i + ").driver");
 	
-		        log.info(dburl);
-	
-		        new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000);
+		        log.info("Register: " + dburl);
+		        try {
+		        	new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000);
+		    	} catch (Exception e) {
+			        log.error("Pooleinrichtung: " + e.getMessage());
+				}
 	    	}
-		} catch (Exception e) {
-	        log.error("Problem bei Pooleinrichtung: ", e);
-		}
-	} 
-    
+		
+		
+	}
+	
     // Verbindung aus Connectionpool holen
     static public Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:bms:pool0");
@@ -340,14 +339,6 @@ public class DB
 /*
  
   
-public class DB 
-{
-	static final Logger log = Logger.getLogger(DB.class);
-	
-	static 
-	{
-//		try 
-//		{
 //			log.debug("Parameter initialisieren ");
 //		
 //			List dbs = Option.config.getList("db.driver");
@@ -360,9 +351,6 @@ public class DB
 //			db_password = Option.getProperties("db(0).password");
 //			
 //			db_config   = Option.getProperties("db(0).config");
-//		} catch (Exception e) {
-//			log.error(e);	
-//		}
 //		
 //		try {
 //            System.out.println("Init Pool");
@@ -441,7 +429,6 @@ public class DB
 		  
 		  System.out.println("Finished Initializing Datasources");
 	 }
-	  
 
 	 public static Session getDBSession() throws Exception
 	 {
@@ -453,198 +440,7 @@ public class DB
 	      return sessionFactory[number].openSession();
 	 }
     
-    
-	 public static boolean isDBAvailable()
-	 {
-		return isDBAvailable(0); 
-	 }
-	
-	 public static boolean isDBAvailable(int number)
-     {
-    	Connection conn = null;
-    	try {
-			conn = getConnection(number);
-			conn.getMetaData();
-		} catch (Exception e) {
-			return false;
-		} finally {
-			try { if(conn != null) conn.close(); } catch (Exception e) {} 
-		}
-		return true;
-    }
-    
-    final static private String secString(ResultSet rset, int i)
-	{
-    	try {
-    		String val = rset.getString(i);
-    		if(val == null)
-    			return "";
-    		else
-    			return val;
-    	} catch (Exception e) {
-		}
-    	return "";
-	}
-	
-	public static Hashtable getRow(String sql, String[] params)
-	{
-		Hashtable hs = null;
-		Connection conn = null;
-		ResultSet rset = null;
-
-		PreparedStatement stmt_select = null;
-		
-		try {
-			conn = DB.getConnection();
-			
-			stmt_select = conn.prepareStatement(sql);
-			
-			int a = 1;
-			
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = params[i];
-				stmt_select.setString(a++, param);
-			}
-
-			rset = stmt_select.executeQuery();
-
-			if (rset.next())
-			{
-				hs = new Hashtable();
-				ResultSetMetaData md = stmt_select.getMetaData();
-				
-				for (int i = md.getColumnCount(); i > 0; i --) {
-					//System.out.println(md.getColumnName(i) + " -- " + secString(rset,i));
-					hs.put(md.getColumnName(i), secString(rset,i));
-				}
-			} else {
-				System.out.println("no result (" + sql + ")" + (params != null ? params[0] : ""));
-			}
-		} catch (Exception e) {
-			System.out.println(".." + e);
-		} finally {
-			doClose(stmt_select); 
-			doClose(rset);
-			doClose(conn);
-		}
-		
-		return hs;
-	}
-	
-	
-	public static ArrayList getRowList(String sql, String[] params)
-	{
-		ArrayList al = new ArrayList();
-		
-		
-		Connection conn = null;
-		
-		ResultSet rset = null;
-
-		PreparedStatement stmt_select = null;
-		
-		try {
-			conn = DB.getConnection();
-			
-			stmt_select = conn.prepareStatement(sql);
-			
-			int a = 1;
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = params[i];
-				stmt_select.setString(a++, param);
-			}
-
-			rset = stmt_select.executeQuery();
-
-			while (rset.next())
-			{
-				Hashtable hs = new Hashtable();
-				ResultSetMetaData md = stmt_select.getMetaData();
-				
-				for (int i = md.getColumnCount(); i > 0; i --) {
-					//System.out.println(md.getColumnName(i) + " -- " + secString(rset, i));
-					hs.put(md.getColumnName(i), secString(rset, i));
-				}
-				
-				al.add(hs);
-			} 
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			doClose(stmt_select); 
-			doClose(rset);
-			doClose(conn);
-		}
-		
-		return al;
-	}
-
-	public static ArrayList getList(String sql, String[] params)
-	{
-		ArrayList al = new ArrayList();
-		
-		
-		Connection conn = null;
-		
-		ResultSet rset = null;
-
-		PreparedStatement stmt_select = null;
-		
-		try {
-			conn = DB.getConnection();
-			
-			stmt_select = conn.prepareStatement(sql);
-			
-			int a = 1;
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = params[i];
-				stmt_select.setString(a++, param);
-			}
-
-			rset = stmt_select.executeQuery();
-
-			while (rset.next())
-			{
-				al.add(secString(rset, 1));
-			} 
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			doClose(stmt_select); 
-			doClose(rset);
-			doClose(conn);
-		}
-		
-		return al;
-	}
-	
-	
-	 
-	 public static final void doClose(ResultSet o)
-	 {
-		try { 
-			if (o != null) o.close();
-		} catch (Exception e) { }
-	 }
-
-	 public static final void doClose(Statement o)
-	 {
-		try { 
-			if (o != null) o.close();
-		} catch (Exception e) { }
-	 }
-
-	 public static final void doClose(Connection o)
-	 {
-		try { 
-			if (o != null) o.close();
-		} catch (Exception e) { }
-	 }
-	 
 	 public static void initObject(Object obj) {
 		Hibernate.initialize(obj);
 	 }
-}
- * 
- * 
  */

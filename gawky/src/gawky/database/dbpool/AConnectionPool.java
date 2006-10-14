@@ -38,6 +38,8 @@ class ConnectionReaper extends Thread
 
 public class AConnectionPool {
 
+   private static Log log = LogFactory.getLog(AConnectionPool.class);
+	
    private Vector connections;
    private String url, user, password;
    public String id;
@@ -133,7 +135,7 @@ public class AConnectionPool {
        c = new AConnection(conn, this);
        c.lease();
        connections.addElement(c);
-       System.out.println("Count++: " + connections.size());
+       log.debug("Count++: " + connections.size());
        return c;
    }
 

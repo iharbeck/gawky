@@ -41,7 +41,7 @@ public class AConnectionDriver implements Driver
      */
 
     public AConnectionDriver(Properties prop)
-           throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+           throws Exception
     {
         URL_PREFIX += prop.getProperty("id", "");
 
@@ -53,23 +53,27 @@ public class AConnectionDriver implements Driver
     }
 
     public AConnectionDriver(String driver, String url, String user, String password, String id, long timeout)
-           throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+           throws Exception
     {
         URL_PREFIX += id;
         init(driver, url, user, password, timeout);
     }
 
     public AConnectionDriver(String driver, String url, String user, String password)
-           throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+           throws Exception
     {
         init(driver, url, user, password, timeout);
     }
 
     public void init(String driver, String url, String user, String password, long timeout)
-           throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException
+           throws Exception
     {
         DriverManager.registerDriver(this);
-        Class.forName(driver).newInstance();
+        try {
+        	Class.forName(driver);
+        } catch (Exception e) {
+        	throw new Exception("MISSING(" + driver + ")");
+        }
         pool = new AConnectionPool(URL_PREFIX, url, user, password, timeout);
     }
 

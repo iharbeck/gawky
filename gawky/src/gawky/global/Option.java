@@ -1,5 +1,7 @@
 package gawky.global;
 
+import gawky.database.DB;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -144,8 +146,16 @@ public class Option
 			}
 		}
 		
-		// overwrite logfile default
+		// DB initialisieren
 		
+		if(isClassInPath("gawky.database.DB", "DB wurde nicht gefunden Parameter werden ignoriert!"))
+		{
+			DB.init();
+		}
+		
+		
+		// overwrite logfile default 
+		// Rootlogger / loglevel
 		// Suche nach LOG4J Klassen
 		if(isClassInPath("org.apache.log4j.Logger", "LOG4J wurde nicht gefunden Parameter werden ignoriert!"))
 		{
