@@ -4,7 +4,7 @@
 
   	<p>31680</p>
   	<host>localhost</host>
-  	<v>9</v>
+  	<!--  <v>9</v> -->
   	<l>/work/gawky/log/logfile</l>
   	<M>10</M>
   	<keystore>/work/gawky/etc/keystore</keystore>

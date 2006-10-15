@@ -3,8 +3,7 @@ package gawky.global;
 import gawky.database.DB;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter; 
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -106,7 +105,6 @@ public class Option
 	
 	public static void init(String propfile, String processname, String args[]) throws Exception
 	{
-		System.out.println("IN INIT !!!!");
 		if(initdone)
 			return;
 	
@@ -118,7 +116,7 @@ public class Option
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
 		} catch(Exception e) {
-			Logger.getLogger(Option.class).error(e);
+			log.error(e);
 			throw e;
 		}
 		
