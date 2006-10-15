@@ -4,7 +4,7 @@ import gawky.database.DB;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.HelpFormatter; 
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -35,7 +35,6 @@ public class Option
 	static CommandLine cmd     = null;
 	static Options     options = null;
 
-	
 	/**
 	 * get Property from cmdline or configfile
 	 * cmdline overwrites
@@ -107,6 +106,7 @@ public class Option
 	
 	public static void init(String propfile, String processname, String args[]) throws Exception
 	{
+		System.out.println("IN INIT !!!!");
 		if(initdone)
 			return;
 	
@@ -117,20 +117,19 @@ public class Option
 			config = new XMLConfiguration(propfile);
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
-			
 		} catch(Exception e) {
 			Logger.getLogger(Option.class).error(e);
 			throw e;
 		}
 		
-		
-		if(isClassInPath("org.apache.commons.cli.CommandLineParser", "Commandline parser disabled Lib is missing!"))
+		boolean hascmd = isClassInPath("org.apache.commons.cli.CommandLineParser", 
+				                       "Commandline parser disabled Lib is missing!");
+		if(hascmd)
 		{
 			initOption();
 			
 			try {			
-				CommandLineParser parser = new PosixParser();
-				cmd = parser.parse( options, args);
+				cmd = new PosixParser().parse(options, args);
 			} catch (Exception e) {
 				log.error(e);
 				throw e;
@@ -148,7 +147,8 @@ public class Option
 		
 		// DB initialisieren
 		
-		if(isClassInPath("gawky.database.DB", "DB wurde nicht gefunden Parameter werden ignoriert!"))
+		if(isClassInPath("gawky.database.DB", 
+						 "DB wurde nicht gefunden Parameter werden ignoriert!"))
 		{
 			DB.init();
 		}
@@ -157,7 +157,8 @@ public class Option
 		// overwrite logfile default 
 		// Rootlogger / loglevel
 		// Suche nach LOG4J Klassen
-		if(isClassInPath("org.apache.log4j.Logger", "LOG4J wurde nicht gefunden Parameter werden ignoriert!"))
+		if(isClassInPath("org.apache.log4j.Logger", 
+						 "LOG4J wurde nicht gefunden Parameter werden ignoriert!"))
 		{
 			// logfile setzen
 			String logfile = Option.getProperty(LOGFILE);

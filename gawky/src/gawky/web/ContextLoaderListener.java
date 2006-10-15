@@ -24,6 +24,7 @@ public class ContextLoaderListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent arg0) {
 		try {
+			System.out.println("START");
 			Option.init();
 		} catch (Exception e) {
 			arg0.getServletContext().log("Init gawky failed", e);
