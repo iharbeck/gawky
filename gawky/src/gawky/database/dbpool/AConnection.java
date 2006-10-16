@@ -52,18 +52,12 @@ public class AConnection implements Connection
 
     public boolean validate()
     {
-      //PreparedStatement pstmt = null;
-      
-      try
-      {
+      try {
       	conn.getMetaData();
-      	//pstmt = conn.prepareStatement("select * from pp_user");
-      	//pstmt.execute();
-      } catch (Exception e) {
+      } 
+      catch (Exception e) {
     	  return false;
-      } finally {
-    	//try { pstmt.close(); } catch(Exception e) {}
-      }
+      } 
       return true;
     }
 
@@ -81,7 +75,6 @@ public class AConnection implements Connection
 
     public void finalclose() throws SQLException {
         conn.close();
-        //pool.returnConnection(this);
     }
 
     protected void expireLease()

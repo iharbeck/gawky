@@ -22,9 +22,9 @@ public class AConnectionDriver implements Driver
      * <pre>
      *      Properties prop = new Properties();
      *      prop.setProperty("driver",  "oracle.jdbc.driver.OracleDriver");
-     *      prop.setProperty("url",     "jdbc:oracle:thin:@debmu335:1480:dbotirs1");
-     *      prop.setProperty("user",    "appirs");
-     *      prop.setProperty("pass",    "tirs00");
+     *      prop.setProperty("url",     "jdbc:oracle:thin:@host:port:db");
+     *      prop.setProperty("user",    "user");
+     *      prop.setProperty("pass",    "pass");
      *      prop.setProperty("id",      "db1");
      *
      *      new pool.ConnectionDriver(prop);
@@ -35,7 +35,7 @@ public class AConnectionDriver implements Driver
      * </pre>
      * <b>getting a connection:</b>
      * <pre>
-     *      Connection conn = DriverManager.getConnection("jdbc:bms:db1");
+     *      Connection conn = DriverManager.getConnection("jdbc:internal:db1");
      * </pre>
      *
      */
@@ -79,7 +79,6 @@ public class AConnectionDriver implements Driver
 
     public Connection connect(String url, Properties props) throws SQLException
     {
-        //if(!url.startsWith(URL_PREFIX)) {
         if(!url.equals(URL_PREFIX)) {
              return null;
         }
@@ -88,7 +87,6 @@ public class AConnectionDriver implements Driver
 
     public boolean acceptsURL(String url)
     {
-        //return url.startsWith(URL_PREFIX);
         return url.equals(URL_PREFIX);
     }
 

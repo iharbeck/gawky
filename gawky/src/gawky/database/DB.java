@@ -1,6 +1,5 @@
 package gawky.database;
 
-import gawky.database.dbpool.AConnectionDriver;
 import gawky.global.Option;
 
 import java.sql.Connection;
@@ -38,10 +37,14 @@ public class DB
 			String dbpass   = Option.getProperty("db(" + i + ").password");
 			String dbuser   = Option.getProperty("db(" + i + ").user");
 			String dbdriver = Option.getProperty("db(" + i + ").driver");
+			String dbalias  = Option.getProperty("db(" + i + ").alias", null);
 
 	        log.info("Register: " + dburl);
 	        try {
-	        	new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000);
+	        	if(dbalias == null)
+	        		new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000);
+	        	else
+	        		new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, dbalias, 5000000);
 	    	} catch (Exception e) {
 		        log.error("Pooleinrichtung: " + e.getMessage());
 			}
@@ -55,6 +58,10 @@ public class DB
     
     static public Connection getConnection(int number) throws SQLException {
     	return DriverManager.getConnection("jdbc:internal:" + "pool" + number);
+    }
+
+    static public Connection getConnection(String alias) throws SQLException {
+    	return DriverManager.getConnection("jdbc:internal:" + alias);
     }
 
     public static boolean isDBAvailable()
@@ -123,7 +130,35 @@ public class DB
 			doClose(rset);
 		}
 	}
-    
+	
+	  public static void execute(String sql)
+		{
+			Connection conn = null;
+			
+			try 
+			{
+				conn = DB.getConnection(0);
+				execute(conn, sql);
+			} catch (Exception e) {
+				log.error(e);
+			} finally {
+				doClose(conn);
+			}
+		}
+	  
+	public static void execute(Connection conn, String sql) throws Exception
+	{
+		PreparedStatement stmt_select = null;
+		
+		try {
+			
+			stmt_select = conn.prepareStatement(sql);
+			stmt_select.execute();
+		} finally {
+			doClose(stmt_select); 
+		}
+	}
+	
     /**
      * Row als Hashtable
      */

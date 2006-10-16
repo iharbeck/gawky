@@ -36,8 +36,8 @@ class ConnectionReaper extends Thread
     }
 }
 
-public class AConnectionPool {
-
+public class AConnectionPool 
+{
    private static Log log = LogFactory.getLog(AConnectionPool.class);
 	
    private Vector connections;
@@ -66,9 +66,6 @@ public class AConnectionPool {
 
    public synchronized void reapConnections()
    {
-      // if(true)
-      //  return;
-
       long stale = System.currentTimeMillis() - timeout;
       Enumeration connlist = connections.elements();
 
@@ -99,7 +96,6 @@ public class AConnectionPool {
        } catch (Exception e) {};
 
        connections.removeElement(conn);
-       //System.out.println("Count--: " + connections.size());
    }
 
    public synchronized Connection getConnection() throws SQLException
@@ -125,7 +121,6 @@ public class AConnectionPool {
        {
            c = (AConnection)connections.elementAt(i);
            if (c.lease()) {
-               //System.out.println("Count==: " + connections.size());
               return c;
            }
        }
