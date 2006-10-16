@@ -1,5 +1,6 @@
 package gawky.database;
 
+import gawky.database.dbpool.AConnectionDriver;
 import gawky.global.Option;
 
 import java.sql.Connection;
@@ -53,15 +54,15 @@ public class DB
 	
     // Verbindung aus Connectionpool holen
     static public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:internal:" + "pool0");
+        return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
     }
     
     static public Connection getConnection(int number) throws SQLException {
-    	return DriverManager.getConnection("jdbc:internal:" + "pool" + number);
+    	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
     }
 
     static public Connection getConnection(String alias) throws SQLException {
-    	return DriverManager.getConnection("jdbc:internal:" + alias);
+    	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
     }
 
     public static boolean isDBAvailable()

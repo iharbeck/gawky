@@ -10,7 +10,10 @@ import java.util.Properties;
 
 public class AConnectionDriver implements Driver 
 {
-    public String URL_PREFIX = "jdbc:internal:";
+    public final static String URL_PREFIX = "jdbc:gawky:";
+    
+    String  drivers_url;
+    
     private static final int MAJOR_VERSION = 1;
     private static final int MINOR_VERSION = 3;
     private static final long timeout = 50000;
@@ -43,7 +46,7 @@ public class AConnectionDriver implements Driver
     public AConnectionDriver(Properties prop)
            throws Exception
     {
-        URL_PREFIX += prop.getProperty("id", "");
+    	drivers_url =  URL_PREFIX + prop.getProperty("id", "");
 
         init(prop.getProperty("driver", ""),
              prop.getProperty("url", ""),
@@ -55,7 +58,7 @@ public class AConnectionDriver implements Driver
     public AConnectionDriver(String driver, String url, String user, String password, String id, long timeout)
            throws Exception
     {
-        URL_PREFIX += id;
+    	drivers_url = URL_PREFIX + id;
         init(driver, url, user, password, timeout);
     }
 
@@ -74,12 +77,12 @@ public class AConnectionDriver implements Driver
         } catch (Exception e) {
         	throw new Exception("MISSING(" + driver + ")");
         }
-        pool = new AConnectionPool(URL_PREFIX, url, user, password, timeout);
+        pool = new AConnectionPool(drivers_url, url, user, password, timeout);
     }
 
     public Connection connect(String url, Properties props) throws SQLException
     {
-        if(!url.equals(URL_PREFIX)) {
+        if(!url.equals(drivers_url)) {
              return null;
         }
         return pool.getConnection();
@@ -87,7 +90,7 @@ public class AConnectionDriver implements Driver
 
     public boolean acceptsURL(String url)
     {
-        return url.equals(URL_PREFIX);
+        return url.equals(drivers_url);
     }
 
     public int getMajorVersion()
