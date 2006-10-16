@@ -50,11 +50,11 @@ public class DB
 	
     // Verbindung aus Connectionpool holen
     static public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
+        return DriverManager.getConnection("jdbc:internal:" + "pool0");
     }
     
     static public Connection getConnection(int number) throws SQLException {
-    	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
+    	return DriverManager.getConnection("jdbc:internal:" + "pool" + number);
     }
 
     public static boolean isDBAvailable()

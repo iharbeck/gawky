@@ -21,7 +21,7 @@
 		<user>root</user> 
 		<password>root</password>
 	</db>
-	<db>
+    <db>
 		<driver>oracle.jdbc.driver.OracleDriver</driver>
 		<url>jdbc:oracle:thin:@hostname:port:sid</url>
 		<user>root</user> 
