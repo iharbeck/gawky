@@ -191,8 +191,6 @@ public class DB
 		PreparedStatement stmt_select = null;
 		
 		try {
-			conn = DB.getConnection(0);
-			
 			stmt_select = conn.prepareStatement(sql);
 			
 			int a = 1;
@@ -255,8 +253,6 @@ public class DB
 		PreparedStatement stmt_select = null;
 		
 		try {
-			conn = DB.getConnection(0);
-			
 			stmt_select = conn.prepareStatement(sql);
 			
 			int a = 1;
@@ -321,8 +317,6 @@ public class DB
 		PreparedStatement stmt_select = null;
 		
 		try {
-			conn = DB.getConnection(0);
-			
 			stmt_select = conn.prepareStatement(sql);
 			
 			int a = 1;

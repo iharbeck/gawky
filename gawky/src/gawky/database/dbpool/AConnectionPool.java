@@ -30,8 +30,10 @@ class ConnectionReaper extends Thread
            try {
               sleep(delay);
               log.info("Count==: " + pool.getConnectionCount());
-           } catch( InterruptedException e) { }
-           pool.reapConnections();
+              pool.reapConnections();
+           } catch( Exception e) { 
+        	   return;
+           }
         }
     }
 }
