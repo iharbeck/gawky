@@ -7,3 +7,23 @@
  * 
  *
  */
+ 
+ 
+ /***
+ 
+ GZIP Filter  (jspbook.jar)
+ 
+ <filter>
+	  <filter-name>Compress</filter-name> 
+	  <filter-class>com.jspbook.GZIPFilter</filter-class> 
+  </filter>
+  <filter-mapping>
+	  <filter-name>Compress</filter-name> 
+       <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+	  <filter-name>Compress</filter-name> 
+       <url-pattern>*.xls</url-pattern>
+  </filter-mapping>
+ 
+ ***/
