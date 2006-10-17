@@ -195,7 +195,7 @@ public class DB
 			
 			int a = 1;
 			
-			for (int i=0; i < params.length; i++) {
+			for (int i=0; params != null && i < params.length; i++) {
 				String param = params[i];
 				stmt_select.setString(a++, param);
 			}
@@ -212,7 +212,7 @@ public class DB
 					hs.put(md.getColumnName(i), secString(rset.getString(i)));
 				}
 			} else {
-				log.error("no result (" + sql + ")" + params[0]);
+				log.error("no result (" + sql + ")");
 			}
 		} catch (Exception e) {
 			log.error(e);
@@ -256,7 +256,7 @@ public class DB
 			stmt_select = conn.prepareStatement(sql);
 			
 			int a = 1;
-			for (int i=0; i < params.length; i++) {
+			for (int i=0; params != null && i < params.length; i++) {
 				String param = params[i];
 				stmt_select.setString(a++, param);
 			}
@@ -320,7 +320,7 @@ public class DB
 			stmt_select = conn.prepareStatement(sql);
 			
 			int a = 1;
-			for (int i=0; i < params.length; i++) {
+			for (int i=0; params != null && i < params.length; i++) {
 				String param = params[i];
 				stmt_select.setString(a++, param);
 			}
