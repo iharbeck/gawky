@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="lib/web/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/commons-digester-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.0.jar"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
