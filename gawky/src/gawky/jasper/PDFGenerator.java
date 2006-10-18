@@ -59,6 +59,6 @@ public class PDFGenerator {
 		
 		PDFGenerator.generateFile(null, 10, jasperFileName, outputFileName);
 		
-		System.out.println("done!");
+		log.info("done!");
 	}
 }

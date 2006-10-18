@@ -87,11 +87,34 @@ public class Option
 		}
 	}
 	
+	/**
+	 * Initialize Global properties with default properties file name "properties.xml"
+	 * 
+	 * @throws Exception
+	 */
 	public static void init() throws Exception
 	{
 		init(PROPERTY_FILE, "Properties", new String[0]);
 	}
 	
+	/**
+	 * Initialize Global properties with custom properties file name
+	 * 
+	 * @param propfile absolut or relative path to the configuration file
+	 * @throws Exception
+	 */
+	public static void init(String propfile) throws Exception
+	{
+		init(propfile, "Properties", new String[0]);
+	}
+	
+	/**
+	 * Check if classname is available in current classpath
+	 * 
+	 * @param classname		name of class to find
+	 * @param info			comment send to option logger if class not available
+	 * @return
+	 */
 	private static boolean isClassInPath(String classname, String info) {
 		try {
 			Class.forName(classname);
@@ -103,6 +126,14 @@ public class Option
 		}
 	}
 	
+	/**
+	 * Initialze Global properties with custom properties file name
+	 * 
+	 * @param propfile 		absolut or relative path to the configuration file
+	 * @param processname	Optional name for the process
+	 * @param args			Command parameter for commandline parsing
+	 * @throws Exception
+	 */
 	public static void init(String propfile, String processname, String args[]) throws Exception
 	{
 		if(initdone)

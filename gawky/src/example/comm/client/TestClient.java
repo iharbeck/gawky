@@ -43,6 +43,6 @@ public class TestClient {
 
         
     	String response = client.sendRequestPlain(request);
-    	System.out.println(":: " + response);
+    	log.info(":: " + response);
 	}
 }
