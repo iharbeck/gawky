@@ -73,7 +73,7 @@ public class Option
 	private static Level getLoglevel()
 	{
 		if(!Option.hasProperty(VERBOSE))
-			return Level.ERROR; 
+			return null; 
 		
 		switch (Option.getProperty(VERBOSE).charAt(0)) 
 		{
@@ -202,8 +202,12 @@ public class Option
 				}
 			}
 			
-			// set loglevel default = ERROR
-			Logger.getRootLogger().setLevel( Option.getLoglevel() );
+			// set loglevel
+			Level level = Option.getLoglevel();
+			if(level != null)
+			{
+				Logger.getRootLogger().setLevel( level );
+			}
 		}
 		
 		initdone = true;
