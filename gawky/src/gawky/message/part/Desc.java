@@ -1,5 +1,7 @@
 package gawky.message.part;
 
+import java.lang.reflect.Method;
+
 /**
  * Generic Part
  * 
@@ -61,6 +63,12 @@ public class Desc
 	public static final char  CODE_O = 'o';  //option
 	public static final char  CODE_F = 'f';  //fixed content (constant)
 	//public static final char  CODE_L = 'l';  //list of values
+	
+	
+	// Optimize relection
+	// store Method Definition
+	public Method smethod;
+	public Method gmethod;
 	
 	public Desc(char format, char code, int len, String name, String delimiter) // ValLength
 	{	

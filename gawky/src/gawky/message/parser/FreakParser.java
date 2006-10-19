@@ -198,7 +198,7 @@ public class FreakParser extends Parser
 	       
 	   Matcher matcher = pattern.matcher(str.substring(start));
 	   if (matcher.find()) {  
-		   //System.out.println( matcher.group(0) );
+		   //log.debug( matcher.group(0) );
 		   return matcher.end() + start;
 	   }
 	   return -1;

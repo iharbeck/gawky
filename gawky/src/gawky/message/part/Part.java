@@ -5,6 +5,7 @@ import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public abstract class Part 
@@ -16,16 +17,36 @@ public abstract class Part
 	
 	abstract public Desc[] getDesc();
 
+	private Desc[] getOptDesc() {
+		
+		Desc[] desc = getDesc();
+
+		// Prepare Reflection call
+		for(int i=0; i < desc.length; i++)
+		{
+			try {
+				String mname = Character.toUpperCase(desc[i].name.charAt(0)) +  desc[i].name.substring(1);
+				
+				desc[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
+				desc[i].gmethod = getClass().getMethod( "get" + mname, new Class[] {String.class});
+			} catch (Exception e) {
+			}
+		}
+		
+		return desc;
+	}
+	
 	// Cache Desc Arrays
 	public final Desc[] getCachedDesc() 
 	{
 		if(this instanceof NotCacheable)
-			return getDesc();
+			return getOptDesc();
 		
 		String key = this.getClass().getName();
 		Desc[] desc = (Desc[])hs.get(key); 
 		if(desc == null) {
-			desc = getDesc();
+			desc = getOptDesc();
+			
 			hs.put(key, desc);
 		}
 		

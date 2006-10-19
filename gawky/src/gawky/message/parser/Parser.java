@@ -5,7 +5,6 @@ import gawky.message.part.Part;
 
 import java.text.SimpleDateFormat;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -172,11 +171,15 @@ public class Parser
 		return;
 	}
 	 
-	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException {
-		try {
+	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException 
+	{
+		if(log.isInfoEnabled())
 			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
+			
+		try {
+			// Prepared Reflection call
 			if(desc.format != Desc.FMT_CONSTANT)
-				PropertyUtils.setSimpleProperty(bean, desc.name, value);
+				desc.smethod.invoke(bean, new Object[] {value});
 		} catch (Exception e) {	 
 			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
 		}

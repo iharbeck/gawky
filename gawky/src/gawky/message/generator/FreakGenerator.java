@@ -5,7 +5,6 @@ import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -36,8 +35,9 @@ public class FreakGenerator extends Generator
 				
 				String val = null;
 				
+				// Prepared Reflection call
 				try {
-					val = (String)PropertyUtils.getSimpleProperty(bean, desc.name);
+					val = (String)desc.gmethod.invoke(bean, (Object[]) null );
 				} catch(Exception e) {
 				}
 				

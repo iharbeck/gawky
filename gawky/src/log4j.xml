@@ -20,7 +20,7 @@
 	  </appender>
   
       <logger name="gawky"> 
-	    <level value="debug"/>
+	    <level value="warn"/>
 	  </logger>
 	  
 	  <logger name="example"> 
