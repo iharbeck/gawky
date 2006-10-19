@@ -2,7 +2,6 @@ package gawky.message.part;
 
 import gawky.global.Option;
 import gawky.message.generator.Generator;
-import gawky.message.parser.Accessor;
 import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
@@ -20,9 +19,10 @@ public abstract class Part
     private Generator generator;
 
 	static HashMap hs = new HashMap(); 
+	boolean dynamic   = true;
 	
 	abstract public Desc[] getDesc();
-
+	
 	private final Desc[] getOptDesc() {
 		
 		Desc[] desc = getDesc();
@@ -36,13 +36,13 @@ public abstract class Part
 			try {
 				String mname = Character.toUpperCase(desc[i].name.charAt(0)) +  desc[i].name.substring(1);
 				
-				if(Option.isClassInPath("javassist.ClassPool", "Install JavaAssist"))
+				if(dynamic && Option.isClassInPath("javassist.ClassPool", "Install JavaAssist"))
 				{
 					// Native case
 					
 					CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
 		
-					cc.addInterface( pool.get("gawky.message.parser.Accessor") );
+					cc.addInterface( pool.get(Accessor.class.getName()) );
 					
 					CtMethod ms = CtNewMethod.make(
 							" public void setValue(Object bean, String value) throws Exception {" +
@@ -71,14 +71,10 @@ public abstract class Part
 		return desc;
 	}
 	
-	
-	
-	// Cache Desc Arrays
 	public final Desc[] getCachedDesc() 
 	{
 		if(this instanceof NotCacheable)
 			return getOptDesc();
-		
 		
 		String key = this.getClass().getName();
 		Desc[] desc = (Desc[])hs.get(key); 
@@ -96,7 +92,7 @@ public abstract class Part
 	}
 	
 	/**
-	 * for Tuning just one parser
+	 * for spezialized Generators
 	 */
 	public final String toString(Generator extgenerator)
 	{
@@ -122,9 +118,8 @@ public abstract class Part
 
 	public final Parser getParser() {
 		if(parser == null)
-			return new Parser();
-		else
-			return parser;
+			parser = new Parser();
+		return parser;
 	}
 
 	public final void parse(String str) throws ParserException
@@ -133,7 +128,7 @@ public abstract class Part
 	}
 
 	/**
-	 * for Tuning just one parser
+	 * for specialized parsers
 	 */
 	public final void parse(Parser extparser, String str) throws ParserException
 	{

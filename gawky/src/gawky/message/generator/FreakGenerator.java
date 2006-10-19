@@ -37,7 +37,7 @@ public class FreakGenerator extends Generator
 				
 				// Prepared Reflection call
 				try {
-					val = (String)desc.gmethod.invoke(bean, (Object[]) null );
+					val = (String)desc.getValue(bean);
 				} catch(Exception e) {
 				}
 				

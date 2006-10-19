@@ -30,7 +30,6 @@ public class Generator
 				
 				String val = null;
 				
-				// Prepared Reflection call
 				try {
 					val = desc.getValue(bean);
 				} catch(Exception e) {

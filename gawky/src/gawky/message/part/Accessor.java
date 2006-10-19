@@ -1,4 +1,4 @@
-package gawky.message.parser;
+package gawky.message.part;
 
 public interface Accessor 
 {

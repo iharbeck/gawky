@@ -19,18 +19,10 @@ public class Parser
 	int    position = 0;
 	String line;
 	
-	SimpleDateFormat df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
-	SimpleDateFormat df_HHMMSS = new SimpleDateFormat("HHmmss");
+	SimpleDateFormat df_YYYYMMDD;
+	SimpleDateFormat df_HHMMSS;
 	
 
-	public void setDateFormat(String format) {
-		df_YYYYMMDD = new SimpleDateFormat(format);
-	}
-	
-	public void setTimeFormat(String format) {
-		df_HHMMSS   = new SimpleDateFormat(format); 
-	}
-	
 	public String getNext()
 	{
 		return line.substring(position);
@@ -48,7 +40,7 @@ public class Parser
 		int max = str.length();
 		int start = 0;
 
-		int end =0;
+		int end = 0;
 		
 		for(int i = 0; i < descs.length; i++)
 		{
@@ -111,7 +103,6 @@ public class Parser
 					throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
 			}
 			
-			
 			// Required Field
 			if(desc.code == Desc.CODE_R && value.equals(""))
 				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
@@ -165,7 +156,7 @@ public class Parser
 						throw new ParserException(ParserException.ERROR_TYPE_TIME, desc, value);
 					break;
 			}
-			
+
 		    storeValue(bean, i, desc, value);
 		}		
 		
@@ -178,10 +169,8 @@ public class Parser
 			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
 			
 		try {
-			// Prepared Reflection call
 			if(desc.format != Desc.FMT_CONSTANT)
 				desc.setValue(bean, value);
-		
 		} catch (Exception e) {	 
 			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
 		}
@@ -221,6 +210,9 @@ public class Parser
 
 	final boolean fmt_DATE(String value)
 	{
+		if(df_YYYYMMDD == null)
+			df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
+			
 		try	{
 			df_YYYYMMDD.parse(value);
 			return true; 
@@ -231,6 +223,9 @@ public class Parser
 
 	final boolean fmt_TIME(String value)
 	{
+		if(df_HHMMSS == null)
+			df_HHMMSS = new SimpleDateFormat("HHmmss");
+			
 		try {
 			df_HHMMSS.parse(value);
 			return true; 
@@ -238,4 +233,13 @@ public class Parser
 			return false;
 		} 
 	}
+	
+	public void setDateFormat(String format) {
+		df_YYYYMMDD = new SimpleDateFormat(format);
+	}
+	
+	public void setTimeFormat(String format) {
+		df_HHMMSS   = new SimpleDateFormat(format); 
+	}
+
 }

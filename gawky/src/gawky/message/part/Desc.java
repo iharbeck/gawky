@@ -1,8 +1,5 @@
 package gawky.message.part;
 
-import example.message.filereader.Address;
-import gawky.message.parser.Accessor;
-
 import java.lang.reflect.Method;
 
 /**
@@ -83,11 +80,11 @@ public class Desc
 	};
 	
 
-	public void setValue(Object bean, String value) throws Exception {
+	public final void setValue(Object bean, String value) throws Exception {
 		accessor.setValue(bean, value);
 	}
 
-	public String getValue(Object bean) throws Exception {
+	public final String getValue(Object bean) throws Exception {
 		return accessor.getValue(bean);	
 	}
 
