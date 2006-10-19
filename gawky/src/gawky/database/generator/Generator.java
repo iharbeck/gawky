@@ -11,7 +11,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -236,7 +235,7 @@ public class Generator
 				
 				setter++;
 
-				String val = (String)PropertyUtils.getSimpleProperty(bean, desc.name);
+				String val = desc.getValue(bean);
 				
 			    switch (desc.format) { 
 					case Desc.FMT_ASCII :
@@ -268,7 +267,7 @@ public class Generator
 
 			// fehlt noch einer muss es wohl die ID sein.
 			if(c == setter+1);
-				stmt.setString(setter+1, (String)PropertyUtils.getSimpleProperty(bean, bean.getDescID().name)); 
+				stmt.setString(setter+1, bean.getDescID().getValue(bean)); 
 				
 		} catch(Exception e) {
 		}
