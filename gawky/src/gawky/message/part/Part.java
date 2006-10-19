@@ -5,7 +5,6 @@ import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public abstract class Part 
