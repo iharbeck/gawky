@@ -1,11 +1,18 @@
 package gawky.message.part;
 
+import gawky.global.Option;
 import gawky.message.generator.Generator;
+import gawky.message.parser.Accessor;
 import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
 
 public abstract class Part 
 {
@@ -16,18 +23,47 @@ public abstract class Part
 	
 	abstract public Desc[] getDesc();
 
-	private Desc[] getOptDesc() {
+	private final Desc[] getOptDesc() {
 		
 		Desc[] desc = getDesc();
 
+		ClassPool pool = ClassPool.getDefault();
+		String classname = this.getClass().getName();
+		
 		// Prepare Reflection call
 		for(int i=0; i < desc.length; i++)
 		{
 			try {
 				String mname = Character.toUpperCase(desc[i].name.charAt(0)) +  desc[i].name.substring(1);
 				
-				desc[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
-				desc[i].gmethod = getClass().getMethod( "get" + mname, new Class[] {String.class});
+				if(Option.isClassInPath("javassist.ClassPool", "Install JavaAssist"))
+				{
+					// Native case
+					
+					CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
+		
+					cc.addInterface( pool.get("gawky.message.parser.Accessor") );
+					
+					CtMethod ms = CtNewMethod.make(
+							" public void setValue(Object bean, String value) throws Exception {" +
+							"  ((" + classname + ")bean).set" + mname + "(value); " +
+							" } "
+							, cc);
+					cc.addMethod(ms); 
+					
+					CtMethod mg = CtNewMethod.make(
+							" public String getValue(Object bean) throws Exception {" +
+							"  return ((" + classname + ")bean).get" + mname + "(); " +
+							" } "
+							, cc);
+					cc.addMethod(mg); 
+					
+					desc[i].accessor = (Accessor)cc.toClass().newInstance();
+				} else {
+					// Reflection case
+					desc[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
+					desc[i].gmethod = getClass().getMethod( "get" + mname, new Class[] {String.class});
+				}
 			} catch (Exception e) {
 			}
 		}
@@ -35,17 +71,19 @@ public abstract class Part
 		return desc;
 	}
 	
+	
+	
 	// Cache Desc Arrays
 	public final Desc[] getCachedDesc() 
 	{
 		if(this instanceof NotCacheable)
 			return getOptDesc();
 		
+		
 		String key = this.getClass().getName();
 		Desc[] desc = (Desc[])hs.get(key); 
 		if(desc == null) {
 			desc = getOptDesc();
-			
 			hs.put(key, desc);
 		}
 		

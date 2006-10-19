@@ -32,7 +32,7 @@ public class Generator
 				
 				// Prepared Reflection call
 				try {
-					val = (String)desc.gmethod.invoke(bean, (Object[]) null );
+					val = desc.getValue(bean);
 				} catch(Exception e) {
 				}
 				

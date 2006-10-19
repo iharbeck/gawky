@@ -110,7 +110,8 @@ public class Parser
 				if(desc.len > 0 && value.length() > desc.len)
 					throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
 			}
-	
+			
+			
 			// Required Field
 			if(desc.code == Desc.CODE_R && value.equals(""))
 				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
@@ -120,7 +121,7 @@ public class Parser
 				storeValue(bean, i, desc, value);		
 				continue;
 			}
-			
+
 			// Inhaltlich prüfung						
 		    switch (desc.format) { 
 				case Desc.FMT_ASCII :
@@ -179,12 +180,13 @@ public class Parser
 		try {
 			// Prepared Reflection call
 			if(desc.format != Desc.FMT_CONSTANT)
-				desc.smethod.invoke(bean, new Object[] {value});
+				desc.setValue(bean, value);
+		
 		} catch (Exception e) {	 
 			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
 		}
 	}
-	 
+	  
 	final boolean fmt_ascii(String value) {
 		return true; //value.matches("[\\w\\söäüÖÄÜß]*"); 
 	}

@@ -24,6 +24,6 @@ public class TestPart extends TestCase {
 	    assertEquals(samplepart.feld4, "1010");
 	    assertEquals(samplepart.feld5, "abc");
 	    assertEquals(samplepart.feld6, "abc");
-	    assertEquals(samplepart.feld7, "alpha");
+	    assertEquals(samplepart.feld7.trim(), "alpha");
 	}
 }

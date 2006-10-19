@@ -1,5 +1,8 @@
 package gawky.message.part;
 
+import example.message.filereader.Address;
+import gawky.message.parser.Accessor;
+
 import java.lang.reflect.Method;
 
 /**
@@ -69,6 +72,25 @@ public class Desc
 	// store Method Definition
 	public Method smethod;
 	public Method gmethod;
+	
+	public Accessor accessor = new Accessor() {
+		public void setValue(Object bean, String value) throws Exception {
+			smethod.invoke(bean, new Object[] {value});
+		}
+		public String getValue(Object bean) throws Exception {
+			return (String)gmethod.invoke(bean, (Object[]) null );	
+		}
+	};
+	
+
+	public void setValue(Object bean, String value) throws Exception {
+		accessor.setValue(bean, value);
+	}
+
+	public String getValue(Object bean) throws Exception {
+		return accessor.getValue(bean);	
+	}
+
 	
 	public Desc(char format, char code, int len, String name, String delimiter) // ValLength
 	{	

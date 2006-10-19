@@ -115,7 +115,7 @@ public class Option
 	 * @param info			comment send to option logger if class not available
 	 * @return
 	 */
-	private static boolean isClassInPath(String classname, String info) {
+	public static boolean isClassInPath(String classname, String info) {
 		try {
 			Class.forName(classname);
 			return true;
