@@ -24,7 +24,7 @@ public abstract class Part
     private Parser    parser;
     private Generator generator;
 
-	static HashMap hs = new HashMap(); 
+	private static HashMap hsDesc = new HashMap(); 
 	
 	abstract public Desc[] getDesc();
 	
@@ -35,22 +35,27 @@ public abstract class Part
 		ClassPool pool = ClassPool.getDefault();
 		String classname = this.getClass().getName();
 		
+		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
+		
 		// Prepare Reflection call
 		for(int i=0; i < desc.length; i++)
 		{
+			// Constanten do not have an attribute
+			if(desc[i].format == Desc.FMT_CONSTANT) 
+				continue;
+
 			try {
 				String mname = Character.toUpperCase(desc[i].name.charAt(0)) +  desc[i].name.substring(1);
 				
-				if(Option.isClassInPath("javassist.ClassPool", "Install JavaAssist"))
+				if(hasJavaAssist)
 				{
-					if(!Option.isClassInPath(classname + "Accessor" + mname, ""))
+
+					String proxycname = classname + "Accessor" + mname;
+					log.info("Generating Proxyclass: " + proxycname);
+					
+					if(!Option.isClassInPath(proxycname, ""))
 					{
 						// Native case - Generate ProxyClasses
-						
-						// Constanten do not have an attribute
-						if(desc[i].format == Desc.FMT_CONSTANT) 
-							continue;
-						
 						CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
 			
 						cc.addInterface( pool.get(Accessor.class.getName()) );
@@ -75,7 +80,7 @@ public abstract class Part
 					}
 					
 					// load from Classpath
-					desc[i].accessor = (Accessor)Class.forName(classname + "Accessor" + mname).newInstance();
+					desc[i].accessor = (Accessor)Class.forName(proxycname).newInstance();
 					
 					//desc[i].accessor = (Accessor)cc.toClass().newInstance();
 				} else {
@@ -94,10 +99,10 @@ public abstract class Part
 	public final Desc[] getCachedDesc() 
 	{
 		String key = this.getClass().getName();
-		Desc[] desc = (Desc[])hs.get(key); 
+		Desc[] desc = (Desc[])hsDesc.get(key); 
 		if(desc == null) {
 			desc = getOptDesc();
-			hs.put(key, desc);
+			hsDesc.put(key, desc);
 		}
 		
 		return desc;
