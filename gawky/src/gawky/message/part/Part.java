@@ -9,13 +9,13 @@ import gawky.message.parser.ParserException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public abstract class Part 
 {
@@ -30,7 +30,7 @@ public abstract class Part
 	
 	private final Desc[] getOptDesc() {
 		
-		Desc[] desc = getDesc();
+		Desc[] descs = getDesc();
 
 		ClassPool pool = ClassPool.getDefault();
 		String classname = this.getClass().getName();
@@ -38,35 +38,37 @@ public abstract class Part
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
 		
 		// Prepare Reflection call
-		for(int i=0; i < desc.length; i++)
+		for(int i=0; i < descs.length; i++)
 		{
 			// Constanten do not have an attribute
-			if(desc[i].format == Desc.FMT_CONSTANT) 
+			if(descs[i].format == Desc.FMT_CONSTANT) 
 				continue;
 
 			try {
-				String mname = Character.toUpperCase(desc[i].name.charAt(0)) +  desc[i].name.substring(1);
+				String mname = Character.toUpperCase(descs[i].name.charAt(0)) +  descs[i].name.substring(1);
 				
 				if(hasJavaAssist)
 				{
-
+					// Native case - Generate ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
+
 					log.info("Generating Proxyclass: " + proxycname);
 					
 					if(!Option.isClassInPath(proxycname, ""))
 					{
-						// Native case - Generate ProxyClasses
 						CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
 			
 						cc.addInterface( pool.get(Accessor.class.getName()) );
 						
+						// Create setter
 						CtMethod ms = CtNewMethod.make(
 								" public void setValue(Object bean, String value) throws Exception {" +
 								"  ((" + classname + ")bean).set" + mname + "(value); " +
 								" } "
 								, cc);
 						cc.addMethod(ms); 
-						
+
+						// Create getter 
 						CtMethod mg = CtNewMethod.make(
 								" public String getValue(Object bean) throws Exception {" +
 								"  return ((" + classname + ")bean).get" + mname + "(); " +
@@ -77,23 +79,25 @@ public abstract class Part
 						// Generate Class files
 						cc.writeFile(Locator.findBinROOT());
 						cc.detach();
+						
+						// Alternative if not written to local disk (no detach!!)
+						//desc[i].accessor = (Accessor)cc.toClass().newInstance();
 					}
 					
-					// load from Classpath
-					desc[i].accessor = (Accessor)Class.forName(proxycname).newInstance();
+					// load class from Classpath
+					descs[i].accessor = (Accessor)Class.forName(proxycname).newInstance();
 					
-					//desc[i].accessor = (Accessor)cc.toClass().newInstance();
 				} else {
 					// Reflection case - Lookup Method details
-					desc[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
-					desc[i].gmethod = getClass().getMethod( "get" + mname, new Class[] {String.class});
+					descs[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
+					descs[i].gmethod = getClass().getMethod( "get" + mname, null);
 				}
 			} catch (Exception e) {
 				log.error("Generating Getter/Setter", e);
 			}
 		}
 		
-		return desc;
+		return descs;
 	}
 	
 	public final Desc[] getCachedDesc() 
