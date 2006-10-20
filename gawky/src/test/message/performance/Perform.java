@@ -16,7 +16,7 @@ public class Perform {
 	{
 		Parser parser = new Parser();
 		
-		String line = "123456789012345678901234567890123456789012345678901234567890";
+		String line = "1234567890abcdefghij1234567890123456789012345678901234567890";
 		
 		Address address = new Address();
 
@@ -39,15 +39,13 @@ public class Perform {
 		{
 			address.parse(parser, line);
 		}
+		
+		log.error("Parser: parsed 1 million lines in " + (System.currentTimeMillis() - start) + "ms");
+
 		// do something
 		log.error(address.getVorname());
 		log.error(address.getNachname());
 
-		
-		
-		log.error("Parser: parsed 1 million lines in " + (System.currentTimeMillis() - start) + "ms");
-
-	
 	}
 
 }

@@ -1,5 +1,6 @@
 package gawky.message.part;
 
+import gawky.file.Locator;
 import gawky.global.Option;
 import gawky.message.generator.Generator;
 import gawky.message.parser.Parser;
@@ -8,6 +9,9 @@ import gawky.message.parser.ParserException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -15,11 +19,12 @@ import javassist.CtNewMethod;
 
 public abstract class Part 
 {
+	Log log = LogFactory.getLog(Part.class);
+	
     private Parser    parser;
     private Generator generator;
 
 	static HashMap hs = new HashMap(); 
-	boolean dynamic   = true;
 	
 	abstract public Desc[] getDesc();
 	
@@ -36,35 +41,50 @@ public abstract class Part
 			try {
 				String mname = Character.toUpperCase(desc[i].name.charAt(0)) +  desc[i].name.substring(1);
 				
-				if(dynamic && Option.isClassInPath("javassist.ClassPool", "Install JavaAssist"))
+				if(Option.isClassInPath("javassist.ClassPool", "Install JavaAssist"))
 				{
-					// Native case
+					if(!Option.isClassInPath(classname + "Accessor" + mname, ""))
+					{
+						// Native case - Generate ProxyClasses
+						
+						// Constanten do not have an attribute
+						if(desc[i].format == Desc.FMT_CONSTANT) 
+							continue;
+						
+						CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
+			
+						cc.addInterface( pool.get(Accessor.class.getName()) );
+						
+						CtMethod ms = CtNewMethod.make(
+								" public void setValue(Object bean, String value) throws Exception {" +
+								"  ((" + classname + ")bean).set" + mname + "(value); " +
+								" } "
+								, cc);
+						cc.addMethod(ms); 
+						
+						CtMethod mg = CtNewMethod.make(
+								" public String getValue(Object bean) throws Exception {" +
+								"  return ((" + classname + ")bean).get" + mname + "(); " +
+								" } "
+								, cc);
+						cc.addMethod(mg); 
+						
+						// Generate Class files
+						cc.writeFile(Locator.findBinROOT());
+						cc.detach();
+					}
 					
-					CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
-		
-					cc.addInterface( pool.get(Accessor.class.getName()) );
+					// load from Classpath
+					desc[i].accessor = (Accessor)Class.forName(classname + "Accessor" + mname).newInstance();
 					
-					CtMethod ms = CtNewMethod.make(
-							" public void setValue(Object bean, String value) throws Exception {" +
-							"  ((" + classname + ")bean).set" + mname + "(value); " +
-							" } "
-							, cc);
-					cc.addMethod(ms); 
-					
-					CtMethod mg = CtNewMethod.make(
-							" public String getValue(Object bean) throws Exception {" +
-							"  return ((" + classname + ")bean).get" + mname + "(); " +
-							" } "
-							, cc);
-					cc.addMethod(mg); 
-					
-					desc[i].accessor = (Accessor)cc.toClass().newInstance();
+					//desc[i].accessor = (Accessor)cc.toClass().newInstance();
 				} else {
-					// Reflection case
+					// Reflection case - Lookup Method details
 					desc[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
 					desc[i].gmethod = getClass().getMethod( "get" + mname, new Class[] {String.class});
 				}
 			} catch (Exception e) {
+				log.error("Generating Getter/Setter", e);
 			}
 		}
 		
@@ -73,9 +93,6 @@ public abstract class Part
 	
 	public final Desc[] getCachedDesc() 
 	{
-		if(this instanceof NotCacheable)
-			return getOptDesc();
-		
 		String key = this.getClass().getName();
 		Desc[] desc = (Desc[])hs.get(key); 
 		if(desc == null) {

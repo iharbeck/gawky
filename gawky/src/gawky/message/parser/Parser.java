@@ -22,18 +22,22 @@ public class Parser
 	SimpleDateFormat df_YYYYMMDD;
 	SimpleDateFormat df_HHMMSS;
 	
-
 	public String getNext()
 	{
 		return line.substring(position);
 	}
+	
+	Desc descs[] = null;
 	
 	public void parse(String str, Object bean) throws ParserException
 	{
 		// store for splitting records 
 		line = str;
 		
-		Desc   descs[] = ((Part)bean).getCachedDesc();
+		// Get Description Object
+		if(descs == null)
+			descs = ((Part)bean).getCachedDesc();
+		
 		Desc   desc;
 		String value = "";
 		
@@ -49,7 +53,7 @@ public class Parser
 			// DISCUSS example - ID not in Importfile but later in DB
 			if(desc.skipparsing) 
 				continue;
-			
+
 			if(desc.delimiter == null)   // fixed
 			{ 
 				end = start+desc.len;
@@ -104,65 +108,72 @@ public class Parser
 			}
 			
 			// Required Field
-			if(desc.code == Desc.CODE_R && value.equals(""))
+			if(desc.code == Desc.CODE_R && value.length() == 0)
 				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
 			// Optional Field
-			else if(desc.code == Desc.CODE_O && value.equals(""))
+			else if(desc.code == Desc.CODE_O && value.length() == 0)
 			{
 				storeValue(bean, i, desc, value);		
 				continue;
 			}
 
-			// Inhaltlich prüfung						
-		    switch (desc.format) { 
-				case Desc.FMT_ASCII :
-					if(!fmt_ascii(value))
-						throw new ParserException(ParserException.ERROR_TYPE_ASCII, desc, value);
-					break;
-				case Desc.FMT_DIGIT :
-					if(!fmt_digit(value))
-						throw new ParserException(ParserException.ERROR_TYPE_DIGIT, desc, value);
-					break;
-				case Desc.FMT_BLANK :
-					if(!fmt_blank(value))
-						throw new ParserException(ParserException.ERROR_TYPE_BLANK, desc, value);
-					break;
-				case Desc.FMT_BLANK_ZERO :
-					if(!fmt_blank_zero(value))
-						throw new ParserException(ParserException.ERROR_TYPE_BLANK_ZERO, desc, value);
-					break;
-				case Desc.FMT_BINARY :
-					if(!fmt_binary(value))
-						throw new ParserException(ParserException.ERROR_TYPE_BINARY, desc, value);
-					break;
-				case Desc.FMT_UPPER :
-					if(!fmt_upper(value))
-						throw new ParserException(ParserException.ERROR_TYPE_UPPER, desc, value);
-					break;
-				case Desc.FMT_LOWER :
-					if(!fmt_lower(value))
-						throw new ParserException(ParserException.ERROR_TYPE_LOWER, desc, value);
-					break;
-				case Desc.FMT_BLANK_LETTER :
-					if(!fmt_blank_letter(value))
-						throw new ParserException(ParserException.ERROR_TYPE_BLANK_LETTER, desc, value);
-					break;
-				case Desc.FMT_DATE :
-					if(!fmt_DATE(value))
-						throw new ParserException(ParserException.ERROR_TYPE_DATE, desc, value);
-					break;
-				case Desc.FMT_TIME :
-					if(!fmt_TIME(value))
-						throw new ParserException(ParserException.ERROR_TYPE_TIME, desc, value);
-					break;
-			}
-
+			// Inhaltlich prüfung	
+			typeCheck(desc, value);
+			
 		    storeValue(bean, i, desc, value);
 		}		
 		
 		return;
 	}
-	 
+	
+	public final void typeCheck(Desc desc, String value) throws ParserException 
+	{
+		// Inhaltlich prüfung						
+	    switch (desc.format) { 
+			case Desc.FMT_ASCII :
+				if(!fmt_ascii(value))
+					throw new ParserException(ParserException.ERROR_TYPE_ASCII, desc, value);
+				break;
+			case Desc.FMT_DIGIT :
+				if(!fmt_digit(value))
+					throw new ParserException(ParserException.ERROR_TYPE_DIGIT, desc, value);
+				break;
+			case Desc.FMT_BLANK :
+				if(!fmt_blank(value))
+					throw new ParserException(ParserException.ERROR_TYPE_BLANK, desc, value);
+				break;
+			case Desc.FMT_BLANK_ZERO :
+				if(!fmt_blank_zero(value))
+					throw new ParserException(ParserException.ERROR_TYPE_BLANK_ZERO, desc, value);
+				break;
+			case Desc.FMT_BINARY :
+				if(!fmt_binary(value))
+					throw new ParserException(ParserException.ERROR_TYPE_BINARY, desc, value);
+				break;
+			case Desc.FMT_UPPER :
+				if(!fmt_upper(value))
+					throw new ParserException(ParserException.ERROR_TYPE_UPPER, desc, value);
+				break;
+			case Desc.FMT_LOWER :
+				if(!fmt_lower(value))
+					throw new ParserException(ParserException.ERROR_TYPE_LOWER, desc, value);
+				break;
+			case Desc.FMT_BLANK_LETTER :
+				if(!fmt_blank_letter(value))
+					throw new ParserException(ParserException.ERROR_TYPE_BLANK_LETTER, desc, value);
+				break;
+			case Desc.FMT_DATE :
+				if(!fmt_DATE(value))
+					throw new ParserException(ParserException.ERROR_TYPE_DATE, desc, value);
+				break;
+			case Desc.FMT_TIME :
+				if(!fmt_TIME(value))
+					throw new ParserException(ParserException.ERROR_TYPE_TIME, desc, value);
+				break;
+		}
+		
+	}
+	
 	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException 
 	{
 		if(log.isInfoEnabled())
@@ -241,5 +252,4 @@ public class Parser
 	public void setTimeFormat(String format) {
 		df_HHMMSS   = new SimpleDateFormat(format); 
 	}
-
 }
