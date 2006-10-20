@@ -21,7 +21,7 @@ public class FreakParser extends Parser
 	
 	public void parse(String str, Object bean) throws ParserException
 	{
-		// store for splitting records 
+		//		 store for splitting records 
 		line = str;
 		
 		// Get Description Object

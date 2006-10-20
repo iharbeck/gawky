@@ -35,7 +35,6 @@ public class FreakGenerator extends Generator
 				
 				String val = null;
 				
-				// Prepared Reflection call
 				try {
 					val = (String)desc.getValue(bean);
 				} catch(Exception e) {

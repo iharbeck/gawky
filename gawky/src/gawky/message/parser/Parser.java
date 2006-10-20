@@ -17,17 +17,18 @@ public class Parser
 	private static Log log = LogFactory.getLog(Parser.class);
 	
 	int    position = 0;
-	String line;
 	
 	SimpleDateFormat df_YYYYMMDD;
 	SimpleDateFormat df_HHMMSS;
 	
-	public String getNext()
+	Desc descs[] = null;
+	
+	String line;
+	
+	public String getNext() 
 	{
 		return line.substring(position);
 	}
-	
-	Desc descs[] = null;
 	
 	public void parse(String str, Object bean) throws ParserException
 	{
@@ -245,11 +246,11 @@ public class Parser
 		} 
 	}
 	
-	public void setDateFormat(String format) {
+	public final void setDateFormat(String format) {
 		df_YYYYMMDD = new SimpleDateFormat(format);
 	}
 	
-	public void setTimeFormat(String format) {
+	public final void setTimeFormat(String format) {
 		df_HHMMSS   = new SimpleDateFormat(format); 
 	}
 }

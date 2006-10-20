@@ -49,13 +49,12 @@ public abstract class Part
 				
 				if(hasJavaAssist)
 				{
-					// Native case - Generate ProxyClasses
+					// Native case - Generate Native Bytecode for ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
 
-					log.info("Generating Proxyclass: " + proxycname);
-					
 					if(!Option.isClassInPath(proxycname, ""))
 					{
+						log.info("Generating Proxyclass: " + proxycname);
 						CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
 			
 						cc.addInterface( pool.get(Accessor.class.getName()) );
@@ -88,7 +87,7 @@ public abstract class Part
 					descs[i].accessor = (Accessor)Class.forName(proxycname).newInstance();
 					
 				} else {
-					// Reflection case - Lookup Method details
+					// Reflection case - Prepare Method details
 					descs[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
 					descs[i].gmethod = getClass().getMethod( "get" + mname, null);
 				}
