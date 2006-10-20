@@ -1,6 +1,5 @@
 package gawky.database.part;
 
-
 import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
@@ -18,7 +17,6 @@ import java.util.HashMap;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 
 /**
  * Persistence Layer for Part based Objects
@@ -152,13 +150,14 @@ public abstract class Table extends Part
 		
 		try {
 			// versuche to generierte ID zu ermitteln und im Object abzulegen
-			PropertyUtils.setSimpleProperty(
-					this, 
-					this.getDescID().name, 
-					getIdgenerator().getGeneratedID(conn, this)
-			);
+			getDescID().setValue(this, getIdgenerator().getGeneratedID(conn, this));
+//			PropertyUtils.setSimpleProperty(
+//					this, 
+//					this.getDescID().name, 
+//					getIdgenerator().getGeneratedID(conn, this)
+//			);
 		} catch (Exception e) {
-			//log.error(e);
+			log.error("insert Record", e);
 		}
 	}
 
@@ -181,7 +180,9 @@ public abstract class Table extends Part
 			ResultSetMetaData md = stmt.getMetaData();
 			
 			for (int i = md.getColumnCount(); i > 0; i --) {
-				log.info(md.getColumnName(i) + " -- " + rset.getString(i));
+				if(log.isInfoEnabled())
+					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
+				
 				PropertyUtils.setSimpleProperty(this, md.getColumnName(i), rset.getString(i));
 			}
 		} else {
@@ -208,7 +209,8 @@ public abstract class Table extends Part
 	public void delete(Connection conn) throws Exception 
 	{
 		// Delete current Object
-		delete(conn, Long.parseLong((String)PropertyUtils.getSimpleProperty(this, this.getDescID().name)));
+		//delete(conn, Long.parseLong((String)PropertyUtils.getSimpleProperty(this, this.getDescID().name)));
+		delete(conn, Long.parseLong( getDescID().getValue(this) ));
 	}
 	
 	public void update (Connection conn) throws SQLException 
