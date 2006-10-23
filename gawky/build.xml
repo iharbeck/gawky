@@ -23,6 +23,7 @@
 		 	<fileset dir="bin" includes="${name}-file-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-net-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-jasper-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-template-?.?.*.jar"/>
 		 </delete>
          <jar destfile="bin/${name}${version}.jar">
          	<fileset dir="${bin}" >
@@ -125,6 +126,14 @@
 	     	</fileset>
 	     	<fileset dir="${src}" >
 	     		<include name="gawky/jasper/**"/>
+	     	</fileset>
+		</jar>	
+		<jar destfile="bin/${name}-template${version}.jar">
+	     	<fileset dir="${bin}" >
+	     		<include name="gawky/template/**"/>
+	     	</fileset>
+	     	<fileset dir="${src}" >
+	     		<include name="gawky/template/**"/>
 	     	</fileset>
 		</jar>	
 	</target>
