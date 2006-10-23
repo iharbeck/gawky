@@ -6,11 +6,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-public class Zip {
+public class Tool {
 
 	public static void unzip(String filename) throws IOException 
 	{
@@ -53,5 +54,19 @@ public class Zip {
 		}
 		zout.close();
 	}
-
+	
+	
+	 public void copy(String in, String out) throws Exception 
+	 {
+		 copy(new File(in), new File(out));
+	 }
+	 
+	 public void copy(File in, File out) throws Exception 
+	 {
+	     FileChannel src = new FileInputStream(in).getChannel();
+	     FileChannel dest = new FileOutputStream(out).getChannel();
+	     src.transferTo(0, src.size(), dest);
+	     src.close();
+	     dest.close();
+	 }
 }
