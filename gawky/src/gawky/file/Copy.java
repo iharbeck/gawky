@@ -7,12 +7,12 @@ import java.nio.channels.FileChannel;
 
 public class Copy 
 {
-	 public void copyFile(String in, String out) throws Exception 
+	 public void copy(String in, String out) throws Exception 
 	 {
-		 copyFile(new File(in), new File(out));
+		 copy(new File(in), new File(out));
 	 }
 	 
-	 public void copyFile(File in, File out) throws Exception 
+	 public void copy(File in, File out) throws Exception 
 	 {
 	     FileChannel src = new FileInputStream(in).getChannel();
 	     FileChannel dest = new FileOutputStream(out).getChannel();
