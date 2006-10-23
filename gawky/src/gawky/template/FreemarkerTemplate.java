@@ -10,6 +10,7 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import gawky.file.Locator;
+import gawky.global.Option;
 
 public class FreemarkerTemplate 
 {
@@ -19,9 +20,11 @@ public class FreemarkerTemplate
 	
 	public static void main(String[] args) throws Exception 
 	{
+		String templates = Option.getProperty("freemarker.templates", "/gawky/template");
+
 		Configuration cfg = new Configuration();
-		
-		cfg.setDirectoryForTemplateLoading(new File(Locator.findBinROOT() + "/gawky/template"));
+
+		cfg.setDirectoryForTemplateLoading(new File(Locator.findBinROOT() + templates));
 		cfg.setObjectWrapper(new DefaultObjectWrapper());
 
 		Map latest = new HashMap();
