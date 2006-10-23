@@ -7,6 +7,8 @@ import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 
 import javassist.ClassPool;
@@ -32,10 +34,20 @@ public abstract class Part
 		
 		Desc[] descs = getDesc();
 
-		ClassPool pool = ClassPool.getDefault();
+		ClassPool pool = null;
 		String classname = this.getClass().getName();
 		
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
+		
+		ClassLoader urlCl = null;
+		
+		try {
+			urlCl  = URLClassLoader.newInstance(
+					    new URL[]{new URL( "file://" + Locator.findBinROOT() + "worker/" )});
+		} catch(Exception e) {
+			hasJavaAssist = false;
+		}
+
 		
 		// Prepare Reflection call
 		for(int i=0; i < descs.length; i++)
@@ -49,10 +61,13 @@ public abstract class Part
 				
 				if(hasJavaAssist)
 				{
+					if(pool == null)
+						pool = ClassPool.getDefault();
+					
 					// Native case - Generate Native Bytecode for ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
 
-					if(!Option.isClassInPath(proxycname, ""))
+					if(!Option.isClassInClassloader(urlCl, proxycname, ""))
 					{
 						log.info("Generating Proxyclass: " + proxycname);
 						CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
@@ -76,7 +91,7 @@ public abstract class Part
 						cc.addMethod(mg); 
 						
 						// Generate Class files
-						cc.writeFile(Locator.findBinROOT());
+						cc.writeFile(Locator.findBinROOT() + "worker");
 						cc.detach();
 						
 						// Alternative if not written to local disk (no detach!!)
@@ -84,7 +99,7 @@ public abstract class Part
 					}
 					
 					// load class from Classpath
-					descs[i].accessor = (Accessor)Class.forName(proxycname).newInstance();
+					descs[i].accessor = (Accessor)Class.forName(proxycname, false, urlCl).newInstance();
 					
 				} else {
 					// Reflection case - Prepare Method details

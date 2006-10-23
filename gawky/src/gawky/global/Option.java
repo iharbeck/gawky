@@ -126,6 +126,17 @@ public class Option
 		}
 	}
 	
+	public final static boolean isClassInClassloader(ClassLoader cl, String classname, String info) {
+		try {
+			cl.loadClass(classname);
+			return true;
+		} catch (Exception e) {
+			if(info != null)
+				log.info(info);
+			return false;
+		}
+	}
+	
 	/**
 	 * Initialze Global properties with custom properties file name
 	 * 
