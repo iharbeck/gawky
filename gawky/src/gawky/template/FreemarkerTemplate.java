@@ -35,7 +35,7 @@ public class FreemarkerTemplate
 		root.put("user", "Big Joe");
 		root.put("latestProduct", latest);
 
-		Template temp = cfg.getTemplate("test.tmpl");
+		Template temp = cfg.getTemplate("test.ftl");
 		
 		Writer out = new OutputStreamWriter(System.out);
 		temp.process(root, out);
