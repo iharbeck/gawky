@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class Generator 
+public class Generator
 {
 	private static Log log = LogFactory.getLog(Generator.class);	
 
