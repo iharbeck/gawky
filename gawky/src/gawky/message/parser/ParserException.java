@@ -20,6 +20,7 @@ public class ParserException extends Exception
 	static HashMap errors = new HashMap();
 	
 	public final static int ERROR_MISSING_SETTER    = 2100;
+	public final static int ERROR_LINE_TO_SHORT     = 2101;
 	public final static int ERROR_FIELD_TO_SHORT    = 2200;
 	public final static int ERROR_FIELD_TO_LONG     = 2300;
 	public final static int ERROR_FIELD_REQUIRED    = 2400;
@@ -39,6 +40,7 @@ public class ParserException extends Exception
 
 	static {
 		addError(ERROR_MISSING_SETTER,   "MISSING SETTER");
+		addError(ERROR_LINE_TO_SHORT,    "LINE TO SHORT");
 		addError(ERROR_FIELD_TO_SHORT,   "TO SHORT");
 		addError(ERROR_FIELD_TO_LONG,    "TO LONG");
 		addError(ERROR_FIELD_REQUIRED,   "REQUIRED");

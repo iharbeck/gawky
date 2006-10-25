@@ -96,7 +96,7 @@ public class Parser
 					}
 					// am Ende der Zeile angekommen
 					if(i < descs.length)
-						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, "line incomplete?");
+						throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
 					
 					return;
 				}
