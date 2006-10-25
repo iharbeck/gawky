@@ -32,7 +32,10 @@ public class TestFile implements LineHandler {
 			{
 				record = new RecordEXTI00();
 				record.parse(parser, line);
-				//log.warn(record.getStreet());
+				
+				// ein paar schöne UTF-8 Kandidaten
+				if(record.getAccountcurrency().equals("ILS"))
+					log.warn(record.getStreet());
 				count++;
 			}
 		} catch (Exception e) {
