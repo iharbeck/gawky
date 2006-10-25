@@ -131,6 +131,11 @@ public abstract class Part
 		return getGenerator().generateString(this);
 	}
 	
+	public final String toDebugString()
+	{
+		return getGenerator().generateDebugString(this);
+	}
+	
 	/**
 	 * for spezialized Generators
 	 */
