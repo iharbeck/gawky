@@ -1,9 +1,3 @@
-/*
- * RequestPayment.java
- *
- * Created on 6. August 2003, 11:29
- */
-
 package gawky.service.crm;
 
 

@@ -89,6 +89,9 @@ public class FreakParser extends Parser
 						storeValue(bean, i, desc, value);
 					}
 					// am Ende der Zeile angekommen
+					if(i < descs.length)
+						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, "line incomplete?");
+			
 					return;
 				}
 

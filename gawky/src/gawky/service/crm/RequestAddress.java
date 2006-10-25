@@ -1,9 +1,3 @@
-/*
- * RequestAddress.java
- *
- * Created on 6. August 2003, 11:35
- */
-
 package gawky.service.crm;
 
 import gawky.message.part.Desc;

@@ -1,9 +1,3 @@
-/*
- * Response.java
- *
- * Created on 6. August 2003, 10:32
- */
-
 package gawky.service.crm;
 
 

@@ -16,13 +16,13 @@ import gawky.message.part.Part;
  *
  * @author  Ingo Harbeck
  */
-public class RecordEXTI extends Part 
+public class RecordEXTI00 extends Part 
 {
     public Desc[] getDesc() 
 	{
 		return new Desc[] {
 			new DescC("EXTI"),	
-			new DescC("01"),
+			new DescC("00"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "encoding"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 9,   "clientid"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 16,  "recordid"),
@@ -41,12 +41,12 @@ public class RecordEXTI extends Part
 		    new DescF(Desc.FMT_9, Desc.CODE_O, 20,  "exchangerate"),
 		    new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "dc"),
 		    new DescF(Desc.FMT_9, Desc.CODE_O, 10,  "referencenumber"),
-		    new DescF(Desc.FMT_A, Desc.CODE_O, 40,  "referencenumberadd"),
+		    new DescF(Desc.FMT_A, Desc.CODE_O, 32,  "referencenumberadd"),
 		    new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "encrypt"),
 		    
 		    new DescF(Desc.FMT_A, Desc.CODE_O, 48,  "creditcardnumber"),
 		    new DescF(Desc.FMT_A, Desc.CODE_O, 4,   "creditcardexpiry"),
-		    new DescF(Desc.FMT_9, Desc.CODE_O, 4,   "issuedate"),
+		    new DescF(Desc.FMT_A, Desc.CODE_O, 4,   "issuedate"),
 		    new DescF(Desc.FMT_A, Desc.CODE_O, 2,   "cardid"),
 		    new DescF(Desc.FMT_A, Desc.CODE_O, 12,  "bankid"),
 		    new DescF(Desc.FMT_A, Desc.CODE_O, 80,  "bankaccount"),
@@ -90,11 +90,7 @@ public class RecordEXTI extends Part
 		    new DescV(Desc.FMT_A, Desc.CODE_O, 64,  "addressline4"),
 		    new DescV(Desc.FMT_A, Desc.CODE_O, 64,  "addressline5"),
 		    new DescV(Desc.FMT_A, Desc.CODE_O, 64,  "addressline6"),
-		    new DescV(Desc.FMT_A, Desc.CODE_O, 64,  "addressline7"),
-		    new DescV(Desc.FMT_A, Desc.CODE_O, 15,  "taxid"),
-		    new DescF(Desc.FMT_A, Desc.CODE_O, 1,   "bankaccounttype"),
-		    new DescV(Desc.FMT_A, Desc.CODE_O, 80,  "smarchantname"),
-		    new DescV(Desc.FMT_A, Desc.CODE_O, 80,  "smarchantcontact")
+		    new DescV(Desc.FMT_A, Desc.CODE_O, 64,  "addressline7")
 		}; 
 	}
 
@@ -163,10 +159,7 @@ public class RecordEXTI extends Part
     private String addressline5;
     private String addressline6;
     private String addressline7;
-    private String taxid;
-    private String bankaccounttype;
-    private String smarchantname;
-    private String smarchantcontact;
+    
 	public String getAccountcurrency() {
 		return accountcurrency;
 	}
@@ -286,12 +279,6 @@ public class RecordEXTI extends Part
 	}
 	public void setBankaccount(String bankaccount) {
 		this.bankaccount = bankaccount;
-	}
-	public String getBankaccounttype() {
-		return bankaccounttype;
-	}
-	public void setBankaccounttype(String bankaccounttype) {
-		this.bankaccounttype = bankaccounttype;
 	}
 	public String getBankid() {
 		return bankid;
@@ -515,18 +502,6 @@ public class RecordEXTI extends Part
 	public void setRibcode(String ribcode) {
 		this.ribcode = ribcode;
 	}
-	public String getSmarchantcontact() {
-		return smarchantcontact;
-	}
-	public void setSmarchantcontact(String smarchantcontact) {
-		this.smarchantcontact = smarchantcontact;
-	}
-	public String getSmarchantname() {
-		return smarchantname;
-	}
-	public void setSmarchantname(String smarchantname) {
-		this.smarchantname = smarchantname;
-	}
 	public String getStreet() {
 		return street;
 	}
@@ -538,12 +513,6 @@ public class RecordEXTI extends Part
 	}
 	public void setStreet2(String street2) {
 		this.street2 = street2;
-	}
-	public String getTaxid() {
-		return taxid;
-	}
-	public void setTaxid(String taxid) {
-		this.taxid = taxid;
 	}
 	public String getTitle() {
 		return title;

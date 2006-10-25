@@ -3,6 +3,7 @@ package gawky.service.bcoscs;
 import gawky.file.LineHandler;
 import gawky.file.LineReader;
 import gawky.file.Locator;
+import gawky.message.parser.Parser;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,25 +12,45 @@ public class TestFile implements LineHandler {
 	
 	private static Log log = LogFactory.getLog(TestFile.class);
 	
-	RecordEXTI record = new RecordEXTI();
+	RecordEXTI00 record = new RecordEXTI00();
 	
+	int count = 1;
+	
+	Parser parser = new Parser();
+	String incl = null;
 	public void processLine(String line) 
 	{
-		try {
-			if(line.startsWith("EXTI"))
+		try 
+		{
+			// handle incomplete lines
+//			if(incl != null) {
+//				line = incl + line; 
+//				incl = null;
+//			}
+			
+			if(line.startsWith("EXTI00"))
 			{
-				record.parse(line);
-				log.warn( record.toDebugString() );
+				record = new RecordEXTI00();
+				record.parse(parser, line);
+				//log.warn(record.getStreet());
+				count++;
 			}
 		} catch (Exception e) {
-			log.error(e);
+//			incl = line;
+			//log.error(line, e);
 		}
 	}
 	
 	public static void main(String[] args) throws Exception 
 	{
-		String filename = Locator.findPath("bcos.dat", TestFile.class);
+		log.warn("start");
 		
-		LineReader.processFile(filename, new TestFile());
+		String filename = Locator.findPath("BCS_DATEN_20061020_233048", TestFile.class);
+		
+		TestFile file = new TestFile();
+		
+		LineReader.processUTF8File(filename, file);
+		
+		log.warn("done: " + file.count);
 	}
 }

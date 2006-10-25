@@ -7,6 +7,10 @@ import gawky.message.part.DescF;
 import gawky.message.part.DescV;
 import gawky.message.part.Reserved;
 
+/**
+ * @author Ingo Harbeck
+ */
+
 public class RequestPayment10 extends RequestPayment {
 
 //	 Record definition

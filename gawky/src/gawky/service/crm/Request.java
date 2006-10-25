@@ -1,9 +1,3 @@
-/*
- * data.java
- *
- * Created on 5. August 2003, 15:58
- */
-
 package gawky.service.crm;
 
 
