@@ -6,6 +6,9 @@ import gawky.data.datasource.listener.CellListener;
 
 public class HtmlTable extends AbstractTable
 {
+	private String tableclass = null;
+	private String tablestyle = null;
+	
 	public String generate(Datasource ds)
 	{
 		StringBuffer buffer = new StringBuffer();
@@ -45,5 +48,22 @@ public class HtmlTable extends AbstractTable
 		buffer.append("</TABLE>\n");
 		
 		return buffer.toString();
+	}
+
+
+	public String getTableclass() {
+		return tableclass;
+	}
+
+	public void setTableclass(String tableclass) {
+		this.tableclass = tableclass;
+	}
+
+	public String getTablestyle() {
+		return tablestyle;
+	}
+
+	public void setTablestyle(String tablestyle) {
+		this.tablestyle = tablestyle;
 	}
 }

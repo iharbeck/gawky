@@ -6,9 +6,16 @@ public class LinkListener implements CellListener
 {
 	String reference;
 	
-	public String getAttribute(String name) { return ""; };
+	public String getAttribute(String name) 
+	{ 
+		if(name.equals("class"))
+			return "BOLDSTYLE";
+		else
+			return "";
+	}
+	
 	public String process(Datasource ds, int column)
 	{
-		return "link";
+		return "<a href=''>" + ds.getValue(column) + "</a>";
 	}
 }

@@ -9,6 +9,7 @@ public interface Datasource
 	String getHead(int i);	  // headline
 
 	boolean nextRow();		  // next record
+	public void reset();
 
 	Object getValue(int i);	  // get value
 	int getType(int i);		  // get type

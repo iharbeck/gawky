@@ -55,6 +55,9 @@ public class ResultSetDatasource implements Datasource {
 			return false;
 		}
 	}
+	
+	public void reset() {
+	}
 
 	public CellListener getListener(int i) 
 	{

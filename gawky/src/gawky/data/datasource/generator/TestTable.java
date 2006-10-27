@@ -2,14 +2,14 @@ package gawky.data.datasource.generator;
 
 import gawky.data.datasource.ArrayListDatasource;
 import gawky.data.datasource.Column;
-import gawky.data.datasource.Datasource;
-import gawky.data.datasource.listener.CellListener;
+import gawky.data.datasource.ResultSetDatasource;
+import gawky.data.datasource.listener.LinkListener;
 
 import java.util.ArrayList;
 
 public class TestTable {
 
-	public static void main(String[] args) 
+	public static void main(String[] args) throws Exception
 	{
 		ArrayList rows = new ArrayList();
 		
@@ -20,33 +20,27 @@ public class TestTable {
 		rows.add(new String[] { "2erster", "2zweiter", "2dritter"});
 		rows.add(new String[] { "2erster", "3zweiter", "3dritter"});
 		
+		Column[] columns = new Column[] {
+							new Column("CHEAD1", Column.TYPE_STRING),
+							new Column("CHEAD2", Column.TYPE_STRING, new LinkListener()),
+							new Column("CHEAD3", Column.TYPE_STRING)
+						};
 		
-		CellListener handler = new CellListener() {
-			public String getAttribute(String name) {
-				if(name.equals("class"))
-					return "BOLDSTYLE";
-				else
-					return "";
-			}
-			public String process(Datasource ds, int column) {
-				return "<a href=''>" + ds.getValue(column) + "</a>";
-			}
-		};
+		ArrayListDatasource ds = new ArrayListDatasource( rows, columns );
 		
-		ArrayListDatasource ds = new ArrayListDatasource(
-				rows, 
-				new Column[] {
-					new Column("HEAD1", Column.TYPE_STRING),
-					new Column("HEAD2", Column.TYPE_STRING, handler),
-					new Column("HEAD3", Column.TYPE_STRING)
-				}
-		);
+		ResultSetDatasource rs = new ResultSetDatasource(null);
+		rs.addColumn("FIRST", new Column("ERSTER"));
 		
+		PdfTable pwalker = new PdfTable();
 		
-		PdfTable walker = new PdfTable();
+		pwalker.generate(ds, "PdfTable.pdf");
+
+		ds.reset();
 		
-		System.out.println( walker.generate(ds) );
+		HtmlTable hwalker = new HtmlTable();
 		
+		System.out.println( hwalker.generate(ds) );
+
 	}
 	
 }
