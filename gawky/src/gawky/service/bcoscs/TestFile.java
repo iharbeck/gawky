@@ -14,33 +14,25 @@ public class TestFile implements LineHandler {
 	
 	RecordEXTI00 record = new RecordEXTI00();
 	
-	int count = 1;
-	
+	int count = 0;
 	Parser parser = new Parser();
-	String incl = null;
+
 	public void processLine(String line) 
 	{
 		try 
 		{
-			// handle incomplete lines
-//			if(incl != null) {
-//				line = incl + line; 
-//				incl = null;
-//			}
+			log.error(line);
 			
 			if(line.startsWith("EXTI00"))
 			{
-				record = new RecordEXTI00();
-				record.parse(parser, line);
-				
-				// ein paar schöne UTF-8 Kandidaten
-				if(record.getAccountcurrency().equals("ILS"))
-					log.warn(record.getStreet());
+//				record = new RecordEXTI00();
+//				record.parse(parser, line);
+//				
+//				log.warn(record.getStreet());
 				count++;
 			}
 		} catch (Exception e) {
-//			incl = line;
-			//log.error(line, e);
+			log.error(line, e);
 		}
 	}
 	
@@ -48,11 +40,12 @@ public class TestFile implements LineHandler {
 	{
 		log.warn("start");
 		
-		String filename = Locator.findPath("BCS_DATEN_20061020_233048", TestFile.class);
+		String filename = Locator.findPath("bcos.dat", TestFile.class);
 		
 		TestFile file = new TestFile();
 		
-		LineReader.processUTF8File(filename, file);
+		LineReader.processUTF8File(filename, file, 
+						new String[] {"EXTI00", "EXTI01", "HEAD"} );
 		
 		log.warn("done: " + file.count);
 	}
