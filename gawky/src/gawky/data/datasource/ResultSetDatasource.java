@@ -1,10 +1,14 @@
 package gawky.data.datasource;
 
+import gawky.data.datasource.listener.CellListener;
+
 import java.sql.ResultSet;
+import java.util.HashMap;
 
 public class ResultSetDatasource implements Datasource {
 
 	ResultSet rset;
+	HashMap column = new HashMap();
 	
 	public ResultSetDatasource(ResultSet rset) 
 	{
@@ -31,6 +35,10 @@ public class ResultSetDatasource implements Datasource {
 		// TODO map rset types
 		return 0;
 	}
+	
+	public int getWidth(int i) {
+		return 0;
+	}
 
 	public Object getValue(int i) {
 		try {
@@ -48,7 +56,17 @@ public class ResultSetDatasource implements Datasource {
 		}
 	}
 
-	public CellListener getListener(int i) {
-		return null;
+	public CellListener getListener(int i) 
+	{
+		Column col = (Column) column.get(getHead(i));
+		
+		if(col == null)
+			return null;
+		
+		return col.getListener();
+	}
+	
+	public void addColumn(String name, Column col) {
+		column.put(name, col);
 	}
 }

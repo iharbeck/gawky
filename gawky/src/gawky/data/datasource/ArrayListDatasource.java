@@ -1,5 +1,7 @@
 package gawky.data.datasource;
 
+import gawky.data.datasource.listener.CellListener;
+
 import java.util.ArrayList;
 
 
@@ -30,7 +32,6 @@ public class ArrayListDatasource implements Datasource
 		return columncount;
 	}
 	
-	
 	public CellListener getListener(int i) {
 		return column[i].getListener();
 	}
@@ -42,17 +43,21 @@ public class ArrayListDatasource implements Datasource
 	public int getType(int i) {
 		return column[i].getType();
 	}
+	
+	public int getWidth(int i) {
+		return column[i].getWidth();
+	}
 
 	public Object getValue(int i) {
 		return ((Object[])array.get(pos))[i];
 	}
 
 	public boolean nextRow() {
-		if(pos < rowcount)
-		{
+		if(pos < rowcount) {
 			pos++;
 			return true;
-		}return false;
+		}
+		return false;
 	}
 
 }
