@@ -29,6 +29,11 @@ public class ArrayListDatasource implements Datasource
 	public int getColumns() {
 		return columncount;
 	}
+	
+	
+	public CellListener getListener(int i) {
+		return column[i].getListener();
+	}
 
 	public String getHead(int i) {
 		return column[i].getLable();

@@ -48,4 +48,7 @@ public class ResultSetDatasource implements Datasource {
 		}
 	}
 
+	public CellListener getListener(int i) {
+		return null;
+	}
 }

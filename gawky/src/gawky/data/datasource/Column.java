@@ -9,12 +9,20 @@ public class Column
 	
 	private int type;
 	private String lable;
+	private CellListener listener;
+	
+	public Column(String lable, int type, CellListener listener) {
+		this.lable = lable;
+		this.type  = type;
+		this.listener = listener;
+	}
 	
 	public Column(String lable, int type) {
 		this.lable = lable;
 		this.type  = type;
+		this.listener = null;
 	}
-	
+
 	public String getLable() {
 		return lable;
 	}
@@ -26,5 +34,13 @@ public class Column
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public CellListener getListener() {
+		return listener;
+	}
+
+	public void setListener(CellListener listener) {
+		this.listener = listener;
 	}
 }
