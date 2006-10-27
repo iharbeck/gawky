@@ -21,14 +21,14 @@ public class TestFile implements LineHandler {
 	{
 		try 
 		{
-			log.error(line);
+			log.info(line);
 			
 			if(line.startsWith("EXTI00"))
 			{
-//				record = new RecordEXTI00();
-//				record.parse(parser, line);
-//				
-//				log.warn(record.getStreet());
+				record = new RecordEXTI00();
+				record.parse(parser, line);
+
+				log.warn(record.getStreet());
 				count++;
 			}
 		} catch (Exception e) {
@@ -40,12 +40,12 @@ public class TestFile implements LineHandler {
 	{
 		log.warn("start");
 		
-		String filename = Locator.findPath("bcos.dat", TestFile.class);
+		String filename = Locator.findPath("BCS_DATEN_20061027.save", TestFile.class);
 		
 		TestFile file = new TestFile();
 		
 		LineReader.processUTF8File(filename, file, 
-						new String[] {"EXTI00", "EXTI01", "HEAD"} );
+						new String[] {"EXTI00", "EXTI01", "S000"} );
 		
 		log.warn("done: " + file.count);
 	}

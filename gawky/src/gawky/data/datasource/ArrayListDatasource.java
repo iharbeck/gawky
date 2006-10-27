@@ -22,7 +22,7 @@ public class ArrayListDatasource implements Datasource
 	{
 		this.array  = array;
 		this.column = column;
-		this.rowcount  = array.size();
+		this.rowcount  = array.size()-1;
 		this.columncount = column.length;
 	}
 	
@@ -43,9 +43,11 @@ public class ArrayListDatasource implements Datasource
 	}
 
 	public boolean nextRow() {
-		if(pos++ < rowcount)
+		if(pos < rowcount)
+		{
+			pos++;
 			return true;
-		return false;
+		}return false;
 	}
 
 }
