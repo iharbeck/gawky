@@ -2,7 +2,7 @@ package gawky.data.datasource;
 
 import java.util.ArrayList;
 
-public class Walker {
+public class PdfTable {
 
 	static CellListener defaultListener = new CellListener() {
 		public String process(Datasource ds, int column) { return (String)ds.getValue(column); };
@@ -33,7 +33,8 @@ public class Walker {
 			}
 		};
 		
-		ArrayListDatasource ds = new ArrayListDatasource(rows, 
+		ArrayListDatasource ds = new ArrayListDatasource(
+				rows, 
 				new Column[] {
 					new Column("HEAD1", Column.TYPE_STRING),
 					new Column("HEAD2", Column.TYPE_STRING, handler),
@@ -43,7 +44,7 @@ public class Walker {
 		
 		
 		
-		Walker walker = new Walker();
+		PdfTable walker = new PdfTable();
 		
 		System.out.println( walker.generate(ds) );
 		
