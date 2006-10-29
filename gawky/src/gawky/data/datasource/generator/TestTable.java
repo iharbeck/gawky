@@ -21,12 +21,12 @@ public class TestTable {
 		rows.add(new String[] { "2erster", "3zweiter", "3dritter"});
 		
 		Column[] columns = new Column[] {
-							new Column("CHEAD1", Column.TYPE_STRING),
-							new Column("CHEAD2", Column.TYPE_STRING, new LinkListener()),
-							new Column("CHEAD3", Column.TYPE_STRING)
-						};
+			new Column("CHEAD1", Column.TYPE_STRING).setWidth(100),
+			new Column("CHEAD2", Column.TYPE_STRING, new LinkListener()).setWidth(300),
+			new Column("CHEAD3", Column.TYPE_STRING).setWidth(200)
+		};
 		
-		ArrayListDatasource ds = new ArrayListDatasource( rows, columns );
+		ArrayListDatasource ds = new ArrayListDatasource( rows, columns);
 		
 		ResultSetDatasource rs = new ResultSetDatasource(null);
 		rs.addColumn("FIRST", new Column("ERSTER"));
@@ -41,6 +41,13 @@ public class TestTable {
 		
 		System.out.println( hwalker.generate(ds) );
 
+		ds.reset();
+
+		XlsTable xwalker = new XlsTable();
+		
+		xwalker.generate(ds, "XlsTable.xls");
+
+		
 	}
 	
 }
