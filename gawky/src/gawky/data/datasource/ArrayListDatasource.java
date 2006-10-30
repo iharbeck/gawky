@@ -7,25 +7,42 @@ import java.util.ArrayList;
 public class ArrayListDatasource implements Datasource 
 {
 	ArrayList array;
-	Column[] column;
+	Column[] columns;
 	
 	int rowcount;
 	int pos = -1;
 	
 	int columncount;
+	int columnshidden = -1;
 	
 	/**
 	 * Initialisiere Datenquelle
 	 * @param array
 	 * @param column
 	 */
-	public ArrayListDatasource(ArrayList array, Column[] column) 
+	public ArrayListDatasource(ArrayList array, Column[] columns) 
 	{
 		this.array  = array;
-		this.column = column;
+		this.columns = columns;
 		this.rowcount  = array.size()-1;
-		this.columncount = column.length;
+		this.columncount = columns.length;
 	}
+	
+	public int getColumnsHidden()
+	{
+		if(columnshidden == -1)
+		{
+			columnshidden = 0;
+			
+			for(int i=0; i < columncount; i++)
+			{
+				if(columns[i].getWidth() == Column.HIDDEN)
+					columnshidden++;
+			}
+		}
+		return columnshidden;
+	}
+	
 	
 	/**
 	 * Firstline includes header
@@ -34,7 +51,7 @@ public class ArrayListDatasource implements Datasource
 	public ArrayListDatasource( ArrayList array ) 
 	{
 		this.array  = array;
-		this.column = null;
+		this.columns = null;
 		this.rowcount  = array.size()-1;
 		this.columncount = ((Object[])array.get(0)).length;
 		pos++;
@@ -45,28 +62,28 @@ public class ArrayListDatasource implements Datasource
 	}
 	
 	public CellListener getListener(int i) {
-		if(column == null)
+		if(columns == null)
 			return null;
-		return column[i].getListener();
+		return columns[i].getListener();
 	}
 
 	public String getHead(int i) {
-		if(column == null)
+		if(columns == null)
 			return (String)((Object[])array.get(0))[i];
 		
-		return column[i].getLable();
+		return columns[i].getLable();
 	}
 
 	public int getType(int i) {
-		if(column == null)
+		if(columns == null)
 			return Column.TYPE_STRING;
-		return column[i].getType();
+		return columns[i].getType();
 	}
 	
 	public int getWidth(int i) {
-		if(column == null)
+		if(columns == null)
 			return 0;
-		return column[i].getWidth();
+		return columns[i].getWidth();
 	}
 
 	public Object getValue(int i) {
@@ -85,7 +102,7 @@ public class ArrayListDatasource implements Datasource
 		pos = -1;
 		
 		// Header überspringen
-		if(column == null)
+		if(columns == null)
 			pos++;
 	}
 }

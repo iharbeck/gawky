@@ -4,15 +4,34 @@ import gawky.data.datasource.listener.CellListener;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class ResultSetDatasource implements Datasource {
 
 	ResultSet rset;
-	HashMap column = new HashMap();
+	HashMap columns = new HashMap();
+	
+	int columnshidden = -1;
 	
 	public ResultSetDatasource(ResultSet rset) 
 	{
 		this.rset = rset;
+	}
+	
+	public int getColumnsHidden()
+	{
+		if(columnshidden == -1)
+		{
+			columnshidden = 0;
+			Iterator it = columns.values().iterator();
+			
+			while(it.hasNext()) 
+			{
+				if(((Column)it.next()).getWidth() == Column.HIDDEN)
+					columnshidden++;
+			}
+		}
+		return columnshidden;
 	}
 	
 	public int getColumns() {
@@ -23,9 +42,14 @@ public class ResultSetDatasource implements Datasource {
 		}
 	}
 
-	public String getHead(int i) {
+	public String getHead(int i) 
+	{
 		try {
-			return rset.getMetaData().getColumnName(i);
+			String name = rset.getMetaData().getColumnName(i+1);
+			if(columns.get(name) == null)
+				return name;
+			else
+				return ((Column) columns.get(name)).getLable();
 		} catch(Exception e) {
 			return "";
 		}
@@ -37,12 +61,20 @@ public class ResultSetDatasource implements Datasource {
 	}
 	
 	public int getWidth(int i) {
-		return 0;
+		try {
+			String name = rset.getMetaData().getColumnName(i+1);
+			if(columns.get(name) == null)
+				return 0;
+			else
+				return ((Column) columns.get(name)).getWidth();
+		} catch(Exception e) {
+			return 0;
+		}
 	}
 
 	public Object getValue(int i) {
 		try {
-			return rset.getObject(i);
+			return rset.getString(i+1);
 		} catch(Exception e) {
 			return null;
 		}
@@ -57,11 +89,15 @@ public class ResultSetDatasource implements Datasource {
 	}
 	
 	public void reset() {
+		try {
+			rset.first();
+		} catch(Exception e) {
+		}
 	}
 
 	public CellListener getListener(int i) 
 	{
-		Column col = (Column) column.get(getHead(i));
+		Column col = (Column) columns.get(getHead(i));
 		
 		if(col == null)
 			return null;
@@ -70,6 +106,6 @@ public class ResultSetDatasource implements Datasource {
 	}
 	
 	public void addColumn(String name, Column col) {
-		column.put(name, col);
+		columns.put(name, col);
 	}
 }

@@ -1,5 +1,6 @@
 package gawky.data.datasource.generator;
 
+import gawky.data.datasource.Column;
 import gawky.data.datasource.Datasource;
 import gawky.data.datasource.listener.CellListener;
 import gawky.file.Locator;
@@ -12,6 +13,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.Table;
 import com.lowagie.text.pdf.PdfWriter;
 
@@ -20,18 +22,30 @@ public class PdfTable extends AbstractTable
 	
 	Document document;
 	
-	float fontsize = (float)8.5;
+	float fontsize = (float)10;
 	float leading  = fontsize;
 	
-	Font courierfont = FontFactory.getFont(FontFactory.COURIER, fontsize);
+	Font courierfont = FontFactory.getFont(FontFactory.HELVETICA, fontsize);
 
 	float margin   = 25;
+	
+	Rectangle format = PageSize.A4;
+	
+	public void setFormatPortrait() {
+		format = PageSize.A4;
+	}
+	public void setFormatLandscape() {
+		format = PageSize.A4.rotate();
+	}
+	public void setMargin(float margin) {
+		this.margin = margin;
+	}
 	
 	public void generate(Datasource ds, String output) throws Exception
 	{
 		// create document
-		//document = new Document(PageSize.A4.rotate());
-		document = new Document(PageSize.A4);
+		document = new Document(format);
+
 		document.setMargins(margin, margin, margin, margin);
 		
 		// output path
@@ -43,32 +57,32 @@ public class PdfTable extends AbstractTable
         document.open();
 
         
-        Table table = new Table(ds.getColumns()); 
+        Table table = new Table(ds.getColumns()-ds.getColumnsHidden()); 
 //        table.setBorderWidth(1); 
 //        table.setBorderColor(new Color(0, 0, 255)); 
-//        table.setCellpadding(5); 
-//        table.setCellspacing(5); 
         
         table.setPadding(2);
         table.setSpacing(0);
         
-        int headerwidths[] = new int[ds.getColumns()];
+        int headerwidths[] = new int[ds.getColumns()-ds.getColumnsHidden()];
         
-        
-        
+        int x = 0;
 		for(int i=0; i < ds.getColumns(); i++)
 		{
+			if(ds.getWidth(i) == Column.HIDDEN)
+				continue;
+		
 	        Cell cell = new Cell(ds.getHead(i)); 
 	        cell.setHeader(true); 
 	        cell.setBackgroundColor(Color.GRAY);
-	        cell.setLeading(10);
+	        cell.setLeading(leading);
 	        table.addCell(cell); 
 	        
-	        headerwidths[i] = ds.getWidth(i);
+	        headerwidths[x++] = ds.getWidth(i) == 0 ? 100 : ds.getWidth(i);
 		}
 
         table.setWidths(headerwidths);
-        //table.setWidth(100);
+        table.setWidth(100);
 
         table.endHeaders();
 
@@ -77,9 +91,13 @@ public class PdfTable extends AbstractTable
 		{
 			for(int i=0; i < ds.getColumns(); i++)
 			{
+				if(ds.getWidth(i) == Column.HIDDEN)
+					continue;
 				CellListener handler = getListener(ds, i);
 				
-				table.addCell(handler.process(ds, i)); 
+				Cell cell = new Cell(handler.process(ds, i)); 
+				cell.setLeading(leading);
+				table.addCell(cell); 
 			}
 		}
 

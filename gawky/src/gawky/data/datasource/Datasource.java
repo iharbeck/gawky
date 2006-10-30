@@ -16,4 +16,5 @@ public interface Datasource
 	int getWidth(int i);	  // get width
 	
 	public CellListener getListener(int i);
+	public int getColumnsHidden();
 }

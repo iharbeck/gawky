@@ -36,6 +36,10 @@ public class Column
 		this.listener = listener;
 	}
 
+	public Column setHidden() {
+		this.width = HIDDEN;
+		return this;
+	}
 
 	public String getLable() {
 		return lable;
