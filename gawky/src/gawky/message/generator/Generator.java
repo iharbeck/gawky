@@ -28,7 +28,7 @@ public class Generator
 		if(bean == null)
 			return "";
 		
-		String str = "";
+		StringBuffer str = new StringBuffer("");
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
@@ -47,32 +47,32 @@ public class Generator
 				
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					str += Formatter.getStringN(desc.len, val);
+					str.append( Formatter.getStringN(desc.len, val) );
 					if(desc.delimiter != null)
-						str += desc.delimiter;
+						str.append(desc.delimiter);
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von rechts mit null füllen
-					str += Formatter.getStringNL(desc.len, val);
+					str.append( Formatter.getStringNL(desc.len, val) );
 					if(desc.delimiter != null)
-						str += desc.delimiter;					
+						str.append( desc.delimiter );					
 				}
 				else
 				{
 					if(desc.delimiter != null)
-						str += Formatter.getStringV(desc.len, val, desc.delimiter);
+						str.append( Formatter.getStringV(desc.len, val, desc.delimiter) );
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0)
-								str += Formatter.getStringC(desc.len, val);
+								str.append( Formatter.getStringC(desc.len, val) );
 							else
-								str += val;
+								str.append( val );
 						}
 						else
 						{
-							str += Formatter.getStringC(desc.len, desc.name);
+							str.append( Formatter.getStringC(desc.len, desc.name) );
 						}
 					}
 				} 
@@ -81,7 +81,7 @@ public class Generator
 			log.error("getProperty in Parser" ,e);
 		}
 		
-		return str;
+		return str.toString();
 	}
 	
 	public String generateDebugString(Part bean)
@@ -89,7 +89,7 @@ public class Generator
 		if(bean == null)
 			return "";
 		
-		String str = "";
+		StringBuffer str = new StringBuffer("");
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
@@ -106,44 +106,44 @@ public class Generator
 				} catch(Exception e) {
 				}
 				
-				str += desc.name + " <"; 
+				str.append( desc.name).append( " <" ); 
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					str += Formatter.getStringN(desc.len, val);
+					str.append( Formatter.getStringN(desc.len, val) );
 					if(desc.delimiter != null)
-						str += desc.delimiter;
+						str.append( desc.delimiter );
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von rechts mit null füllen
-					str += Formatter.getStringNL(desc.len, val);
+					str.append( Formatter.getStringNL(desc.len, val) );
 					if(desc.delimiter != null)
-						str += desc.delimiter;					
+						str.append( desc.delimiter );					
 				}
 				else
 				{
 					if(desc.delimiter != null)
-						str += Formatter.getStringV(desc.len, val, desc.delimiter);
+						str.append( Formatter.getStringV(desc.len, val, desc.delimiter) );
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0)
-								str += Formatter.getStringC(desc.len, val);
+								str.append( Formatter.getStringC(desc.len, val) );
 							else
-								str += val;
+								str.append( val );
 						}
 						else
 						{
-							str += Formatter.getStringC(desc.len, desc.name);
+							str.append( Formatter.getStringC(desc.len, desc.name) );
 						}
 					}
 				}
-				str += ">\n";
+				str.append( ">\n" );
 			}
 		} catch(Exception e) {
 			log.error("getProperty in Parser" ,e);
 		}
 		
-		return str;
+		return str.toString();
 	}
 }

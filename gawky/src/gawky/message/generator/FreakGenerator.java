@@ -18,7 +18,7 @@ public class FreakGenerator extends Generator
 		if(bean == null)
 			return "";
 		
-		String str = "";
+		StringBuffer str = new StringBuffer("");
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
@@ -42,32 +42,32 @@ public class FreakGenerator extends Generator
 				
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					str += Formatter.getStringN(desc.len, val);
+					str.append(Formatter.getStringN(desc.len, val) );
 					if(delimiter != null)
-						str += delimiter;
+						str.append( delimiter );
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von rechts mit null füllen
-					str += Formatter.getStringNL(desc.len, val);
+					str.append( Formatter.getStringNL(desc.len, val) );
 					if(delimiter != null)
-						str += delimiter;					
+						str.append( delimiter );					
 				}
 				else
 				{
 					if(delimiter != null)
-						str += Formatter.getStringV(desc.len, val, delimiter);
+						str.append( Formatter.getStringV(desc.len, val, delimiter) );
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0)
-								str += Formatter.getStringC(desc.len, val);
+								str.append( Formatter.getStringC(desc.len, val) );
 							else
-								str += val;
+								str.append( val );
 						}
 						else
 						{
-							str += Formatter.getStringC(desc.len, desc.name);
+							str.append( Formatter.getStringC(desc.len, desc.name) );
 						}
 					}
 				} 
@@ -76,6 +76,6 @@ public class FreakGenerator extends Generator
 			log.error("getProperty in Parser" ,e);
 		}
 		
-		return str;
+		return str.toString();
 	}
 }
