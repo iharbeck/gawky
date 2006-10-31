@@ -12,15 +12,19 @@ import freemarker.template.Template;
 import gawky.file.Locator;
 import gawky.global.Option;
 
-public class FreemarkerTemplate 
+public class FreemarkerTemplate implements gawky.template.Template
 {
 	/**
 	 *  http://freemarker.sourceforge.net/docs/dgui_quickstart_basics.html#example.first
 	 */ 
 	
-	static Configuration cfg = null;
+	Configuration cfg = null;
 	
-	public static String processToString(Object obj, String templatefile) throws Exception 
+	public static gawky.template.Template getInstance() {
+		return new FreemarkerTemplate();
+	}
+	
+	public String processToString(Object obj, String templatefile) throws Exception 
 	{
 		ByteArrayOutputStream barray = new ByteArrayOutputStream();
 		process(obj, templatefile, barray);
@@ -29,7 +33,7 @@ public class FreemarkerTemplate
 	}
 	
 	
-	public static void process(Object obj, String templatefile, OutputStream out) throws Exception 
+	public void process(Object obj, String templatefile, OutputStream out) throws Exception 
 	{
 		String templates = Option.getProperty("freemarker.templates", "/");
 

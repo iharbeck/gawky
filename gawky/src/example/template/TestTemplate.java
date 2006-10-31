@@ -2,11 +2,12 @@ package example.template;
 
 import gawky.global.Option;
 import gawky.template.FreemarkerTemplate;
+import gawky.template.Template;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestFreemaker {
+public class TestTemplate {
 
 	/**
 	 *  http://freemarker.sourceforge.net/docs/dgui_quickstart_basics.html#example.first
@@ -26,12 +27,15 @@ public class TestFreemaker {
 		root.put("user", "Big Joe");
 		root.put("latestProduct", latest);
 
+		Template tmp = FreemarkerTemplate.getInstance();
 		// in eine String Variable
-		String res = FreemarkerTemplate.processToString(root, "test.ftl");
+		String res = tmp.processToString(root, "test.ftl");
 		System.out.println(res);
 		
 		// direkt zum Screen
-		FreemarkerTemplate.process(root, "test.ftl", System.out);
+		tmp.process(root, "test.ftl", System.out);
+		
+		System.exit(0);
 	}
 	
 }
