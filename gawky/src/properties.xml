@@ -43,4 +43,8 @@
   		<subject></subject>
 	</mail>
 
+	<freemarker>
+		<templates>/example/template</templates>
+	</freemarker>
+	
 </config>

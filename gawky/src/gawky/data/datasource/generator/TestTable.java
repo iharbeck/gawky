@@ -1,6 +1,5 @@
 package gawky.data.datasource.generator;
 
-import example.database.DaoObject;
 import gawky.data.datasource.ArrayListDatasource;
 import gawky.data.datasource.Column;
 import gawky.data.datasource.ResultSetDatasource;
