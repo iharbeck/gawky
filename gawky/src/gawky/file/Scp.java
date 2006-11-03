@@ -14,12 +14,7 @@ import com.jcraft.jsch.UserInfo;
 
 public class Scp {
 
-	public static void main(String[] arg) {
-	
-		scopy("debmu720.server.arvato-systems.de", "ggcrm01", "Chr0mA4", "c:/a.exe", "/PDIS/users/ggcrm01/");
-	}
-
-	public static void scopy(String host, String user, String pass, String lfile, String rfile) 
+	public static void copytohost(String host, String user, String pass, String lfile, String rfile) 
 	{
 		FileInputStream fis = null;
 		try {
