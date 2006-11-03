@@ -19,6 +19,9 @@ public class TestTable {
 
 	public static void main(String[] args) throws Exception
 	{
+		Option.init();
+		
+		//ArrayList Source with String[]
 		ArrayList rows = new ArrayList();
 		
 		rows.add(new String[] { "1", "2", "3"});
@@ -36,30 +39,32 @@ public class TestTable {
 		
 		ArrayListDatasource ds = new ArrayListDatasource( rows, columns);
 		
-		
-		Option.init();
+		//Database Source
 		Connection conn = DB.getConnection();
-		
-		Statement stmt = conn.createStatement();
-		
-		ResultSet rset = stmt.executeQuery("select * from kunde");
+		Statement  stmt = conn.createStatement();
+		ResultSet  rset = stmt.executeQuery("select * from kunde");
 		
 		ResultSetDatasource rs = new ResultSetDatasource(rset);
 		rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
 		rs.addColumn("name", new Column("DER NAME"));
 		
+		
+		//PDFgenerator
 		PdfTable pwalker = new PdfTable();
-		pwalker.generate(rs, "PdfTable.pdf");
-
+		pwalker.generate(ds, "PdfARTable.pdf");
+		pwalker.generate(rs, "PdfDBTable.pdf");
 		ds.reset();
 		
+		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();
 		System.out.println( hwalker.generate(ds) );
-
+		System.out.println( hwalker.generate(rs) );
 		ds.reset();
 
+		//XLSgenerator
 		XlsTable xwalker = new XlsTable();
-		xwalker.generate(ds, "XlsTable.xls");
+		xwalker.generate(ds, "XlsARTable.xls");
+		xwalker.generate(rs, "XlsDBTable.xls");
 
 		System.exit(0);
 	}
