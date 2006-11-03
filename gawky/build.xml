@@ -21,7 +21,6 @@
 		 	<fileset dir="bin" includes="${name}-global-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-comm-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-file-?.?.*.jar"/>
-		 	<fileset dir="bin" includes="${name}-net-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-jasper-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-template-?.?.*.jar"/>
 		 </delete>
@@ -105,14 +104,6 @@
 	     	</fileset>
 	    </jar>
 		<jar destfile="bin/${name}-file${version}.jar">
-	     	<fileset dir="${bin}" >
-	     		<include name="gawky/file/**"/>
-	     	</fileset>
-	     	<fileset dir="${src}" >
-	     		<include name="gawky/file/**"/>
-	     	</fileset>
-		</jar>
-		<jar destfile="bin/${name}-net${version}.jar">
 	     	<fileset dir="${bin}" >
 	     		<include name="gawky/file/**"/>
 	     	</fileset>

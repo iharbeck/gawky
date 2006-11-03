@@ -3,7 +3,7 @@ package example.net;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import gawky.net.FTPFactory;
+import gawky.file.Ftp;
 
 public class TestFTP {
 
@@ -11,7 +11,7 @@ public class TestFTP {
 	
 	public static void main(String[] args) throws Exception 
 	{
-		FTPFactory f = new FTPFactory("localhost", "root", "root");
+		Ftp f = new Ftp("localhost", "root", "root");
 
 		// Verzeichnisse setzen
 		f.changeRemoteDir("/targ");

@@ -1,4 +1,4 @@
-package gawky.net;
+package gawky.file;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,14 +12,14 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
-public class FTPFactory 
+public class Ftp 
 {
-	private static Log log = LogFactory.getLog(FTPFactory.class);
+	private static Log log = LogFactory.getLog(Ftp.class);
 
 	FTPClient ftp = null;
 	String localdir;
 	
-	public FTPFactory(String server, String user, String pass) throws Exception 
+	public Ftp(String server, String user, String pass) throws Exception 
 	{
 		log.info("Login to FTP: " + server);
 		ftp = new FTPClient();
