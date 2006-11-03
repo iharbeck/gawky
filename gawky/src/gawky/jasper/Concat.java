@@ -37,7 +37,7 @@ public class Concat
             
             while (x < files.length-1) 
             {
-                PdfReader reader = new PdfReader(files[x]);
+                PdfReader reader = new PdfReader(path + files[x]);
                 reader.consolidateNamedDestinations();
 
                 // we retrieve the total number of pages
