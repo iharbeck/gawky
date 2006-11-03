@@ -1,4 +1,4 @@
-package example.net;
+package example.file;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
