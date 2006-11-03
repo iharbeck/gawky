@@ -157,7 +157,5 @@ public class Scp {
 
 		public void showMessage(String arg0) {
 		}
-
-		
 	}
 }
