@@ -1,6 +1,6 @@
-package gawky.data.datasource;
+package gawky.list.datasource;
 
-import gawky.data.datasource.listener.CellListener;
+import gawky.list.generator.listener.CellListener;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
