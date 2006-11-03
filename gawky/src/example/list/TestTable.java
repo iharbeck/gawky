@@ -8,7 +8,7 @@ import gawky.list.datasource.ResultSetDatasource;
 import gawky.list.generator.HtmlTable;
 import gawky.list.generator.PdfTable;
 import gawky.list.generator.XlsTable;
-import gawky.list.generator.listener.LinkListener;
+import gawky.list.listener.LinkListener;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
