@@ -1,8 +1,8 @@
 package gawky.list.generator;
 
 import gawky.list.datasource.Datasource;
-import gawky.list.generator.listener.CellListener;
-import gawky.list.generator.listener.DefaultListener;
+import gawky.list.listener.CellListener;
+import gawky.list.listener.DefaultListener;
 
 public abstract class AbstractTable 
 {

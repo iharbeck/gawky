@@ -3,7 +3,7 @@ package gawky.list.generator;
 import gawky.file.Locator;
 import gawky.list.datasource.Column;
 import gawky.list.datasource.Datasource;
-import gawky.list.generator.listener.CellListener;
+import gawky.list.listener.CellListener;
 
 import java.awt.Color;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package gawky.list.generator.listener;
+package gawky.list.listener;
 
 import gawky.list.datasource.Datasource;
 

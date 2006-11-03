@@ -2,7 +2,7 @@ package gawky.list.generator;
 
 import gawky.list.datasource.Column;
 import gawky.list.datasource.Datasource;
-import gawky.list.generator.listener.CellListener;
+import gawky.list.listener.CellListener;
 
 public class HtmlTable extends AbstractTable
 {
