@@ -1,9 +1,3 @@
-/*
- * RequestHead.java
- *
- * Created on 6. August 2003, 11:27
- */
-
 package gawky.service.bcoscs;
 
 import gawky.message.part.Desc;
