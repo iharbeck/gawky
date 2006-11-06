@@ -1,4 +1,4 @@
-package example.message.patternparser;
+package example.message.mt940;
 
 import gawky.message.parser.PatternParser;
 import gawky.message.part.Desc;
@@ -8,25 +8,20 @@ import gawky.message.part.DescL;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
-public class MT940ParserBean extends Part 
+public class Satz61 extends Part 
 {
-	final String DELIMITER_LETTER    = "#[A-Z]";
-	final String DELIMITER_NUMBER    = "#[0-9]";
-	final String DELIMITER_NOTNUMBER = "#[^0-9]";
-	final String PATTERN_CURRENCY    = "%[0-9]*,[0-9]{0,2}"; // ####,##
-	
 	public Desc[] getDesc() {
 		return new Desc[] {
 			new DescC(":61:"),
 			new DescF(6,  "valuedate"),
-			new DescV(4,  "entrydate", DELIMITER_LETTER),
-			new DescL(    "dc", new String[] {"D", "C", "RC", "RD"}),
-			new DescF(1,  "fundcode"),
-			new DescV(15, "amount", PATTERN_CURRENCY),
+			new DescV(4,  "entrydate", PatternParser.DELIMITER_LETTER),
+			new DescL(    "dc",        new String[] {"D", "C", "RC", "RD"}),
+			new DescV(1,  "fundcode",  PatternParser.DELIMITER_NUMBER),
+			new DescV(15, "amount",    PatternParser.PATTERN_CURRENCY),
 			new DescF(1,  "entrymethod"),
 			new DescF(3,  "entryreason"),
 			new DescV(16, "accountownerreference", "//"),
-			new DescV(16, "accountservicereference", "#[/]"),
+			new DescV(16, "accountservicereference", "\r\n"),
 			new DescV(34, "furtherinfo", Desc.END)
 			
 		};
@@ -34,18 +29,30 @@ public class MT940ParserBean extends Part
 	
 	public static void main(String[] args) throws Exception 
 	{
-		PatternParser    parser = new PatternParser();
+		PatternParser parser = new PatternParser();
 		
-		MT940ParserBean bean = new MT940ParserBean();
+		Satz61 bean = new Satz61();
 		
-		//in gruppe0 wird alles bis zum nächsten Tag abgelegt 
-		//Pattern.compile(".*:[0-9]{0,2}.?:");
-		
-		String str = ":61:0405230528DK418,89NCHKNOREF//10002/CTC/026/CHEQUES, PD ENCODED";
-		
+		String str = ":61:061006C10104929,71NMSCIA100265687460//00000000000";
+			   str = ":61:0405230528DK418,86NCHKNOREF//10002\r\n" +
+				     "/CTC/026/CHEQUES, PD ENCODED";
+			   
 		bean.parse(parser, str);
-
-	    System.out.println(bean.amount);
+		bean.echo();
+		
+	}
+	
+	public void echo()
+	{
+		System.out.println("Value Date = " + valuedate);
+		System.out.println("Entry Date = " + entrydate);
+		System.out.println("Credit / Debit Indicator = " + dc);
+		System.out.println("Fund Code = " + fundcode);
+		System.out.println("Amount = " + amount);
+	    System.out.println("Entry Method = " + entrymethod);
+	    System.out.println("Account Owner’s Reference = " + accountownerreference);
+	    System.out.println("Account Servicer’s Reference = " + accountservicereference);
+	    System.out.println("Further Information = " + furtherinfo);
 	}
 	
 	private String valuedate;

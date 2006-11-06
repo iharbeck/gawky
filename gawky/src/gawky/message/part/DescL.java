@@ -35,8 +35,8 @@ public class DescL extends Desc
 	    if(!matcher.find())
 	    	return null;
 
-	    System.out.println( matcher.group(0) );
-		System.out.println( matcher.end() );
+	    //System.out.println( matcher.group(0) );
+		//System.out.println( matcher.end() );
 		   
 		return matcher.group(0);
 	}

@@ -9,24 +9,19 @@ import gawky.message.part.Part;
 
 public class PatternParserBean extends Part 
 {
-	final String DELIMITER_LETTER    = "#[A-Z]";
-	final String DELIMITER_NUMBER    = "#[0-9]";
-	final String DELIMITER_NOTNUMBER = "#[^0-9]";
-	final String PATTERN_CURRENCY    = "%[0-9]*,[0-9]{0,2}"; // ####,##
-	
 	public Desc[] getDesc() {
 		return new Desc[] {
-			new DescV(3, "feld1", DELIMITER_LETTER),
-			new DescV(4, "feld2", DELIMITER_LETTER),
-			new DescV(2, "feld3", DELIMITER_NUMBER),
-			new DescV(3, "feld4", DELIMITER_LETTER),
+			new DescV(3, "feld1", PatternParser.DELIMITER_LETTER),
+			new DescV(4, "feld2", PatternParser.DELIMITER_LETTER),
+			new DescV(2, "feld3", PatternParser.DELIMITER_NUMBER),
+			new DescV(3, "feld4", PatternParser.DELIMITER_LETTER),
 			new DescF(2, "feld5"),
 			//
 			new DescV(3, "zahlbegin", ","),
-			new DescV(2, "zahlend", DELIMITER_NOTNUMBER),
+			new DescV(2, "zahlend", PatternParser.DELIMITER_NOTNUMBER),
 			//
-			new DescV(15, "zahl1", PATTERN_CURRENCY),
-			new DescV(15, "zahl2", PATTERN_CURRENCY)
+			new DescV(15, "zahl1", PatternParser.PATTERN_CURRENCY),
+			new DescV(15, "zahl2", PatternParser.PATTERN_CURRENCY)
 			
 		};
 	}
