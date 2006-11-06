@@ -141,8 +141,8 @@ public class Parser
 						value = str.substring(start);
 						storeValue(bean, i, desc, value);
 					}
-					// am Ende der Zeile angekommen
-					if(i < descs.length)
+					// am Ende der Zeile angekommen und weiteres nicht optionales feld
+					if(i+1 < descs.length  && descs[i].code != Desc.CODE_O)
 						throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
 					
 					return;

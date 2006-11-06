@@ -62,7 +62,7 @@ public class Desc
 	public static final char  CODE_R = 'r';  //required
 	public static final char  CODE_O = 'o';  //option
 	public static final char  CODE_F = 'f';  //fixed content (constant)
-	//public static final char  CODE_L = 'l';  //list of values
+	public static final char  CODE_L = 'l';  //list of values
 	
 	
 	

@@ -1,6 +1,7 @@
 package gawky.message.parser;
 
 import gawky.message.part.Desc;
+import gawky.message.part.DescL;
 import gawky.message.part.Part;
 
 import java.util.regex.Matcher;
@@ -43,6 +44,20 @@ public class PatternParser extends Parser
 			// DISCUSS example - ID not in Importfile but later in DB
 			if(desc.skipparsing) 
 				continue;
+			
+			// ListValue
+			if(desc.code == Desc.CODE_L)
+			{
+				value = ((DescL)desc).lookup(str.substring(start));
+				
+				if(value == null)
+					throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+				
+				start += value.length();
+				
+				storeValue(bean, i, desc, value);
+				continue;
+			}
 			
 			if(desc.delimiter == null)   // fixed
 			{ 
@@ -88,8 +103,9 @@ public class PatternParser extends Parser
 						value = str.substring(start);
 						storeValue(bean, i, desc, value);
 					}
-					// am Ende der Zeile angekommen
-					if(i < descs.length)
+					
+					// am Ende der Zeile angekommen und weiteres nicht optionales feld
+					if(i+1 < descs.length && descs[i].code != Desc.CODE_O)
 						throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
 			
 					return;
