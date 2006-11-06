@@ -1,5 +1,6 @@
-package gawky.message.generator;
+package example.message.host;
 
+import gawky.message.generator.EBCDICGenerator;
 import gawky.service.dtaus.SatzA;
 
 public class TestEBCDICGenerator {

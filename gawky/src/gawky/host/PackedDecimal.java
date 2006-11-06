@@ -1,7 +1,5 @@
 package gawky.host;
 
-import java.io.IOException;
-import java.util.IllegalFormatException;
 import java.util.Locale;
 
 class DecimalWrapper 
@@ -78,16 +76,16 @@ class DecimalWrapper
 		if (pos+1 > sizedecimal) {
 			return 0;
 		} else {
-			return ByteMover.buildByte(
-					ByteMover.getLowNibble((byte) (partdecimal[pos])), 
+			return ByteHandler.buildByte(
+					ByteHandler.getLowNibble((byte) (partdecimal[pos])), 
 					(byte) (0));
 		}
 	}
 
 	public byte getIntegerDigit(int pos) {
-		return ByteMover.buildByte(
-				ByteMover.getLowNibble((byte) (partint[pos])), 
-				ByteMover.getLowNibble((byte) (0)));
+		return ByteHandler.buildByte(
+				ByteHandler.getLowNibble((byte) (partint[pos])), 
+				ByteHandler.getLowNibble((byte) (0)));
 	}
 }
 
@@ -170,15 +168,15 @@ public class PackedDecimal
 			}
 			
 			if (high) {
-				bytes[bytepos] = ByteMover.buildByte(
-								  ByteMover.getLowNibble(bytes[bytepos]), 
-								  ByteMover.getLowNibble(curdigit));
+				bytes[bytepos] = ByteHandler.buildByte(
+								  ByteHandler.getLowNibble(bytes[bytepos]), 
+								  ByteHandler.getLowNibble(curdigit));
 				bytepos--;
 			} 
 			else {
-				bytes[bytepos] = ByteMover.buildByte(
-								  ByteMover.getLowNibble(curdigit),
-								  ByteMover.getLowNibble(bytes[bytepos]));
+				bytes[bytepos] = ByteHandler.buildByte(
+								  ByteHandler.getLowNibble(curdigit),
+								  ByteHandler.getLowNibble(bytes[bytepos]));
 			}
 			high = !high; // next digit
 		}
@@ -223,9 +221,9 @@ public class PackedDecimal
 			high = !high;
 
 			if (high) {
-				curdigit = ByteMover.getHighNibble(packed[ipacked]);
+				curdigit = ByteHandler.getHighNibble(packed[ipacked]);
 			} else {
-				curdigit = ByteMover.getLowNibble(packed[ipacked]);
+				curdigit = ByteHandler.getLowNibble(packed[ipacked]);
 				ipacked++;
 			}
 
@@ -242,9 +240,9 @@ public class PackedDecimal
 				case 9:
 					if ((curdigit != 0) || (isnotnull)) {
 						isnotnull = true; 
-						bytes[ibytes++] = (char) (ByteMover.buildByte(
+						bytes[ibytes++] = (char) (ByteHandler.buildByte(
 								 							curdigit,
-															ByteMover.getHighNibble(ASCII_HIGH_CHAR_NIBBLE)));
+															ByteHandler.getHighNibble(ASCII_HIGH_CHAR_NIBBLE)));
 						if ((digits == intsize) && (decimalsize != 0)) {  // vorkomma erreicht && hat nachkomma
 							bytes[ibytes++] = '.';
 							hasDecimalPartOnly = false;
@@ -326,8 +324,7 @@ public class PackedDecimal
             }
             
         	System.out.println(new String(buffer).substring(0,len));
-            //this.persistence.writeBlock(block, off, this.buffer, 0, len);
-        }
+    }
 	
 	public static long readNumberPackedPositive(byte buffer[], 
 	         final int len, final boolean sign, Locale locale) 

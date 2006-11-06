@@ -1,13 +1,13 @@
 package example.message.freak;
 
-import gawky.message.generator.FreakGenerator;
-import gawky.message.parser.FreakParser;
+import gawky.message.generator.PatternGenerator;
+import gawky.message.parser.PatternParser;
 import gawky.message.part.Desc;
 import gawky.message.part.DescF;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
-public class FreakParserBean extends Part 
+public class PatternParserBean extends Part 
 {
 	final String DELIMITER_LETTER    = "#[A-Z]";
 	final String DELIMITER_NUMBER    = "#[0-9]";
@@ -33,10 +33,10 @@ public class FreakParserBean extends Part
 	
 	public static void main(String[] args) throws Exception 
 	{
-		FreakParser    parser = new FreakParser();
-		FreakGenerator generator = new FreakGenerator();
+		PatternParser    parser = new PatternParser();
+		PatternGenerator generator = new PatternGenerator();
 		
-		FreakParserBean bean = new FreakParserBean();
+		PatternParserBean bean = new PatternParserBean();
 		
 		String str = "1.3AB456CD122,33222,44,";
 		bean.parse(parser, str);

@@ -13,9 +13,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Ingo Harbeck
  *
  */
-public class FreakParser extends Parser
+public class PatternParser extends Parser
 {
-	private static Log log = LogFactory.getLog(FreakParser.class);
+	private static Log log = LogFactory.getLog(PatternParser.class);
 	
 	boolean hasDelimiter;
 	

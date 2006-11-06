@@ -9,9 +9,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class FreakGenerator extends Generator
+public class PatternGenerator extends Generator
 {
-	private static Log log = LogFactory.getLog(FreakGenerator.class);
+	private static Log log = LogFactory.getLog(PatternGenerator.class);
 	
 	public String generateString(Part bean)
 	{

@@ -1,6 +1,6 @@
 package gawky.host;
 
-public class ByteMover 
+public class ByteHandler 
 {
 	// bytes
 	public final static byte getLowByte(short ii) {
@@ -8,7 +8,7 @@ public class ByteMover
 	}
 
 	public final static byte getHighByte(short ii) {
-		return (ByteMover.getLowByte((short) (ii >> 8)));
+		return (ByteHandler.getLowByte((short) (ii >> 8)));
 	}
 
 	// words
@@ -17,7 +17,7 @@ public class ByteMover
 	}
 
 	public final static short getHighWord(int ii) {
-		return (ByteMover.getLowWord((int) (ii >> 16)));
+		return (ByteHandler.getLowWord((int) (ii >> 16)));
 	}
 
 	// builder

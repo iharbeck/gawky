@@ -1,14 +1,13 @@
 package gawky.message.generator;
 
-
 import gawky.host.Ebcdic;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
+import gawky.message.part.DescP;
 import gawky.message.part.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 
 public class EBCDICGenerator extends Generator
 {
@@ -40,7 +39,12 @@ public class EBCDICGenerator extends Generator
 				
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+					if(desc.isPacked())
+						System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+					else // PACKED DECIMAL
+						System.arraycopy(
+								((DescP)desc).getPackeddecimal().pack( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+						
 					pos += desc.len;
 					
 //					if(desc.delimiter != null)

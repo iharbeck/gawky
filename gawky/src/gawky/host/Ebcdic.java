@@ -3,8 +3,22 @@ package gawky.host;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
-public class Ebcdic {
-
+public class Ebcdic 
+{
+	public final static byte[] toEbcdic(String unicode) throws UnsupportedEncodingException
+	{
+		String encoding = "Cp1047";
+		return unicode.getBytes(encoding);
+	}
+	
+	public final static String toUnicode(byte[] ebcdic) throws UnsupportedEncodingException
+	{
+		String encoding = "Cp1047";  
+		Integer.toBinaryString(13);
+		return new String(ebcdic, encoding);
+	}
+	
+	
 	public static void main(String[] args) throws Exception {
 		
 		String src = "12345";
@@ -23,19 +37,6 @@ public class Ebcdic {
 		PackedDecimal.writeNumberPackedPositive(3, 12345, true);
 		System.out.println(PackedDecimal.readNumberPackedPositive(bytes, 3, true, Locale.GERMAN));
 	}
-
-	public static byte[] toEbcdic(String unicode) throws UnsupportedEncodingException
-	{
-		String encoding = "Cp1047";
-		return unicode.getBytes(encoding);
-	}
-	
-	public static String toUnicode(byte[] ebcdic) throws UnsupportedEncodingException
-	{
-		String encoding = "Cp1047";
-		return new String(ebcdic, encoding);
-	}
-	
 	
 	public static void convertEbcdic() throws UnsupportedEncodingException {
 		// System 390 EBCDIC

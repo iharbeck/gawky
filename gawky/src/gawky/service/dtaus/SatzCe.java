@@ -1,10 +1,8 @@
 package gawky.service.dtaus;
 
 import gawky.message.part.Desc;
-import gawky.message.part.DescC;
 import gawky.message.part.DescF;
 import gawky.message.part.Part;
-import gawky.message.part.Reserved;
 
 /**
  *

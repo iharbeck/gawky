@@ -65,6 +65,7 @@ public class Desc
 	//public static final char  CODE_L = 'l';  //list of values
 	
 	
+	
 	// Optimize relection
 	// store Method Definition
 	public Method smethod;
@@ -137,6 +138,14 @@ public class Desc
 		this.dbname = name;
 		return this;
 	}
+
+	public boolean isPacked() {
+		return packed;
+	}
+
+	public void setPacked(boolean packed) {
+		this.packed = packed;
+	}
 	
 	public char    format;
 	public char    code;
@@ -146,4 +155,6 @@ public class Desc
 	public boolean mask = false;
 	public String  dbname;
 	public boolean skipparsing = false;
+
+	public boolean packed = false;
 }
