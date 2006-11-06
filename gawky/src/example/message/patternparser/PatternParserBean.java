@@ -1,4 +1,4 @@
-package example.message.freak;
+package example.message.patternparser;
 
 import gawky.message.generator.PatternGenerator;
 import gawky.message.parser.PatternParser;
