@@ -11,7 +11,7 @@ public class Satz20 extends Part
 	public Desc[] getDesc() {
 		return new Desc[] {
 			new DescC(":20:"),
-			new DescV(16,  "transrefnr", Desc.END)
+			new DescV(16,  "transrefnr", Desc.NL)
 		};
 	}
 	

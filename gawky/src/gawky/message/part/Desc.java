@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 public class Desc 
 {
 	// CONSTANTS
+	public static final String NL       = new String(new char[] {'\n'});
 	public static final String END      = new String(new char[] {'\001'});
 	public static final String ENDPART  = new String(new char[] {'\002'});
 	public static final String ENDCOMMA = new String(new char[] {','});

@@ -11,7 +11,7 @@ public class Satz21 extends Part
 	public Desc[] getDesc() {
 		return new Desc[] {
 			new DescC(":21:"),
-			new DescV(16,  "relatedrefnr", Desc.END)
+			new DescV(16,  "relatedrefnr", Desc.NL)
 		};
 	}
 	

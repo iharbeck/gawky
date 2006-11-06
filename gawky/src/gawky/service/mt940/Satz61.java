@@ -22,7 +22,7 @@ public class Satz61 extends Part
 			new DescF(3,  "entryreason"),
 			new DescV(16, "accountownerreference", "//"),
 			new DescV(16, "accountservicereference", "\r\n"),
-			new DescV(34, "furtherinfo", Desc.END)
+			new DescV(34, "furtherinfo", Desc.NL)
 			
 		};
 	}

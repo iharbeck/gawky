@@ -3,7 +3,6 @@ package gawky.service.mt940;
 import gawky.message.parser.PatternParser;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
-import gawky.message.part.DescF;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
@@ -11,12 +10,13 @@ public class Satz86 extends Part
 {
 	public Desc[] getDesc() {
 		return new Desc[] {
-			new DescC(":86:"),     // citibank
+			new DescC(":86:"),     
+			new DescV(390, "all", Desc.NL)
+// citibank
 //			new DescF(4,  "producttype"),
 //			new DescV(2,  "paymenttype", "/"),
 //			new DescV(2,  "furtherdescription", "/"),
 //			new DescV(382, "narrativedescription", Desc.END)
-			new DescV(390, "all", Desc.END)
 		};
 	}
 	
