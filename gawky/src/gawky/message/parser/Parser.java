@@ -34,16 +34,9 @@ public class Parser
 	{
 		// store for splitting records 
 		line = str;
-		// 
 		
-		//int len = 10;
-		//char[] val  = new char[len]; 
-		//System.arraycopy(src, srcPos, dest, destPos, length)
-		
-		
-		// Get Description Object
-		//if(descs == null)
-			descs = ((Part)bean).getCachedDesc();
+		// Get Description Object 
+		descs = ((Part)bean).getCachedDesc();
 		
 		Desc   desc;
 		String value = "";

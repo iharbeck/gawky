@@ -6,7 +6,6 @@ import gawky.message.part.Part;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -27,7 +26,7 @@ public class MT940Reader
     
 	static PatternParser parser = new PatternParser();
 	
-	private static void handle(String line, Part part) throws Exception
+	private static void handler(String line, Part part) throws Exception
 	{
 		part.parse(parser, line);
 	
@@ -40,30 +39,27 @@ public class MT940Reader
     private static void processLine(String line) throws Exception
     {
     	if(line.startsWith(":20:"))
-    		handle(line, new Satz20());
+    		handler(line, new Satz20());
     	if(line.startsWith(":21:"))
-    		handle(line, new Satz21());
+    		handler(line, new Satz21());
     	if(line.startsWith(":25:"))
-    		handle(line, new Satz25());
+    		handler(line, new Satz25());
     	if(line.startsWith(":28:"))
-    		handle(line, new Satz28());
+    		handler(line, new Satz28());
     	if(line.startsWith(":60"))
-    		handle(line, new Satz60_62_64());
+    		handler(line, new Satz60_62_64());
     	if(line.startsWith(":62"))
-    		handle(line, new Satz60_62_64());
+    		handler(line, new Satz60_62_64());
     	if(line.startsWith(":64"))
-    		handle(line, new Satz60_62_64());
+    		handler(line, new Satz60_62_64());
     	if(line.startsWith(":61:"))
-    		handle(line, new Satz61());
+    		handler(line, new Satz61());
     	if(line.startsWith(":86")) 
-    		handle(line, new Satz86());
+    		handler(line, new Satz86());
     	
     	if(line.equals("-"))
     		System.out.println("--------------------------------------------------------<br>");
-
     }
-    
-    
     
     private final static void matchLines(CharBuffer cb) throws Exception
     {
@@ -85,8 +81,10 @@ public class MT940Reader
 		}
     }
 
-    private static void openFile(File f) throws Exception 
+    public static void main(String[] args) throws Exception
     {
+		File f = new File(Locator.findBinROOT()+"../format/mt940google");
+	    
 		// Open the file and then get a channel from the stream
 		FileInputStream fis = new FileInputStream(f);
 		FileChannel fc = fis.getChannel();
@@ -102,19 +100,6 @@ public class MT940Reader
 	
 		// Close the channel and the stream
 		fc.close();
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-		File f = new File(Locator.findBinROOT()+"../format/mt940google");
-	    
-		try 
-	    {
-	    	openFile(f);
-	    } 
-	    catch (IOException x) {
-	    	System.err.println(f + ": " + x);
-	    }
     }
 }
 

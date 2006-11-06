@@ -27,12 +27,11 @@ public class PatternParser extends Parser
 	
 	public void parse(String str, Object bean) throws ParserException
 	{
-		//		 store for splitting records 
+		// store for splitting records 
 		line = str;
 		
 		// Get Description Object
-		//if(descs == null)
-			descs = ((Part)bean).getCachedDesc();
+		descs = ((Part)bean).getCachedDesc();
 		
 		Desc   desc;
 		String value = "";
