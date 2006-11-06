@@ -31,7 +31,7 @@ public class PatternParser extends Parser
 		line = str;
 		
 		// Get Description Object
-		if(descs == null)
+		//if(descs == null)
 			descs = ((Part)bean).getCachedDesc();
 		
 		Desc   desc;

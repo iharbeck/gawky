@@ -1,8 +1,8 @@
-package gawky.incubator;
+package gawky.service.mt940;
 
-import example.message.mt940.Satz61;
 import gawky.file.Locator;
 import gawky.message.parser.PatternParser;
+import gawky.message.part.Part;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,19 +27,43 @@ public class MT940Reader
     
 	static PatternParser parser = new PatternParser();
 	
+	private static void handle(String line, Part part) throws Exception
+	{
+		part.parse(parser, line);
+	
+		System.out.println("<b><pre style='margin-top:0px;margin-bottom:0px;'>" + line + "</pre></b>");
+		System.out.println("<pre  style='margin-top:0px;margin-bottom:7px;'>");
+		part.echo();
+		System.out.print("</pre>");
+		
+	}
     private static void processLine(String line) throws Exception
     {
-    	if(!line.startsWith(":61:"))
-    		return;
+    	if(line.startsWith(":20:"))
+    		handle(line, new Satz20());
+    	if(line.startsWith(":21:"))
+    		handle(line, new Satz21());
+    	if(line.startsWith(":25:"))
+    		handle(line, new Satz25());
+    	if(line.startsWith(":28:"))
+    		handle(line, new Satz28());
+    	if(line.startsWith(":60"))
+    		handle(line, new Satz60_62_64());
+    	if(line.startsWith(":62"))
+    		handle(line, new Satz60_62_64());
+    	if(line.startsWith(":64"))
+    		handle(line, new Satz60_62_64());
+    	if(line.startsWith(":61:"))
+    		handle(line, new Satz61());
+    	if(line.startsWith(":86")) 
+    		handle(line, new Satz86());
     	
-    	Satz61 bean = new Satz61();
-    	
-    	bean.parse(parser, line);
-    	
-    	System.out.println(line);
-    	
-		bean.echo();
+    	if(line.equals("-"))
+    		System.out.println("--------------------------------------------------------<br>");
+
     }
+    
+    
     
     private final static void matchLines(CharBuffer cb) throws Exception
     {

@@ -179,4 +179,6 @@ public abstract class Part
 	{
 		extparser.parse(str, this);
 	}
+	
+	public void echo() {};
 }

@@ -1,4 +1,4 @@
-package example.message.mt940;
+package gawky.service.mt940;
 
 import gawky.message.parser.PatternParser;
 import gawky.message.part.Desc;
