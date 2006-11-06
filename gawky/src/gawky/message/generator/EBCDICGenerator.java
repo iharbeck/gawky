@@ -1,7 +1,7 @@
 package gawky.message.generator;
 
 
-import gawky.host.PP;
+import gawky.host.Ebcdic;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
@@ -40,7 +40,7 @@ public class EBCDICGenerator extends Generator
 				
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					System.arraycopy(PP.toEbcdic( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+					System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
 					pos += desc.len;
 					
 //					if(desc.delimiter != null)
@@ -48,7 +48,7 @@ public class EBCDICGenerator extends Generator
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von rechts mit null füllen
-					System.arraycopy(PP.toEbcdic( Formatter.getStringNL(desc.len, val) ), 0, str, pos, desc.len);
+					System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringNL(desc.len, val) ), 0, str, pos, desc.len);
 					pos += desc.len;
 
 //					if(desc.delimiter != null)
@@ -64,7 +64,7 @@ public class EBCDICGenerator extends Generator
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0) {
-								System.arraycopy(PP.toEbcdic( Formatter.getStringC(desc.len, val) ), 0, str, pos, desc.len);
+								System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringC(desc.len, val) ), 0, str, pos, desc.len);
 								pos += desc.len;
 
 								//str.append( Formatter.getStringC(desc.len, val) );
@@ -74,7 +74,7 @@ public class EBCDICGenerator extends Generator
 						}
 						else
 						{
-							System.arraycopy(PP.toEbcdic( Formatter.getStringC(desc.len, desc.name) ), 0, str, pos, desc.len);
+							System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringC(desc.len, desc.name) ), 0, str, pos, desc.len);
 							pos += desc.len;
 
 							//str.append( Formatter.getStringC(desc.len, desc.name) );

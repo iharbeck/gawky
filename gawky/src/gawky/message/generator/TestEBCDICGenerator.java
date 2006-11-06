@@ -2,7 +2,7 @@ package gawky.message.generator;
 
 import gawky.service.dtaus.SatzA;
 
-public class EB {
+public class TestEBCDICGenerator {
 
 	/**
 	 * @param args
