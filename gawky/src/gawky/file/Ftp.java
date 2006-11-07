@@ -89,8 +89,8 @@ public class Ftp
 	public void sendLocalFile(String src) throws Exception
 	{
 		String tmp_prefix = ".temp";
-		File f = new File(src);
-		FileInputStream is = new FileInputStream(src);
+		File f = new File(localdir + src);
+		FileInputStream is = new FileInputStream(localdir + src);
 		ftp.storeFile(f.getName() + tmp_prefix, is);
 
 		renameRemoteFile(f.getName() + tmp_prefix, f.getName());

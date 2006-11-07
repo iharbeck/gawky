@@ -13,16 +13,6 @@ public class Generator
 {
 	private static Log log = LogFactory.getLog(Generator.class);
 
-	public static void generateVars(Part part) 
-	{
-		Desc[] descs = part.getDesc();
-		
-		for(int i=0; i < descs.length; i++){
-			if(descs[i].format != Desc.FMT_CONSTANT)
-				System.out.println("private String " + descs[i].name + ";");
-		}
-	}
-	
 	public String generateString(Part bean)
 	{
 		if(bean == null)

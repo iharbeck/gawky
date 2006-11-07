@@ -1,4 +1,4 @@
-package gawky.incubator;
+package gawky.incubator.filereader;
 
 import gawky.file.Locator;
 
