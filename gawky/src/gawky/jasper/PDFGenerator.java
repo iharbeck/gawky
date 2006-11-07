@@ -22,6 +22,10 @@ public class PDFGenerator {
 	
 	public static void generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName) throws Exception
 	{
+		generateFile(reportdata, rows, jasperFileName, outputFileName, new HashMap());
+	}
+	public static void generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName, HashMap map) throws Exception
+	{
 		JasperPrint jasperPrint = null;
 		
 		if(jasperFileName.endsWith("jrxml")) 
@@ -33,13 +37,13 @@ public class PDFGenerator {
 				jasperReport = JasperCompileManager.compileReport(jasperFileName);    
 				compiledreportcache.put(jasperFileName, jasperReport);
 			}
-			jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), 
+			jasperPrint = JasperFillManager.fillReport(jasperReport, map, 
 				new JRBeanUtilDataSource(reportdata, rows)
 			);
 		} 
 		else 
 		{
-			jasperPrint = JasperFillManager.fillReport(jasperFileName, new HashMap(), 
+			jasperPrint = JasperFillManager.fillReport(jasperFileName, map, 
 					new JRBeanUtilDataSource(reportdata, rows)
 			);
 		}
