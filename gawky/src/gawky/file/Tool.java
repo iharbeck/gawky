@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
@@ -68,5 +69,26 @@ public class Tool {
 	     src.transferTo(0, src.size(), dest);
 	     src.close();
 	     dest.close();
+	 }
+	 
+	 public static class TypeFilter implements FilenameFilter 
+	 {
+	 	String type;
+	 	
+	 	public TypeFilter(String type) {
+	 		this.type = type;
+	 	}
+	 	public boolean accept(File dir, String name) {
+	        return (name.endsWith("." + type));
+	    }
+	 }
+	 
+	 public static void delete(String path, String prefix) throws Exception 
+	 {
+		 File folder = new File(path);
+		 String files[] = folder.list(new TypeFilter(prefix));
+		 
+		 for(int i=0; i < files.length; i++)
+			 new File(folder + "/" + files[i]).delete();
 	 }
 }
