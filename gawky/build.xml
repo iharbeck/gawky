@@ -23,12 +23,21 @@
 		 	<fileset dir="bin" includes="${name}-file-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-jasper-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-template-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-crypt-?.?.*.jar"/>
 		 </delete>
          <jar destfile="bin/${name}${version}.jar">
          	<fileset dir="${bin}" >
          	</fileset>
          	<fileset dir="${src}" >
          	</fileset>
+         </jar>
+		 <jar destfile="bin/${name}-crypt${version}.jar">
+		         	<fileset dir="${bin}" >
+		         		<include name="gawky/crypt/**"/>
+		         	</fileset>
+		     		<fileset dir="${src}" >
+		         		<include name="gawky/crypt/**"/>
+		     		</fileset>
          </jar>
          <jar destfile="bin/${name}-servicecrm${version}.jar">
          	<fileset dir="${bin}" >

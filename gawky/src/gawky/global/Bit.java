@@ -2,22 +2,20 @@ package gawky.global;
 
 public class Bit 
 {
-	public static int set( int n, int pos )
+	public static int set( int bitholder, int pos )
 	{
-	  return n | (1 << pos);
+	  return bitholder | (1 << pos);
 	}
-	public static int clear( int n, int pos )
+	public static int clear( int bitholder, int pos )
 	{
-	  return n & ~(1 << pos);
+	  return bitholder & ~(1 << pos);
 	}
-	public static int flip( int n, int pos )
+	public static int flip( int bitholder, int pos )
 	{
-	  return n ^ (1 << pos);
+	  return bitholder ^ (1 << pos);
 	}
-	public static boolean test( int n, int pos )
+	public static boolean test( int bitholder, int pos )
 	{
-	  // return (n & 1<<pos) != 0;
-	  int mask = 1 << pos;
-	  return (n & mask) == mask;
+	  return (bitholder & (1 << pos)) != 0;
 	}
 }
