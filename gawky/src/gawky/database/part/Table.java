@@ -163,7 +163,7 @@ public abstract class Table extends Part
 		}
 	}
 	
-	public void exportToStream(Connection conn, String where, OutputStream out) throws Exception 
+	public void queryToStream(Connection conn, String where, OutputStream out) throws Exception 
 	{
 		PreparedStatement stmt = conn.prepareStatement("select * from " + getTableName() + " " + where);
 		 

@@ -57,7 +57,7 @@ public class DaoObject extends Table {
 		daoobject.setName("INGO2");
 		daoobject.update(conn);
 		
-		daoobject.exportToStream(conn, "WHERE 1=1", System.out);
+		daoobject.queryToStream(conn, "WHERE 1=1", System.out);
 		
 		DB.doClose(conn);
 		
