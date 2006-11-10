@@ -154,7 +154,9 @@ public class Option
 		// Properties parsen
 		try {
 			// XML Configfile
-			config = new XMLConfiguration(propfile);
+			config = new XMLConfiguration();
+			config.setEncoding("UTF-8");
+			config.load(propfile);
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
 		} catch(Exception e) {

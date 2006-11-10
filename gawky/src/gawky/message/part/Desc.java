@@ -73,10 +73,10 @@ public class Desc
 	public Method gmethod;
 	
 	public Accessor accessor = new Accessor() {
-		public void setValue(Object bean, String value) throws Exception {
+		public final void setValue(Object bean, String value) throws Exception {
 			smethod.invoke(bean, new Object[] {value});
 		}
-		public String getValue(Object bean) throws Exception {
+		public final String getValue(Object bean) throws Exception {
 			return (String)gmethod.invoke(bean, (Object[]) null );	
 		}
 	};

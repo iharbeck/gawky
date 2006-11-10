@@ -76,7 +76,7 @@ public abstract class Part
 						
 						// Create setter
 						CtMethod ms = CtNewMethod.make(
-								" public void setValue(Object bean, String value) throws Exception {" +
+								" public final void setValue(Object bean, String value) throws Exception {" +
 								"  ((" + classname + ")bean).set" + mname + "(value); " +
 								" } "
 								, cc);
@@ -84,7 +84,7 @@ public abstract class Part
 
 						// Create getter 
 						CtMethod mg = CtNewMethod.make(
-								" public String getValue(Object bean) throws Exception {" +
+								" public final String getValue(Object bean) throws Exception {" +
 								"  return ((" + classname + ")bean).get" + mname + "(); " +
 								" } "
 								, cc);

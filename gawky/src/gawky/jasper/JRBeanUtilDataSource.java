@@ -4,7 +4,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,7 +14,7 @@ public class JRBeanUtilDataSource implements JRDataSource
 
 	Object data;
 
-	int rows = 0;
+	int rows   = 0;
 	int currow = 0;
 	
 	public JRBeanUtilDataSource(Object data, int rows) {
@@ -25,8 +25,11 @@ public class JRBeanUtilDataSource implements JRDataSource
 	public Object getValue(Object bean, String path, int row) 
 	{
 		try {
+			// Indexed parameters described as [x] in Report 
 			path = path.replaceAll("\\[x\\]", "[" + (row) + "]");
-			return BeanUtils.getProperty(bean, path);
+			
+			// TODO: implement cached version
+			return PropertyUtils.getProperty(bean, path);  //return BeanUtils.getProperty(bean, path);
 		} catch (Exception e) {
 			log.info(e);
 			return "$$" + path + "$$";
