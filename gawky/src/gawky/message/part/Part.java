@@ -30,7 +30,7 @@ public abstract class Part
 	
 	abstract public Desc[] getDesc();
 	
-	private final Desc[] getOptDesc() {
+	protected final Desc[] getOptDesc() {
 		
 		Desc[] descs = getDesc();
 

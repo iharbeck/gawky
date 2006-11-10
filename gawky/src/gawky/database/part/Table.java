@@ -1,5 +1,6 @@
 package gawky.database.part;
 
+import gawky.database.DB;
 import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
@@ -7,6 +8,7 @@ import gawky.database.generator.IDGenerator;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -160,6 +162,31 @@ public abstract class Table extends Part
 			log.error("insert Record", e);
 		}
 	}
+	
+	public void exportToStream(Connection conn, String where, OutputStream out) throws Exception 
+	{
+		PreparedStatement stmt = conn.prepareStatement("select * from " + getTableName() + " " + where);
+		 
+		ResultSet rset = stmt.executeQuery();
+			
+		Desc[] descs = this.getOptDesc();  
+		
+		byte endline = '\n';
+		
+		while (rset.next())
+		{
+			Part part = (Part) this.getClass().newInstance();
+
+			for(int i=0; i < descs.length; i++)
+			{
+				descs[i].setValue(part, rset.getString(descs[i].dbname) );
+				
+			 	out.write(part.toString().getBytes());
+			 	out.write(endline);
+			}
+		}
+		DB.doClose(stmt);
+	}
 
 	public void find(Connection conn, long id) throws Exception 
 	{
@@ -183,6 +210,7 @@ public abstract class Table extends Part
 				if(log.isInfoEnabled())
 					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
 				
+				//TODO Tune Reflection
 				PropertyUtils.setSimpleProperty(this, md.getColumnName(i), rset.getString(i));
 			}
 		} else {
