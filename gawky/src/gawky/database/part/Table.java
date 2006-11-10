@@ -202,17 +202,28 @@ public abstract class Table extends Part
 		stmt.setLong(1, id);
 		ResultSet rset = stmt.executeQuery();
 		
+		Desc[] descs = this.getOptDesc();  
+		
 		if (rset.next())
 		{
-			ResultSetMetaData md = stmt.getMetaData();
+// RESULTSET BASED
+//			ResultSetMetaData md = stmt.getMetaData();
 			
-			for (int i = md.getColumnCount(); i > 0; i --) {
-				if(log.isInfoEnabled())
-					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
-				
-				//TODO Tune Reflection
-				PropertyUtils.setSimpleProperty(this, md.getColumnName(i), rset.getString(i));
+//			for (int i = md.getColumnCount(); i > 0; i --) {
+//				if(log.isInfoEnabled())
+//					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
+//				
+//				PropertyUtils.setSimpleProperty(this, md.getColumnName(i), rset.getString(i));
+//			}
+			
+// OBJECT BASED TODO compare performance
+// alternative generat
+			for(int i=0; i < descs.length; i++)
+			{
+				//descs[i].setValue(this, rset.getString(descs[i].dbname) );
+				descs[i].setValue(this, rset.getString(i+1) );
 			}
+			
 		} else {
 			log.error("no result (" + sql + ")");
 		}
