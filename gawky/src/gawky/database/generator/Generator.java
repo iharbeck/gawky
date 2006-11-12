@@ -54,7 +54,7 @@ public class Generator
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
-		String sql  = "INSERT into " + bean.getTableName() + " ( " + customcolumns;
+		String sql  = "INSERT INTO " + bean.getTableName() + " ( " + customcolumns;
 		
 		String params = "";
 		for(int i = 0; i < descs.length; i++)
@@ -132,13 +132,17 @@ public class Generator
 		return sql;
 	}
 	
-	public String generateFindSQL(Table bean)
+	/**
+	 * TODO
+	 * @param bean
+	 * @return
+	 */
+	public String generateSelectSQL(Table bean)
 	{
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
 		String sql  = "SELECT ";
-		
 		
 		for(int i = 0; i < descs.length; i++)
 		{
@@ -153,9 +157,16 @@ public class Generator
 				sql += ",";
 			}
 		}
-
+		
 		sql += " FROM ";
 		sql += bean.getTableName();
+		
+		return sql;
+	}
+	
+	public String generateFindSQL(Table bean)
+	{
+		String sql = generateSelectSQL(bean);
 		
 		// ID Spalte für UPDATE zwingend
 		sql += " WHERE ";
@@ -164,7 +175,6 @@ public class Generator
 		log.debug(sql);
 		
 		return sql;
-		
 	}
 	
 	public String generateDeleteSQL(Table bean)

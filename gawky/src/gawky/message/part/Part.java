@@ -28,6 +28,21 @@ public abstract class Part
 
 	private static HashMap hsDesc = new HashMap(); 
 	
+	/**
+	 * used by matcher
+	 * @param name
+	 * @return
+	 */
+	public Desc getDescByName(String name) {
+		Desc[] descs = getCachedDesc();
+		
+		for(int i=0; i < descs.length; i++) {
+			if(descs[i].name.equals(name))
+				return descs[i];
+		}
+		return null;
+	}
+	
 	abstract public Desc[] getDesc();
 	
 	protected final Desc[] getOptDesc() {

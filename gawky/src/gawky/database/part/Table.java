@@ -12,11 +12,9 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -38,6 +36,8 @@ public abstract class Table extends Part
 	private static final int SQL_FIND   = 1;
 	private static final int SQL_UPDATE = 2;
 	private static final int SQL_DELETE = 3;
+	private static final int SQL_SELECT = 4;
+	
 	
 	Generator generator = new Generator();
 	
@@ -75,7 +75,7 @@ public abstract class Table extends Part
 		String key = this.getClass().getName();
 		String[] sql = (String[])hsQueries.get(key); 
 		if(sql == null) {
-			sql = new String[4];
+			sql = new String[5];
 			hsQueries.put(key, sql);
 		}
 		
@@ -123,7 +123,11 @@ public abstract class Table extends Part
 	public String getUpdateSQL() {
 		return generator.generateUpdateSQL(this);
 	}
-	
+
+	public String getSelectSQL() {
+		return generator.generateSelectSQL(this);
+	}
+
 	public String getFindSQL() {
 		return generator.generateFindSQL(this);
 	}
@@ -165,22 +169,30 @@ public abstract class Table extends Part
 	
 	public void queryToStream(Connection conn, String where, OutputStream out) throws Exception 
 	{
-		PreparedStatement stmt = conn.prepareStatement("select * from " + getTableName() + " " + where);
+		String sql = getQueries()[SQL_SELECT];
+		if(sql == null)	{
+			sql = getSelectSQL();
+			getQueries()[SQL_SELECT] = sql;
+		}
+		
+		PreparedStatement stmt = conn.prepareStatement(sql + " " + where);
 		 
 		ResultSet rset = stmt.executeQuery();
 			
 		Desc[] descs = this.getOptDesc();  
 		
 		byte endline = '\n';
-		
+
 		while (rset.next())
 		{
 			Part part = (Part) this.getClass().newInstance();
 
 			for(int i=0; i < descs.length; i++)
 			{
-				descs[i].setValue(part, rset.getString(descs[i].dbname) );
-				
+				//descs[i].setValue(part, rset.getString(descs[i].dbname) );
+				// Tuned ??
+				descs[i].setValue(part, rset.getString(i+1));
+				part.toString().getBytes();
 			 	out.write(part.toString().getBytes());
 			 	out.write(endline);
 			}
