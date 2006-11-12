@@ -1,4 +1,4 @@
-package example.database;
+package example.database.oldschool;
 
 import gawky.database.DB;
 
@@ -11,7 +11,6 @@ import java.util.Date;
 
 /**
  * @author Ingo Harbeck
- * Objectlayer for Database access.
  */
 
 public class Account 
@@ -189,175 +188,89 @@ public class Account
 			} catch (Exception e) {}
 		}
 	}
-	/**
-	 * @return Returns the bookings.
-	 */
+
 	public ArrayList getBookings() {
 		return bookings;
 	}
-	/**
-	 * @param bookings The bookings to set.
-	 */
 	public void setBookings(ArrayList bookings) {
 		this.bookings = bookings;
 	}
-	
-	/**
-	 * @return Returns the client_id.
-	 */
 	public String getClient_id() {
 		return client_id;
 	} 
-	/**
-	 * @param client_id The client_id to set.
-	 */
 	public void setClient_id(String client_id) {
 		this.client_id = client_id;
 	}
-	/**
-	 * @return Returns the customer_id.
-	 */
 	public String getCustomer_id__() {
 		return customer_id;
 	}
-	/**
-	 * @param customer_id The customer_id to set.
-	 */
 	public void setCustomer_id(String customer_id) {
 		this.customer_id = customer_id;
 	}
-	/**
-	 * @return Returns the city.
-	 */
 	public String getCity() {
 		return city;
 	}
-	/**
-	 * @param city The city to set.
-	 */
 	public void setCity(String city) {
 		this.city = city;
 	}
-	/**
-	 * @return Returns the country.
-	 */
 	public String getCountry() {
 		return country;
 	}
-	/**
-	 * @param country The country to set.
-	 */
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	/**
-	 * @return Returns the email.
-	 */
 	public String getEmail() {
 		return email;
 	}
-	/**
-	 * @param email The email to set.
-	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	/**
-	 * @return Returns the first_name.
-	 */
 	public String getFirst_name() {
 		return first_name;
 	}
-	/**
-	 * @param first_name The first_name to set.
-	 */
 	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
 	}
-	/**
-	 * @return Returns the last_name.
-	 */
 	public String getLast_name() {
 		return last_name;
 	}
-	/**
-	 * @param last_name The last_name to set.
-	 */
 	public void setLast_name(String last_name) {
 		this.last_name = last_name;
 	}
-	/**
-	 * @return Returns the phone.
-	 */
 	public String getPhone() {
 		return phone;
 	}
-	/**
-	 * @param phone The phone to set.
-	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	/**
-	 * @return Returns the state.
-	 */
 	public String getState() {
 		return state;
 	}
-	/**
-	 * @param state The state to set.
-	 */
 	public void setState(String state) {
 		this.state = state;
 	}
-	/**
-	 * @return Returns the street.
-	 */
 	public String getStreet() {
 		return street;
 	}
-	/**
-	 * @param street The street to set.
-	 */
 	public void setStreet(String street) {
 		this.street = street;
 	}
-	/**
-	 * @return Returns the street_2.
-	 */
 	public String getStreet_2() {
 		return street_2;
 	}
-	/**
-	 * @param street_2 The street_2 to set.
-	 */
 	public void setStreet_2(String street_2) {
 		this.street_2 = street_2;
 	}
-	/**
-	 * @return Returns the zip.
-	 */
 	public String getZip() {
 		return zip;
 	}
-	/**
-	 * @param zip The zip to set.
-	 */
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
-	/**
-	 * @return
-	 */
 	public String getSeq_account_id() {
 		return seq_account_id;
 	}
-
-	/**
-	 * @param string
-	 */
 	public void setSeq_account_id(String string) {
 		seq_account_id = string;
 	}
-
 }

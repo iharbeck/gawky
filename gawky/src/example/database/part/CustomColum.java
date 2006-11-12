@@ -1,4 +1,4 @@
-package example.database;
+package example.database.part;
 
 
 import gawky.database.generator.Generator;
