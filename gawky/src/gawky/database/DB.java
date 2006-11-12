@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -161,11 +162,11 @@ public class DB
 	}
 	
     /**
-     * Row als Hashtable
+     * Row als Map
      */
 	
 	
-	public static Hashtable getRow(String sql, String[] params)
+	public static Map getRow(String sql, String[] params)
 	{
 		Connection conn = null;
 		
@@ -182,9 +183,9 @@ public class DB
 		return null;
 	}
     
-	public static Hashtable getRow(Connection conn, String sql, String[] params)
+	public static Map getRow(Connection conn, String sql, String[] params)
 	{
-		Hashtable hs = null;
+		Map hs = null;
 		
 		ResultSet rset = null;
 
@@ -225,7 +226,7 @@ public class DB
 	}
 	
 	/**
-	 * Eine ArrayList von Hashtables
+	 * Eine ArrayList von Map
 	 */
 	
 	public static ArrayList getRowList(String sql, String[] params)
@@ -265,7 +266,7 @@ public class DB
 
 			while (rset.next())
 			{
-				Hashtable hs = new Hashtable();
+				Map hs = new Hashtable();
 				ResultSetMetaData md = stmt_select.getMetaData();
 				
 				for (int i = md.getColumnCount(); i > 0; i --) {
@@ -327,8 +328,7 @@ public class DB
 
 			rset = stmt_select.executeQuery();
 
-			while (rset.next())
-			{
+			while (rset.next()) {
 				al.add(secString(rset.getString(1)));
 			} 
 		} catch (Exception e) {
@@ -341,24 +341,24 @@ public class DB
 		return al;
 	}
 	
-	public static final void doClose(ResultSet o)
-	 {
+	public static final void doClose(ResultSet o) {
 		try { 
-			if (o != null) o.close();
+			if (o != null) 
+				o.close();
 		} catch (Exception e) { }
 	 }
 
-	 public static final void doClose(Statement o)
-	 {
+	 public static final void doClose(Statement o) {
 		try { 
-			if (o != null) o.close();
+			if (o != null) 
+				o.close();
 		} catch (Exception e) { }
 	 }
 
-	 public static final void doClose(Connection o)
-	 {
+	 public static final void doClose(Connection o) {
 		try { 
-			if (o != null) o.close();
+			if (o != null) 
+				o.close();
 		} catch (Exception e) { }
 	 }
 }
