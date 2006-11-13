@@ -1,6 +1,5 @@
 package gawky.incubator.filereader;
 
-import gawky.file.Locator;
 import gawky.host.PackedDecimal;
 
 import java.io.File;
