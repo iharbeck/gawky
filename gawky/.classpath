@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="lib/codegen/freemarker.jar"/>
 	<classpathentry kind="lib" path="lib/xls/poi-2.0-pre2-20030711.jar"/>
 	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.30.jar"/>
+	<classpathentry kind="lib" path="lib/hash/trove.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

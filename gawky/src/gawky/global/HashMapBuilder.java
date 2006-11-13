@@ -1,10 +1,12 @@
 package gawky.global;
 
+import gnu.trove.THashMap;
+
 import java.util.HashMap;
 
 public class HashMapBuilder {
 
-	public static HashMap build(Object[][] map) 
+	public static HashMap buildMap(Object[][] map) 
 	{
 		HashMap hs = new HashMap(map.length);
 		
@@ -15,7 +17,7 @@ public class HashMapBuilder {
 		
 		return hs;
 	}
-	
+		
 	public static void main(String[] args) {
 		
 		Object map[][] = { //  key, obj
@@ -24,9 +26,8 @@ public class HashMapBuilder {
 			  	{ "key3", "dritter" },
 		};
 		
-		HashMap m = build(map);
-		
-		System.out.println(m.size());
+		HashMap m = buildMap(map);
+
 	}
 	
 }
