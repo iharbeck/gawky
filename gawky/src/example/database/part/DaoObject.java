@@ -1,32 +1,29 @@
 package example.database.part;
 
-
 import gawky.database.DB;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.IDGenerator;
 import gawky.database.part.Table;
 import gawky.global.Option;
 import gawky.message.part.Desc;
-import gawky.message.part.DescV;
 
 import java.sql.Connection;
 
 public class DaoObject extends Table {
 
 	//Record definition
-	public Desc[] getDesc() {
-		
-		// ### SET ID ###
-		
-		//setDescID(0); // Manual set ID
-		//setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
-		setDescID(0, IDGenerator.ID_AUTO());                    // MYSQL auto column
-		
+	public Desc[] getDesc()
+	{
 		setDialect(new MySQL());
 		
+	  //setDescID(0);  // Manual set ID default first Column!
+      //setDescID(Table.NO_ID); // no ID
+	  //setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
+		setDescID(0, IDGenerator.ID_AUTO());                    // MYSQL auto column
+		
 		return new Desc[]  {
-			new DescV("kunde_id"),
-			new DescV("name")
+			new Column("kunde_id"),
+			new Column("name")
 		};
 	}
 

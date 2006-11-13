@@ -38,10 +38,12 @@ public abstract class Table extends Part
 	private static final int SQL_DELETE = 3;
 	private static final int SQL_SELECT = 4;
 	
+	public static final int NO_ID = -1;
+	
 	
 	Generator generator = new Generator();
 	
-	int idindex = -1;
+	int idindex = 0;
 	IDGenerator idgenerator = null;
 	
 	abstract public Desc[] getDesc();
@@ -54,13 +56,18 @@ public abstract class Table extends Part
 		this.idgenerator = null;
 	}
 	
+	public void setDescID(IDGenerator idgenerator) {
+		this.idindex = 0;
+		this.idgenerator = idgenerator;
+	}
+	
 	public void setDescID(int idindex, IDGenerator idgenerator) {
 		this.idindex = idindex;
 		this.idgenerator = idgenerator;
 	}
 	
 	public Desc getDescID() {
-		if(idindex == -1)
+		if(idindex == NO_ID)
 			return null;
 		return getCachedDesc()[idindex];
 	}
