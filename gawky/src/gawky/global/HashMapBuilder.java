@@ -1,7 +1,5 @@
 package gawky.global;
 
-import gnu.trove.THashMap;
-
 import java.util.HashMap;
 
 public class HashMapBuilder {

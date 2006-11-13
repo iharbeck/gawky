@@ -164,11 +164,6 @@ public abstract class Table extends Part
 		try {
 			// versuche to generierte ID zu ermitteln und im Object abzulegen
 			getDescID().setValue(this, getIdgenerator().getGeneratedID(conn, this));
-//			PropertyUtils.setSimpleProperty(
-//					this, 
-//					this.getDescID().name, 
-//					getIdgenerator().getGeneratedID(conn, this)
-//			);
 		} catch (Exception e) {
 			log.error("insert Record", e);
 		}
@@ -186,23 +181,22 @@ public abstract class Table extends Part
 		 
 		ResultSet rset = stmt.executeQuery();
 			
-		Desc[] descs = this.getOptDesc();  
+		//Desc[] descs = this.getOptDesc();  
 		
 		byte endline = '\n';
 
 		while (rset.next())
 		{
-			Part part = (Part) this.getClass().newInstance();
+			Table table = (Table) this.getClass().newInstance();
 
-			for(int i=0; i < descs.length; i++)
-			{
-				//descs[i].setValue(part, rset.getString(descs[i].dbname) );
-				// Tuned ??
-				descs[i].setValue(part, rset.getString(i+1));
-				part.toString().getBytes();
-			 	out.write(part.toString().getBytes());
-			 	out.write(endline);
-			}
+			generator.fillPart(rset, table);
+//			for(int i=0; i < descs.length; i++)
+//			{
+//				descs[i].setValue(part, rset.getString(i+1));
+//			}	
+				
+			out.write(table.toString().getBytes());
+			out.write(endline);
 		}
 		DB.doClose(stmt);
 	}

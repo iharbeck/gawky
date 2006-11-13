@@ -6,6 +6,7 @@ import gawky.message.part.Desc;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,12 @@ public class Generator
 	String customcolumns = "";
 	String customparams = "";
 	
+	NumberFormat fmt = NumberFormat.getInstance(locale);
+
+	public Generator() {
+		fmt.setGroupingUsed(false);
+	}
+	
 	public void setDateFormat(String format) {
 		df_YYYYMMDD = new SimpleDateFormat(format);
 	}
@@ -40,13 +47,14 @@ public class Generator
 		this.locale = locale;
 	}
 	
+	
 	public double parseNumber(String val) throws Exception
 	{
-			NumberFormat fmt = NumberFormat.getInstance(locale);
-			fmt.setMaximumFractionDigits(2);
-			fmt.setMinimumFractionDigits(2);
-			fmt.setGroupingUsed(true);
-			return fmt.parse(val).doubleValue();
+		return fmt.parse(val).doubleValue();
+	}
+	public String formatNumber(double val) throws Exception
+	{
+		return fmt.format(val);
 	}
 	
 	public String generateInsertSQL(Table bean)
@@ -224,6 +232,57 @@ public class Generator
 		
 		return sql;
 	}
+	
+
+	
+	public void fillPart(ResultSet rset, Table part)
+	{
+		Desc[] descs = part.getCachedDesc();
+		Desc   desc;
+		
+		for(int i=0; i < descs.length; i++)
+		{
+			desc = descs[i];
+			
+			if(desc.dbname == null)
+				continue;
+
+			try 
+			{
+				String val = null;
+				
+			    switch (desc.format) { 
+					case Desc.FMT_ASCII :
+					case Desc.FMT_BLANK :
+					case Desc.FMT_BLANK_ZERO :
+					case Desc.FMT_BINARY :
+					case Desc.FMT_UPPER :
+					case Desc.FMT_LOWER :
+					case Desc.FMT_BLANK_LETTER :
+						val = rset.getString(i+1); 
+						break;
+					case Desc.FMT_DIGIT :
+						val = formatNumber(rset.getDouble(i+1));
+						break;
+					case Desc.FMT_DATE :
+						val =  df_YYYYMMDD.format( rset.getDate(i+1) );
+						break;
+					case Desc.FMT_TIME :
+						val =  df_HHMMSS.format( rset.getTimestamp(i+1) );
+						break;
+				}
+	
+			    descs[i].setValue(part, val);
+			    // descs[i].setValue(part, rset.getString(i+1));
+
+			} catch(Exception e) {
+				try  { descs[i].setValue(part, ""); } catch(Exception ee) {}
+			}
+		}
+
+	}
+
+	
 	
 	public void fillPreparedStatement(PreparedStatement stmt, Table bean)
 	{
