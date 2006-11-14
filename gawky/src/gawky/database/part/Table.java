@@ -123,27 +123,27 @@ public abstract class Table extends Part
 		return stmt;
 	}
 	
-	public String getInsertSQL() {
+	protected String getInsertSQL() {
 		return generator.generateInsertSQL(this);
 	}
 	
-	public String getUpdateSQL() {
+	protected String getUpdateSQL() {
 		return generator.generateUpdateSQL(this);
 	}
 
-	public String getSelectSQL() {
+	protected String getSelectSQL() {
 		return generator.generateSelectSQL(this);
 	}
 
-	public String getFindSQL() {
+	protected String getFindSQL() {
 		return generator.generateFindSQL(this);
 	}
 	
-	public String getDeleteSQL() {
+	protected String getDeleteSQL() {
 		return generator.generateDeleteSQL(this);
 	}
 	
-	public void fillPreparedStatement(PreparedStatement stmt) {
+	protected void fillPreparedStatement(PreparedStatement stmt) {
 		generator.fillPreparedStatement(stmt, this);
 	}
 	

@@ -64,12 +64,9 @@ public class XlsTable extends AbstractTable
 			}
 		}
 		
-		
-
         FileOutputStream stream = new 
         FileOutputStream(Locator.findBinROOT() + "/" + output);
 	       
         workBook.write(stream);
-
 	}
 }

@@ -28,9 +28,10 @@ public class Generator
 	String customcolumns = "";
 	String customparams = "";
 	
-	NumberFormat fmt = NumberFormat.getInstance(locale);
+	NumberFormat fmt;
 
 	public Generator() {
+		fmt = NumberFormat.getInstance(Locale.ENGLISH);
 		fmt.setGroupingUsed(false);
 	}
 	

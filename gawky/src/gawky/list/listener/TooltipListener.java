@@ -8,9 +8,9 @@ public class TooltipListener implements CellListener
 	
 	public String getAttribute(String name) { return ""; };
 	
-	public TooltipListener()
+	public TooltipListener(int reference)
 	{
-		reference = 0;
+		this.reference = reference;
 	}
 	
 	public String process(Datasource ds, int column)

@@ -13,7 +13,15 @@ public class HtmlTable extends AbstractTable
 	{
 		StringBuffer buffer = new StringBuffer();
 		
-		buffer.append("<TABLE>\n");
+		buffer.append("<TABLE");
+		
+		if(getTableclass() != null)
+			buffer.append(" class='" + getTableclass() + "'");
+		if(getTablestyle() != null)
+			buffer.append(" style='" + getTablestyle() + "'");
+		
+		buffer.append(">\n");
+		
 		buffer.append("<TR>");
 		
 		for(int i=0; i < ds.getColumns(); i++)
@@ -21,7 +29,7 @@ public class HtmlTable extends AbstractTable
 			if(ds.getWidth(i) == Column.HIDDEN)
 				continue;
 			
-			buffer.append("<TH>")
+			buffer.append("<TH width='" + ds.getWidth(i) + "'>")
 				  .append(ds.getHead(i))
 				  .append("</TH>");
 		}
@@ -35,9 +43,11 @@ public class HtmlTable extends AbstractTable
 				if(ds.getWidth(i) == Column.HIDDEN)
 					continue;
 				
+				// handler für spezielle Cell formatierungen
 				CellListener handler = getListener(ds, i);
 				
-				buffer.append("<TD class='" + handler.getAttribute("class") + "'>")
+				buffer
+				  .append("<TD class='" + handler.getAttribute("class") + "'>")
 				  .append(handler.process(ds, i))
 				  .append("</TD>");
 

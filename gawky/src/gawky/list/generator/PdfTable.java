@@ -19,7 +19,6 @@ import com.lowagie.text.pdf.PdfWriter;
 
 public class PdfTable extends AbstractTable 
 {
-	
 	Document document;
 	
 	float fontsize = (float)10;
