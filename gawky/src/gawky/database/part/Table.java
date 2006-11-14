@@ -243,6 +243,34 @@ public abstract class Table extends Part
 	}
 	
 	
+	public void find(Connection conn, String where, Object [] params /* TODO optional Parameters */) throws Exception 
+	{
+		String sql = getQueries()[SQL_SELECT];
+		if(sql == null)	{
+			sql = getFindSQL();
+			getQueries()[SQL_SELECT] = sql;
+		}
+		
+		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
+		
+		
+		sql += " " + where;
+		ResultSet rset = stmt.executeQuery();
+		
+		Desc[] descs = this.getOptDesc();   
+		
+		if (rset.next())
+		{
+			for(int i=0; i < descs.length; i++)
+			{
+				descs[i].setValue(this, rset.getString(i+1) );
+			}
+			
+		} else {
+			log.error("no result (" + sql + ")");
+		}
+	}
+	
 	public void delete(Connection conn, long id) throws Exception 
 	{
 		String sql = getQueries()[SQL_DELETE];

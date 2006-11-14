@@ -124,7 +124,32 @@ public class Generator
 				continue;
 			
 			sql    += desc.dbname;  // column name
-			sql    += " varchar(" + desc.len + ")";
+			
+			
+			 switch (desc.format) { 
+				case Desc.FMT_ASCII :
+				case Desc.FMT_BLANK :
+				case Desc.FMT_BLANK_ZERO :
+				case Desc.FMT_BINARY :
+				case Desc.FMT_UPPER :
+				case Desc.FMT_LOWER :
+				case Desc.FMT_BLANK_LETTER :
+					sql    += " VARCHAR2(" + desc.len + ")";
+					break;
+				case Desc.FMT_DIGIT :
+					sql    += " NUMBER(" + desc.len + ")";
+					break;
+				case Desc.FMT_DATE :
+					sql    += " DATE ";
+					break;
+				case Desc.FMT_TIME :
+					sql    += " DATE ";
+					break;
+				default:
+					sql    += " VARCHAR2(" + desc.len + ")";
+			}
+			 
+			
 			
 			if(i < descs.length-1) { // beim letzten ohne Komma
 				sql    += ",";
