@@ -92,9 +92,9 @@ public class Ftp
 		File f = new File(localdir + src);
 		FileInputStream is = new FileInputStream(localdir + src);
 		ftp.storeFile(f.getName() + tmp_prefix, is);
+		is.close();
 
 		renameRemoteFile(f.getName() + tmp_prefix, f.getName());
-		is.close();
 
 		checkReply("send failed: " + f.getName());
 	}
@@ -113,11 +113,11 @@ public class Ftp
 	}
 	
 	public void modeASCII() throws Exception {
-		ftp.setFileTransferMode(FTP.ASCII_FILE_TYPE);
+		ftp.setFileType(FTP.ASCII_FILE_TYPE);
 	}
 
 	public void modeBINARY() throws Exception {
-		ftp.setFileTransferMode(FTP.BINARY_FILE_TYPE);
+		ftp.setFileType(FTP.BINARY_FILE_TYPE);
 	}
 	
 	public void deleteRemoteFile(String path) throws Exception {

@@ -22,6 +22,23 @@ public class LineReader {
 	    }
 	}
 	
+	public static void processFile(String filename, LineHandler handler, String encoding) throws Exception
+	{
+		Reader in = new InputStreamReader(new FileInputStream(filename), encoding);
+		
+		BufferedReader is = new BufferedReader(in);
+		
+		String line = null;
+
+		try {   
+		    while((line = is.readLine()) != null)
+		    	handler.processLine(line);
+		} catch (CancelException e) {
+	    } finally {
+	    	is.close();
+	    }
+	}
+	
 	public static void processUTF8File(String filename, LineHandler handler) throws Exception
 	{
 		//String uline = new String(line.getBytes(),"UTF-8");

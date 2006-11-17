@@ -13,7 +13,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -243,18 +245,21 @@ public abstract class Table extends Part
 	}
 	
 	
-	public void find(Connection conn, String where, Object [] params /* TODO optional Parameters */) throws Exception 
+	public void find(Connection conn, String where, Object [] params) throws Exception 
 	{
 		String sql = getQueries()[SQL_SELECT];
 		if(sql == null)	{
-			sql = getFindSQL();
+			sql = getSelectSQL();
 			getQueries()[SQL_SELECT] = sql;
 		}
 		
-		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
-		
-		
 		sql += " " + where;
+
+		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
+		
+		for(int i = 1; params != null && i <= params.length; i++)
+			stmt.setObject(i, params[i-1]);
+		
 		ResultSet rset = stmt.executeQuery();
 		
 		Desc[] descs = this.getOptDesc();   
@@ -269,6 +274,48 @@ public abstract class Table extends Part
 		} else {
 			log.error("no result (" + sql + ")");
 		}
+		
+		DB.doClose(stmt);
+	}
+	
+	public static List find(Class clazz, Connection conn, String where, Object [] params) throws Exception 
+	{
+		Table inst = (Table)clazz.newInstance();
+		
+		String sql = inst.getQueries()[SQL_SELECT];
+		if(sql == null)	{
+			sql = inst.getSelectSQL();
+			inst.getQueries()[SQL_SELECT] = sql;
+		}
+		
+		sql += " " + where;
+
+		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
+		
+		for(int i = 1; params != null && i <= params.length; i++)
+			stmt.setObject(i, params[i-1]);
+			
+		ResultSet rset = stmt.executeQuery();
+		
+		Desc[] descs = inst.getOptDesc();   
+		
+		ArrayList list = new ArrayList();
+		
+		while (rset.next())
+		{
+			for(int i=0; i < descs.length; i++)
+			{
+				descs[i].setValue(inst, rset.getString(i+1) );
+			}
+			
+			list.add(inst);
+			
+			inst = (Table)clazz.newInstance();
+		} 
+		
+		DB.doClose(stmt);
+		
+		return list;
 	}
 	
 	public void delete(Connection conn, long id) throws Exception 
