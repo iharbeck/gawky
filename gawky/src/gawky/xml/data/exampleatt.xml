@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fias2 SYSTEM "importatt.dtd" >
+<fias2 uniqueid="">
+  <record client_id="" customer_id="">
+    <address address_line_1="" address_line_2="" address_line_3="" address_line_4="" address_line_5="" address_line_6="" address_line_7="" address_number="" city="" country_code="" email_address="" fax_number="" name="" name_2="" phone_number="" po_box="" street="" street_2="" title="" zip_code="" zip_po_box=""/>
+    <account account_group="" account_owner="" affiliates_percent_rate="" bank_account="" bank_id="" cc_expiry_date="" credit_card="" external_customer_id="" issue_date="" issue_number="" language_debtor="" reminder_block="" rib_code="" vat_id=""/>
+    <booking account_owner="" address_number="" amount="" authorization_code="" bank_account="" bank_id="" cc_expiry_date="" cc_secure_pay_id="" cc_secure_reference_number="" cc_secure_transaction_id="" credit_card="" distribution_channel="" due_date="" generic_field_1="" generic_field_2="" generic_field_3="" invoice_ext="" issue_date="" issue_number="" order_number="" payment_type="" position_number="" reminder_block="" reminder_level="" rib_code="" sale_point="" text_line="" transaction_code="" transaction_date="" transaction_id="" transaction_subcode="">
+      <lineitem amount="" distribution_channel="" generic_field_1="" generic_field_2="" generic_field_3="" product_group="" product_id="" service_type="" tax_amount_1="" tax_amount_2="" tax_amount_3="" tax_per_cent_1="" tax_per_cent_2="" tax_per_cent_3="" text_line="" unit_number=""/>
+    </booking>
+  </record>
+</fias2>

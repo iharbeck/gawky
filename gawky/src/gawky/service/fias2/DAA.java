@@ -41,7 +41,6 @@ public class DAA extends Part
 			new DescF(Desc.FMT_A, Desc.CODE_R, 10,  "zip_code"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 16,  "po_box"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 10,  "zip_po_box"),
-
 			new DescF(Desc.FMT_A, Desc.CODE_O, 40,  "phone_number"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 40,  "fax_number"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 100,  "email_address"),

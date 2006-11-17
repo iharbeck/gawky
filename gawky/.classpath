@@ -25,5 +25,12 @@
 	<classpathentry kind="lib" path="lib/xls/poi-2.0-pre2-20030711.jar"/>
 	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.30.jar"/>
 	<classpathentry kind="lib" path="lib/hash/trove.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xerces.jar"/>
+	<classpathentry kind="lib" path="lib/xml/jaxen-core.jar"/>
+	<classpathentry kind="lib" path="lib/xml/jaxen-jdom.jar"/>
+	<classpathentry kind="lib" path="lib/xml/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/xml/saxpath.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xalan.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

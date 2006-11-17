@@ -1,0 +1,173 @@
+<!ELEMENT fias2 (record*)>
+<!ATTLIST fias2 uniqueid CDATA #REQUIRED>
+
+<!ELEMENT record (client_id, customer_id, address?, account?, booking?)>
+
+<!ELEMENT client_id (#PCDATA)>
+<!ELEMENT customer_id (#PCDATA)>
+
+<!ELEMENT address (
+address_number?,title?, name,name_2?,street,street_2?,zip_code,city,country_code,zip_po_box?,
+po_box?,phone_number?,fax_number?,email_address?,
+address_line_1?,address_line_2?,address_line_3?,address_line_4?,
+address_line_5?,address_line_6?,address_line_7?)>
+
+<!ELEMENT address_number (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT name_2 (#PCDATA)>
+<!ELEMENT street (#PCDATA)>
+<!ELEMENT street_2 (#PCDATA)>
+<!ELEMENT zip_code (#PCDATA)>
+<!ELEMENT city (#PCDATA)>
+<!ELEMENT country_code (#PCDATA)>
+<!ELEMENT zip_po_box (#PCDATA)>
+<!ELEMENT po_box (#PCDATA)>
+<!ELEMENT phone_number (#PCDATA)>
+<!ELEMENT fax_number (#PCDATA)>
+<!ELEMENT email_address (#PCDATA)>
+<!ELEMENT address_line_1 (#PCDATA)>
+<!ELEMENT address_line_2 (#PCDATA)>
+<!ELEMENT address_line_3 (#PCDATA)>
+<!ELEMENT address_line_4 (#PCDATA)>
+<!ELEMENT address_line_5 (#PCDATA)>
+<!ELEMENT address_line_6 (#PCDATA)>
+<!ELEMENT address_line_7 (#PCDATA)>
+
+<!ELEMENT account (
+external_customer_id?,
+vat_id?,
+language_debtor?,
+account_group?,
+reminder_block?,
+affiliates_percent_rate?,
+credit_card?,
+cc_expiry_date?,
+issue_date?,
+issue_number?,
+bank_id?,
+bank_account?,
+account_owner?,
+rib_code?
+)>
+
+
+<!ELEMENT external_customer_id (#PCDATA)>
+<!ELEMENT vat_id (#PCDATA)>
+<!ELEMENT language_debtor (#PCDATA)>
+<!ELEMENT account_group (#PCDATA)>
+<!ELEMENT reminder_block (#PCDATA)>
+<!ELEMENT affiliates_percent_rate (#PCDATA)>
+<!ELEMENT credit_card (#PCDATA)>
+<!ELEMENT cc_expiry_date (#PCDATA)>
+<!ELEMENT issue_date (#PCDATA)>
+<!ELEMENT issue_number (#PCDATA)>
+<!ELEMENT bank_id (#PCDATA)>
+<!ELEMENT bank_account (#PCDATA)>
+<!ELEMENT account_owner (#PCDATA)>
+<!ELEMENT rib_code (#PCDATA)>
+
+
+<!ELEMENT booking (
+transaction_id?,
+address_number?,
+transaction_code,
+transaction_subcode,
+transaction_date,
+due_date?,
+amount,
+invoice_ext?,
+order_number?,
+distribution_channel?,
+sale_point?,
+generic_field_1?,
+generic_field_2?,
+generic_field_3?,
+position_number?,
+payment_type?,
+text_line?,
+bank_id?,
+bank_account?,
+reminder_level?,
+account_owner?,
+reminder_block?,
+rib_code?,
+credit_card?,
+cc_expiry_date?,
+issue_date?,
+issue_number?,
+authorization_code?,
+cc_secure_pay_id?,
+cc_secure_transaction_id?,
+cc_secure_reference_number?,
+lineitem*
+)> 
+
+<!ELEMENT transaction_id (#PCDATA)>
+<!ELEMENT address_number (#PCDATA)>
+<!ELEMENT transaction_code (#PCDATA)>
+<!ELEMENT transaction_subcode (#PCDATA)>
+<!ELEMENT transaction_date (#PCDATA)>
+<!ELEMENT due_date (#PCDATA)>
+<!ELEMENT amount (#PCDATA)>
+<!ELEMENT invoice_ext (#PCDATA)>
+<!ELEMENT order_number (#PCDATA)>
+<!ELEMENT distribution_channel (#PCDATA)>
+<!ELEMENT sale_point (#PCDATA)>
+<!ELEMENT generic_field_1 (#PCDATA)>
+<!ELEMENT generic_field_2 (#PCDATA)>
+<!ELEMENT generic_field_3 (#PCDATA)>
+<!ELEMENT position_number (#PCDATA)>
+<!ELEMENT payment_type (#PCDATA)>
+<!ELEMENT text_line (#PCDATA)>
+<!ELEMENT bank_id (#PCDATA)>
+<!ELEMENT bank_account (#PCDATA)>
+<!ELEMENT reminder_level (#PCDATA)>
+<!ELEMENT account_owner (#PCDATA)>
+<!ELEMENT reminder_block (#PCDATA)>
+<!ELEMENT rib_code (#PCDATA)>
+<!ELEMENT credit_card (#PCDATA)>
+<!ELEMENT cc_expiry_date (#PCDATA)>
+<!ELEMENT issue_date (#PCDATA)>
+<!ELEMENT issue_number (#PCDATA)>
+<!ELEMENT authorization_code (#PCDATA)>
+<!ELEMENT cc_secure_pay_id (#PCDATA)>
+<!ELEMENT cc_secure_transaction_id (#PCDATA)>
+<!ELEMENT cc_secure_reference_number (#PCDATA)>
+
+<!ELEMENT lineitem (
+amount,
+tax_per_cent_1?,
+tax_amount_1?,
+tax_per_cent_2?,
+tax_amount_2?,
+tax_per_cent_3?,
+tax_amount_3?,
+product_group?,
+service_type?,
+distribution_channel?,
+product_id?,
+unit_number?,
+text_line?,
+generic_field_1?,
+generic_field_2?,
+generic_field_3?
+)>
+
+<!ELEMENT amount (#PCDATA)>
+<!ELEMENT tax_per_cent_1 (#PCDATA)>
+<!ELEMENT tax_amount_1 (#PCDATA)>
+<!ELEMENT tax_per_cent_2 (#PCDATA)>
+<!ELEMENT tax_amount_2 (#PCDATA)>
+<!ELEMENT tax_per_cent_3 (#PCDATA)>
+<!ELEMENT tax_amount_3 (#PCDATA)>
+<!ELEMENT product_group (#PCDATA)>
+<!ELEMENT service_type (#PCDATA)>
+<!ELEMENT distribution_channel (#PCDATA)>
+<!ELEMENT product_id (#PCDATA)>
+<!ELEMENT unit_number (#PCDATA)>
+<!ELEMENT text_line (#PCDATA)>
+<!ELEMENT generic_field_1 (#PCDATA)>
+<!ELEMENT generic_field_2 (#PCDATA)>
+<!ELEMENT generic_field_3 (#PCDATA)>
+
