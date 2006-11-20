@@ -20,7 +20,7 @@ public class Reader {
 	      {
 	        InputStream in;
 	        
-	        in = new FileInputStream(Locator.findPath("", SaxSample.class) + "../data/example.xml");
+	        in = new FileInputStream(Locator.findPath("", SaxSample.class) + "../data/exampleatt.xml");
 	        
 	        XMLInputFactory factory = XMLInputFactory.newInstance();
 	        XMLStreamReader parser = factory.createXMLStreamReader(in);
@@ -29,16 +29,14 @@ public class Reader {
 	        {
 	          switch (event) {
 	            case XMLStreamConstants.START_ELEMENT:
-	            	 System.out.print("<" + parser.getLocalName() + ">");
+	            	 System.out.println("<" + parser.getLocalName() + " " + parser.getAttributeCount() + ">");
+	            	 printAtt(parser);
 	              break;
 	            case XMLStreamConstants.END_ELEMENT:
-	            	System.out.print("</"+parser.getLocalName()+">");
+	            	  parser.getLocalName();
 	              break;
 	            case XMLStreamConstants.CHARACTERS:
-	            	  System.out.print("[["+parser.getText()+"]]");
-	              break;
-	            case XMLStreamConstants.CDATA:
-	            	  System.out.print("["+parser.getText()+"]");
+	            	  parser.getText();
 	              break;
 	          } 
 	        } 
@@ -51,5 +49,9 @@ public class Reader {
 	      catch (IOException ex) {
 	        System.out.println(ex);
 	      }
+	}
+	
+	public static void printAtt(XMLStreamReader parser) {
+		System.out.println("  " + parser.getAttributeValue(null, "address_line_1"));
 	}
 }
