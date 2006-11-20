@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE fias2 SYSTEM "import.dtd" >
+<!-- DOCTYPE fias2 SYSTEM "import.dtd" -->
 <fias2 uniqueid="">
   <record>
     <client_id>client_id</client_id>

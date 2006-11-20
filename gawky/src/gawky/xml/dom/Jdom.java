@@ -18,7 +18,7 @@ public class Jdom {
 	public static void main(String[] args) throws Exception {
 		 
 		SAXBuilder parser = new SAXBuilder();
-		Document doc = parser.build(new File(Locator.findPath("", SaxSample.class) + "../example.xml"));
+		Document doc = parser.build(new File(Locator.findPath("", SaxSample.class) + "../data/example.xml"));
 
 		System.out.println( doc.getRootElement().getChildren("record").size() );
 		
