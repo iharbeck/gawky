@@ -32,7 +32,13 @@
 	<classpathentry kind="lib" path="lib/xml/saxpath.jar"/>
 	<classpathentry kind="lib" path="lib/xml/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/xml/xml-apis.jar"/>
+<<<<<<< .mine
+	<classpathentry kind="lib" path="lib/xml/stax/stax2.jar"/>
+	<classpathentry kind="lib" path="lib/xml/stax/wstx-asl-3.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml/stax/stax-api-1.0.1.jar"/>
+=======
 	<classpathentry kind="lib" path="lib/xml/mstax/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/xml/mstax/wstx-asl-3.1.0.jar"/>
+>>>>>>> .r330
 	<classpathentry kind="output" path="bin"/>
 </classpath>
