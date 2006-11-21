@@ -1,8 +1,5 @@
 package test.message.performance;
 
-import example.message.filereader.Address;
-import gawky.message.parser.Parser;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
