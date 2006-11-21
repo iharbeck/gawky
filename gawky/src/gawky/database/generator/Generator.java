@@ -303,6 +303,7 @@ public class Generator
 
 			} catch(Exception e) {
 				try  { descs[i].setValue(part, ""); } catch(Exception ee) {}
+				System.out.println(e);
 			}
 		}
 
