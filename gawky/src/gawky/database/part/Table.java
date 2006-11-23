@@ -484,7 +484,7 @@ public abstract class Table extends Part
 		
 		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);		
 
-		fillPreparedStatement(stmt, true);
+		fillPreparedStatement(stmt, false);
 		
 		stmt.execute();
 	}
