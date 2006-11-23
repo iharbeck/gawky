@@ -370,7 +370,7 @@ public class Generator
 			// fehlt noch einer muss es wohl die ID sein.
 			//if(c == setter+1);
 			
-			if(insert && bean.insertcount == setter+1)
+			if((insert && bean.insertcount == setter+1) || !insert)
 				stmt.setString(setter+1, bean.getDescID().getValue(bean)); 
 				
 		} catch(Exception e) {
