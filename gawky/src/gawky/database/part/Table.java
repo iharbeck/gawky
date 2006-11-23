@@ -464,7 +464,7 @@ public abstract class Table extends Part
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
-			update(conn);
+			update(conn); 
 		} finally {
 			DB.doClose(conn);
 		}
