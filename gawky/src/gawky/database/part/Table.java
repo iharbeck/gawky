@@ -149,6 +149,19 @@ public abstract class Table extends Part
 		generator.fillPreparedStatement(stmt, this);
 	}
 	
+	public void insert() throws SQLException 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			insert(conn);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+
+	
 	public void insert (Connection conn) throws SQLException 
 	{
 		String sql = getQueries()[SQL_INSERT];
@@ -205,6 +218,18 @@ public abstract class Table extends Part
 		DB.doClose(stmt);
 	}
 
+	public void find(long id) throws SQLException 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			find(conn, id);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+
 	public void find(Connection conn, long id) throws Exception 
 	{
 		String sql = getQueries()[SQL_FIND];
@@ -246,6 +271,17 @@ public abstract class Table extends Part
 		}
 	}
 	
+	public void find(String where, Object [] params) throws SQLException 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			find(conn, where, params);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
+	}
 	
 	public void find(Connection conn, String where, Object [] params) throws Exception 
 	{
@@ -283,6 +319,20 @@ public abstract class Table extends Part
 	/*
 	 * static Find Methods
 	 */
+	
+	public static Table find(Class clazz, long id) throws SQLException 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			return find(clazz, conn, id);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
+		return null;
+	}
+	
 	public static Table find(Class clazz, Connection conn, long id) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
@@ -313,6 +363,19 @@ public abstract class Table extends Part
 		}
 		
 		return inst;
+	}
+	
+	public static List find(Class clazz, String where, Object [] params) throws SQLException 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			return find(clazz, conn, where, params);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
+		return null;
 	}
 	
 	public static List find(Class clazz, Connection conn, String where, Object [] params) throws Exception 
@@ -355,26 +418,66 @@ public abstract class Table extends Part
 		return list;
 	}
 	
-	public void delete(Connection conn, long id) throws Exception 
+	public static void delete(Class clazz, long id) throws SQLException 
 	{
-		String sql = getQueries()[SQL_DELETE];
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			delete(clazz, conn, id);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+	
+	public static void delete(Class clazz, Connection conn, long id) throws Exception 
+	{
+		Table inst = (Table)clazz.newInstance();
+		
+		
+		String sql = inst.getQueries()[SQL_DELETE];
 		if(sql == null)	{
-			sql = getDeleteSQL();
-			getQueries()[SQL_DELETE] = sql;
+			sql = inst.getDeleteSQL();
+			inst.getQueries()[SQL_DELETE] = sql;
 		}
 		
-		PreparedStatement stmt = getStmt(conn, sql, SQL_DELETE);
+		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
 		
 		// Delete by ID
 		stmt.setLong(1, id);
 		stmt.execute();
 	}
 
+	public void delete() throws SQLException 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			delete(conn);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+
+	
 	public void delete(Connection conn) throws Exception 
 	{
 		// Delete current Object
 		//delete(conn, Long.parseLong((String)PropertyUtils.getSimpleProperty(this, this.getDescID().name)));
-		delete(conn, Long.parseLong( getDescID().getValue(this) ));
+		delete(getClass(), conn, Long.parseLong( getDescID().getValue(this) ));
+	}
+	
+	public void update() throws SQLException 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			update(conn);
+		} catch (Exception e) {
+		} finally {
+			DB.doClose(conn);
+		}
 	}
 	
 	public void update (Connection conn) throws SQLException 
