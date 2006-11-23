@@ -47,6 +47,9 @@ public abstract class Table extends Part
 	
 	int idindex = 0;
 	IDGenerator idgenerator = null;
+
+	public boolean insertparameter = true;
+
 	
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
@@ -90,8 +93,6 @@ public abstract class Table extends Part
 		
 		return sql;
 	}
-	
-	public int insertcount=0;
 	
 	public final PreparedStatement[] getStmts() 
 	{
