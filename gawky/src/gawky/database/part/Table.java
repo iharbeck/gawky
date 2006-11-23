@@ -155,7 +155,6 @@ public abstract class Table extends Part
 		try {
 			conn = DB.getConnection();
 			insert(conn);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
@@ -218,13 +217,12 @@ public abstract class Table extends Part
 		DB.doClose(stmt);
 	}
 
-	public void find(long id) throws SQLException 
+	public void find(long id) throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
 			find(conn, id);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
@@ -271,13 +269,12 @@ public abstract class Table extends Part
 		}
 	}
 	
-	public void find(String where, Object [] params) throws SQLException 
+	public void find(String where, Object [] params) throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
 			find(conn, where, params);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
@@ -320,17 +317,15 @@ public abstract class Table extends Part
 	 * static Find Methods
 	 */
 	
-	public static Table find(Class clazz, long id) throws SQLException 
+	public static Table find(Class clazz, long id) throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
 			return find(clazz, conn, id);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
-		return null;
 	}
 	
 	public static Table find(Class clazz, Connection conn, long id) throws Exception 
@@ -365,17 +360,15 @@ public abstract class Table extends Part
 		return inst;
 	}
 	
-	public static List find(Class clazz, String where, Object [] params) throws SQLException 
+	public static List find(Class clazz, String where, Object [] params) throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
 			return find(clazz, conn, where, params);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
-		return null;
 	}
 	
 	public static List find(Class clazz, Connection conn, String where, Object [] params) throws Exception 
@@ -418,13 +411,12 @@ public abstract class Table extends Part
 		return list;
 	}
 	
-	public static void delete(Class clazz, long id) throws SQLException 
+	public static void delete(Class clazz, long id) throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
 			delete(clazz, conn, id);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
@@ -448,13 +440,12 @@ public abstract class Table extends Part
 		stmt.execute();
 	}
 
-	public void delete() throws SQLException 
+	public void delete() throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
 			delete(conn);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
@@ -468,13 +459,12 @@ public abstract class Table extends Part
 		delete(getClass(), conn, Long.parseLong( getDescID().getValue(this) ));
 	}
 	
-	public void update() throws SQLException 
+	public void update() throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
 			update(conn);
-		} catch (Exception e) {
 		} finally {
 			DB.doClose(conn);
 		}
