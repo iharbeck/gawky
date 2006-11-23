@@ -73,7 +73,7 @@ public class Generator
 			if(desc.dbname == null)
 				continue;
 
-			if(desc == bean.getDescID() && bean.getIdgenerator() != null) // ID Element überspringen
+			if(desc == bean.getDescID()) // && bean.getIdgenerator() != null) // ID Element überspringen
 				continue;
 			
 			sql    += desc.dbname;  // column name
@@ -90,7 +90,11 @@ public class Generator
 				
 			    sql    += "," + bean.getDescID().dbname;
 			    params += "," + bean.getIdgenerator().getSequence(); // generate Methode einfügen
-			} 
+			} else if(bean.getDescID() != null ) {
+			    sql    += "," + bean.getDescID().dbname;
+			    params += ",?"; // manuel
+				
+			}
 		}
 		
 		sql += " ) VALUES ( ";
@@ -310,7 +314,7 @@ public class Generator
 
 	
 	
-	public void fillPreparedStatement(PreparedStatement stmt, Table bean)
+	public void fillPreparedStatement(PreparedStatement stmt, Table bean, boolean insert)
 	{
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
@@ -331,6 +335,8 @@ public class Generator
 				setter++;
 
 				String val = desc.getValue(bean);
+				
+				System.out.println("[" + val + "] " + desc.dbname);
 				
 			    switch (desc.format) { 
 					case Desc.FMT_ASCII :
@@ -362,6 +368,8 @@ public class Generator
 			
 			// fehlt noch einer muss es wohl die ID sein.
 			//if(c == setter+1);
+			
+			
 			
 			stmt.setString(setter+1, bean.getDescID().getValue(bean)); 
 				

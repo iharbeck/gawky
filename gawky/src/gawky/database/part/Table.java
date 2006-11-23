@@ -145,8 +145,8 @@ public abstract class Table extends Part
 		return generator.generateDeleteSQL(this);
 	}
 	
-	protected void fillPreparedStatement(PreparedStatement stmt) {
-		generator.fillPreparedStatement(stmt, this);
+	protected void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
+		generator.fillPreparedStatement(stmt, this, insert);
 	}
 	
 	public void insert() throws SQLException 
@@ -169,9 +169,11 @@ public abstract class Table extends Part
 			getQueries()[SQL_INSERT] = sql;
 		}
 		
+		System.out.println(sql);
+		
 		PreparedStatement stmt = getStmt(conn, sql, SQL_INSERT);
 		
-		fillPreparedStatement(stmt);
+		fillPreparedStatement(stmt, true);
 		
 		stmt.execute();
 		
@@ -480,7 +482,7 @@ public abstract class Table extends Part
 		
 		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);		
 
-		fillPreparedStatement(stmt);
+		fillPreparedStatement(stmt, true);
 		
 		stmt.execute();
 	}
