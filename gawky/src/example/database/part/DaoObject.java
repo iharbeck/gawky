@@ -3,6 +3,7 @@ package example.database.part;
 import gawky.database.DB;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.IDGenerator;
+import gawky.database.part.Column;
 import gawky.database.part.Table;
 import gawky.global.Option;
 import gawky.message.part.Desc;

@@ -1,4 +1,4 @@
-package example.database.part;
+package gawky.database.part;
 
 import gawky.message.part.Desc;
 

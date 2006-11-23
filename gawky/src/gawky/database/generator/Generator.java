@@ -303,7 +303,6 @@ public class Generator
 
 			} catch(Exception e) {
 				try  { descs[i].setValue(part, ""); } catch(Exception ee) {}
-				System.out.println(e);
 			}
 		}
 
@@ -359,13 +358,15 @@ public class Generator
 		}
 		
 		try {
-			int c = stmt.getParameterMetaData().getParameterCount();
-
+			//int c = stmt.getParameterMetaData().getParameterCount();
+			
 			// fehlt noch einer muss es wohl die ID sein.
-			if(c == setter+1);
-				stmt.setString(setter+1, bean.getDescID().getValue(bean)); 
+			//if(c == setter+1);
+			
+			stmt.setString(setter+1, bean.getDescID().getValue(bean)); 
 				
 		} catch(Exception e) {
+			log.error(e);
 		}
 	}
 	

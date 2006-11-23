@@ -192,9 +192,11 @@ public abstract class Table extends Part
 			Table table = (Table) this.getClass().newInstance();
 
 			generator.fillPart(rset, table);
+			
+//			Desc[] descs = this.getOptDesc(); 
 //			for(int i=0; i < descs.length; i++)
 //			{
-//				descs[i].setValue(part, rset.getString(i+1));
+//				descs[i].setValue(table, rset.getString(i+1));
 //			}	
 				
 			out.write(table.toString().getBytes());
@@ -276,6 +278,41 @@ public abstract class Table extends Part
 		}
 		
 		DB.doClose(stmt);
+	}
+	
+	/*
+	 * static Find Methods
+	 */
+	public static Table find(Class clazz, Connection conn, long id) throws Exception 
+	{
+		Table inst = (Table)clazz.newInstance();
+		
+		String sql = inst.getQueries()[SQL_FIND];
+		if(sql == null)	{
+			sql = inst.getFindSQL();
+			inst.getQueries()[SQL_FIND] = sql;
+		}
+		
+		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_FIND);
+		
+		// Find by ID
+		stmt.setLong(1, id);
+		ResultSet rset = stmt.executeQuery();
+		
+		Desc[] descs = inst.getOptDesc();  
+		
+		if (rset.next())
+		{
+			for(int i=0; i < descs.length; i++)
+			{
+				descs[i].setValue(inst, rset.getString(i+1) );
+			}
+			
+		} else {
+			log.error("no result (" + sql + ")");
+		}
+		
+		return inst;
 	}
 	
 	public static List find(Class clazz, Connection conn, String where, Object [] params) throws Exception 
