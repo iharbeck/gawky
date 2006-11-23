@@ -28,7 +28,7 @@ class ConnectionReaper extends Thread
         while(true)
         {
            try {
-              sleep(delay);
+              wait(delay);
               log.info("Count==: " + pool.getConnectionCount());
               pool.reapConnections();
            } catch( Exception e) { 
