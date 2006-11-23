@@ -90,10 +90,11 @@ public class Generator
 				
 			    sql    += "," + bean.getDescID().dbname;
 			    params += "," + bean.getIdgenerator().getSequence(); // generate Methode einfügen
+			    bean.insertcount = i;
 			} else if(bean.getDescID() != null ) {
 			    sql    += "," + bean.getDescID().dbname;
 			    params += ",?"; // manuel
-				
+			    bean.insertcount = i+1;
 			}
 		}
 		
@@ -369,9 +370,8 @@ public class Generator
 			// fehlt noch einer muss es wohl die ID sein.
 			//if(c == setter+1);
 			
-			
-			
-			stmt.setString(setter+1, bean.getDescID().getValue(bean)); 
+			if(insert && bean.insertcount == setter+1)
+				stmt.setString(setter+1, bean.getDescID().getValue(bean)); 
 				
 		} catch(Exception e) {
 			log.error(e);

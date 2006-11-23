@@ -91,6 +91,8 @@ public abstract class Table extends Part
 		return sql;
 	}
 	
+	public int insertcount=0;
+	
 	public final PreparedStatement[] getStmts() 
 	{
 		String key = this.getClass().getName();
