@@ -187,7 +187,7 @@ public class Generator
 			if(desc.dbname == null)
 				continue;
 			
-			sql += desc.dbname;  // column name
+			sql += "a." + desc.dbname;  // column name
 			
 			if(i < descs.length-1) { // beim letzten ohne Komma
 				sql += ",";
@@ -196,6 +196,7 @@ public class Generator
 		
 		sql += " FROM ";
 		sql += bean.getTableName();
+		sql += " a ";
 		
 		return sql;
 	}

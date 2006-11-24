@@ -13,6 +13,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,11 +39,27 @@ public class Client extends Parameter
 {
 	private static Log log = LogFactory.getLog(Client.class);
 	
-	boolean all = true;
+	boolean readall = true;
+	boolean trustall = false;
 	
 	//System.setProperty("javax.net.ssl.trustStore", Comm.keystore);
     //System.setProperty("javax.net.ssl.trustStorePassword", Comm.storepass);
     
+	TrustManager[] trustAllCerts = new TrustManager[] {
+	        new X509TrustManager() {
+	            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+	                return null;
+	            }
+	            public void checkClientTrusted(
+	                java.security.cert.X509Certificate[] certs, String authType) {
+	            }
+	            public void checkServerTrusted(
+	                java.security.cert.X509Certificate[] certs, String authType) {
+	            }
+	        }
+	};
+
+	
 	public Client()
 	{
 		initServer();
@@ -120,9 +137,12 @@ public class Client extends Parameter
     	   tmf = TrustManagerFactory.getInstance("SunX509");
     	   tmf.init(ks);
     	   tm = tmf.getTrustManagers();
-    	      
-    	   ctx.init(kmf.getKeyManagers(), tm, null);
-
+    	   
+    	   if(trustall)
+    		   ctx.init(null, trustAllCerts, new java.security.SecureRandom());
+    	   else
+    		   ctx.init(kmf.getKeyManagers(), tm, null);
+    	   
     	   factory = ctx.getSocketFactory();
 	    
            log.info("Factory wurde erstellt.");
@@ -159,13 +179,20 @@ public class Client extends Parameter
 	}
 
 	public boolean isAll() {
-		return all;
+		return readall;
 	}
 
 	public void setAll(boolean all) {
-		this.all = all;
+		this.readall = all;
 	}
-    
+
+	public boolean isTrustall() {
+		return trustall;
+	}
+
+	public void setTrustall(boolean trustall) {
+		this.trustall = trustall;
+	}
 }
 
 

@@ -4,7 +4,8 @@ public class Mod10
 {
 	static public void main(String [] args)
 	{
-			if(check10("706511227"))
+			//if(check10("706511227"))
+			if(check10("701032000000000011713131755"))
 				System.out.println("good");
 			else 
 				System.out.println("bad");
@@ -22,7 +23,7 @@ public class Mod10
 			c = (int)s.charAt(i)-48;
 			if(c<0 || c>9)
 				return false;	// not a number
-			if(0 == (i%2))
+			if(0 != (i%2))
 			{
 				c*=2;
 				c = (c%10)+c/10;

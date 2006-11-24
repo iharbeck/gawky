@@ -388,6 +388,8 @@ public abstract class Table extends Part
 		
 		sql += " " + where;
 
+		System.out.println(sql);
+		
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 		
 		for(int i = 1; params != null && i <= params.length; i++)
