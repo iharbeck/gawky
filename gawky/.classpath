@@ -33,5 +33,6 @@
 	<classpathentry kind="lib" path="lib/xml/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/xml/xerces.jar"/>
 	<classpathentry kind="lib" path="lib/xml/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/http/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
