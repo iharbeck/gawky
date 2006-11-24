@@ -11,6 +11,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -286,6 +287,57 @@ public class DB
 		return al;
 	}
 
+	
+	public static HashMap getHash(String sql, String[] params)
+	{
+		Connection conn = null;
+		
+		try 
+		{
+			conn = DB.getConnection(0);
+			return getHash(conn, sql, params);
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			doClose(conn);
+		}
+		
+		return null;
+	}
+	
+	public static HashMap getHash(Connection conn, String sql, String[] params)
+	{
+		HashMap hs = new HashMap();
+		
+		ResultSet rset = null;
+		PreparedStatement stmt_select = null;
+		
+		try {
+			stmt_select = conn.prepareStatement(sql);
+			
+			int a = 1;
+			for (int i=0; params != null && i < params.length; i++) {
+				String param = params[i];
+				stmt_select.setString(a++, param);
+			}
+
+			rset = stmt_select.executeQuery();
+
+			
+			while (rset.next())
+			{
+				hs.put(rset.getString(1), rset.getString(2));
+			} 
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+			doClose(stmt_select); 
+			doClose(rset);
+		}
+		
+		return hs;
+	}
+	
 	/**
 	 * Firstvalue des SELECT als ArrayList
 	 * 
