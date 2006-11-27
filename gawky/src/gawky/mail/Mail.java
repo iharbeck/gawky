@@ -16,6 +16,7 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
@@ -129,11 +130,10 @@ public class Mail
         }
     	 
         try {
-            
-            //String message = MimeUtility.encodeText(_message, charset, encoding);
-            String nmessage = message;
-            String nsubject = MimeUtility.encodeText(subject, charset, encoding);
-            String ntoalias = MimeUtility.encodeText(toalias, charset, encoding);
+        	// encoding
+            String nmessage   = message;
+            String nsubject   = MimeUtility.encodeText(subject, charset, encoding);
+            String ntoalias   = MimeUtility.encodeText(toalias, charset, encoding);
             String nfromalias = MimeUtility.encodeText(fromalias, charset, encoding);
             
             // Get system properties
@@ -162,19 +162,50 @@ public class Mail
     	    //FROM
     	    msg.setSubject(nsubject);
     	    
+    	    
     	    //BODY
     	    MimeBodyPart messageBodyPart = new MimeBodyPart();
     	    messageBodyPart.setHeader("Content-Transfer-Encoding", "8Bit");
             
+    	    
             // SET HTML MAIL
             if(html)
+            {
             	messageBodyPart.setContent(nmessage, "text/html");
-            else
+            }
+            else 
+            {
+            	messageBodyPart.setContent(nmessage, "text/plain");            	
             	messageBodyPart.setText(nmessage, charsettext);
+            }
             
-            Multipart multipart = new MimeMultipart();
-    	    multipart.addBodyPart(messageBodyPart);
+            // Multipart Email
+    	    Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
     	    
+    	    
+            /* INCLUDED images for HTML MAIL */
+    	    if(false) 
+    	    {
+        	    // <img src="cid:imagefile" />
+
+        	    String imagefilename = "path/imagefile";
+        	    String cid           = "imagefile";
+        	     
+        	    MimeBodyPart inlineimg = new MimeBodyPart();
+        	    FileDataSource fileds = new FileDataSource(imagefilename);
+
+        	    inlineimg.setFileName(fileds.getName());
+        	    inlineimg.setText("");
+        	    inlineimg.setDataHandler(new DataHandler(fileds));
+        	    inlineimg.setHeader("Content-ID", "<" + cid + ">");
+        	    inlineimg.setDisposition("inline");
+        	     
+        	    multipart.addBodyPart(inlineimg);
+    	    }
+
+    	     
+    	     
     	    //ATTACHEMENT
 		    if(stream != null && stream.available() > 0)
 		    {
@@ -191,17 +222,7 @@ public class Mail
 			    	source =  new ByteArrayDataSource(stream, "plain/text");
 			    } else {
 				    // gzip
-				    
-				    ByteArrayOutputStream bout = new ByteArrayOutputStream();
-				    GZIPOutputStream out = new GZIPOutputStream(bout);
-				    
-				    int ch;
-		            while((ch = stream.read()) != -1) 
-		                out.write(ch);
-		            
-				    out.finish();
-				    out.close();
-				    source = new ByteArrayDataSource(bout.toByteArray(), "plain/text");
+				    source = new ByteArrayDataSource(zipStream(stream), "plain/text");
 			    }
 			    
 			    
@@ -233,6 +254,21 @@ public class Mail
         return STATUS_OK;
     }
     
+    public static byte[] zipStream(InputStream stream) throws IOException 
+    {
+    	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		GZIPOutputStream out = new GZIPOutputStream(bout);
+		    
+		int ch;
+        while((ch = stream.read()) != -1) {
+             out.write(ch);
+        }
+        
+	    out.finish();
+	    out.close();
+		    
+	    return bout.toByteArray();
+    }
     
     /**
      * replace {key} with corresponding HashValue
