@@ -41,6 +41,7 @@
   		<from></from>
   		<fromalias></fromalias>
   		<subject></subject>
+  		<images>d:</images>
 	</mail>
 
 	<freemarker>

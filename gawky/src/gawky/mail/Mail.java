@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
@@ -66,7 +68,7 @@ public class Mail
         String server   = Option.getProperty(DEFAULT_SERVER);
         
         return sendMailGeneric(username, password, server, 
-                		   from, fromalias, to, toalias, subject, message, false, null, null, false, hash);
+                		   from, fromalias, to, toalias, subject, message, false, null, null, false, hash, null);
     }
     
     public static int sendMailAttachStream(
@@ -94,7 +96,7 @@ public class Mail
         
         return sendMailGeneric(username, password, server, 
                            from, fromalias, to, toalias, subject, message, 
-                           false, stream, attachName, dozip, null);
+                           false, stream, attachName, dozip, null, null);
     }
  
     public static int sendSimpleMail(
@@ -108,7 +110,7 @@ public class Mail
         
     	return sendMailGeneric(username, password, server, 
                            from, fromalias, to, toalias, subject, message, 
-                           false, null, null, false, null);
+                           false, null, null, false, null, null);
     }
 
     public static int sendMailGeneric(
@@ -119,7 +121,7 @@ public class Mail
             InputStream stream, 
             String attachName,
             boolean dozip,
-            Hashtable templateparameter
+            Hashtable templateparameter, ArrayList cids
             ) 
     {
     	// templates in message / subject ersetzen
@@ -180,28 +182,35 @@ public class Mail
             }
             
             // Multipart Email
-    	    Multipart multipart = new MimeMultipart();
+    	    Multipart multipart = new MimeMultipart("related");
             multipart.addBodyPart(messageBodyPart);
     	    
     	    
             /* INCLUDED images for HTML MAIL */
-    	    if(false) 
+    	    if(cids != null) 
     	    {
         	    // <img src="cid:imagefile" />
-
-        	    String imagefilename = "path/imagefile";
-        	    String cid           = "imagefile";
-        	     
-        	    MimeBodyPart inlineimg = new MimeBodyPart();
-        	    FileDataSource fileds = new FileDataSource(imagefilename);
-
-        	    inlineimg.setFileName(fileds.getName());
-        	    inlineimg.setText("");
-        	    inlineimg.setDataHandler(new DataHandler(fileds));
-        	    inlineimg.setHeader("Content-ID", "<" + cid + ">");
-        	    inlineimg.setDisposition("inline");
-        	     
-        	    multipart.addBodyPart(inlineimg);
+    	    	
+    	    	String imagepath = Option.getProperty("mail.images");
+    	    	
+    	    	Iterator it=cids.iterator();
+    	    	
+    	    	while(it.hasNext())
+    	    	{
+    	    		String cid = (String) it.next();
+	        	    String imagefilename = imagepath +  "/" + cid;
+	        	     
+	        	    MimeBodyPart inlineimg = new MimeBodyPart();
+	        	    FileDataSource fileds = new FileDataSource(imagefilename);
+	
+	        	    inlineimg.setFileName(fileds.getName());
+	        	    inlineimg.setText("dd");
+	        	    inlineimg.setDataHandler(new DataHandler(fileds));
+	        	    inlineimg.setHeader("Content-ID", "<" + cid + ">");
+	        	    inlineimg.setDisposition("inline");
+	        	     
+	        	    multipart.addBodyPart(inlineimg);
+    	    	}
     	    }
 
     	     
@@ -241,13 +250,13 @@ public class Mail
     	    tr.close();
         
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
             return ERROR_IO;
         } catch (AddressException e) {
-            e.printStackTrace();
+        	log.error(e);
             return ERROR_INVALIDADDRESS;
         } catch (MessagingException e) {
-            e.printStackTrace();
+        	log.error(e);
             return ERROR_SENDFAILED;
         }
         
@@ -314,7 +323,7 @@ class ByteArrayDataSource implements DataSource
 
             data = os.toByteArray();
         }
-        catch(IOException ioexception) { }
+        catch(IOException ioexception) {  }
     }
 
     public ByteArrayDataSource(byte data[], String type)
