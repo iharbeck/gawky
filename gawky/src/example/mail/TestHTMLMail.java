@@ -1,6 +1,7 @@
 package example.mail;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import gawky.global.Option;
 import gawky.mail.Mail;
@@ -15,13 +16,13 @@ public class TestHTMLMail {
         String password = Option.getProperty("mail.password");
         String host     = Option.getProperty("mail.server");
         
-        ArrayList list = new ArrayList();
+        Hashtable list = new Hashtable();
         
-        list.add("strutter.jpg");
+        list.put("strutter.jpg", "strutter.jpg");
         
 		Mail.sendMailGeneric(username, password, host,  
 				            "ingo.harbeck@bertelsmann.de", "harb05", 
-							"ingo.harbeck@bertelsmann.de", "harb05", 
+							"ingo.harbeck@bertelsmann.de", "harb05", null,
 							"Test subject new", "<b>Hello 6ex</b><img src=\"cid:strutter.jpg\"/>",
 							 true, null, null, false, null, list);
 		System.exit(0);

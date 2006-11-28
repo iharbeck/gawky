@@ -18,14 +18,14 @@ public class SatzA extends Part
 			new DescF(Desc.FMT_A, Desc.CODE_R, 4,   "len"),          
 			new DescC("A"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 2,   "kennzeichen"),          
-			new DescF(Desc.FMT_A, Desc.CODE_R, 5,   "blzempfaenger"),          
-			new DescF(Desc.FMT_A, Desc.CODE_R, 5,   "blzsender"),          
+			new DescF(Desc.FMT_A, Desc.CODE_R, 8,   "blzempfaenger"),          
+			new DescF(Desc.FMT_A, Desc.CODE_R, 8,   "blzsender"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "empfaenger"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 4,   "dateidatum"),
+			new DescF(Desc.FMT_A, Desc.CODE_R, 6,   "dateidatum"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 4,   "valutadatum"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 6,  "kontonummer"),
+			new DescF(Desc.FMT_A, Desc.CODE_R, 10,  "kontonummer"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 10,  "referenznummer"),
-		    new Reserved(81),
+		    new Reserved(47),
 		    new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "waehrungskennzeichen")
 		}; 
 	}

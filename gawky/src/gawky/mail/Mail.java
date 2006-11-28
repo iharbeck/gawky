@@ -19,6 +19,7 @@ import java.util.zip.GZIPOutputStream;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
@@ -56,7 +57,11 @@ public class Mail
     private static String DEFAULT_USER     = "mail.user";
     private static String DEFAULT_PASSWORD = "mail.password";
     private static String DEFAULT_SERVER   = "mail.server";
-    
+
+    private static String DEFAULT_FROM      = "mail.from";
+    private static String DEFAULT_FROMALIAS = "mail.fromalias";
+    private static String DEFAULT_SUBJECT   = "mail.subject";
+ 
     public static int sendParameterMail(
             String from,    String fromalias,
             String to,      String toalias,
@@ -68,7 +73,7 @@ public class Mail
         String server   = Option.getProperty(DEFAULT_SERVER);
         
         return sendMailGeneric(username, password, server, 
-                		   from, fromalias, to, toalias, subject, message, false, null, null, false, hash, null);
+                		   from, fromalias, to, toalias, null, subject, message, false, null, null, false, hash, null);
     }
     
     public static int sendMailAttachStream(
@@ -95,7 +100,7 @@ public class Mail
         String server   = Option.getProperty(DEFAULT_SERVER);
         
         return sendMailGeneric(username, password, server, 
-                           from, fromalias, to, toalias, subject, message, 
+                           from, fromalias, to, toalias, null, subject, message, 
                            false, stream, attachName, dozip, null, null);
     }
  
@@ -109,19 +114,20 @@ public class Mail
         String server   = Option.getProperty(DEFAULT_SERVER);
         
     	return sendMailGeneric(username, password, server, 
-                           from, fromalias, to, toalias, subject, message, 
+                           from, fromalias, to, toalias, null, subject, message, 
                            false, null, null, false, null, null);
     }
 
     public static int sendMailGeneric(
             String username, String password, String host, 
             String from, String fromalias, String to, String toalias,
+            ArrayList reply,
             String subject, String message,
             boolean html,
             InputStream stream, 
             String attachName,
             boolean dozip,
-            Hashtable templateparameter, ArrayList cids
+            Hashtable templateparameter, Hashtable cids
             ) 
     {
     	// templates in message / subject ersetzen
@@ -164,6 +170,8 @@ public class Mail
     	    //FROM
     	    msg.setSubject(nsubject);
     	    
+    	    if(reply != null)
+    	    	msg.setReplyTo((Address[]) reply.toArray(new Address[reply.size()]) );
     	    
     	    //BODY
     	    MimeBodyPart messageBodyPart = new MimeBodyPart();
@@ -193,12 +201,12 @@ public class Mail
     	    	
     	    	String imagepath = Option.getProperty("mail.images");
     	    	
-    	    	Iterator it=cids.iterator();
+    	    	Enumeration it=cids.keys();
     	    	
-    	    	while(it.hasNext())
+    	    	while(it.hasMoreElements())
     	    	{
-    	    		String cid = (String) it.next();
-	        	    String imagefilename = imagepath +  "/" + cid;
+    	    		String cid = (String) it.nextElement();
+	        	    String imagefilename = imagepath +  "/" + cids.get(cid);
 	        	     
 	        	    MimeBodyPart inlineimg = new MimeBodyPart();
 	        	    FileDataSource fileds = new FileDataSource(imagefilename);
