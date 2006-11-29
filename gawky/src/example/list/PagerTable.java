@@ -42,23 +42,36 @@ public class PagerTable {
 		rows.add(new String[] { "c11111", "22222", "33333"});
 		rows.add(new String[] { "c111111", "222222", "333333"});
 		
-		Column[] columns = new Column[] {
-			new Column("CHEAD1", Column.TYPE_STRING).setWidth(100).setHidden(),
-			new Column("CHEAD2", Column.TYPE_STRING, new LinkListener(0)).setWidth(300),
-			new Column("CHEAD3", Column.TYPE_STRING).setWidth(200)
-		};
+		/* Style 1
+			Column[] columns = new Column[] {
+				new Column("CHEAD1", Column.TYPE_STRING).setWidth(100).setHidden(),
+				new Column("CHEAD2", Column.TYPE_STRING, new LinkListener(0)).setWidth(300),
+				new Column("CHEAD3", Column.TYPE_STRING).setWidth(200)
+			};
+			
+			ArrayListDatasource ds = new ArrayListDatasource( rows, columns);
+		*/
 		
-		ArrayListDatasource ds = new ArrayListDatasource( rows, columns);
-		
-		
+		ArrayListDatasource ds = new ArrayListDatasource( rows );
+		 ds.addColumn(new Column("CHEAD1", Column.TYPE_STRING).setWidth(100).setHidden());
+		 ds.addColumn(new Column("CHEAD2", Column.TYPE_STRING, new LinkListener(0)).setWidth(300));
+		 ds.addColumn(new Column("CHEAD3", Column.TYPE_STRING).setWidth(200));
+	
 		//Database Source
 		Connection conn = DB.getConnection();
 		Statement  stmt = conn.createStatement();
 		ResultSet  rset = stmt.executeQuery("select * from kunde");
+
+/*		
+		rset.last();
+		rset.getRow();
+		rset.beforeFirst();
+		rset.absolute(row);
+*/
 		
 		ResultSetDatasource rs = new ResultSetDatasource(rset);
-		rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
-		rs.addColumn("name",     new Column("DER NAME"));
+		 rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
+		 rs.addColumn("name",     new Column("DER NAME"));
 		
 		int numberOfRows = 6;
 		int page = 3;

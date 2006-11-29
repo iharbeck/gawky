@@ -8,6 +8,7 @@ public class ArrayListDatasource implements Datasource
 {
 	ArrayList array;
 	Column[] columns;
+	ArrayList columnslist = new ArrayList();
 	
 	int rowcount;
 	int pos = -1;
@@ -28,6 +29,19 @@ public class ArrayListDatasource implements Datasource
 		this.columncount = columns.length;
 	}
 	
+	/**
+	 * Firstline includes header
+	 * @param array
+	 */
+	public ArrayListDatasource( ArrayList array ) 
+	{
+		this.array  = array;
+		this.columns = null;
+		this.rowcount  = array.size()-1;
+		this.columncount = ((Object[])array.get(0)).length;
+		pos++;
+	}
+	
 	public int getColumnsHidden()
 	{
 		if(columnshidden == -1)
@@ -44,18 +58,7 @@ public class ArrayListDatasource implements Datasource
 	}
 	
 	
-	/**
-	 * Firstline includes header
-	 * @param array
-	 */
-	public ArrayListDatasource( ArrayList array ) 
-	{
-		this.array  = array;
-		this.columns = null;
-		this.rowcount  = array.size()-1;
-		this.columncount = ((Object[])array.get(0)).length;
-		pos++;
-	}
+	
 	 
 	public int getColumns() {
 		return columncount;
@@ -104,5 +107,14 @@ public class ArrayListDatasource implements Datasource
 		// Header überspringen
 		if(columns == null)
 			pos++;
+	}
+	
+	public void addColumn(Column col) 
+	{
+		columnslist.add(col);
+		
+		columns = (Column[])columnslist.toArray(new Column[columnslist.size()]);
+		this.columncount = columns.length;
+		pos=-1;
 	}
 }
