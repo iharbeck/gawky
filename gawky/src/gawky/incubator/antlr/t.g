@@ -30,7 +30,7 @@ DIGIT:
 
 	
 // one-or-more letters followed by a newline
-NAME:    (LETTER) (NEWLINE)+ {}
+NAME:    (LETTER)+ (NEWLINE)+ {}
     ;
     
 

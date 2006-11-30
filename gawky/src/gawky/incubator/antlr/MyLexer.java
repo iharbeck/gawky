@@ -169,20 +169,31 @@ tryAgain:
 		int _saveIndex;
 		
 		{
-		mLETTER(false);
-		}
-		{
-		int _cnt7=0;
-		_loop7:
+		int _cnt6=0;
+		_loop6:
 		do {
 			if ((_tokenSet_0.member(LA(1)))) {
+				mLETTER(false);
+			}
+			else {
+				if ( _cnt6>=1 ) { break _loop6; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+			}
+			
+			_cnt6++;
+		} while (true);
+		}
+		{
+		int _cnt8=0;
+		_loop8:
+		do {
+			if ((_tokenSet_1.member(LA(1)))) {
 				mNEWLINE(false);
 			}
 			else {
-				if ( _cnt7>=1 ) { break _loop7; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+				if ( _cnt8>=1 ) { break _loop8; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
 			}
 			
-			_cnt7++;
+			_cnt8++;
 		} while (true);
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {
@@ -234,9 +245,14 @@ tryAgain:
 	
 	
 	private static final long[] mk_tokenSet_0() {
-		long[] data = { 38654714880L, 0L, 0L};
+		long[] data = { 0L, 576460743847706622L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_0 = new BitSet(mk_tokenSet_0());
+	private static final long[] mk_tokenSet_1() {
+		long[] data = { 38654714880L, 0L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_1 = new BitSet(mk_tokenSet_1());
 	
 	}
