@@ -1,0 +1,11 @@
+// $ANTLR 2.7.6 (2005-12-22): t.g -> MyParserTokenTypes.txt$
+MyParser    // output token vocab name
+NAME=4
+LITERAL_int="int"=5
+LITERAL_char="char"=6
+LITERAL_if="if"=7
+LITERAL_else="else"=8
+LITERAL_while="while"=9
+LETTER=10
+DIGIT=11
+NEWLINE=12
