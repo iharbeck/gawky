@@ -49,8 +49,8 @@ public class DaoObject extends Table {
 		} catch (Exception e) {}
 		
 		//daoobject.setKunde_id("16");
-		daoobject.setName("INGO");
-		daoobject.insert(conn);
+//		daoobject.setName("INGO");
+//		daoobject.insert(conn);
 		
 		daoobject.setName("INGO2");
 		daoobject.update(conn);

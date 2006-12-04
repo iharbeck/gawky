@@ -45,7 +45,7 @@ public abstract class Table extends Part
 	
 	Generator generator = new Generator();
 	
-	int idindex = 0;
+	int idindex = NO_ID;
 	IDGenerator idgenerator = null;
 
 	public boolean insertparameter = true;
