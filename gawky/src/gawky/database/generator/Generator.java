@@ -258,9 +258,13 @@ public class Generator
 			}
 		}
 
-		// ID Spalte für UPDATE zwingend
-		sql += " WHERE ";
-		sql +=  bean.getDescID().dbname + "=?";
+		try {	
+			// ID Spalte für UPDATE zwingend
+			sql += " WHERE ";
+			sql +=  bean.getDescID().dbname + "=?";
+		} catch (Exception e) {
+			log.error("GAWKY: Primarykey is not defined");
+		}
 		
 		log.debug(sql);
 		

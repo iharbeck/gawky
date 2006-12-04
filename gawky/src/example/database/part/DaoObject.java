@@ -15,12 +15,12 @@ public class DaoObject extends Table {
 	//Record definition
 	public Desc[] getDesc()
 	{
-		setDialect(new MySQL());
+//		setDialect(new MySQL());
+//		setDescID(0, IDGenerator.ID_AUTO());                    // MYSQL auto column
 		
 	  //setDescID(0);  // Manual set ID default first Column!
       //setDescID(Table.NO_ID); // no ID
 	  //setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
-		setDescID(0, IDGenerator.ID_AUTO());                    // MYSQL auto column
 		
 		return new Desc[]  {
 			new Column("kunde_id"),
@@ -40,9 +40,10 @@ public class DaoObject extends Table {
 		DaoObject daoobject = new DaoObject();
 		
 		daoobject.setName("HELO");
+		daoobject.setKunde_id("37");
 		daoobject.insert(conn);
 		
-		daoobject.find(conn, 30);
+	//	daoobject.find(conn, 30);
 		
 		try {
 			//daoobject.delete(conn);

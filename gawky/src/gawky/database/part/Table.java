@@ -48,7 +48,7 @@ public abstract class Table extends Part
 	int idindex = NO_ID;
 	IDGenerator idgenerator = null;
 
-	public boolean insertparameter = true;
+	public boolean insertparameter = false;
 
 	
 	abstract public Desc[] getDesc();
@@ -182,7 +182,8 @@ public abstract class Table extends Part
 		
 		try {
 			// versuche to generierte ID zu ermitteln und im Object abzulegen
-			getDescID().setValue(this, getIdgenerator().getGeneratedID(conn, this));
+			if(getIdgenerator() != null)
+				getDescID().setValue(this, getIdgenerator().getGeneratedID(conn, this));
 		} catch (Exception e) {
 			log.error("insert Record", e);
 		}
