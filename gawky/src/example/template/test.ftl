@@ -8,7 +8,7 @@
   <a href="${latestProduct.url}">${latestProduct.name}</a>!
    
  <#list ["winter", "spring", "summer", "autumn"] as x>
-      ${x?cap_first}
+    --  ${x?cap_first}
  </#list> 
 
 </body>
