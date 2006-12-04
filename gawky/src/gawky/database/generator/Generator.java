@@ -81,7 +81,12 @@ public class Generator
 			if(i < descs.length-1) { // beim letzten ohne Komma
 				sql    += ",";
 				params += ",";
-			} else if(bean.getDescID() != null && bean.getIdgenerator() != null && bean.getIdgenerator().getSequence() != null) { 
+			} 
+		}
+		
+		if(bean.getDescID() != null)
+		{
+			if(bean.getIdgenerator() != null && bean.getIdgenerator().getSequence() != null) { 
 				// ID definiert
 				
 				// ## bean.getIdgenerator() == null 			 --> manual id
@@ -91,7 +96,7 @@ public class Generator
 			    sql    += "," + bean.getDescID().dbname;
 			    params += "," + bean.getIdgenerator().getSequence(); // generate Methode einfügen
 			    bean.insertparameter = false;
-			} else if(bean.getDescID() != null && bean.getIdgenerator().getSequence() != null) {
+			} else { // if(bean.getDescID() != null) /* && bean.getIdgenerator().getSequence() != null) */ {
 				// manual parameter
 			    sql    += "," + bean.getDescID().dbname;
 			    params += ",?"; // manuel
@@ -308,6 +313,11 @@ public class Generator
 			}
 		}
 
+	}
+
+	public void fillPreparedStatement(PreparedStatement stmt, Table bean)
+	{	
+		fillPreparedStatement(stmt, bean, true);
 	}
 
 	public void fillPreparedStatement(PreparedStatement stmt, Table bean, boolean insert)

@@ -116,10 +116,17 @@ public abstract class Part
 					// load class from Classpath
 					descs[i].accessor = (Accessor)Class.forName(proxycname, false, urlCl).newInstance();
 					
+					if(descs[i].accessor == null)
+						throw new Exception("Can't generate GetterSetterclass for [" + mname + "]");
 				} else {
 					// Reflection case - Prepare Method details
 					descs[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
 					descs[i].gmethod = getClass().getMethod( "get" + mname, null);
+
+					if(descs[i].smethod == null)
+						throw new Exception("Missing Setter for [" + mname + "]");
+					if(descs[i].gmethod == null)
+						throw new Exception("Missing Getter for [" + mname + "]");
 				}
 			} catch (Exception e) {
 				log.error("Generating Getter/Setter", e);
