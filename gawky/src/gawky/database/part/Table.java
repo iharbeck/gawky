@@ -61,6 +61,12 @@ public abstract class Table extends Part
 		this.idgenerator = null;
 	}
 	
+	public void setDescID(String idindex) {
+		// multikey 
+		this.idindex = NO_ID;
+		this.idgenerator = null;
+	}
+	
 	public void setDescID(IDGenerator idgenerator) {
 		this.idindex = 0;
 		this.idgenerator = idgenerator;
@@ -234,6 +240,47 @@ public abstract class Table extends Part
 		}
 	}
 
+	public void find(String id) throws Exception 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			find(conn, id);
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+	
+	
+	public void find(Connection conn, String id) throws Exception 
+	{
+		String sql = getQueries()[SQL_FIND];
+		if(sql == null)	{
+			sql = getFindSQL();
+			getQueries()[SQL_FIND] = sql;
+		}
+		
+		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
+		
+		// Find by ID
+		stmt.setString(1, id);
+		ResultSet rset = stmt.executeQuery();
+		
+//		Desc[] descs = this.getOptDesc();  
+		
+		if (rset.next())
+		{
+//			for(int i=0; i < descs.length; i++)
+//			{
+//				descs[i].setValue(this, rset.getString(i+1) );
+//			}
+			generator.fillPart(rset, this);
+			
+		} else {
+			log.error("no result (" + sql + ")");
+		}
+	}
+	
 	public void find(Connection conn, long id) throws Exception 
 	{
 		String sql = getQueries()[SQL_FIND];
@@ -248,7 +295,7 @@ public abstract class Table extends Part
 		stmt.setLong(1, id);
 		ResultSet rset = stmt.executeQuery();
 		
-		Desc[] descs = this.getOptDesc();  
+//		Desc[] descs = this.getOptDesc();  
 		
 		if (rset.next())
 		{
@@ -264,12 +311,13 @@ public abstract class Table extends Part
 			
 // OBJECT BASED TODO compare performance
 // alternative generat
-			for(int i=0; i < descs.length; i++)
-			{
+//			for(int i=0; i < descs.length; i++)
+//			{
 				//descs[i].setValue(this, rset.getString(descs[i].dbname) );
-				descs[i].setValue(this, rset.getString(i+1) );
-			}
+				//descs[i].setValue(this, rset.getString(i+1) );
+//			}
 			
+			generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -303,15 +351,15 @@ public abstract class Table extends Part
 		
 		ResultSet rset = stmt.executeQuery();
 		
-		Desc[] descs = this.getOptDesc();   
+//		Desc[] descs = this.getOptDesc();   
 		
 		if (rset.next())
 		{
-			for(int i=0; i < descs.length; i++)
-			{
-				descs[i].setValue(this, rset.getString(i+1) );
-			}
-			
+			generator.fillPart(rset, this);
+//			for(int i=0; i < descs.length; i++)
+//			{
+//				descs[i].setValue(this, rset.getString(i+1) );
+//			}
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -333,6 +381,18 @@ public abstract class Table extends Part
 			DB.doClose(conn);
 		}
 	}
+
+	public static Table find(Class clazz, String id) throws Exception 
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			return find(clazz, conn, id);
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+
 	
 	public static Table find(Class clazz, Connection conn, long id) throws Exception 
 	{
@@ -350,14 +410,48 @@ public abstract class Table extends Part
 		stmt.setLong(1, id);
 		ResultSet rset = stmt.executeQuery();
 		
-		Desc[] descs = inst.getOptDesc();  
+//		Desc[] descs = inst.getOptDesc();  
 		
 		if (rset.next())
 		{
-			for(int i=0; i < descs.length; i++)
-			{
-				descs[i].setValue(inst, rset.getString(i+1) );
-			}
+//			for(int i=0; i < descs.length; i++)
+//			{
+//				descs[i].setValue(inst, rset.getString(i+1) );
+//			}
+			new Generator().fillPart(rset, inst);
+		} else {
+			log.error("no result (" + sql + ")");
+		}
+		
+		return inst;
+	}
+	
+	
+	public static Table find(Class clazz, Connection conn, String id) throws Exception 
+	{
+		Table inst = (Table)clazz.newInstance();
+		
+		String sql = inst.getQueries()[SQL_FIND];
+		if(sql == null)	{
+			sql = inst.getFindSQL();
+			inst.getQueries()[SQL_FIND] = sql;
+		}
+		
+		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_FIND);
+		
+		// Find by ID
+		stmt.setString(1, id);
+		ResultSet rset = stmt.executeQuery();
+		
+//		Desc[] descs = inst.getOptDesc();  
+		
+		if (rset.next())
+		{
+//			for(int i=0; i < descs.length; i++)
+//			{
+//				descs[i].setValue(inst, rset.getString(i+1) );
+//			}
+			new Generator().fillPart(rset, inst);
 			
 		} else {
 			log.error("no result (" + sql + ")");
@@ -365,6 +459,7 @@ public abstract class Table extends Part
 		
 		return inst;
 	}
+	
 	
 	public static List find(Class clazz, String where, Object [] params) throws Exception 
 	{
@@ -398,16 +493,19 @@ public abstract class Table extends Part
 			
 		ResultSet rset = stmt.executeQuery();
 		
-		Desc[] descs = inst.getOptDesc();   
+//		Desc[] descs = inst.getOptDesc();   
 		
 		ArrayList list = new ArrayList();
-		
+
+		Generator generator = new Generator();
+
 		while (rset.next())
 		{
-			for(int i=0; i < descs.length; i++)
-			{
-				descs[i].setValue(inst, rset.getString(i+1) );
-			}
+//			for(int i=0; i < descs.length; i++)
+//			{
+//				descs[i].setValue(inst, rset.getString(i+1) );
+//			}
+			generator.fillPart(rset, inst);
 			
 			list.add(inst);
 			
@@ -433,7 +531,6 @@ public abstract class Table extends Part
 	public static void delete(Class clazz, Connection conn, long id) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
-		
 		
 		String sql = inst.getQueries()[SQL_DELETE];
 		if(sql == null)	{
