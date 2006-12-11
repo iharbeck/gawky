@@ -28,6 +28,7 @@ public abstract class Part
 
 	private static HashMap hsDesc = new HashMap(); 
 	
+	
 	/**
 	 * used by matcher
 	 * @param name

@@ -56,33 +56,48 @@ public abstract class Table extends Part
 	
 	Dialect dialect = new MySQL();
 
+	private void store() {
+		String key = this.getClass().getName();
+		hsDescID.put(key, new Integer(idindex));
+	}
+	
 	public void setDescID(int idindex) {
 		this.idindex = idindex;
 		this.idgenerator = null;
+		store();
 	}
 	
 	public void setDescID(String idindex) {
 		// multikey 
 		this.idindex = NO_ID;
 		this.idgenerator = null;
+		store();
 	}
 	
 	public void setDescID(IDGenerator idgenerator) {
 		this.idindex = 0;
 		this.idgenerator = idgenerator;
+		store();
 	}
 	
 	public void setDescID(int idindex, IDGenerator idgenerator) {
 		this.idindex = idindex;
 		this.idgenerator = idgenerator;
+		store();
 	}
 	
-	public Desc getDescID() {
+	public Desc getDescID() 
+	{
+		String key = this.getClass().getName();
+		idindex = ((Integer)hsDescID.get(key)).intValue();
+				
 		if(idindex == NO_ID)
 			return null;
+		
 		return getCachedDesc()[idindex];
 	}
 	
+	private static HashMap hsDescID = new HashMap(); 
 	
 	// Cache Query Arrays
 	static HashMap hsQueries = new HashMap(); 
