@@ -78,11 +78,15 @@ public class Generator
 			sql    += desc.dbname;  // column name
 			params += "?";		  // parameter
 			
-			if(i < descs.length-1) { // beim letzten ohne Komma
+			//if(i < descs.length-1) { // beim letzten ohne Komma
+			{
 				sql    += ",";
 				params += ",";
 			} 
 		}
+		
+		sql = sql.substring(0, sql.length()-1);
+		params = params.substring(0, params.length()-1);
 		
 		if(bean.getDescID() != null)
 		{
@@ -166,6 +170,8 @@ public class Generator
 			} 
 		}
 		
+		
+		
 		sql += " ) ";
 		
 		log.debug(sql);
@@ -193,11 +199,14 @@ public class Generator
 				continue;
 			
 			sql += "a." + desc.dbname;  // column name
+			sql += ",";
 			
-			if(i < descs.length-1) { // beim letzten ohne Komma
-				sql += ",";
-			}
+//			if(i < descs.length-1) { // beim letzten ohne Komma
+//			}
 		}
+		
+//		if(sql.endsWith(","))
+		sql = sql.substring(0, sql.length()-1);
 		
 		sql += " FROM ";
 		sql += bean.getTableName();
@@ -252,11 +261,14 @@ public class Generator
 				continue;
 			
 			sql += desc.dbname + "=?";  // column name
+			sql += ",";
 			
-			if(i < descs.length-1) { // beim letzten ohne Komma
-				sql += ",";
-			}
+//			if(i < descs.length-1) { // beim letzten ohne Komma
+//			}
 		}
+		
+		sql = sql.substring(0, sql.length()-1);
+
 
 		try {	
 			// ID Spalte für UPDATE zwingend

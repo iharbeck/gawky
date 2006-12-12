@@ -5,6 +5,8 @@ import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
+import gawky.message.Formatter;
+import gawky.message.helper.Format;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -237,8 +239,10 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(table, rset.getString(i+1));
 //			}	
+			
 				
-			out.write(table.toString().getBytes());
+			out.write(Formatter.getStringC(300, table.toString()).getBytes());
+			out.write('\r');
 			out.write(endline);
 		}
 		DB.doClose(stmt);
@@ -288,7 +292,7 @@ public abstract class Table extends Part
 //			for(int i=0; i < descs.length; i++)
 //			{
 //				descs[i].setValue(this, rset.getString(i+1) );
-//			}
+//			
 			generator.fillPart(rset, this);
 			
 		} else {

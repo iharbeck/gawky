@@ -1,14 +1,22 @@
 package gawky.database.dbpool;
 
+import java.sql.Array;
+import java.sql.Blob;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
+import java.util.Properties;
 
 
 public class AConnection implements Connection 
@@ -228,5 +236,55 @@ public class AConnection implements Connection
     public Savepoint setSavepoint(String name) throws SQLException {
         return setSavepoint(name);
     }
+
+	public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+		return null;
+	}
+
+	public Blob createBlob() throws SQLException {
+		return null;
+	}
+
+	public Clob createClob() throws SQLException {
+		return null;
+	}
+
+	public NClob createNClob() throws SQLException {
+		return null;
+	}
+
+	public SQLXML createSQLXML() throws SQLException {
+		return null;
+	}
+
+	public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+		return null;
+	}
+
+	public Properties getClientInfo() throws SQLException {
+		return null;
+	}
+
+	public String getClientInfo(String name) throws SQLException {
+		return null;
+	}
+
+	public boolean isValid(int timeout) throws SQLException {
+		return false;
+	}
+
+	public void setClientInfo(Properties properties) throws SQLClientInfoException {
+	}
+
+	public void setClientInfo(String name, String value) throws SQLClientInfoException {
+	}
+
+	public boolean isWrapperFor(Class arg0) throws SQLException {
+		return false;
+	}
+
+	public Object unwrap(Class arg0) throws SQLException {
+		return null;
+	}
     
 }
