@@ -234,15 +234,19 @@ public class Generator
 	
 	public String generateDeleteSQL(Table bean)
 	{
-		String sql  = "DELETE FROM " + bean.getTableName();
+		try {
+			String sql  = "DELETE FROM " + bean.getTableName();
+			
+			// ID Spalte für UPDATE zwingend
+			sql += " WHERE ";
+			sql +=  bean.getDescID().dbname + "=?";
 		
-		// ID Spalte für UPDATE zwingend
-		sql += " WHERE ";
-		sql +=  bean.getDescID().dbname + "=?";
-		
-		log.debug(sql);
-		
-		return sql;
+			return sql;
+		} 
+		catch(Exception e) {
+			log.debug(bean.getTableName() + " ohne primary key", e);
+			return null;
+		}
 	}
 
 	// NEW
