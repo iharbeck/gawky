@@ -50,8 +50,18 @@ public abstract class Table extends Part
 	int idindex = NO_ID;
 	IDGenerator idgenerator = null;
 
-	public boolean insertparameter = false;
 
+	public void setParameter(boolean val) {
+		String key = this.getClass().getName();
+		hsParameter.put(key, new Boolean(val));
+	}
+	
+	public boolean getParameter()
+	{
+		String key = this.getClass().getName();
+		return ((Boolean)hsParameter.get(key)).booleanValue();
+	}
+	
 	
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
@@ -99,7 +109,8 @@ public abstract class Table extends Part
 		return getCachedDesc()[idindex];
 	}
 	
-	private static HashMap hsDescID = new HashMap(); 
+	private static HashMap hsDescID    = new HashMap(); 
+	private static HashMap hsParameter = new HashMap(); 
 	
 	// Cache Query Arrays
 	static HashMap hsQueries = new HashMap(); 
