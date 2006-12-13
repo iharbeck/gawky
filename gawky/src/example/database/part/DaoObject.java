@@ -22,7 +22,10 @@ public class DaoObject extends Table {
       //setDescID(Table.NO_ID); // no ID
 	  //setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
 		
+		setDescID(0);
+		
 		return new Desc[]  {
+		
 			new Column("kunde_id"),
 			new Column("name")
 		};
@@ -40,7 +43,7 @@ public class DaoObject extends Table {
 		DaoObject daoobject = new DaoObject();
 		
 		daoobject.setName("HELO");
-		daoobject.setKunde_id("37");
+		daoobject.setKunde_id("45");
 		daoobject.insert(conn);
 		
 	//	daoobject.find(conn, 30);

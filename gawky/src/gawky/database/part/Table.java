@@ -6,7 +6,6 @@ import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
 import gawky.message.Formatter;
-import gawky.message.helper.Format;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -28,12 +27,21 @@ import org.apache.commons.logging.LogFactory;
  * Insert / Update / Delete / Find
  * 
  * TODO query mit custom where
- * @author Ingo Harbeck
+ * @author Ingo Harbeck 
  *
  */
 
 public abstract class Table extends Part 
 {
+	class Staticdata {
+		public String[]            sql  = new String[5];
+		public PreparedStatement[] stmt = new PreparedStatement[4];
+		public boolean             parameter = false;
+		public int                 descidindex;
+		
+		public Desc getDescId() { return getCachedDesc()[descidindex]; }
+	}
+	
 	private static Log log = LogFactory.getLog(Table.class);
 	
 	private static final int SQL_INSERT = 0;
@@ -50,18 +58,17 @@ public abstract class Table extends Part
 	int idindex = NO_ID;
 	IDGenerator idgenerator = null;
 
-
-	public void setParameter(boolean val) {
-		String key = this.getClass().getName();
-		hsParameter.put(key, new Boolean(val));
+	Staticdata staticdata = (Staticdata)hsStatic.get(key);;
+	
+	public void setParameter(boolean val) 
+	{
+		getStaticdata().parameter = val;
 	}
 	
 	public boolean getParameter()
 	{
-		String key = this.getClass().getName();
-		return ((Boolean)hsParameter.get(key)).booleanValue();
+		return getStaticdata().parameter;
 	}
-	
 	
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
@@ -69,8 +76,8 @@ public abstract class Table extends Part
 	Dialect dialect = new MySQL();
 
 	private void store() {
-		String key = this.getClass().getName();
-		hsDescID.put(key, new Integer(idindex));
+		//hsDescID.put(key, new Integer(idindex));
+		getStaticdata().descidindex = idindex; 
 	}
 	
 	public void setDescID(int idindex) {
@@ -100,44 +107,29 @@ public abstract class Table extends Part
 	
 	public Desc getDescID() 
 	{
-		String key = this.getClass().getName();
-		idindex = ((Integer)hsDescID.get(key)).intValue();
-				
-		if(idindex == NO_ID)
-			return null;
-		
-		return getCachedDesc()[idindex];
+		return getStaticdata().getDescId();
+		// viel zu langsam
+//		try {
+//			idindex = ((Integer)hsDescID.get(key)).intValue();
+//		} catch (Exception e) {
+//			return null;
+//		}
+//		if(idindex == NO_ID)
+//			return null;
+//		
+//		return getCachedDesc()[idindex];
 	}
 	
-	private static HashMap hsDescID    = new HashMap(); 
-	private static HashMap hsParameter = new HashMap(); 
-	
-	// Cache Query Arrays
-	static HashMap hsQueries = new HashMap(); 
-	static HashMap hsStmts   = new HashMap(); 
-	
+	private static HashMap hsStatic    = new HashMap(); 
+
 	public final String[] getQueries() 
 	{
-		String key = this.getClass().getName();
-		String[] sql = (String[])hsQueries.get(key); 
-		if(sql == null) {
-			sql = new String[5];
-			hsQueries.put(key, sql);
-		}
-		
-		return sql;
+		return getStaticdata().sql; 
 	}
 	
 	public final PreparedStatement[] getStmts() 
 	{
-		String key = this.getClass().getName();
-		PreparedStatement[] stmt = (PreparedStatement[])hsStmts.get(key); 
-		if(stmt == null) {
-			stmt = new PreparedStatement[4];
-			hsStmts.put(key, stmt);
-		}
-		
-		return stmt;
+		return getStaticdata().stmt; 
 	}
 	
 	/**
@@ -628,5 +620,18 @@ public abstract class Table extends Part
 	}
 	public void setDialect(Dialect dialect) {
 		this.dialect = dialect;
+	}
+
+	public Staticdata getStaticdata() {
+		if(staticdata == null)
+		{
+			staticdata = new Staticdata();
+			hsStatic.put(key, staticdata);
+		}
+		return staticdata;
+	}
+
+	public void setStaticdata(Staticdata staticdata) {
+		this.staticdata = staticdata;
 	}
 }

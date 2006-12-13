@@ -28,6 +28,7 @@ public abstract class Part
 
 	private static HashMap hsDesc = new HashMap(); 
 	
+	public String key = getClass().getName();;
 	
 	/**
 	 * used by matcher
@@ -51,7 +52,7 @@ public abstract class Part
 		Desc[] descs = getDesc();
 
 		ClassPool pool = null;
-		String classname = this.getClass().getName();
+		String classname = key;
 		
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
 		
@@ -137,16 +138,20 @@ public abstract class Part
 		return descs;
 	}
 	
+	Desc[] cacheddesc = null;
+	
 	public final Desc[] getCachedDesc() 
 	{
-		String key = this.getClass().getName();
-		Desc[] desc = (Desc[])hsDesc.get(key); 
-		if(desc == null) {
-			desc = getOptDesc();
-			hsDesc.put(key, desc);
+		if(cacheddesc != null)
+			return cacheddesc;
+		
+		cacheddesc = (Desc[])hsDesc.get(key); 
+		if(cacheddesc == null) {
+			cacheddesc = getOptDesc();
+			hsDesc.put(key, cacheddesc);
 		}
 		
-		return desc;
+		return cacheddesc;
 	}
 	
 	public final String toString()
