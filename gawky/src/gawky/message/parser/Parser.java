@@ -30,6 +30,8 @@ public class Parser
 		return line.substring(position);
 	}
 	
+	Desc   desc;
+	
 	public void parse(String str, Object bean) throws ParserException
 	{
 		// store for splitting records 
@@ -37,11 +39,10 @@ public class Parser
 		
 		// Get Description Object 
 		descs = ((Part)bean).getCachedDesc();
-		
-		Desc   desc;
+
 		String value = "";
 		
-		int max = str.length();
+		int max   = str.length();
 		int start = 0;
 
 		int end = 0;
@@ -177,9 +178,11 @@ public class Parser
 		
 	}
 	
+	boolean info = log.isInfoEnabled();
+	
 	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException 
 	{
-		if(log.isInfoEnabled())
+		if(info)
 			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
 			
 		try {
