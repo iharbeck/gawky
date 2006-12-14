@@ -1,5 +1,6 @@
 package gawky.message.helper;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -7,15 +8,15 @@ public class Format
 {
 	static final int DECIMALS = 2;
 
-	static double[] decimals = {
-		1,
-		10,
-		100,
-		1000,
-		10000,
-		100000,
-		1000000,
-		10000000
+	static BigDecimal[] decimals = {
+		new BigDecimal("1"),
+		new BigDecimal("10"),
+		new BigDecimal("100"),
+		new BigDecimal("1000"),
+		new BigDecimal("10000"),
+		new BigDecimal("100000"),
+		new BigDecimal("1000000"),
+		new BigDecimal("10000000")
 	};
 
 	public static final String lowerNumber(String val) 
@@ -40,22 +41,42 @@ public class Format
 	
 	public static final String lowerNumber(String val, int dec) 
 	{
-		return Double.toString((Double.parseDouble(val)/decimals[dec]));
+		BigDecimal dc = new BigDecimal(val);
+		dc.setScale(dec);
+		dc.divide(decimals[dec]);
+		return dc.toString();
+		
+		//return Double.toString((Double.parseDouble(val)/decimals[dec]));
 	}
 	
 	public static final String lowerNumber(double val, int dec) 
 	{
-		return Double.toString(val/decimals[dec]);
+		BigDecimal dc = new BigDecimal(val);
+		dc.setScale(dec);
+		dc.divide(decimals[dec]);
+		return dc.toString();
+		
+		//return Double.toString(val/decimals[dec]);
 	}
 	
 	public static final String upperNumber(String val, int dec) 
 	{
-		return Long.toString((long)(Double.parseDouble(val)*decimals[dec]));
+		BigDecimal dc = new BigDecimal(val);
+		dc.setScale(dec);
+		dc.multiply(decimals[dec]);
+		return dc.toString();
+		
+		//return Long.toString((long)(Double.parseDouble(val)*decimals[dec] + 0.0001));
 	}
 	
 	public static final String upperNumber(double val, int dec) 
 	{
-		return Long.toString((long)(val*decimals[dec]));
+		BigDecimal dc = new BigDecimal(val);
+		dc.setScale(dec);
+		dc.multiply(decimals[dec]);
+		return dc.toString();
+		
+		//return Long.toString((long)(val*decimals[dec]));
 	}
 	
 	public static final String toEuro(double val) 

@@ -26,9 +26,6 @@ public abstract class Part
     private Parser    parser;
     private Generator generator;
 
-	private static HashMap hsDesc = new HashMap(); 
-	
-	public String key = getClass().getName();;
 	
 	/**
 	 * used by matcher
@@ -52,7 +49,7 @@ public abstract class Part
 		Desc[] descs = getDesc();
 
 		ClassPool pool = null;
-		String classname = key;
+		String classname = getClass().getName();;
 		
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
 		
@@ -66,7 +63,7 @@ public abstract class Part
 		}
 
 		
-		// Prepare Reflection call
+		// Prepare Attribute Access
 		for(int i=0; i < descs.length; i++)
 		{
 			// Constanten do not have an attribute
@@ -78,6 +75,7 @@ public abstract class Part
 				
 				if(hasJavaAssist)
 				{
+					log.info("Attribute access: using JavaAssist");
 					if(pool == null)
 						pool = ClassPool.getDefault();
 					
@@ -121,6 +119,8 @@ public abstract class Part
 					if(descs[i].accessor == null)
 						throw new Exception("Can't generate GetterSetterclass for [" + mname + "]");
 				} else {
+					log.info("Attribute access: using Reflection");
+					
 					// Reflection case - Prepare Method details
 					descs[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
 					descs[i].gmethod = getClass().getMethod( "get" + mname, null);
@@ -138,12 +138,16 @@ public abstract class Part
 		return descs;
 	}
 	
+	private static HashMap hsDesc = new HashMap(); 
+	
 	Desc[] cacheddesc = null;
 	
 	public final Desc[] getCachedDesc() 
 	{
 		if(cacheddesc != null)
 			return cacheddesc;
+		
+		String key = getClass().getName();
 		
 		cacheddesc = (Desc[])hsDesc.get(key); 
 		if(cacheddesc == null) {

@@ -33,13 +33,16 @@ import org.apache.commons.logging.LogFactory;
 
 public abstract class Table extends Part 
 {
-	class Staticdata {
+	private final class Staticdata 
+	{
 		public String[]            sql  = new String[5];
 		public PreparedStatement[] stmt = new PreparedStatement[4];
 		public boolean             parameter = false;
 		public int                 descidindex;
 		
 		public Desc getDescId() { return getCachedDesc()[descidindex]; }
+		
+		IDGenerator idgenerator   = null;
 	}
 	
 	private static Log log = LogFactory.getLog(Table.class);
@@ -50,16 +53,28 @@ public abstract class Table extends Part
 	private static final int SQL_DELETE = 3;
 	private static final int SQL_SELECT = 4;
 	
-	public static final int NO_ID = -1;
+	public  static final int NO_ID = -1;
 	
-	
-	Generator generator = new Generator();
-	
-	int idindex = NO_ID;
-	IDGenerator idgenerator = null;
+	static Generator generator = new Generator();
 
-	Staticdata staticdata = (Staticdata)hsStatic.get(key);;
+	Staticdata staticdata;
 	
+	public Staticdata getStaticdata() 
+	{
+		if(staticdata != null) 
+			return staticdata;
+
+		staticdata = (Staticdata)hmStatic.get(getClass());
+		
+		if(staticdata == null)
+		{
+			staticdata = new Staticdata();
+			hmStatic.put(getClass(), staticdata);
+		}
+
+		return staticdata;
+	}
+
 	public void setParameter(boolean val) 
 	{
 		getStaticdata().parameter = val;
@@ -75,34 +90,26 @@ public abstract class Table extends Part
 	
 	Dialect dialect = new MySQL();
 
-	private void store() {
-		//hsDescID.put(key, new Integer(idindex));
-		getStaticdata().descidindex = idindex; 
+	private void store(int idindex, IDGenerator idgenerator) {
+		getStaticdata().descidindex = idindex;
+		getStaticdata().idgenerator = idgenerator;
 	}
 	
 	public void setDescID(int idindex) {
-		this.idindex = idindex;
-		this.idgenerator = null;
-		store();
+		store(idindex, null);
 	}
 	
 	public void setDescID(String idindex) {
 		// multikey 
-		this.idindex = NO_ID;
-		this.idgenerator = null;
-		store();
+		store(NO_ID, null);
 	}
 	
 	public void setDescID(IDGenerator idgenerator) {
-		this.idindex = 0;
-		this.idgenerator = idgenerator;
-		store();
+		store(0, idgenerator);
 	}
 	
 	public void setDescID(int idindex, IDGenerator idgenerator) {
-		this.idindex = idindex;
-		this.idgenerator = idgenerator;
-		store();
+		store(idindex, idgenerator);
 	}
 	
 	public Desc getDescID() 
@@ -120,7 +127,7 @@ public abstract class Table extends Part
 //		return getCachedDesc()[idindex];
 	}
 	
-	private static HashMap hsStatic    = new HashMap(); 
+	private static HashMap hmStatic    = new HashMap(); 
 
 	public final String[] getQueries() 
 	{
@@ -155,27 +162,27 @@ public abstract class Table extends Part
 	}
 	
 	protected String getInsertSQL() {
-		return generator.generateInsertSQL(this);
+		return Table.generator.generateInsertSQL(this);
 	}
 	
 	protected String getUpdateSQL() {
-		return generator.generateUpdateSQL(this);
+		return Table.generator.generateUpdateSQL(this);
 	}
 
 	protected String getSelectSQL() {
-		return generator.generateSelectSQL(this);
+		return Table.generator.generateSelectSQL(this);
 	}
 
 	protected String getFindSQL() {
-		return generator.generateFindSQL(this);
+		return Table.generator.generateFindSQL(this);
 	}
 	
 	protected String getDeleteSQL() {
-		return generator.generateDeleteSQL(this);
+		return Table.generator.generateDeleteSQL(this);
 	}
 	
 	protected void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
-		generator.fillPreparedStatement(stmt, this, insert);
+		Table.generator.fillPreparedStatement(stmt, this, insert);
 	}
 	
 	public void insert() throws SQLException 
@@ -235,7 +242,7 @@ public abstract class Table extends Part
 		{
 			Table table = (Table) this.getClass().newInstance();
 
-			generator.fillPart(rset, table);
+			Table.generator.fillPart(rset, table);
 			
 //			Desc[] descs = this.getOptDesc(); 
 //			for(int i=0; i < descs.length; i++)
@@ -244,7 +251,8 @@ public abstract class Table extends Part
 //			}	
 			
 				
-			out.write(Formatter.getStringC(300, table.toString()).getBytes());
+			//out.write(Formatter.getStringC(300, table.toString()).getBytes());
+			out.write(table.toString().getBytes());
 			out.write('\r');
 			out.write(endline);
 		}
@@ -296,7 +304,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(this, rset.getString(i+1) );
 //			
-			generator.fillPart(rset, this);
+			Table.generator.fillPart(rset, this);
 			
 		} else {
 			log.error("no result (" + sql + ")");
@@ -339,7 +347,7 @@ public abstract class Table extends Part
 				//descs[i].setValue(this, rset.getString(i+1) );
 //			}
 			
-			generator.fillPart(rset, this);
+			Table.generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -377,7 +385,7 @@ public abstract class Table extends Part
 		
 		if (rset.next())
 		{
-			generator.fillPart(rset, this);
+			Table.generator.fillPart(rset, this);
 //			for(int i=0; i < descs.length; i++)
 //			{
 //				descs[i].setValue(this, rset.getString(i+1) );
@@ -440,7 +448,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(inst, rset.getString(i+1) );
 //			}
-			new Generator().fillPart(rset, inst);
+			Table.generator.fillPart(rset, inst);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -473,7 +481,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(inst, rset.getString(i+1) );
 //			}
-			new Generator().fillPart(rset, inst);
+			Table.generator.fillPart(rset, inst);
 			
 		} else {
 			log.error("no result (" + sql + ")");
@@ -519,15 +527,13 @@ public abstract class Table extends Part
 		
 		ArrayList list = new ArrayList();
 
-		Generator generator = new Generator();
-
 		while (rset.next())
 		{
 //			for(int i=0; i < descs.length; i++)
 //			{
 //				descs[i].setValue(inst, rset.getString(i+1) );
 //			}
-			generator.fillPart(rset, inst);
+			Table.generator.fillPart(rset, inst);
 			
 			list.add(inst);
 			
@@ -582,7 +588,6 @@ public abstract class Table extends Part
 	public void delete(Connection conn) throws Exception 
 	{
 		// Delete current Object
-		//delete(conn, Long.parseLong((String)PropertyUtils.getSimpleProperty(this, this.getDescID().name)));
 		delete(getClass(), conn, Long.parseLong( getDescID().getValue(this) ));
 	}
 	
@@ -613,7 +618,7 @@ public abstract class Table extends Part
 	}
 	
 	public IDGenerator getIdgenerator() {
-		return idgenerator;
+		return getStaticdata().idgenerator;
 	}
 	public Dialect getDialect() {
 		return dialect;
@@ -622,16 +627,5 @@ public abstract class Table extends Part
 		this.dialect = dialect;
 	}
 
-	public Staticdata getStaticdata() {
-		if(staticdata == null)
-		{
-			staticdata = new Staticdata();
-			hsStatic.put(key, staticdata);
-		}
-		return staticdata;
-	}
 
-	public void setStaticdata(Staticdata staticdata) {
-		this.staticdata = staticdata;
-	}
 }
