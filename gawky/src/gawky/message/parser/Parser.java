@@ -24,13 +24,13 @@ public class Parser
 	Desc descs[] = null;
 	
 	String line;
+	Desc   desc;
 	
 	public String getNext() 
 	{
 		return line.substring(position);
 	}
 	
-	Desc   desc;
 	
 	public void parse(String str, Object bean) throws ParserException
 	{
