@@ -5,7 +5,6 @@ import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
-import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -43,6 +42,9 @@ public abstract class Table extends Part
 		public Desc getDescId() { return getCachedDesc()[descidindex]; }
 		
 		IDGenerator idgenerator   = null;
+		
+		Generator generator       = new Generator();
+		Dialect dialect           = new MySQL();
 	}
 	
 	private static Log log = LogFactory.getLog(Table.class);
@@ -55,9 +57,12 @@ public abstract class Table extends Part
 	
 	public  static final int NO_ID = -1;
 	
-	static Generator generator = new Generator();
-
+	//Instance Cache
 	Staticdata staticdata;
+	
+	public static Staticdata getStaticdata(Table bean) {
+		return bean.getStaticdata();
+	}
 	
 	public Staticdata getStaticdata() 
 	{
@@ -88,7 +93,7 @@ public abstract class Table extends Part
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
 	
-	Dialect dialect = new MySQL();
+	
 
 	private void store(int idindex, IDGenerator idgenerator) {
 		getStaticdata().descidindex = idindex;
@@ -162,27 +167,27 @@ public abstract class Table extends Part
 	}
 	
 	protected String getInsertSQL() {
-		return Table.generator.generateInsertSQL(this);
+		return getStaticdata().generator.generateInsertSQL(this);
 	}
 	
 	protected String getUpdateSQL() {
-		return Table.generator.generateUpdateSQL(this);
+		return getStaticdata().generator.generateUpdateSQL(this);
 	}
 
 	protected String getSelectSQL() {
-		return Table.generator.generateSelectSQL(this);
+		return getStaticdata().generator.generateSelectSQL(this);
 	}
 
 	protected String getFindSQL() {
-		return Table.generator.generateFindSQL(this);
+		return getStaticdata().generator.generateFindSQL(this);
 	}
 	
 	protected String getDeleteSQL() {
-		return Table.generator.generateDeleteSQL(this);
+		return getStaticdata().generator.generateDeleteSQL(this);
 	}
 	
 	protected void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
-		Table.generator.fillPreparedStatement(stmt, this, insert);
+		getStaticdata().generator.fillPreparedStatement(stmt, this, insert);
 	}
 	
 	public void insert() throws SQLException 
@@ -242,7 +247,7 @@ public abstract class Table extends Part
 		{
 			Table table = (Table) this.getClass().newInstance();
 
-			Table.generator.fillPart(rset, table);
+			getStaticdata().generator.fillPart(rset, table);
 			
 //			Desc[] descs = this.getOptDesc(); 
 //			for(int i=0; i < descs.length; i++)
@@ -304,7 +309,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(this, rset.getString(i+1) );
 //			
-			Table.generator.fillPart(rset, this);
+			getStaticdata().generator.fillPart(rset, this);
 			
 		} else {
 			log.error("no result (" + sql + ")");
@@ -347,7 +352,7 @@ public abstract class Table extends Part
 				//descs[i].setValue(this, rset.getString(i+1) );
 //			}
 			
-			Table.generator.fillPart(rset, this);
+			getStaticdata().generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -385,7 +390,7 @@ public abstract class Table extends Part
 		
 		if (rset.next())
 		{
-			Table.generator.fillPart(rset, this);
+			getStaticdata().generator.fillPart(rset, this);
 //			for(int i=0; i < descs.length; i++)
 //			{
 //				descs[i].setValue(this, rset.getString(i+1) );
@@ -448,7 +453,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(inst, rset.getString(i+1) );
 //			}
-			Table.generator.fillPart(rset, inst);
+			getStaticdata(inst).generator.fillPart(rset, inst);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -481,7 +486,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(inst, rset.getString(i+1) );
 //			}
-			Table.generator.fillPart(rset, inst);
+			getStaticdata(inst).generator.fillPart(rset, inst);
 			
 		} else {
 			log.error("no result (" + sql + ")");
@@ -533,7 +538,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(inst, rset.getString(i+1) );
 //			}
-			Table.generator.fillPart(rset, inst);
+			getStaticdata(inst).generator.fillPart(rset, inst);
 			
 			list.add(inst);
 			
@@ -621,11 +626,9 @@ public abstract class Table extends Part
 		return getStaticdata().idgenerator;
 	}
 	public Dialect getDialect() {
-		return dialect;
+		return getStaticdata().dialect;
 	}
 	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
+		getStaticdata().dialect = dialect;
 	}
-
-
 }
