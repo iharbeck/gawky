@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="lib/http/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/itext-1.4.7.jar"/>
 	<classpathentry kind="lib" path="lib/codegen/antlr.jar"/>
+	<classpathentry kind="lib" path="lib/hash/trove.jar" sourcepath="lib/hash/trove.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

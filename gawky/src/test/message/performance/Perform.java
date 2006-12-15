@@ -24,12 +24,16 @@ public class Perform {
 
 		for(int i=0; i < 1000000; i++)
 		{
-			address.setVorname(line.substring(0, 9));
-			address.setNachname(line.substring(9, 19));
-			address.setInfo1(line.substring(19, 29));
-			address.setInfo2(line.substring(29, 39));
+			address.setVorname(line.substring(0, 10));
+			address.setNachname(line.substring(10, 20));
+			address.setInfo1(line.substring(20, 30));
+			address.setInfo2(line.substring(30, 40));
 		}
 
+		
+		// do something
+		log.error(address.getVorname());
+		log.error(address.getNachname());
 		
 		log.error("Referenz: parsed 1 million lines in " + (System.currentTimeMillis() - start) + "ms");
 

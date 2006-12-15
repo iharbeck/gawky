@@ -62,6 +62,8 @@ public abstract class Part
 			hasJavaAssist = false;
 		}
 
+		if(hasJavaAssist)
+			pool = ClassPool.getDefault();
 		
 		// Prepare Attribute Access
 		for(int i=0; i < descs.length; i++)
@@ -76,8 +78,6 @@ public abstract class Part
 				if(hasJavaAssist)
 				{
 					log.info("Attribute access: using JavaAssist");
-					if(pool == null)
-						pool = ClassPool.getDefault();
 					
 					// Native case - Generate Native Bytecode for ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
@@ -138,7 +138,7 @@ public abstract class Part
 		return descs;
 	}
 	
-	private static HashMap hsDesc = new HashMap(); 
+	private static HashMap hmDesc = new HashMap(); 
 	
 	Desc[] cacheddesc = null;
 	
@@ -147,12 +147,10 @@ public abstract class Part
 		if(cacheddesc != null)
 			return cacheddesc;
 		
-		String key = getClass().getName();
-		
-		cacheddesc = (Desc[])hsDesc.get(key); 
+		cacheddesc = (Desc[])hmDesc.get(getClass()); 
 		if(cacheddesc == null) {
 			cacheddesc = getOptDesc();
-			hsDesc.put(key, cacheddesc);
+			hmDesc.put(getClass(), cacheddesc);
 		}
 		
 		return cacheddesc;
@@ -212,5 +210,4 @@ public abstract class Part
 		extparser.parse(str, this);
 	}
 	
-	public void echo() {};
 }

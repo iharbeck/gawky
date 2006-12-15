@@ -32,7 +32,6 @@ public class Mt940Reader
 	
 		System.out.println("<b><pre style='margin-top:0px;margin-bottom:0px;'>" + line + "</pre></b>");
 		System.out.println("<pre  style='margin-top:0px;margin-bottom:7px;'>");
-		part.echo();
 		System.out.print("</pre>");
 		
 	}

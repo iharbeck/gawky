@@ -37,9 +37,12 @@ public abstract class Table extends Part
 		public String[]            sql  = new String[5];
 		public PreparedStatement[] stmt = new PreparedStatement[4];
 		public boolean             parameter = false;
-		public int                 descidindex;
+		public int                 descidindex = NO_ID;
 		
-		public Desc getDescId() { return getCachedDesc()[descidindex]; }
+		public Desc getDescId() { if(descidindex == NO_ID) 
+								  	return null;
+		                          return getCachedDesc()[descidindex]; 
+		}
 		
 		IDGenerator idgenerator   = null;
 		
