@@ -23,8 +23,8 @@ public abstract class Part
 {
 	Log log = LogFactory.getLog(Part.class);
 	
-    private Parser    parser;
-    private Generator generator;
+    private static Parser    parser;
+    private static Generator generator;
 
 	
 	/**
@@ -43,6 +43,10 @@ public abstract class Part
 	}
 	
 	abstract public Desc[] getDesc();
+	
+	public void descAfterInterceptor(Desc[] descs) { 
+		
+	}
 	
 	protected final Desc[] getOptDesc() {
 		
@@ -135,6 +139,8 @@ public abstract class Part
 			}
 		}
 		
+		descAfterInterceptor(descs);
+		
 		return descs;
 	}
 	
@@ -186,9 +192,8 @@ public abstract class Part
 	
 	public final Generator getGenerator() {
 		if(generator == null)
-			return new Generator();
-		else
-			return generator;
+			generator = new Generator();
+		return generator;
 	}
 
 	public final Parser getParser() {

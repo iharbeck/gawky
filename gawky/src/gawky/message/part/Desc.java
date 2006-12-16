@@ -100,6 +100,9 @@ public class Desc
 		this.name      = name;
 		this.delimiter = delimiter;
 		this.dbname    = name;
+		
+		if(format == FMT_CONSTANT)
+			nostore = true;
 	}
 	
 	public Desc(char format, char code, int len, String name) // FixLength
@@ -149,7 +152,7 @@ public class Desc
 	}
 	
 	public char    format;
-	public char    code;
+	public char     code;
 	public int     len;
 	public String  delimiter;
 	public String  name;
@@ -158,4 +161,8 @@ public class Desc
 	public boolean skipparsing = false;
 
 	public boolean packed = false;
+	
+	// constant informationen müssen nicht im Part
+	// gespeichert werden.
+	public boolean nostore = false;
 }

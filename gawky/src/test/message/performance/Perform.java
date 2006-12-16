@@ -18,12 +18,14 @@ public class Perform {
 		
 		String line = "1234567890abcdefghij1234567890123456789012345678901234567890";
 		
-		Address address = new Address();
+		//Address address = new Address();
 
 		long start = System.currentTimeMillis();
 
+		Address address = null;
 		for(int i=0; i < 1000000; i++)
 		{
+			address = new Address();
 			address.setVorname(line.substring(0, 10));
 			address.setNachname(line.substring(10, 20));
 			address.setInfo1(line.substring(20, 30));
@@ -41,8 +43,11 @@ public class Perform {
 		
 		for(int i=0; i < 1000000; i++)
 		{
+			address = new Address();
 			address.parse(parser, line);
+			//address.toString();
 		}
+		
 		
 		log.error("Parser: parsed 1 million lines in " + (System.currentTimeMillis() - start) + "ms");
 

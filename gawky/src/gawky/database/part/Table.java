@@ -32,22 +32,39 @@ import org.apache.commons.logging.LogFactory;
 
 public abstract class Table extends Part 
 {
-	private final class Staticdata 
+
+	private final class StaticLocal 
 	{
 		public String[]            sql  = new String[5];
 		public PreparedStatement[] stmt = new PreparedStatement[4];
 		public boolean             parameter = false;
-		public int                 descidindex = NO_ID;
+		public int[]               descidindex;
 		
-		public Desc getDescId() { if(descidindex == NO_ID) 
-								  	return null;
-		                          return getCachedDesc()[descidindex]; 
+		public StaticLocal() {
+			descidindex = new int[1];
+			descidindex[0] = NO_ID;
+	
+			descIds = new Desc[1];
+			descIds[0] = null;
 		}
+		
+		public Desc[] descIds = null;
 		
 		IDGenerator idgenerator   = null;
 		
 		Generator generator       = new Generator();
 		Dialect dialect           = new MySQL();
+	}
+	
+	public void descAfterInterceptor(Desc[] descs) { 
+
+		StaticLocal local = getStaticLocal();
+		local.descIds = new Desc[local.descidindex.length];
+
+		for(int i=0; i < local.descidindex.length; i++)
+			local.descIds[i] = descs[local.descidindex[i]];
+		
+		//getStaticLocal().descId = descs[getStaticLocal().descidindex];
 	}
 	
 	private static Log log = LogFactory.getLog(Table.class);
@@ -61,36 +78,36 @@ public abstract class Table extends Part
 	public  static final int NO_ID = -1;
 	
 	//Instance Cache
-	Staticdata staticdata;
+	StaticLocal staticlocal;
 	
-	public static Staticdata getStaticdata(Table bean) {
-		return bean.getStaticdata();
+	public final static StaticLocal getStaticLocal(Table bean) {
+		return bean.getStaticLocal();
 	}
 	
-	public Staticdata getStaticdata() 
+	public final StaticLocal getStaticLocal() 
 	{
-		if(staticdata != null) 
-			return staticdata;
+		if(staticlocal != null) 
+			return staticlocal;
 
-		staticdata = (Staticdata)hmStatic.get(getClass());
+		staticlocal = (StaticLocal)hmStaticLocal.get(getClass());
 		
-		if(staticdata == null)
+		if(staticlocal == null)
 		{
-			staticdata = new Staticdata();
-			hmStatic.put(getClass(), staticdata);
+			staticlocal = new StaticLocal();
+			hmStaticLocal.put(getClass(), staticlocal);
 		}
 
-		return staticdata;
+		return staticlocal;
 	}
 
 	public void setParameter(boolean val) 
 	{
-		getStaticdata().parameter = val;
+		getStaticLocal().parameter = val;
 	}
 	
 	public boolean getParameter()
 	{
-		return getStaticdata().parameter;
+		return getStaticLocal().parameter;
 	}
 	
 	abstract public Desc[] getDesc();
@@ -98,19 +115,32 @@ public abstract class Table extends Part
 	
 	
 
-	private void store(int idindex, IDGenerator idgenerator) {
-		getStaticdata().descidindex = idindex;
-		getStaticdata().idgenerator = idgenerator;
+	private void store(int idindex, IDGenerator idgenerator) 
+	{
+		StaticLocal local = getStaticLocal();
+		
+		local.descidindex = new int[1];
+		local.descidindex[0] = idindex;
+		local.idgenerator = idgenerator;
 	}
 	
 	public void setDescID(int idindex) {
 		store(idindex, null);
 	}
 	
-	public void setDescID(String idindex) {
-		// multikey 
-		store(NO_ID, null);
+	// Start Multikey 
+	public void setDescID(int idindex1, int idindex2) {
+		getStaticLocal().descidindex = new int[2];
+		getStaticLocal().descidindex[0] = idindex1;
+		getStaticLocal().descidindex[1] = idindex2;
 	}
+	public void setDescID(int idindex1, int idindex2, int idindex3) {
+		getStaticLocal().descidindex = new int[3];
+		getStaticLocal().descidindex[0] = idindex1;
+		getStaticLocal().descidindex[1] = idindex2;
+		getStaticLocal().descidindex[2] = idindex3;
+	}
+	// Ende Multikey
 	
 	public void setDescID(IDGenerator idgenerator) {
 		store(0, idgenerator);
@@ -120,31 +150,30 @@ public abstract class Table extends Part
 		store(idindex, idgenerator);
 	}
 	
-	public Desc getDescID() 
-	{
-		return getStaticdata().getDescId();
-		// viel zu langsam
-//		try {
-//			idindex = ((Integer)hsDescID.get(key)).intValue();
-//		} catch (Exception e) {
-//			return null;
-//		}
-//		if(idindex == NO_ID)
-//			return null;
-//		
-//		return getCachedDesc()[idindex];
+	public boolean isPrimary(Desc desc) {
+		Desc[] descs = getStaticLocal().descIds;
+		
+		for(int i=0; i < descs.length; i++)
+			if(descs[i] == desc)
+				return true;
+		return false;
 	}
 	
-	private static HashMap hmStatic    = new HashMap(); 
+	public Desc[] getDescIDs() 
+	{
+		return getStaticLocal().descIds;
+	}
+	
+	private static HashMap hmStaticLocal    = new HashMap(); 
 
 	public final String[] getQueries() 
 	{
-		return getStaticdata().sql; 
+		return getStaticLocal().sql; 
 	}
 	
 	public final PreparedStatement[] getStmts() 
 	{
-		return getStaticdata().stmt; 
+		return getStaticLocal().stmt; 
 	}
 	
 	/**
@@ -170,27 +199,27 @@ public abstract class Table extends Part
 	}
 	
 	protected String getInsertSQL() {
-		return getStaticdata().generator.generateInsertSQL(this);
+		return getStaticLocal().generator.generateInsertSQL(this);
 	}
 	
 	protected String getUpdateSQL() {
-		return getStaticdata().generator.generateUpdateSQL(this);
+		return getStaticLocal().generator.generateUpdateSQL(this);
 	}
 
 	protected String getSelectSQL() {
-		return getStaticdata().generator.generateSelectSQL(this);
+		return getStaticLocal().generator.generateSelectSQL(this);
 	}
 
 	protected String getFindSQL() {
-		return getStaticdata().generator.generateFindSQL(this);
+		return getStaticLocal().generator.generateFindSQL(this);
 	}
 	
 	protected String getDeleteSQL() {
-		return getStaticdata().generator.generateDeleteSQL(this);
+		return getStaticLocal().generator.generateDeleteSQL(this);
 	}
 	
 	protected void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
-		getStaticdata().generator.fillPreparedStatement(stmt, this, insert);
+		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
 	}
 	
 	public void insert() throws SQLException 
@@ -224,7 +253,7 @@ public abstract class Table extends Part
 		try {
 			// versuche to generierte ID zu ermitteln und im Object abzulegen
 			if(getIdgenerator() != null)
-				getDescID().setValue(this, getIdgenerator().getGeneratedID(conn, this));
+				getDescIDs()[0].setValue(this, getIdgenerator().getGeneratedID(conn, this));
 		} catch (Exception e) {
 			log.error("insert Record", e);
 		}
@@ -242,23 +271,14 @@ public abstract class Table extends Part
 		 
 		ResultSet rset = stmt.executeQuery();
 			
-		//Desc[] descs = this.getOptDesc();  
-		
 		byte endline = '\n';
 
 		while (rset.next())
 		{
 			Table table = (Table) this.getClass().newInstance();
 
-			getStaticdata().generator.fillPart(rset, table);
+			getStaticLocal().generator.fillPart(rset, table);
 			
-//			Desc[] descs = this.getOptDesc(); 
-//			for(int i=0; i < descs.length; i++)
-//			{
-//				descs[i].setValue(table, rset.getString(i+1));
-//			}	
-			
-				
 			//out.write(Formatter.getStringC(300, table.toString()).getBytes());
 			out.write(table.toString().getBytes());
 			out.write('\r');
@@ -269,16 +289,10 @@ public abstract class Table extends Part
 
 	public void find(long id) throws Exception 
 	{
-		Connection conn = null;
-		try {
-			conn = DB.getConnection();
-			find(conn, id);
-		} finally {
-			DB.doClose(conn);
-		}
+		find(new Long(id));
 	}
 
-	public void find(String id) throws Exception 
+	public void find(Object id) throws Exception 
 	{
 		Connection conn = null;
 		try {
@@ -289,38 +303,24 @@ public abstract class Table extends Part
 		}
 	}
 	
-	
-	public void find(Connection conn, String id) throws Exception 
+	public void find(Object id1, Object id2) throws Exception 
 	{
-		String sql = getQueries()[SQL_FIND];
-		if(sql == null)	{
-			sql = getFindSQL();
-			getQueries()[SQL_FIND] = sql;
-		}
-		
-		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
-		
-		// Find by ID
-		stmt.setString(1, id);
-		ResultSet rset = stmt.executeQuery();
-		
-//		Desc[] descs = this.getOptDesc();  
-		
-		if (rset.next())
-		{
-//			for(int i=0; i < descs.length; i++)
-//			{
-//				descs[i].setValue(this, rset.getString(i+1) );
-//			
-			getStaticdata().generator.fillPart(rset, this);
-			
-		} else {
-			log.error("no result (" + sql + ")");
+		Connection conn = null;
+		try {
+			conn = DB.getConnection();
+			find(conn, id1, id2);
+		} finally {
+			DB.doClose(conn);
 		}
 	}
 	
 	public void find(Connection conn, long id) throws Exception 
 	{
+		find(conn, new Long(id));
+	}
+
+	public void find(Connection conn, Object id) throws Exception 
+	{
 		String sql = getQueries()[SQL_FIND];
 		if(sql == null)	{
 			sql = getFindSQL();
@@ -330,36 +330,38 @@ public abstract class Table extends Part
 		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
 		
 		// Find by ID
-		stmt.setLong(1, id);
+		stmt.setObject(1, id);
 		ResultSet rset = stmt.executeQuery();
 		
-//		Desc[] descs = this.getOptDesc();  
-		
-		if (rset.next())
-		{
-// RESULTSET BASED
-//			ResultSetMetaData md = stmt.getMetaData();
-			
-//			for (int i = md.getColumnCount(); i > 0; i --) {
-//				if(log.isInfoEnabled())
-//					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
-//				
-//				PropertyUtils.setSimpleProperty(this, md.getColumnName(i), rset.getString(i));
-//			}
-			
-// OBJECT BASED TODO compare performance
-// alternative generat
-//			for(int i=0; i < descs.length; i++)
-//			{
-				//descs[i].setValue(this, rset.getString(descs[i].dbname) );
-				//descs[i].setValue(this, rset.getString(i+1) );
-//			}
-			
-			getStaticdata().generator.fillPart(rset, this);
+		if (rset.next()) {
+			getStaticLocal().generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
 	}
+
+	public void find(Connection conn, Object id1, Object id2) throws Exception 
+	{
+		String sql = getQueries()[SQL_FIND];
+		if(sql == null)	{
+			sql = getFindSQL();
+			getQueries()[SQL_FIND] = sql;
+		}
+		
+		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
+		
+		// Find by ID
+		stmt.setObject(1, id1);
+		stmt.setObject(2, id2);
+		ResultSet rset = stmt.executeQuery();
+		
+		if (rset.next()) {
+			getStaticLocal().generator.fillPart(rset, this);
+		} else {
+			log.error("no result (" + sql + ")");
+		}
+	}
+
 	
 	public void find(String where, Object [] params) throws Exception 
 	{
@@ -389,15 +391,8 @@ public abstract class Table extends Part
 		
 		ResultSet rset = stmt.executeQuery();
 		
-//		Desc[] descs = this.getOptDesc();   
-		
-		if (rset.next())
-		{
-			getStaticdata().generator.fillPart(rset, this);
-//			for(int i=0; i < descs.length; i++)
-//			{
-//				descs[i].setValue(this, rset.getString(i+1) );
-//			}
+		if (rset.next()) {
+			getStaticLocal().generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -411,16 +406,10 @@ public abstract class Table extends Part
 	
 	public static Table find(Class clazz, long id) throws Exception 
 	{
-		Connection conn = null;
-		try {
-			conn = DB.getConnection();
-			return find(clazz, conn, id);
-		} finally {
-			DB.doClose(conn);
-		}
+		return find(clazz, new Long(id));
 	}
 
-	public static Table find(Class clazz, String id) throws Exception 
+	public static Table find(Class clazz, Object id) throws Exception 
 	{
 		Connection conn = null;
 		try {
@@ -430,9 +419,8 @@ public abstract class Table extends Part
 			DB.doClose(conn);
 		}
 	}
-
 	
-	public static Table find(Class clazz, Connection conn, long id) throws Exception 
+	public static Table find(Class clazz, Connection conn, Object id) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
 		
@@ -445,18 +433,11 @@ public abstract class Table extends Part
 		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_FIND);
 		
 		// Find by ID
-		stmt.setLong(1, id);
+		stmt.setObject(1, id);
 		ResultSet rset = stmt.executeQuery();
 		
-//		Desc[] descs = inst.getOptDesc();  
-		
-		if (rset.next())
-		{
-//			for(int i=0; i < descs.length; i++)
-//			{
-//				descs[i].setValue(inst, rset.getString(i+1) );
-//			}
-			getStaticdata(inst).generator.fillPart(rset, inst);
+		if (rset.next()) {
+			getStaticLocal(inst).generator.fillPart(rset, inst);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
@@ -465,38 +446,38 @@ public abstract class Table extends Part
 	}
 	
 	
-	public static Table find(Class clazz, Connection conn, String id) throws Exception 
-	{
-		Table inst = (Table)clazz.newInstance();
-		
-		String sql = inst.getQueries()[SQL_FIND];
-		if(sql == null)	{
-			sql = inst.getFindSQL();
-			inst.getQueries()[SQL_FIND] = sql;
-		}
-		
-		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_FIND);
-		
-		// Find by ID
-		stmt.setString(1, id);
-		ResultSet rset = stmt.executeQuery();
-		
-//		Desc[] descs = inst.getOptDesc();  
-		
-		if (rset.next())
-		{
-//			for(int i=0; i < descs.length; i++)
-//			{
-//				descs[i].setValue(inst, rset.getString(i+1) );
-//			}
-			getStaticdata(inst).generator.fillPart(rset, inst);
-			
-		} else {
-			log.error("no result (" + sql + ")");
-		}
-		
-		return inst;
-	}
+//	public static Table find(Class clazz, Connection conn, Object id) throws Exception 
+//	{
+//		Table inst = (Table)clazz.newInstance();
+//		
+//		String sql = inst.getQueries()[SQL_FIND];
+//		if(sql == null)	{
+//			sql = inst.getFindSQL();
+//			inst.getQueries()[SQL_FIND] = sql;
+//		}
+//		
+//		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_FIND);
+//		
+//		// Find by ID
+//		stmt.setString(1, id);
+//		ResultSet rset = stmt.executeQuery();
+//		
+////		Desc[] descs = inst.getOptDesc();  
+//		
+//		if (rset.next())
+//		{
+////			for(int i=0; i < descs.length; i++)
+////			{
+////				descs[i].setValue(inst, rset.getString(i+1) );
+////			}
+//			getStaticLocal(inst).generator.fillPart(rset, inst);
+//			
+//		} else {
+//			log.error("no result (" + sql + ")");
+//		}
+//		
+//		return inst;
+//	}
 	
 	
 	public static List find(Class clazz, String where, Object [] params) throws Exception 
@@ -541,7 +522,7 @@ public abstract class Table extends Part
 //			{
 //				descs[i].setValue(inst, rset.getString(i+1) );
 //			}
-			getStaticdata(inst).generator.fillPart(rset, inst);
+			getStaticLocal(inst).generator.fillPart(rset, inst);
 			
 			list.add(inst);
 			
@@ -555,6 +536,11 @@ public abstract class Table extends Part
 	
 	public static void delete(Class clazz, long id) throws Exception 
 	{
+		delete(clazz, new Long(id));
+	}
+	
+	public static void delete(Class clazz, Object id) throws Exception 
+	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
@@ -565,6 +551,11 @@ public abstract class Table extends Part
 	}
 	
 	public static void delete(Class clazz, Connection conn, long id) throws Exception 
+	{
+		delete(clazz, conn, new Long(id));
+	}
+	
+	public static void delete(Class clazz, Connection conn, Object id) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
 		
@@ -577,7 +568,25 @@ public abstract class Table extends Part
 		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
 		
 		// Delete by ID
-		stmt.setLong(1, id);
+		stmt.setObject(1, id);
+		stmt.execute();
+	}
+	
+	public static void delete(Class clazz, Connection conn, Object id1, Object id2) throws Exception 
+	{
+		Table inst = (Table)clazz.newInstance();
+		
+		String sql = inst.getQueries()[SQL_DELETE];
+		if(sql == null)	{
+			sql = inst.getDeleteSQL();
+			inst.getQueries()[SQL_DELETE] = sql;
+		}
+		
+		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
+		
+		// Delete by ID
+		stmt.setObject(1, id1);
+		stmt.setObject(2, id2);
 		stmt.execute();
 	}
 
@@ -596,7 +605,11 @@ public abstract class Table extends Part
 	public void delete(Connection conn) throws Exception 
 	{
 		// Delete current Object
-		delete(getClass(), conn, Long.parseLong( getDescID().getValue(this) ));
+		if(getDescIDs().length == 1)
+			delete(getClass(), conn, getDescIDs()[0].getValue(this) );
+		else
+			delete(getClass(), conn, getDescIDs()[0].getValue(this),
+									 getDescIDs()[1].getValue(this));
 	}
 	
 	public void update() throws Exception 
@@ -626,12 +639,12 @@ public abstract class Table extends Part
 	}
 	
 	public IDGenerator getIdgenerator() {
-		return getStaticdata().idgenerator;
+		return getStaticLocal().idgenerator;
 	}
 	public Dialect getDialect() {
-		return getStaticdata().dialect;
+		return getStaticLocal().dialect;
 	}
 	public void setDialect(Dialect dialect) {
-		getStaticdata().dialect = dialect;
+		getStaticLocal().dialect = dialect;
 	}
 }

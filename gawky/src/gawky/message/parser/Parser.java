@@ -1,5 +1,6 @@
 package gawky.message.parser;
 
+import example.message.filereader.Address;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -123,7 +124,7 @@ public class Parser
 
 			// Inhaltlich prüfung	
 			typeCheck(desc, value);
-			
+
 		    storeValue(bean, i, desc, value);
 		}		
 		
@@ -184,10 +185,28 @@ public class Parser
 	{
 		if(info)
 			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
-			
+
+		if(desc.nostore)
+			return;
+
+		
+//		switch(pos) {
+//		case 0:
+//			((Address)bean).setVorname(value);
+//		break;
+//		case 1:
+//			((Address)bean).setNachname(value);
+//			break;
+//		case 2:
+//			((Address)bean).setInfo1(value);
+//			break;
+//		case 3:
+//			((Address)bean).setInfo2(value);
+//			break;
+//		}
+		
 		try {
-			if(desc.format != Desc.FMT_CONSTANT)
-				desc.setValue(bean, value);
+			desc.setValue(bean, value);
 		} catch (Exception e) {	 
 			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
 		}
