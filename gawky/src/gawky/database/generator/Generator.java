@@ -1,11 +1,17 @@
 package gawky.database.generator;
 
+import gawky.database.DB;
+import gawky.database.part.Column;
 import gawky.database.part.Table;
+import gawky.global.Option;
 import gawky.message.part.Desc;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -166,6 +172,51 @@ public class Generator
 		
 		return sql;
 	}
+
+	public static void main(String[] args) throws Exception {
+		Option.init();
+		System.out.println(new Generator().generateDesc("kunde"));
+	}
+	
+	public String generateDesc(String table)
+	{
+		String descstr = "";
+		
+		try {
+			Connection conn = DB.getConnection();
+			
+			Statement stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery("select * from " + table);
+			
+			ResultSetMetaData md = rset.getMetaData();
+			int c = md.getColumnCount();
+			
+			descstr += "	// Record definition\n";
+			descstr += "	public Desc[] getDesc()\n";
+			descstr += "	{\n";
+			descstr += "		//setDescID(0);  // Manual set ID\n";
+			
+			descstr += "		return new Desc[]  {\n";
+				
+			for(int i=1; i <= c; i++){
+				descstr += "			new Column(\"" + md.getColumnName(i) + "\"),\n";
+			}
+			
+			descstr += "		}\n";
+			descstr += "	}\n";
+
+			for(int i=1; i <= c; i++){
+				descstr += "	private String " + md.getColumnName(i) + ";\n";
+			}
+
+			
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		return descstr;
+	}
+
+	
 	
 	/**
 	 * 		TODO Dialect einfügen
