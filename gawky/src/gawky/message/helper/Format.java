@@ -42,9 +42,8 @@ public class Format
 	public static final String lowerNumber(String val, int dec) 
 	{
 		BigDecimal dc = new BigDecimal(val);
-		dc.setScale(dec);
-		dc.divide(decimals[dec]);
-		return dc.toString();
+		dc = dc.divide(decimals[dec]);
+		return dc.setScale(dec).toString();
 		
 		//return Double.toString((Double.parseDouble(val)/decimals[dec]));
 	}
@@ -52,9 +51,8 @@ public class Format
 	public static final String lowerNumber(double val, int dec) 
 	{
 		BigDecimal dc = new BigDecimal(val);
-		dc.setScale(dec);
-		dc.divide(decimals[dec]);
-		return dc.toString();
+		dc = dc.divide(decimals[dec]);
+		return dc.setScale(3).toString();
 		
 		//return Double.toString(val/decimals[dec]);
 	}
@@ -62,9 +60,9 @@ public class Format
 	public static final String upperNumber(String val, int dec) 
 	{
 		BigDecimal dc = new BigDecimal(val);
-		dc.setScale(dec);
-		dc.multiply(decimals[dec]);
-		return dc.toString();
+		//dc.setScale(dec);
+		dc = dc.multiply(decimals[dec]);
+		return dc.setScale(0).toString();
 		
 		//return Long.toString((long)(Double.parseDouble(val)*decimals[dec] + 0.0001));
 	}
@@ -72,9 +70,9 @@ public class Format
 	public static final String upperNumber(double val, int dec) 
 	{
 		BigDecimal dc = new BigDecimal(val);
-		dc.setScale(dec);
-		dc.multiply(decimals[dec]);
-		return dc.toString();
+		//dc.setScale(dec);
+		dc = dc.multiply(decimals[dec]);
+		return dc.setScale(0).toString();
 		
 		//return Long.toString((long)(val*decimals[dec]));
 	}
@@ -82,7 +80,7 @@ public class Format
 	public static final String toEuro(double val) 
 	{
 		return lowerNumber(val); 
-	}
+	} 
 	
 	public static final String toEuro(String val) 
 	{

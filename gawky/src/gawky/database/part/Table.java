@@ -62,8 +62,12 @@ public abstract class Table extends Part
 		local.descIds = new Desc[local.descidindex.length];
 
 		for(int i=0; i < local.descidindex.length; i++)
-			local.descIds[i] = descs[local.descidindex[i]];
-		
+		{
+			if(local.descidindex[i] == NO_ID)
+				local.descIds[i] = null;
+			else
+				local.descIds[i] = descs[local.descidindex[i]];
+		}
 		//getStaticLocal().descId = descs[getStaticLocal().descidindex];
 	}
 	
