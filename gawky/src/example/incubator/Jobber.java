@@ -19,12 +19,12 @@ public class Jobber {
 		System.out.println( "//EXEC  NAT2BAT".matches(".*?EXEC\\s*?NAT2BAT")  ? "NATURAL" : "-" );
 		
 		//REPRO
-		System.out.println( "//REPRO01    EXEC".matches(".*?REPRO.*?\\sEXEC")  ? "REPRO" : "-" );
+		System.out.println( "//REPRO01    EXEC".matches(".*?REPR.*?\\sEXEC")  ? "REPRO" : "-" );
 
 		//FILE1-2 3-4 5-6
 		
 		//KALTER
-		System.out.println( "//KALTER    EXEC".matches(".*?KALTER.*?\\sEXEC")  ? "Kalter" : "-" );
+		System.out.println( "//KALTER    EXEC   PGM=V1COMP".matches(".*?KALTER.*?\\sEXEC.*?PGM=V1COMP")  ? "Kalter" : "-" );
 
 		input = "123,7676,=J";
 		p = Pattern.compile ("(\\d*?),(\\d*?),=(.*)", Pattern.CASE_INSENSITIVE);
@@ -36,19 +36,33 @@ public class Jobber {
 		
 		
 		//FEBES
-		System.out.println( "//V700    EXEC".matches(".*?V700.*?\\sEXEC")  ? "FEBES" : "-" );
+		System.out.println( "//V700    EXEC  PGM=V700".matches(".*?\\sEXEC.*?PGM=V700")  ? "FEBES" : "-" );
 
+		
+		
 		//SORT
-		System.out.println( "//SORT    EXEC".matches(".*?SORT.*?\\sEXEC") ? "SORT" : "-" );
+		System.out.println( "//SORT    EXEC  PGM=ICEMAN".matches(".*?SORT.*?\\sEXEC.*?PGM=ICEMAN") ? "SORT" : "-" );
 
 		
 		
-		input = "SORT FIELDS  = (1,97,A),FORMAT=BI";
-		p = Pattern.compile ("FIELDS\\s*?=\\s*?\\((\\d),(\\d).*?\\).*", Pattern.CASE_INSENSITIVE);
+		input = "SORT FIELDS  = (10,97,A,21,33,D,44,55,A),FORMAT=BI";
+		p = Pattern.compile ("FIELDS\\s*?=\\s*?\\((.*?)\\).*", Pattern.CASE_INSENSITIVE);
 		m = p.matcher (input);
 		if (m.find()) {
-			System.out.println ("SORT von " + m.group(1) + " bis " + m.group(2));
+			System.out.println ("SORT von " + m.group(1) );
+		
+			input =  m.group(1);
+			
+			Pattern sp = Pattern.compile ("(\\d*),(\\d*),(.),?", Pattern.CASE_INSENSITIVE);
+			Matcher sm = sp.matcher (input);
+			while (sm.find()) {
+				System.out.println ("Spalten von " + sm.group(1) + "-" + sm.group(2) + " order " + sm.group(3));
+			}
+			
 		}
+		
+		
+		
 		
 		System.out.println( " INCLUDE  COND ".matches(".*?INCLUDE.*?\\sCOND.*?") ? "INCLUDE" : "-");
 		System.out.println( " OMID     COND ".matches(".*?OMID.*?\\sCOND.*?") ? "OMID" : "-" );
@@ -62,7 +76,7 @@ public class Jobber {
 		}
 
 		//PRUEF
-		System.out.println( "//PRUEF    EXEC".matches(".*?PRUEF.*?\\sEXEC") ? "PRUEF" : "-");
+		System.out.println( "//PRUEF    EXEC PGM=IDCAMS".matches(".*?PRUEF.*?\\sEXEC.*?PGM=IDCAMS") ? "PRUEF" : "-");
 		//FILE1
 	}
 
