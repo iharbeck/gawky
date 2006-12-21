@@ -165,4 +165,17 @@ public class Desc
 	// constant informationen müssen nicht im Part
 	// gespeichert werden.
 	public boolean nostore = false;
+	
+	public boolean nostring = false;
+
+
+	public boolean isNostring() {
+		return nostring;
+	}
+ 
+	public Desc setNostring() {
+		this.nostring = true;
+		return this;
+	}
+	
 }

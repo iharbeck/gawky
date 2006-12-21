@@ -27,6 +27,9 @@ public class Generator
 			for(int i = 0; i < descs.length; i++)
 			{
 				desc = descs[i];
+		
+				if(desc.nostring)
+					continue;
 				
 				String val = null;
 				
