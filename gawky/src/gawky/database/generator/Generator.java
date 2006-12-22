@@ -106,7 +106,8 @@ public class Generator
 				try  { descs[i].setValue(part, ""); } catch(Exception ee) {}
 			}
 		}
-
+		
+		part.afterFill();
 	}
 	public String generateInsertSQL(Table bean)
 	{

@@ -1,6 +1,5 @@
 package gawky.message.parser;
 
-import example.message.filereader.Address;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -32,103 +31,107 @@ public class Parser
 		return line.substring(position);
 	}
 	
-	
 	public void parse(String str, Object bean) throws ParserException
 	{
-		// store for splitting records 
-		line = str;
-		
-		// Get Description Object 
-		descs = ((Part)bean).getCachedDesc();
-
-		String value = "";
-		
-		int max   = str.length();
-		int start = 0;
-
-		int end = 0;
-		
-		for(int i = 0; i < descs.length; i++)
+		try 
 		{
-			desc = descs[i];
+			// store for splitting records 
+			line = str;
 			
-			// DISCUSS example - ID not in Importfile but later in DB
-			if(desc.skipparsing) 
-				continue;
-
-			if(desc.delimiter == null)   // fixed
-			{ 
-				end = start+desc.len;
+			// Get Description Object 
+			descs = ((Part)bean).getCachedDesc();
+	
+			String value = "";
+			
+			int max   = str.length();
+			int start = 0;
+	
+			int end = 0;
+			
+			for(int i = 0; i < descs.length; i++)
+			{
+				desc = descs[i];
 				
-				if(end > max) // Feld zu kurz wenn nicht option
-				{
-					position = max;
+				// DISCUSS example - ID not in Importfile but later in DB
+				if(desc.skipparsing) 
+					continue;
+	
+				if(desc.delimiter == null)   // fixed
+				{ 
+					end = start+desc.len;
 					
-					if(desc.len > 0 && desc.code != Desc.CODE_O)
-						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
-					
-					// Optionale Felder mit zu kurzem Wert gefüllt !!!
-					log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
-
-					value = str.substring(start);
-					storeValue(bean, i, desc, value);
-					return;
-				}
-				value = str.substring(start, start+desc.len);
-				start += desc.len;
-				
-				position = start;
-			} 
-			else // variable 
-			{   
-				end = str.indexOf(desc.delimiter, start);
-				
-				if(end > max || end == -1) // Feld zu kurz wenn nicht option
-				{
-					//position = max;
-
-					if(desc.len > 0 && desc.code != Desc.CODE_O)
-						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
-
-					if(end == -1) {
-						// enventuell fehlt einfach nur der Delimiter am Zeilenende
+					if(end > max) // Feld zu kurz wenn nicht option
+					{
+						position = max;
+						
+						if(desc.len > 0 && desc.code != Desc.CODE_O)
+							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+						
+						// Optionale Felder mit zu kurzem Wert gefüllt !!!
+						log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
+	
 						value = str.substring(start);
 						storeValue(bean, i, desc, value);
+						return;
 					}
-					// am Ende der Zeile angekommen und weiteres nicht optionales feld
-					if(i+1 < descs.length  && descs[i].code != Desc.CODE_O)
-						throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
+					value = str.substring(start, start+desc.len);
+					start += desc.len;
 					
-					return;
+					position = start;
+				} 
+				else // variable 
+				{   
+					end = str.indexOf(desc.delimiter, start);
+					
+					if(end > max || end == -1) // Feld zu kurz wenn nicht option
+					{
+						//position = max;
+	
+						if(desc.len > 0 && desc.code != Desc.CODE_O)
+							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+	
+						if(end == -1) {
+							// enventuell fehlt einfach nur der Delimiter am Zeilenende
+							value = str.substring(start);
+							storeValue(bean, i, desc, value);
+						}
+						// am Ende der Zeile angekommen und weiteres nicht optionales feld
+						if(i+1 < descs.length  && descs[i].code != Desc.CODE_O)
+							throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
+						
+						return;
+					}
+	
+					value = str.substring(start, end);
+					
+					start = end + desc.delimiter.length();  // Multicharacter delimiter
+	
+					position = start;
+	
+					if(desc.len > 0 && value.length() > desc.len)
+						throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
 				}
-
-				value = str.substring(start, end);
 				
-				start = end + desc.delimiter.length();  // Multicharacter delimiter
-
-				position = start;
-
-				if(desc.len > 0 && value.length() > desc.len)
-					throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
-			}
+				// Required Field
+				if(desc.code == Desc.CODE_R && value.length() == 0)
+					throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
+				// Optional Field
+				else if(desc.code == Desc.CODE_O && value.length() == 0)
+				{
+					storeValue(bean, i, desc, value);		
+					continue;
+				}
+	
+				// Inhaltlich prüfung	
+				typeCheck(desc, value);
+	
+			    storeValue(bean, i, desc, value);
+			}		
 			
-			// Required Field
-			if(desc.code == Desc.CODE_R && value.length() == 0)
-				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
-			// Optional Field
-			else if(desc.code == Desc.CODE_O && value.length() == 0)
-			{
-				storeValue(bean, i, desc, value);		
-				continue;
-			}
-
-			// Inhaltlich prüfung	
-			typeCheck(desc, value);
-
-		    storeValue(bean, i, desc, value);
-		}		
-		
-		return;
+			return;
+		} finally {
+			((Part)bean).afterFill();
+		}
 	}
 	
 	public final void typeCheck(Desc desc, String value) throws ParserException 
