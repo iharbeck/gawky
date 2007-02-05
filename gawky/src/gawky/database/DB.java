@@ -207,7 +207,7 @@ public class DB
 			if (rset.next())
 			{
 				hs = new Hashtable();
-				ResultSetMetaData md = stmt_select.getMetaData();
+				ResultSetMetaData md = rset.getMetaData();
 				
 				for (int i = md.getColumnCount(); i > 0; i --) {
 					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
@@ -268,7 +268,7 @@ public class DB
 			while (rset.next())
 			{
 				Map hs = new Hashtable();
-				ResultSetMetaData md = stmt_select.getMetaData();
+				ResultSetMetaData md = rset.getMetaData();
 				
 				for (int i = md.getColumnCount(); i > 0; i --) {
 					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
