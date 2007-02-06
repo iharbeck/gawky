@@ -183,11 +183,15 @@ public class Generator
 	{
 		String descstr = "";
 		
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		
 		try {
-			Connection conn = DB.getConnection();
+			conn = DB.getConnection();
 			
-			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery("select * from " + table);
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery("select * from " + table);
 			
 			ResultSetMetaData md = rset.getMetaData();
 			int c = md.getColumnCount();
@@ -210,9 +214,12 @@ public class Generator
 				descstr += "	private String " + md.getColumnName(i) + ";\n";
 			}
 
-			
 		} catch(Exception e) {
 			System.out.println(e);
+		} finally {
+			DB.doClose(rset);
+			DB.doClose(stmt);
+			DB.doClose(conn);
 		}
 		return descstr;
 	}
