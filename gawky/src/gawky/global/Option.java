@@ -155,7 +155,7 @@ public class Option
 		try {
 			// XML Configfile
 			config = new XMLConfiguration();
-			config.setEncoding("UTF-8");
+			config.setEncoding("UTF8");
 			config.load(propfile);
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
