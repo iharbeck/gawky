@@ -1,6 +1,8 @@
 package gawky.global;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class Format {
@@ -28,6 +30,17 @@ public class Format {
 			return nf.parse(val).doubleValue();
 		} catch (Exception e) {
 			return 0;
+		}
+	}
+	
+	public static Date getDate(String value, String pattern) {
+		SimpleDateFormat df = new SimpleDateFormat(pattern);
+		df.setLenient(false);
+		
+		try {
+			return df.parse(value);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 }
