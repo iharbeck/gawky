@@ -29,6 +29,8 @@ public class CustomColum {
 		String sql = gen.generateInsertSQL(new DaoObject()); 
 		// insert only DAO shouldent have an ID!!!
 		System.out.println(sql);
+		
+		
 	}
 
 }

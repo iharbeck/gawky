@@ -176,10 +176,10 @@ public class Generator
 
 	public static void main(String[] args) throws Exception {
 		Option.init();
-		System.out.println(new Generator().generateDesc("kunde"));
+		System.out.println(Generator.generateDesc("kunde"));
 	}
 	
-	public String generateDesc(String table)
+	public static String generateDesc(String table)
 	{
 		String descstr = "";
 		
@@ -231,7 +231,7 @@ public class Generator
 		return descstr;
 	}
 
-	public String buildGetter(String name) {
+	public static String buildGetter(String name) {
 		
 		String uname = name.substring(0, 1).toUpperCase() + name.substring(1);
 		
@@ -240,7 +240,7 @@ public class Generator
 		buf += "		return " + name + ";\n";
 		buf += "	}\n\n";
 		
-		buf =  "	public void set" + uname + "(String " + name + ") {\n";
+		buf += "	public void set" + uname + "(String " + name + ") {\n";
 		buf += "		this." + name + " = " + name + ";\n";
 		buf += "	}\n";
 		
