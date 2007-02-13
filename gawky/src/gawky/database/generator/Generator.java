@@ -214,6 +214,13 @@ public class Generator
 				descstr += "	private String " + md.getColumnName(i).toLowerCase() + ";\n";
 			}
 
+			descstr += "\n";
+			
+			for(int i=1; i <= c; i++){
+				descstr += buildGetter(md.getColumnName(i).toLowerCase());
+				descstr += "\n";
+			}
+			
 		} catch(Exception e) {
 			System.out.println(e);
 		} finally {
@@ -224,6 +231,21 @@ public class Generator
 		return descstr;
 	}
 
+	public String buildGetter(String name) {
+		
+		String uname = name.substring(0, 1).toUpperCase() + name.substring(1);
+		
+		String 
+		buf =  "	public String get" + uname + "() {\n";
+		buf += "		return " + name + ";\n";
+		buf += "	}\n\n";
+		
+		buf =  "	public void set" + uname + "(String " + name + ") {\n";
+		buf += "		this." + name + " = " + name + ";\n";
+		buf += "	}\n";
+		
+		return buf;
+	}
 	
 	
 	/**
