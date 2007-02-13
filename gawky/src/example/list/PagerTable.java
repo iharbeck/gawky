@@ -8,6 +8,7 @@ import gawky.list.datasource.PagedDatasource;
 import gawky.list.datasource.ResultSetDatasource;
 import gawky.list.generator.HtmlTable;
 import gawky.list.listener.LinkListener;
+import gawky.list.listener.NumberFormatListener;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -60,7 +61,7 @@ public class PagerTable {
 		//Database Source
 		Connection conn = DB.getConnection();
 		Statement  stmt = conn.createStatement();
-		ResultSet  rset = stmt.executeQuery("select * from kunde");
+		ResultSet  rset = stmt.executeQuery("select * from kunde order by kunde_id");
 
 /*		
 		rset.last();
@@ -70,16 +71,17 @@ public class PagerTable {
 */
 		
 		ResultSetDatasource rs = new ResultSetDatasource(rset);
-		 rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
+		 //rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
 		 rs.addColumn("name",     new Column("DER NAME"));
+		 rs.addColumn("val",      new Column("val").setListener(new NumberFormatListener()));
 		
 		int numberOfRows = 6;
-		int page = 3;
+		int page = 1;
 		
 		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();
 		hwalker.setTablestyle("width:100%");
-		System.out.println( hwalker.generate(new PagedDatasource(ds, numberOfRows, page) ));
+		System.out.println( hwalker.generate(new PagedDatasource(rs, numberOfRows, page) ));
 		rs.reset();
 
 		System.exit(0);

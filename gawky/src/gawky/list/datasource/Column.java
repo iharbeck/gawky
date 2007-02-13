@@ -56,8 +56,9 @@ public class Column
 	public CellListener getListener() {
 		return listener;
 	}
-	public void setListener(CellListener listener) {
+	public Column setListener(CellListener listener) {
 		this.listener = listener;
+		return this;
 	}
 	public int getWidth() {
 		return width;
