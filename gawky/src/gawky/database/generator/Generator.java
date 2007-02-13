@@ -207,7 +207,7 @@ public class Generator
 				descstr += "			new Column(\"" + md.getColumnName(i) + "\"),\n";
 			}
 			
-			descstr += "		}\n";
+			descstr += "		};\n";
 			descstr += "	}\n";
 
 			for(int i=1; i <= c; i++){
