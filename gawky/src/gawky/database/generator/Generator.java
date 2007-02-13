@@ -204,14 +204,14 @@ public class Generator
 			descstr += "		return new Desc[]  {\n";
 				
 			for(int i=1; i <= c; i++){
-				descstr += "			new Column(\"" + md.getColumnName(i) + "\"),\n";
+				descstr += "			new Column(\"" + md.getColumnName(i).toLowerCase() + "\"),\n";
 			}
 			
 			descstr += "		};\n";
 			descstr += "	}\n";
 
 			for(int i=1; i <= c; i++){
-				descstr += "	private String " + md.getColumnName(i) + ";\n";
+				descstr += "	private String " + md.getColumnName(i).toLowerCase() + ";\n";
 			}
 
 		} catch(Exception e) {
