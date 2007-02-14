@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFPrintSetup;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -25,7 +26,11 @@ public class XlsTable extends AbstractTable
 
 		//create a new worksheet
 		HSSFSheet sheet = workBook.createSheet();
-
+ 
+		//set A4 layout
+		HSSFPrintSetup printsetup = sheet.getPrintSetup();
+		printsetup.setPaperSize(printsetup.A4_PAPERSIZE);
+		
 		HSSFFont headerfont = workBook.createFont();
 		headerfont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
    
