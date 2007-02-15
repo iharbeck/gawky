@@ -32,7 +32,8 @@ import org.apache.commons.logging.LogFactory;
 
 public abstract class Table extends Part 
 {
-
+	int defaultconnection = 0;
+	
 	private final class StaticLocal 
 	{
 		public String[]            sql  = new String[5];
@@ -230,7 +231,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			conn = DB.getConnection(defaultconnection);
 			insert(conn);
 		} finally {
 			DB.doClose(conn);
@@ -300,7 +301,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			conn = DB.getConnection(defaultconnection);
 			find(conn, id);
 		} finally {
 			DB.doClose(conn);
@@ -311,7 +312,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			conn = DB.getConnection(defaultconnection);
 			find(conn, id1, id2);
 		} finally {
 			DB.doClose(conn);
@@ -371,7 +372,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			conn = DB.getConnection(defaultconnection);
 			find(conn, where, params);
 		} finally {
 			DB.doClose(conn);
@@ -598,7 +599,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			conn = DB.getConnection(defaultconnection);
 			delete(conn);
 		} finally {
 			DB.doClose(conn);
@@ -620,7 +621,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			conn = DB.getConnection(defaultconnection);
 			update(conn); 
 		} finally {
 			DB.doClose(conn);
@@ -650,5 +651,13 @@ public abstract class Table extends Part
 	}
 	public void setDialect(Dialect dialect) {
 		getStaticLocal().dialect = dialect;
+	}
+
+	public int getDefaultconnection() {
+		return defaultconnection;
+	}
+
+	public void setDefaultconnection(int defaultconnection) {
+		this.defaultconnection = defaultconnection;
 	}
 }
