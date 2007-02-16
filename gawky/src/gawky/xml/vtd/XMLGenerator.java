@@ -5,31 +5,44 @@ import java.io.FileOutputStream;
 
 public class XMLGenerator {
 
-	public static FileOutputStream out;
+	public FileOutputStream out;
+	public StringBuffer xml= new StringBuffer();
 	
-	public static void init(String filename) throws Exception {
+	public void init(String filename) throws Exception {
 		out = new FileOutputStream(filename, false);
 	}
 	
-	public static void close() throws Exception {
+	public void close() throws Exception {
+		out.write(xml.toString().getBytes());
 		out.close();
 	}
 	
-	
-	
-	public static final void genxml(BaseObjectI obj) throws Exception 
+	public final void addAttribut(String name, String value)
 	{
-		String xml;
-		
-		xml  = "<booking ";
-
-		obj.getFirstname().indexOf('\'');
-		xml += "firstname=\"" + obj.getFirstname() + "\" ";
-		xml += "lasttname=\"" + obj.getLastname() + "\" ";
-		xml += "amount=\"" + obj.getAmount() + "\" ";
+		xml.append(name).append("=\"").append(value).append("\" ");
+	}
 	
-		xml += "/>\n";
+	public final void genxml(BaseObjectI obj) throws Exception 
+	{
+		xml.append("<booking ");
 
-		out.write(xml.getBytes());
+		//obj.getFirstname().indexOf('\'');
+//		xml.append("firstname=\"").append(obj.getFirstname()).append("\" ");
+//		xml.append("lasttname=\"").append(obj.getLastname()).append("\" ");
+//		xml.append("amount=\"").append(obj.getAmount()).append("\" ");
+		addAttribut("firstname", obj.getFirstname());
+		addAttribut("lasttname", obj.getLastname());
+		addAttribut("amount",    obj.getAmount());
+		addAttribut("firstname", obj.getFirstname());
+		addAttribut("lasttname", obj.getLastname());
+		addAttribut("amount",    obj.getAmount());
+		addAttribut("firstname", obj.getFirstname());
+		addAttribut("lasttname", obj.getLastname());
+		addAttribut("amount",    obj.getAmount());
+		addAttribut("firstname", obj.getFirstname());
+		addAttribut("lasttname", obj.getLastname());
+		addAttribut("amount",    obj.getAmount());
+
+		xml.append("/>\n");
 	}
 }
