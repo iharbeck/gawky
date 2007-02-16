@@ -1,5 +1,6 @@
 package gawky.global;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,4 +44,18 @@ public class Format {
 			return null;
 		}
 	}
+
+	public static String getDecimal(Locale loc, String value, String pattern) {
+		return getDecimal(getDouble(loc, value), pattern);
+	}
+
+	public static String getDecimal(String value, String pattern) {
+		return getDecimal(getDouble(Locale.GERMAN, value), pattern);
+	}
+	
+	public static String getDecimal(double value, String pattern) {
+		DecimalFormat df = new DecimalFormat(pattern);
+		return df.format(value);
+	}
+	
 }
