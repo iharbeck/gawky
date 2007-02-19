@@ -9,8 +9,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Simple 
-{
+public class Simple {
+
 	//tag position
 	int pos = 0;
 	//tag ende
@@ -63,6 +63,7 @@ public class Simple
 		
 		while(simpleparser.toTagEmpty("booking") != -1 )
 		{
+			obj.setAmount   ("1");//parser.getAttribut("amount"));
 			obj.setFirstname(simpleparser.getAttribut("fn"));
 			obj.setLastname (simpleparser.getAttribut("ln"));
 							 simpleparser.getAttribut("ne");
