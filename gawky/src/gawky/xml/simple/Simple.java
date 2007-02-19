@@ -9,10 +9,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Simple {
-
+public class Simple 
+{
+	//tag position
 	int pos = 0;
+	//tag ende
 	int epos = 0;
+	
+	//child ende
+	int cepos = 0;
+	
+	// nav depth
+	int depth = 0;
 	
 	String xml = null;
 
@@ -37,6 +45,7 @@ public class Simple {
 	public void initFile(String filename) throws Exception
 	{
 		xml = new String(readFile(filename));
+		toStart();
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -48,16 +57,16 @@ public class Simple {
 		int count = 0;
 	    long totalamount = 0;
 		
-		Simple parser = new Simple("c:/test.xml");
+		Simple simpleparser = new Simple("c:/test.xml");
 	
 		ArrayList username = new ArrayList();
 		
-		while(parser.toTag("booking") != -1 )
+		while(simpleparser.toTagEmpty("booking") != -1 )
 		{
-			obj.setFirstname(parser.getAttribut("fn"));
-			obj.setLastname (parser.getAttribut("ln"));
-							 parser.getAttribut("ne");
-			obj.setAmount   (parser.getAttribut("am"));
+			obj.setFirstname(simpleparser.getAttribut("fn"));
+			obj.setLastname (simpleparser.getAttribut("ln"));
+							 simpleparser.getAttribut("ne");
+			obj.setAmount   (simpleparser.getAttribut("am"));
 			
 			if(obj.getAmount() != null)
 				totalamount += Long.parseLong(obj.getAmount());
@@ -77,7 +86,16 @@ public class Simple {
 		
 	}
 	
-	public final int toTag(String name)
+	public final void toStart() {
+		pos = 0;
+		depth = 0;
+	}
+	/**
+	 * detect EMPTY Tag
+	 * @param name
+	 * @return
+	 */
+	public final int toTagEmpty(String name)
 	{
 		pos  = xml.indexOf("<" + name + " ", pos);
 		
@@ -87,8 +105,30 @@ public class Simple {
 			return -1;
 		
 		epos = xml.indexOf("/>", pos); 
+		// no children
+		cepos = -1;
 		
 		return pos;
+	}
+	
+	public final int toTagFull(String name)
+	{
+		pos  = xml.indexOf("<" + name + " ", pos);
+		
+		if(pos != -1) 
+			pos = pos + name.length() + 1;
+		else 
+			return -1;
+		
+		epos = xml.indexOf(">", pos);
+		// children to this pos
+		cepos = xml.indexOf("</" + name + ">", pos); 
+		
+		return pos;
+	}
+	
+	public final int toChildTag(String name) {
+		return -1;
 	}
 	
 	public final String getAttribut(String name)
@@ -104,18 +144,6 @@ public class Simple {
 		apos = apos + name.length() + 2;
 		
 		return tag.substring(apos, tag.indexOf("\"", apos));
-	}
-
-	public final String __getAttribut(String name)
-	{
-		int apos = xml.indexOf(name + "=\"", pos);
-		
-		if(apos == -1 || apos > epos)
-			return null;
-		
-		apos = apos + name.length() + 2;
-		
-		return xml.substring(apos, xml.indexOf("\"", apos));
 	}
 
 	
