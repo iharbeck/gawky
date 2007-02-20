@@ -14,14 +14,6 @@ public class XMLGenerator
 		out.write("<bookings>\n".getBytes());
 	}
 	
-	public void close() throws Exception {
-		
-		out.write(xml.toString().getBytes());
-		
-		out.write("</bookings>\n".getBytes());
-		out.close();
-	}
-	
 	public final void addAttribut(String name, String value)
 	{
 		if(value != null)
@@ -30,11 +22,8 @@ public class XMLGenerator
 	
 	public final void genxml(BaseObjectI obj) throws Exception 
 	{
-		//xml  = new StringBuilder();
-		
 		xml.append("<booking ");
 
-		//obj.getFirstname().indexOf('\'');
 		addAttribut("clientid", obj.getClientid());
 		addAttribut("debtor_account", obj.getDebtor_account());
 		addAttribut("ref_nr", obj.getRef_nr());
@@ -81,7 +70,13 @@ public class XMLGenerator
 		addAttribut("authtime", obj.getAuthtime());
 
 		xml.append("/>\n");
+	}
+	
+	public void close() throws Exception {
 		
-		//out.write(xml.toString().getBytes());
+		out.write(xml.toString().getBytes());
+		
+		out.write("</bookings>\n".getBytes());
+		out.close();
 	}
 }

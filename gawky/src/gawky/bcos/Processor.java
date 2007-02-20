@@ -42,7 +42,7 @@ public class Processor
 	{
 		long start = System.currentTimeMillis();
 
-		Processor simpleparser = new Processor("c:/test.xml");
+		Processor sp = new Processor("c:/test.xml");
 	
 		BaseObjectI obj = new BaseObject();
 
@@ -51,13 +51,52 @@ public class Processor
 		
 		consumer.open();
 		
-		while(simpleparser.toTagEmpty("booking") != -1 )
+		while(sp.toTagEmpty("booking") != -1 )
 		{
-			obj.setAmount   ("1");//parser.getAttribut("amount"));
-			obj.setFirstname(simpleparser.getAttribut("fn"));
-			obj.setLastname (simpleparser.getAttribut("ln"));
-							 simpleparser.getAttribut("ne");
-			obj.setAmount   (simpleparser.getAttribut("am"));
+			obj.setClientid(sp.getAttribut("clientid"));
+			obj.setDebtor_account(sp.getAttribut("debtor_account"));
+			obj.setRef_nr(sp.getAttribut("ref_nr"));
+			obj.setBookdate(sp.getAttribut("bookdate"));
+			obj.setBookcode(sp.getAttribut("bookcode"));
+			obj.setBooksubcode(sp.getAttribut("booksubcode"));
+			obj.setBooknumber(sp.getAttribut("booknumber"));
+			obj.setCurrency(sp.getAttribut("currency"));
+			obj.setAmount(sp.getAttribut("amount"));
+			obj.setCurrency_org(sp.getAttribut("currency_org"));
+			obj.setAmount_org(sp.getAttribut("amount_org"));
+			obj.setDc(sp.getAttribut("dc"));
+			obj.setCcnumber(sp.getAttribut("ccnumber"));
+			obj.setCcexpiry(sp.getAttribut("ccexpiry"));
+			obj.setAddressvalcode(sp.getAttribut("addressvalcode"));
+			obj.setAuthcode(sp.getAttribut("authcode"));
+			obj.setAuthdate(sp.getAttribut("authdate"));
+			obj.setCcid(sp.getAttribut("ccid"));
+			obj.setBanksortcode(sp.getAttribut("banksortcode"));
+			obj.setBankaccount(sp.getAttribut("bankaccount"));
+			obj.setLastname(sp.getAttribut("lastname"));
+			obj.setFirstname(sp.getAttribut("firstname"));
+			obj.setStreet(sp.getAttribut("street"));
+			obj.setZip(sp.getAttribut("zip"));
+			obj.setCity(sp.getAttribut("city"));
+			obj.setCountrycode(sp.getAttribut("countrycode"));
+			obj.setCountryname(sp.getAttribut("countryname"));
+			obj.setBookingtext(sp.getAttribut("bookingtext"));
+			obj.setCctype(sp.getAttribut("cctype"));
+			obj.setPaymenttype(sp.getAttribut("paymenttype"));
+			obj.setBanknumber(sp.getAttribut("banknumber"));
+			obj.setAuthcodelong(sp.getAttribut("authcodelong"));
+			obj.setRibcode(sp.getAttribut("ribcode"));
+			obj.setReferencetext(sp.getAttribut("referencetext"));
+			obj.setIban(sp.getAttribut("iban"));
+			obj.setBic(sp.getAttribut("bic"));
+			obj.setMandate_status(sp.getAttribut("mandate_status"));
+			obj.setState(sp.getAttribut("state"));
+			obj.setMandate_id(sp.getAttribut("mandate_id"));
+			obj.setStreet2(sp.getAttribut("street2"));
+			obj.setPaymenttype2(sp.getAttribut("paymenttype2"));
+			obj.setCompanyname(sp.getAttribut("companyname"));
+			obj.setAccountnowner(sp.getAttribut("accountnowner"));
+			obj.setAuthtime(sp.getAttribut("authtime"));
 			
 			consumer.processline(obj);
 		}
