@@ -1,15 +1,9 @@
 package gawky.bcos;
 
-public class ImportFIAS {
+public class ImportFIAS implements ImportI {
 
-	public static void main(String[] args) throws Exception 
+	public void execute(String infile, Import importer) throws Exception
 	{
-		long start = System.currentTimeMillis();
-
-		Import importer = new Import();
-		
-		importer.open("c:/test_out.xml");
-		
 	    BaseObjectI obj = new BaseObject();
 
 	    obj.setClientid("123");
@@ -24,9 +18,5 @@ public class ImportFIAS {
 
 		    importer.run(obj);
 	    }
-		
-		importer.close();
-		
-		System.out.println("RUN: " + (System.currentTimeMillis() -start));
 	}
 }
