@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Simple {
+public class SimpleVTD {
 
 	//tag position
 	int pos = 0;
@@ -24,10 +24,10 @@ public class Simple {
 	
 	String xml = null;
 
-	public Simple() {
+	public SimpleVTD() {
 	}
 	
-	public Simple(String filename) throws Exception {
+	public SimpleVTD(String filename) throws Exception {
 		initFile(filename);
 	}
 	
@@ -48,17 +48,41 @@ public class Simple {
 		toStart();
 	}
 	
+	public void parse() 
+	{
+	
+		
+		
+		long length = xml.length();
+		
+		for(int i = 0; i < length; i++)
+		{
+			xml.charAt(0);
+		}
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		long start = System.currentTimeMillis();
 
+		short a = 44;
+		short b = 33;
+
+		int store = (int) ((int) a | (int) (b << 16));
+		
+		System.out.println(store & 0x0000ffff);
+		System.out.println((store >> 16) & 0x0000ffff);
+
+		
 		BaseObjectI obj = new BaseObject();
 
 		int count = 0;
 	    long totalamount = 0;
 		
-		Simple simpleparser = new Simple("c:/test.xml");
+		SimpleVTD simpleparser = new SimpleVTD("c:/test.xml");
 	
+	    simpleparser.parse();
+	    
 		ArrayList username = new ArrayList();
 		
 		while(simpleparser.toTagEmpty("booking") != -1 )
