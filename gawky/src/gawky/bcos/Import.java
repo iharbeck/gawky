@@ -3,35 +3,19 @@ package gawky.bcos;
 
 public class Import 
 {
-	public static void main(String[] args) throws Exception 
-	{
-		long start = System.currentTimeMillis();
+	XMLGenerator xmlgen = new XMLGenerator();
 
-		Import importer = new Import();
-		importer.run();
-
-		System.out.println("RUN: " + (System.currentTimeMillis() -start));
+	public void open(String outfile) throws Exception {
+		xmlgen.init(outfile);
 	}
 	
-	public void run() throws Exception 
+	public void run(BaseObjectI obj) throws Exception 
 	{
-		XMLGenerator xmlgen = new XMLGenerator();
-	    
-		// Output path
-		
-		xmlgen.init("c:/test_out.xml");
-	    
-	    BaseObjectI obj = new BaseObject();
-
-	    
-	    long totalamount = 0;
-		
-	    xmlgen.genxml(obj);
-			
-	    if(!obj.getAmount().equals(""))
-				totalamount += Long.parseLong(obj.getAmount());
-
-	    xmlgen.close();
+		xmlgen.genxml(obj);
+	}
+	
+	public void close() throws Exception {
+		xmlgen.close();		
 	}
 	
 }

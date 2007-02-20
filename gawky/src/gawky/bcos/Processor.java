@@ -3,21 +3,14 @@ package gawky.bcos;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
 
-public class Processor {
+public class Processor 
+{
+	int pos = 0; //tag position
+	int epos = 0; //tag ende
 
-	//tag position
-	int pos = 0;
-	//tag ende
-	int epos = 0;
-	
-	//child ende
-	int cepos = 0;
-	
-	// nav depth
-	int depth = 0;
+	int cepos = 0; //child ende
+	int depth = 0; // nav depth
 	
 	String xml = null;
 
@@ -49,14 +42,14 @@ public class Processor {
 	{
 		long start = System.currentTimeMillis();
 
-		BaseObjectI obj = new BaseObject();
-
-		int count = 0;
-	    long totalamount = 0;
-		
 		Processor simpleparser = new Processor("c:/test.xml");
 	
-		ArrayList username = new ArrayList();
+		BaseObjectI obj = new BaseObject();
+
+		/** produce by Factory !!! **/
+		ConsumerI consumer = new Report1060();
+		
+		consumer.open();
 		
 		while(simpleparser.toTagEmpty("booking") != -1 )
 		{
@@ -66,21 +59,12 @@ public class Processor {
 							 simpleparser.getAttribut("ne");
 			obj.setAmount   (simpleparser.getAttribut("am"));
 			
-			if(obj.getAmount() != null)
-				totalamount += Long.parseLong(obj.getAmount());
-
-			if(!username.contains(obj.getLastname()))
-				username.add(obj.getLastname());
-			
-			count ++;
+			consumer.processline(obj);
 		}
 		
-		System.out.println("#:" + count + " amount: " + totalamount + " ms: " + (System.currentTimeMillis() -start));
-		System.out.println("UNIQUE CUSTOMERS:");
-		
-		for (Iterator iter = username.iterator(); iter.hasNext();) {
-			System.out.println((String) iter.next());
-		} 
+		consumer.close();
+
+		System.out.println(" ms: " + (System.currentTimeMillis() -start));
 		
 	}
 	

@@ -1,11 +1,9 @@
 package gawky.bcos;
 
-
 import java.io.FileOutputStream;
 
-
-public class XMLGenerator {
-
+public class XMLGenerator 
+{
 	public FileOutputStream out;
 	public StringBuilder xml = new StringBuilder();
 	
