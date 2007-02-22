@@ -75,8 +75,8 @@ public class PagerTable {
 		 rs.addColumn("name",     new Column("DER NAME"));
 		 rs.addColumn("val",      new Column("val").setListener(new NumberFormatListener()));
 		
-		int numberOfRows = 6;
-		int page = 1;
+		int numberOfRows = 100;
+		int page = 3;
 		
 		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();
