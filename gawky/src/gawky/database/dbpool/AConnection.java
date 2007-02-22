@@ -1,5 +1,7 @@
 package gawky.database.dbpool;
 
+import gawky.database.DB;
+
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -61,9 +63,10 @@ public class AConnection implements Connection
     public boolean validate()
     {
       try {
-      	conn.getMetaData();
+      	conn.getMetaData().getCatalogSeparator();
       } 
       catch (Exception e) {
+    	  DB.doClose(conn);
     	  return false;
       } 
       return true;
