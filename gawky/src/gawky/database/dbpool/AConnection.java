@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -63,7 +64,9 @@ public class AConnection implements Connection
     public boolean validate()
     {
       try {
-      	conn.getMetaData().getCatalogSeparator();
+      	ResultSet rset = conn.getMetaData().getSchemas();
+      	rset.next();
+      	DB.doClose(rset);
       } 
       catch (Exception e) {
     	  DB.doClose(conn);
