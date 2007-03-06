@@ -204,7 +204,7 @@ public class Generator
 			descstr += "		return new Desc[]  {\n";
 				
 			for(int i=1; i <= c; i++){
-				descstr += "			new Column(\"" + md.getColumnName(i).toLowerCase() + "\"),\n";
+				descstr += "			new Column(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
 			}
 			
 			descstr += "		};\n";
