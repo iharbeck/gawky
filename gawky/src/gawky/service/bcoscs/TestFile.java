@@ -44,7 +44,7 @@ public class TestFile implements LineHandler {
 		
 		TestFile file = new TestFile();
 		
-		LineReader.processUTF8File(filename, file, 
+		LineReader.processFile(filename, file, "UTF-8",
 						new String[] {"EXTI00", "EXTI01", "S000"} );
 		
 		log.warn("done: " + file.count);

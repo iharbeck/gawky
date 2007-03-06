@@ -21,7 +21,7 @@ public class SatzE extends Part
 			new DescF(Desc.FMT_A, Desc.CODE_R, 4,   "anzahlcsaetze"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 7,   "sumbetraege"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 9,   "sumkontonummern"),          
-			new DescF(Desc.FMT_A, Desc.CODE_R, 9,  "sumblz"),
+			new DescF(Desc.FMT_A, Desc.CODE_R, 9,   "sumblz"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 7,   "sumeurobetraege"),
 		    new Reserved(104),
 		}; 

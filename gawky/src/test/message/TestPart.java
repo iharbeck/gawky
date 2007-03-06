@@ -18,6 +18,7 @@ public class TestPart extends TestCase {
 	    SamplePart samplepart = new SamplePart();
 	    samplepart.parse(str);
 	    
+	    
 	    assertEquals(samplepart.feld1, "abcd");
 	    assertEquals(samplepart.feld2, "1234567890");
 	    assertEquals(samplepart.feld3, "1234567890");

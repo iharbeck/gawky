@@ -64,10 +64,10 @@ public class LineReader {
 		return false;
 	}
 	
-	public static void processUTF8File(String filename, LineHandler handler, String[] records) throws Exception
+	public static void processFile(String filename, LineHandler handler, String encoding, String[] records) throws Exception
 	{
 		//String uline = new String(line.getBytes(),"UTF-8");
-		Reader in = new InputStreamReader(new FileInputStream(filename), "UTF-8");
+		Reader in = new InputStreamReader(new FileInputStream(filename), encoding);
 		
 		BufferedReader is = new BufferedReader(in);
 		String line = null;

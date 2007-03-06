@@ -34,6 +34,7 @@ public class Reader {
 	              break;
 	            case XMLStreamConstants.END_ELEMENT:
 	            	  parser.getLocalName();
+	            	  System.out.println("END:" + parser.getLocalName());
 	              break;
 	            case XMLStreamConstants.CHARACTERS:
 	            	  parser.getText();

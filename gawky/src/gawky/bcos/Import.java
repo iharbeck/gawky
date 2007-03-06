@@ -9,8 +9,11 @@ public class Import
 	{
 		long start = System.currentTimeMillis();
 
+		String pluginname = "gawky.bcos.ImportFIASLT";
+		
 		//** RUN ImportFIAS
-		ImportI plugin = new ImportFIAS();
+		ImportI plugin = (ImportI)Class.forName(pluginname).newInstance();
+		//new ImportFIAS();
 		
 		Import importer = new Import();
 		

@@ -68,10 +68,10 @@ public class SimpleVTD {
 		short a = 44;
 		short b = 33;
 
-		int store = (int) ((int) a | (int) (b << 16));
+		int store =  ( a | (b << 8));
 		
-		System.out.println(store & 0x0000ffff);
-		System.out.println((store >> 16) & 0x0000ffff);
+		System.out.println(store & 0x00ff);
+		System.out.println((store >> 8)); // & 0x00ff);
 
 		
 		BaseObjectI obj = new BaseObject();

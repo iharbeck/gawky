@@ -1,6 +1,6 @@
 package gawky.bcos;
 
-public class ImportFIAS implements ImportI {
+public class ImportFIASLT implements ImportI {
 
 	public void execute(String infile, Import importer) throws Exception
 	{
