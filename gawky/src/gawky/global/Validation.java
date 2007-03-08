@@ -96,6 +96,32 @@ public class Validation
 	
 		return false;
 	}
+	
+	public static boolean isBigger(String value, double ref) 
+	{
+		if(value == null)
+			value = "";
+
+		double val = Format.getDouble(Locale.GERMAN, value);
+		
+		if(val > ref)
+			return true;
+	
+		return false;
+	}
+	
+	public static boolean isSmaller(String value, double ref) 
+	{
+		if(value == null)
+			value = "";
+
+		double val = Format.getDouble(Locale.GERMAN, value);
+		
+		if(val < ref)
+			return true;
+	
+		return false;
+	}
 
 	/**
 	 * Check if value exists in lookup table
