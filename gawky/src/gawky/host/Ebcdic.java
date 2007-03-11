@@ -23,19 +23,19 @@ public class Ebcdic
 		
 		String src = "12345";
 		
-		PackedDecimal pp = new PackedDecimal(5, 0);
-		
-		byte[] bytes = pp.pack(src);
-		
-		System.out.println("orginal " + src);
-		System.out.println("  pack  " + new String(bytes));
-		System.out.println("unpack  " + pp.unpack(bytes));
+//		PackedDecimal pp = new PackedDecimal(5, 0);
+//		
+//		byte[] bytes = pp.pack(src);
+//		
+//		System.out.println("orginal " + src);
+//		System.out.println("  pack  " + new String(bytes));
+//		System.out.println("unpack  " + pp.unpack(bytes));
 
 		System.out.println(new String(toEbcdic("te     st")));
 		System.out.println(toUnicode(toEbcdic("te     st")));
 			
-		PackedDecimal.writeNumberPackedPositive(3, 12345, true);
-		System.out.println(PackedDecimal.readNumberPackedPositive(bytes, 3, true, Locale.GERMAN));
+		PackedDecimal.writeNumberPacked(3, 12345, true);
+//		System.out.println(PackedDecimal.readNumberPacked(bytes, 3, true));
 	}
 	
 	public static void convertEbcdic() throws UnsupportedEncodingException {

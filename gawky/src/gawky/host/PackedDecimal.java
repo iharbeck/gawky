@@ -1,8 +1,7 @@
 package gawky.host;
 
-import java.util.Locale;
 
-class DecimalWrapper 
+/*class DecimalWrapper 
 {
 	private final static byte MAX_SIZE = 20; 
 	private boolean negative = false;
@@ -69,9 +68,6 @@ class DecimalWrapper
 		return sizeint;
 	}
 
-	/**
-	 * get Digits 
-	 */
 	public byte getDecimalDigit(int pos) {
 		if (pos+1 > sizedecimal) {
 			return 0;
@@ -88,10 +84,33 @@ class DecimalWrapper
 				ByteHandler.getLowNibble((byte) (0)));
 	}
 }
+*/
 
 public class PackedDecimal 
 {
-	private static final byte NEGATIVE = 0x0d;
+	
+	public static void main(String[] args) {
+		
+//		PackedDecimal pack = new PackedDecimal(10, 0);
+//		
+//		byte [] b = pack.pack("1366");
+		
+//		System.out.println("bb" + new String(b));
+//
+//		System.out.println("aa" + PackedDecimal.readNumberPacked(b, 6, true));
+		
+		
+		byte[] b = PackedDecimal.writeNumberPacked(6, 1366L, true);
+		
+		System.out.println("bb" + new String(b));
+		
+		//System.out.println("bb" + pack.unpack(b));
+		
+		System.out.println("aa" + PackedDecimal.readNumberPacked(b, 6, true));
+		
+	}
+	
+/*	private static final byte NEGATIVE = 0x0d;
 	private static final byte POSITIVE = 0x0c;
 	private static final byte ASCII_HIGH_CHAR_NIBBLE = (byte) (0x30);
 	private static final int  MAX_SIZE = 100;
@@ -103,10 +122,6 @@ public class PackedDecimal
 
 	protected boolean even;
 	
-	/**
-	 * @param intsize  non decimal part size
-	 * @param decsize  decimal part size
-	 */
 	public PackedDecimal(int intsize, int decimalsize) {
 		this.intsize = intsize;
 		this.decimalsize = decimalsize;
@@ -121,16 +136,15 @@ public class PackedDecimal
 			this.size = (size + 1) / 2;
 	}
 
-	/**
-	 * Build a packed decimal from a string number
-	 * 
-	 * Convert "+-99999.99" in  IBM packed decimal 
-	 * last digit is the sign digit : A|C|E|F => + ; B|D => - ; the decimal point is virtual its position is
-	 * defined in the second byte of dec_len
-	 * 
-	 * @param number
-	 *            decimal String representation to be converted
-	 */
+	//
+	// Build a packed decimal from a string number
+
+	// * Convert "+-99999.99" in  IBM packed decimal 
+	// * last digit is the sign digit : A|C|E|F => + ; B|D => - ; the decimal point is virtual its position is
+	// * defined in the second byte of dec_len
+	// * 
+	// * @param number
+	// *            decimal String representation to be converted
 	public byte[] pack(String number) throws NumberFormatException 
 	{
 		byte bytes[] = new byte[size]; 
@@ -184,11 +198,6 @@ public class PackedDecimal
 		return bytes;
 	}
 
-	/**
-	 * Translate current Packed into a String representation
-	 * 
-	 * @return String representation of packed decimal
-	 */
 	public String unpack(byte[] packed) 
 	{
 		char bytes[] = new char[MAX_SIZE];
@@ -273,111 +282,107 @@ public class PackedDecimal
 			return new String(bytes).trim();
 		}
 	}
+*/	
 	
 	
 	
-	
-	static void writeNumberPackedPositive(final int len, long number, final boolean sign) 
+	public static byte[] writeNumberPacked(final int len, long number, final boolean sign) 
     {
-    		int FORMAT_MAX_DIGITS = 17;
-    	    long[] EXP10 = new long[FORMAT_MAX_DIGITS + 1];    
-    	
-    	    for(int i = 0; i <= FORMAT_MAX_DIGITS; i++)
-                EXP10[i] = (long) Math.floor(Math.pow(10.00D, i));
+    	    byte[] buffer = new byte[len];
     	    
-    	    int FORMAT_MAX_CHARS = 105;
-    	    byte[] buffer = new byte[FORMAT_MAX_CHARS + 1];
-    	    
-            int i;
             int pos = 0;
             final int nibbles = len * 2;
             final int digits = nibbles - (sign ? 1 : 0);
             int exp = digits - 1;
-            final long maxValue =  EXP10[digits] - 1L;
-            byte b = 0;
+            byte curbyte = 0;
             byte digit;
             boolean highNibble = true;
             
-            if(number < 0L || number > maxValue) {
-                throw new IllegalArgumentException("number=" + number +
-                                                   ", maxValue=" + maxValue);
-                
-            }
+            boolean neg = number < 0L;
             
-            for(i = 0; i < nibbles; i++, exp--) {
-                // Vorzeichen des letzten Nibbles.
+            if(neg)
+            	number = -number;
+            
+            for(int i = 0; i < nibbles; i++, exp--) 
+            {
+                // Vorzeichen im letzten Nibbles.
                 if(sign && exp < 0) {
-                    digit = 0xC;
+                	if(neg)
+                		digit = 0xD;
+                	else
+                		digit = 0xC;
                 } else {
                     digit = (byte) Math.floor(number / EXP10[exp]);
                     
                     number -= (digit * EXP10[exp]);
                 }
                 if(highNibble) {
-                    b = (byte) (((byte) (digit << 4)) & 0xF0);
+                    curbyte = (byte) (((byte) (digit << 4)) & 0xF0);
                     highNibble = false;
                 } else {
-                    b |= digit;
+                    curbyte |= digit;
                     highNibble = true;
-                    buffer[pos++] = b;
+                    buffer[pos++] = curbyte;
                 }
             }
             
-        	System.out.println(new String(buffer).substring(0,len));
+        	return buffer;
     }
 	
-	public static long readNumberPackedPositive(byte buffer[], 
-	         final int len, final boolean sign, Locale locale) 
-	{
-		int FORMAT_MAX_DIGITS = 17;
-	    long[] EXP10 = new long[FORMAT_MAX_DIGITS + 1];    
 	
-	    for(int i = 0; i <= FORMAT_MAX_DIGITS; i++)
+	static int MAX_DIGITS = 17;
+	static long[] EXP10 = new long[MAX_DIGITS + 1];    
+
+	static {
+	    for(int i = 0; i <= MAX_DIGITS; i++)
             EXP10[i] = (long) Math.floor(Math.pow(10.00D, i));
-	    
+	}
+	
+	public static long readNumberPacked(byte buffer[], final int len, final boolean sign) 
+	{
         long ret = 0L;
         final int nibbles = 2 * len;
         int exp = nibbles - (sign ? 2 : 1);
-        boolean highNibble = true;
         int nibble = 0;
-        int read = 0;
+        int pos = 0;
         int digit;
         
-        try {
+        boolean highNibble = true;
 
-        	for(; nibble < nibbles; nibble++, exp--) {
+        try {
+        	for(; nibble < nibbles; nibble++, exp--) 
+        	{
                 if(highNibble) {
-                    if(buffer[read] < 0)
-                        digit = (buffer[read] + 256) >> 4;
+                    if(buffer[pos] < 0)
+                        digit = (buffer[pos] + 256) >> 4;
                     else
-                        digit = buffer[read] >> 4;
+                        digit = buffer[pos] >> 4;
                     
                     highNibble = false;
                 } else {
-                    digit = (buffer[read++] & 0xF);
+                    digit = (buffer[pos++] & 0xF);
                     highNibble = true;
                 }
                 
                 // Vorzeichen des letzten Nibbles.
                 if(sign && exp < 0) {
-                    if(digit != 0xC) {
-//                        throw new IllegalFormatException(field, block, off,
-//                            "0xC", Integer.toString(digit), locale);
-                       return -1;   
+                    if(digit != 0x0C && 
+                       digit != 0x0A && 
+                       digit != 0x0E && 
+                       digit !=0x0F) { //(neg)0x0B:0x0D    (pos)0x0A:0x0C:0x0E:0x0F:
+                    	ret = -ret;
                     }
                 } else {
                     if(digit < 0 || digit > 9) {
-//                        throw new IllegalFormatException(field, block, off,
-//                            "[0x0..0x9]{" + (nibbles - (sign ? 1 : 0)) + "}0xC",
-//                            Integer.toString(digit), locale);
-                    	return -1; 
+                    	digit = 0;
                     }
-                    ret += (digit & 0xF) * EXP10[exp];
+                    ret += (digit & 0xF) * EXP10[exp]; 
                 }
             }
             
             return ret;
         } catch(Exception e) {
+        	
         }
         return -1;
     }

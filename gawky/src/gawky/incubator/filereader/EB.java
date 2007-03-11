@@ -1,110 +1,183 @@
 package gawky.incubator.filereader;
 
-import gawky.host.PackedDecimal;
+import gawky.host.Ebcdic;
+import gawky.message.parser.EBCDICParser;
+import gawky.service.dtaus_band.SatzA;
+import gawky.service.dtaus_band.SatzC;
+import gawky.service.dtaus_band.SatzCe;
+import gawky.service.dtaus_band.SatzE;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class EB 
 {
-    // Charset and decoder for ISO-8859-15
-    private static Charset charset = Charset.forName("Cp1047");
-    private static CharsetDecoder decoder = charset.newDecoder();
-
-    // Pattern used to parse lines
-    private static Pattern linePattern = Pattern.compile(".*\r?\n");
-
-    // The input pattern that we're looking for
-    private static Pattern pattern;
-
-    // Compile the pattern from the command line
-    //
-    private static void compile(String pat) 
-    {
-		try {
-		    pattern = Pattern.compile(pat);
-		} catch (PatternSyntaxException x) {
-		    System.err.println(x.getMessage());
-		    System.exit(1);
-		}
-    }
-
-    // Use the linePattern to break the given CharBuffer into lines, applying
-    // the input pattern to each line to see if we have a match
-    //
-    private static void grep(File f, CharBuffer cb) 
-    {
-		Matcher lm = linePattern.matcher(cb);	// Line matcher
-		Matcher pm = null;			// Pattern matcher
-		int lines = 0;
-		while (lm.find()) {
-		    lines++;
-		    CharSequence cs = lm.group(); 	// The current line
-		    if (pm == null)
-			pm = pattern.matcher(cs);
-		    else
-			pm.reset(cs);
-		    if (pm.find())
-			System.out.print(f + ":" + lines + ":" + cs);
-		    if (lm.end() == cb.limit())
-			break;
-		}
-    }
-
-    // Search for occurrences of the input pattern in the given file
-    //
-    private static void grep(File f) throws IOException 
+    private static void read(File f) throws IOException, Exception
     {
 		// Open the file and then get a channel from the stream
 		FileInputStream fis = new FileInputStream(f);
 		FileChannel fc = fis.getChannel();
 	
+		// Zeile lesen
+		int len = 581; //146;
+		
 		// Get the file's size and then map it into memory
 		int sz = (int)fc.size();
-		MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
+		MappedByteBuffer mappedbuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
 
-		byte[] b = new byte[500];
+		byte[] line = new byte[len];
 		
-		PackedDecimal packer = new PackedDecimal(8,0);
-		bb.get(b, 0, 20);
-
-		byte[] c = new byte[40];
-		System.arraycopy(b, 3, c, 0, 5);
 		
-		System.out.println("" + packer.unpack(c));
-		bb.rewind();
+		
+		EBCDICParser extparser = new EBCDICParser();
+		
+		byte[] part = new byte[len];
+		
+		long sumbetraege = 0;
+		long mandanten = 0;
+		long sumdeclines = 0;
+		long sumkto = 0;
+		long sumblz = 0;
+		
+		long booking = 0;
+		
+		while(mappedbuffer.hasRemaining())
+		{
+			mappedbuffer.get(line, 0, len);
 
-		// Decode the file into a char buffer
-		CharBuffer cb = decoder.decode(bb);
+			String type = Ebcdic.toUnicode(new byte[] {line[0]});
+			
+			if(type.startsWith("A"))
+			{
+				SatzA satz = new SatzA();
+				
+				satz.parse(extparser, line);
+				
+				System.out.println("========================================" + satz.getKennzeichen() + satz.getEmpfaenger());
+				System.out.println(new String(line));
+				System.out.println("::" + satz.getKontonummer());
+				System.out.println("::" + mandanten++);
+				
+				//System.exit(-1);
+			}
+			if(type.startsWith("E"))
+			{
+				SatzE satz = new SatzE();
+				
+				satz.parse(extparser, line);
+		
+				
+				System.out.println("SUM Beträge: " + satz.getSumeurobetraege());
+				System.out.println("SUM Beträge check: " + sumbetraege);
+				System.out.println("count: " + satz.getAnzahlcsaetze());
+				System.out.println("count check: " + sumdeclines);
+				System.out.println("kto: " + satz.getSumkontonummern());
+				System.out.println("kto check: " + sumkto);
+				System.out.println("blz: " + satz.getSumblz());
+				System.out.println("blz check: " + sumblz);
+
+				System.out.println("::: " + booking);
+				
+				sumdeclines = 0;
+				sumbetraege = 0;
+				sumkto = 0;
+				sumblz = 0;
+			}
+			else if(type.startsWith("C")) 
+			{
+				sumdeclines++;
+				booking++;
+				
+				SatzC satz = new SatzC();
+				
+				satz.parse(extparser, line);
+
+				System.out.println("KTO Mandant: " + satz.getKontonummer());
+				System.out.println("BLZ Mandant: " + satz.getBlzkontofuehrend());				
+				System.out.println("KTO Kunde:   " + satz.getKontonummerauftraggeber());
+				System.out.println("BLZ Kunde:   " + satz.getBlzauftraggeber());
+				System.out.println("TEXTKEY:     " + satz.getTextschluessel() + ":" + satz.getTextschluesselergaenzung());
+
+				System.out.println("Betrag:      " + satz.getBetrageuro());
+
+				sumbetraege += Long.parseLong(satz.getBetrageuro());
+				
+				sumkto += Long.parseLong(satz.getKontonummer());
+				sumblz += Long.parseLong(satz.getBlzkontofuehrend());
+				
+				System.out.println("KUND:        " + satz.getAuftragnehmername());
+				System.out.println("VERW:        " + satz.getVerwendungszweck());
+
+				System.out.println("EMPF:        " + satz.getEmpfaengername());
+
+				
+				int ext = Integer.parseInt(satz.getErweiterungskennnzeichen());
+			
+				String[] store = new String[10];
+				
+				for(int x=0; x < ext; x++)
+				{
+					SatzCe satze = new SatzCe();
+					
+					part = new byte[29];
+					System.arraycopy(line, 144 + 2 + (x*29), part, 0, 29);
+					
+					satze.parse(extparser, part);
+					
+					System.out.println("["+satze.getKennzeichen() +"]" + satze.getDaten());
+				
+//					if(satze.getDaten().contains("AM 21.02.07 ZUR") || satze.getDaten().contains("KEINE EINZUGSERM"))
+//					{
+//						byte[] gg = satze.getDaten().getBytes(); 
+//
+//						System.out.println((char)0x7F);
+//						System.out.println(gg);
+// 					}
+					
+					store[x] = satze.getDaten();
+				}
+				
+				if(satz.getTextschluessel().equals("9"))
+				{
+					String dat;
+					try {
+						dat = store[1] != null ? store[1] : "";			
+						System.out.println("BETRAG___:" + Long.parseLong(dat.substring(11, 23).replaceAll("[\\., ]", "")));
 	
-		byte[] v = cb.subSequence(0, 400).toString().getBytes();
-		System.out.println(v);
-		// Perform the search
-		//grep(f, cb);
-	
+						dat = store[1] != null ? store[2] : "";
+						System.out.println("FEE FREMD:" + Long.parseLong(dat.substring(11, 15).replaceAll("[\\., ]", "")));
+						System.out.println("FEE EIGEN:" + Long.parseLong(dat.substring(21, 25).replaceAll("[\\., ]", "")));						
+					} catch (Exception e) {
+						System.out.println(e);
+						System.exit(-1);
+					}
+				} else {
+					System.out.println("LOOK");
+				}
+
+				System.out.println("---");
+			}
+		}
+
 		// Close the channel and the stream
 		fc.close();
     }
 
-    public static void main(String[] args) 
+    public static void main(String[] args) throws Exception
     {
-		compile("");
-
-		File f = new File("C:/work/gawky/format/dtaus.bin");
-	    try {
-		grep(f);
-	    } catch (IOException x) {
-		System.err.println(f + ": " + x);
-	    }
+		//File f = new File("C:/work/gawky/format/dtaus.bin");
+		File f = new File("C:/work/gawky/format/rtldti230207.org");
+	    
+		try {
+		read(f);
+		} catch (Exception e) {
+		
+			System.out.println(e);
+			System.exit(-1);
+		}
     }
 
 }

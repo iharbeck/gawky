@@ -68,7 +68,7 @@ public class RequestPayment extends Part
 
   public String getPaymentdetails()
   {
-	  StringBuffer buff = new StringBuffer();
+	  StringBuilder buff = new StringBuilder();
 	  
 
       if(TOH_CREDITCARD.equals(type_of_handling)) // 00 credit card
