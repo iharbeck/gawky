@@ -1,8 +1,8 @@
 package example.message;
 
 import gawky.message.generator.UtilGenerator;
-import gawky.service.dtaus_band.SatzC;
-import gawky.service.dtaus_band.SatzCe;
+import gawky.service.dtaus.dtaus_band.SatzC;
+import gawky.service.dtaus.dtaus_band.SatzCe;
 
 public class GenVars {
 

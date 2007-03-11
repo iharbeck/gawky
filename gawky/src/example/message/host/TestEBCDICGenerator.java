@@ -2,7 +2,7 @@ package example.message.host;
 
 import gawky.message.generator.EBCDICGenerator;
 import gawky.message.parser.EBCDICParser;
-import gawky.service.dtaus_band.SatzA;
+import gawky.service.dtaus.dtaus_band.SatzA;
 
 public class TestEBCDICGenerator {
 
