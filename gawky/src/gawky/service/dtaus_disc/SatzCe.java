@@ -18,7 +18,7 @@ public class SatzCe extends Part
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "daten"),
 			new DescF(Desc.FMT_9, Desc.CODE_R, 2,   "kennzeichen2"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "daten2"),
-			new Reserved(11),
+			new Reserved(11),  // bis hier im ersten block 128 Zeichen
 			new DescF(Desc.FMT_9, Desc.CODE_R, 2,   "kennzeichen3"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "daten3"),
 			new DescF(Desc.FMT_9, Desc.CODE_R, 2,   "kennzeichen4"),          
@@ -27,7 +27,7 @@ public class SatzCe extends Part
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "daten5"),
 			new DescF(Desc.FMT_9, Desc.CODE_R, 2,   "kennzeichen6"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "daten6"),
-			new Reserved(12),
+			new Reserved(12), // dies im zweitenblock 128 Zeichen
 		}; 
 	}
     

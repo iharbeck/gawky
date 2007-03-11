@@ -26,7 +26,7 @@ public class SatzA extends Part
 			new DescP(6, "kontonummer"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 10, "referenznummer"),
 		    new Reserved(15),
-		    new DescF(Desc.FMT_A, Desc.CODE_O, 8,  "referenznummer"),  //GG
+		    new DescF(Desc.FMT_A, Desc.CODE_O, 8,  "executedate"),  
 		    new Reserved(58),
 		    new DescF(Desc.FMT_A, Desc.CODE_R, 1,  "waehrungskennzeichen")
 		}; 
@@ -40,6 +40,7 @@ public class SatzA extends Part
     private String valutadatum;
     private String kontonummer;
     private String referenznummer;
+    private String executedate;
     private String waehrungskennzeichen;
     
 	public String getBlzempfaenger() {
@@ -95,5 +96,11 @@ public class SatzA extends Part
 	}
 	public void setWaehrungskennzeichen(String waehrungskennzeichen) {
 		this.waehrungskennzeichen = waehrungskennzeichen;
+	}
+	public String getExecutedate() {
+		return executedate;
+	}
+	public void setExecutedate(String executedate) {
+		this.executedate = executedate;
 	}
 }

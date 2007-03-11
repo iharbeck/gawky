@@ -1,10 +1,7 @@
 package gawky.incubator.filereader;
 
 import gawky.host.Ebcdic;
-import gawky.message.parser.EBCDICParser;
-import gawky.service.dtaus_band.SatzA;
 import gawky.service.dtaus_band.SatzC;
-import gawky.service.dtaus_band.SatzCe;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,9 +9,9 @@ import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class EBtrimed 
+public class EBtrimed extends EBProcessor
 {
-    private static void read(File f) throws IOException, Exception
+    private void read(File f) throws IOException, Exception
     {
 		// Open the file and then get a channel from the stream
 		FileInputStream fis = new FileInputStream(f);
@@ -33,8 +30,6 @@ public class EBtrimed
 		//C 146 + 29
 		//E 146
 		
-		EBCDICParser extparser = new EBCDICParser();
-		
 		byte[] part = new byte[29];
 		
 		while(mappedbuffer.hasRemaining())
@@ -43,47 +38,34 @@ public class EBtrimed
 
 			String type = Ebcdic.toUnicode(new byte[] {line[0]});
 			
-			
 			if(type.startsWith("A"))
 			{
-				SatzA satz = new SatzA();
-				
-				satz.parse(extparser, line);
-	
-				System.out.println("========================================" + satz.getKennzeichen() + satz.getEmpfaenger());
-				System.out.println(new String(line));
-				System.out.println("::" + satz.getKontonummer());
-				
+				processSatzA(line);
+				//System.exit(-1);
+			} 
+			else if(type.startsWith("E"))
+			{
+				processSatzE(line);
 				//System.exit(-1);
 			}
 			else if(type.startsWith("C")) 
 			{
-				SatzC satz = new SatzC();
-				
-				satz.parse(extparser, line);
-				
-				System.out.println(satz.getBetrageuro());
+				SatzC satz = processSatzC(line);
 
-				System.out.println("KUND: " + satz.getAuftragnehmername());
-				System.out.println("VERW: " + satz.getVerwendungszweck());
-
-				
 				int ext = Integer.parseInt(satz.getErweiterungskennnzeichen());
 				
 				for(int x=0; x < ext; x++)
 				{
-					SatzCe satze = new SatzCe();
-					
 					mappedbuffer.get(part, 0, 29);
-					
-					satze.parse(extparser, part);
-					
-					System.out.print("["+satze.getKennzeichen() +"]" + satze.getDaten());
-					//System.out.println("ext: " + new String(satze.getDaten().getBytes(), "CP850"));
+
+					processSatzCe(part, x);
 				}
-				System.out.println();
+
+				finishSatzC();
 			}
 		}
+
+		System.out.println("\ncount::" + count);
 
 		// Close the channel and the stream
 		fc.close();
@@ -93,7 +75,7 @@ public class EBtrimed
     {
 		File f = new File("C:/work/gawky/format/dtaus.bin");
 		//File f = new File("C:/work/gawky/format/rtldti230207.org");
-		read(f);
+		new EBtrimed().read(f);
     }
 
 }

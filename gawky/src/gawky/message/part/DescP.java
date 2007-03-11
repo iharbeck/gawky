@@ -1,8 +1,5 @@
 package gawky.message.part;
 
-import gawky.host.PackedDecimal;
-
-
 /**
  * Packed Decimal Part
  * 

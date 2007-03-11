@@ -3,7 +3,6 @@ package gawky.message.parser;
 import gawky.host.Ebcdic;
 import gawky.host.PackedDecimal;
 import gawky.message.part.Desc;
-import gawky.message.part.DescP;
 import gawky.message.part.Part;
 
 import org.apache.commons.logging.Log;
@@ -34,10 +33,10 @@ public class EBCDICParser extends Parser
 	
 			String value = "";
 			
-			int max   = str.length;
+//			int max   = str.length;
 			int start = 0;
 	
-			int end = 0;
+//			int end = 0;
 			
 			for(int i = 0; i < descs.length; i++)
 			{
@@ -51,8 +50,8 @@ public class EBCDICParser extends Parser
 	
 				if(desc.delimiter == null)   // fixed
 				{ 
-					end = start+desc.len;
-					
+//					end = start+desc.len;
+/*					
 					if(end > max) // Feld zu kurz wenn nicht option
 					{
 						position = max;
@@ -69,12 +68,12 @@ public class EBCDICParser extends Parser
 						storeValue(bean, i, desc, value);
 						return;
 					}
-
+*/
 					try {
 						
 						System.arraycopy(str, start, part, 0, desc.len);
 
-						if(desc.isPacked())
+						if(desc.isPacked())	
 						{	
 							if(!desc.isUnsigned())
 							//	value = ((DescP)desc).packeddecimal.unpack(part);
@@ -95,6 +94,7 @@ public class EBCDICParser extends Parser
 					position = start;
 				} 
 
+/*
 				// Required Field
 				if(desc.code == Desc.CODE_R && value.length() == 0)
 					throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
@@ -104,9 +104,9 @@ public class EBCDICParser extends Parser
 					storeValue(bean, i, desc, value);		
 					continue;
 				}
-	
+*/	
 				// Inhaltlich prüfung	
-				//typeCheck(desc, value);
+				// typeCheck(desc, value);
 	
 			    storeValue(bean, i, desc, value);
 			}		
