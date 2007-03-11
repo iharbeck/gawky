@@ -147,10 +147,20 @@ public class Desc
 		return packed;
 	}
 
-	public void setPacked(boolean packed) {
+	public Desc setPacked(boolean packed) {
 		this.packed = packed;
+		return this;
 	}
-	
+
+	public boolean isUnsigned() {
+		return unsigned;
+	}
+
+	public Desc setUnsigned(boolean unsigned) {
+		this.unsigned = unsigned;
+		return this;
+	}
+
 	public char    format;
 	public char     code;
 	public int     len;
@@ -161,6 +171,7 @@ public class Desc
 	public boolean skipparsing = false;
 
 	public boolean packed = false;
+	public boolean unsigned = false;
 	
 	// constant informationen müssen nicht im Part
 	// gespeichert werden.

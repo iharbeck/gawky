@@ -18,7 +18,7 @@ public class Generator
 		if(bean == null)
 			return "";
 		
-		StringBuffer str = new StringBuffer(1000);
+		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
@@ -82,7 +82,7 @@ public class Generator
 		if(bean == null)
 			return "";
 		
-		StringBuffer str = new StringBuffer(1000);
+		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		

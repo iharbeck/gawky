@@ -206,11 +206,21 @@ public abstract class Part
 	{
 		getParser().parse(str, this);
 	}
+	
+	public final void parse(byte[] str) throws ParserException
+	{
+		getParser().parse(str, this);
+	}
 
 	/**
 	 * for specialized parsers
 	 */
 	public final void parse(Parser extparser, String str) throws ParserException
+	{
+		extparser.parse(str, this);
+	}
+	
+	public final void parse(Parser extparser, byte[] str) throws ParserException
 	{
 		extparser.parse(str, this);
 	}

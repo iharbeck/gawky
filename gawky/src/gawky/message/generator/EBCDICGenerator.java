@@ -1,6 +1,7 @@
 package gawky.message.generator;
 
 import gawky.host.Ebcdic;
+import gawky.host.PackedDecimal;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.DescP;
@@ -13,12 +14,12 @@ public class EBCDICGenerator extends Generator
 {
 	private static Log log = LogFactory.getLog(EBCDICGenerator.class);
 
-	public String generateString(Part bean, int len)
+	public byte[] generateString(Part bean, int len)
 	{
-		if(bean == null)
-			return "";
-		
 		byte str[] = new byte[len];
+
+		if(bean == null)
+			return str;
 		
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
@@ -39,24 +40,29 @@ public class EBCDICGenerator extends Generator
 				
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					if(desc.isPacked())
+					if(!desc.isPacked())
 						System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
 					else // PACKED DECIMAL
-						System.arraycopy(
-								((DescP)desc).getPackeddecimal().pack( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+					{
+						if(desc.isUnsigned()) {
+							System.arraycopy(
+								PackedDecimal.writeNumberPacked(desc.len, Long.parseLong(val), false), 0, str, pos, desc.len);
+						} else {
+							if(val == null)
+								val = "0";
+							System.arraycopy(
+									PackedDecimal.writeNumberPacked(desc.len, Long.parseLong(val), true), 0, str, pos, desc.len);
+//							System.arraycopy(
+//								((DescP)desc).getPackeddecimal().pack( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+						}
+					}
 						
 					pos += desc.len;
-					
-//					if(desc.delimiter != null)
-//						str.append(desc.delimiter);
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von rechts mit null füllen
 					System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringNL(desc.len, val) ), 0, str, pos, desc.len);
 					pos += desc.len;
-
-//					if(desc.delimiter != null)
-//						str.append( desc.delimiter );					
 				}
 				else
 				{
@@ -90,7 +96,7 @@ public class EBCDICGenerator extends Generator
 			log.error("getProperty in Parser" ,e);
 		}
 		
-		return new String(str);
+		return str;
 	}
 
 	
@@ -101,7 +107,7 @@ public class EBCDICGenerator extends Generator
 		if(bean == null)
 			return "";
 		
-		StringBuffer str = new StringBuffer(1000);
+		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		

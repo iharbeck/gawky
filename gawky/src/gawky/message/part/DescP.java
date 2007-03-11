@@ -11,14 +11,21 @@ import gawky.host.PackedDecimal;
  */
 public class DescP extends Desc 
 {
-	PackedDecimal packeddecimal;
-
-	public DescP(int integer, int decimal, String name)
+	//public PackedDecimal packeddecimal;
+	
+	public DescP(int len, String name, boolean signed)
 	{	
-		super(Desc.FMT_9, Desc.CODE_R, packedsize(integer, decimal), name);
+		//super(Desc.FMT_9, Desc.CODE_R, packedsize(integer, decimal), name);
+		super(Desc.FMT_9, Desc.CODE_R, len, name);
 		setPacked(true);
-		
-		packeddecimal = new PackedDecimal(integer, decimal);
+		setUnsigned(!signed);
+		//packeddecimal = new PackedDecimal(integer, decimal);
+		//packeddecimal = new PackedDecimal(len*2, 0);
+	}
+	
+	public DescP(int len, String name)
+	{
+		this(len, name, true);
 	}
 	
 	private static int packedsize(int integer, int decimal) 
@@ -31,9 +38,5 @@ public class DescP extends Desc
 			size = (size + 1) / 2;
 		
 		return size;
-	}
-
-	public PackedDecimal getPackeddecimal() {
-		return packeddecimal;
 	}
 }

@@ -11,7 +11,7 @@ public class HtmlTable extends AbstractTable
 	
 	public String generate(Datasource ds)
 	{
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		
 		buffer.append("<TABLE");
 		

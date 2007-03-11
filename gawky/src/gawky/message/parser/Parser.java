@@ -31,6 +31,11 @@ public class Parser
 		return line.substring(position);
 	}
 	
+	public void parse(byte[] str, Object bean) throws ParserException
+	{
+		parse(new String(str), bean);
+	}
+	
 	public void parse(String str, Object bean) throws ParserException
 	{
 		try 

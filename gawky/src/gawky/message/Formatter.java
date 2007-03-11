@@ -64,7 +64,7 @@ public class Formatter
 
 	   public final static String getSpacer(int len, String filler)
 	   {
-	     StringBuffer value = new StringBuffer(200);
+		 StringBuilder value = new StringBuilder(200);
 
 	     for (int i=0; i < len; i++) {
 	       value.append(filler);

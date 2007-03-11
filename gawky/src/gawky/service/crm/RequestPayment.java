@@ -122,7 +122,7 @@ public class RequestPayment extends Part
 
     public String getPayment_details()
     {
-       StringBuffer buff = new StringBuffer(500);
+    	StringBuilder buff = new StringBuilder(500);
     
     //00 (32)
        if(type_of_handling.equals("00")) {
