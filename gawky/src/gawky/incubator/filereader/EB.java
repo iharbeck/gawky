@@ -2,10 +2,10 @@ package gawky.incubator.filereader;
 
 import gawky.host.Ebcdic;
 import gawky.message.parser.EBCDICParser;
-import gawky.service.dtaus_band.SatzA;
-import gawky.service.dtaus_band.SatzC;
-import gawky.service.dtaus_band.SatzCe;
-import gawky.service.dtaus_band.SatzE;
+import gawky.service.dtaus.dtaus_band.SatzA;
+import gawky.service.dtaus.dtaus_band.SatzC;
+import gawky.service.dtaus.dtaus_band.SatzCe;
+import gawky.service.dtaus.dtaus_band.SatzE;
 
 import java.io.File;
 import java.io.FileInputStream;

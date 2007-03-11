@@ -1,7 +1,7 @@
 package gawky.incubator.filereader;
 
 import gawky.host.Ebcdic;
-import gawky.service.dtaus_band.SatzC;
+import gawky.service.dtaus.dtaus_band.SatzC;
 
 import java.io.File;
 import java.io.FileInputStream;
