@@ -24,7 +24,7 @@ public class HashCode {
 		
 			byte d[] = sha1.digest(value.getBytes());
 			
-			StringBuffer buff = new StringBuffer();
+			StringBuilder buff = new StringBuilder();
 			for (int i=0; i < d.length ; i++)
 			  buff.append(addLZ(Integer.toHexString( d[i] & 0xFF)));
  

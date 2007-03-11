@@ -31,7 +31,7 @@ public class Password {
 	
 	public static String generator(char[] chars, int len) 
 	{
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		for (int i=0; i < len; i++)
 			 buff.append( chars[ rand.nextInt(chars.length) ]);
  

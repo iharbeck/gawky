@@ -96,7 +96,7 @@ public class IO
       
        String inputLine;
       
-       StringBuffer buf = new StringBuffer();
+       StringBuilder buf = new StringBuilder();
         
        if ((inputLine = is.readLine()) != null)
        {
