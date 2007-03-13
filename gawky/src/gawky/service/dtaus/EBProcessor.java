@@ -33,6 +33,7 @@ public class EBProcessor {
 
 		System.out.println("========================================" );
 		//System.out.println(new String(line));
+		System.out.println("::" + satz.getKennzeichen());   // nur RTL...
 		System.out.println("::" + satz.getBlzsender());   // nur RTL...
 		System.out.println("::" + satz.getKontonummer());
 		System.out.println("::" + mandanten++);
@@ -74,12 +75,11 @@ public class EBProcessor {
 		satzc.parse(extparser, line);
 		
 		
-		System.out.println("BLZ Mandant: " + satzc.getBlzkontofuehrend());				
-		System.out.println("KTO Mandant: " + satzc.getKontonummer());
-		System.out.println("BLZ Kunde:   " + satzc.getBlzauftraggeber());
-		System.out.println("KTO Kunde:   " + satzc.getKontonummerauftraggeber());
+		System.out.println("BLZ/Kto Mandant:  " + satzc.getBlzkontofuehrend() + "/" + satzc.getKontonummer());				
+		//System.out.println("BLZ MandErst: " + satzc.getBlzerstbeteiligt());				
+		System.out.println("BLZ/Kto Kunde:    " + satzc.getBlzauftraggeber() + "/" + satzc.getKontonummerauftraggeber());
 		System.out.println("Referenz:    " + satzc.getReferenznummer());
-		System.out.println("TEXTKEY:     " + satzc.getTextschluessel() + ":" + satzc.getTextschluesselergaenzung());
+		System.out.println("TEXTKEY:     " + satzc.getTextschluessel() + "." + satzc.getTextschluesselergaenzung());
 
 		System.out.println("Betrag:      " + satzc.getBetrageuro());
 
@@ -100,6 +100,34 @@ public class EBProcessor {
 	
 	public void finishSatzC() 
 	{
+		int t = Integer.parseInt(satzc.getTextschluessel());
+		
+		switch (t) {
+		case 4:
+		case 5:
+		case 9:
+			System.out.println("$$:Lastschrift");
+			break;
+		case 51:	
+		case 52:	
+		case 53:	
+		case 54:	
+		case 55:	
+		case 56:	
+		case 57:	
+		case 58:	
+		case 59:	
+		case 65:	
+		case 66:	
+		case 67:	
+		case 68:	
+		case 69:
+			System.out.println("$$:Gutschrift");
+			break;
+		default:
+			System.out.println("$$:??");
+			break;
+		}
 		if(satzc.getTextschluessel().equals("9"))
 		{
 			String dat;
@@ -114,7 +142,9 @@ public class EBProcessor {
 				System.out.println(e);
 				System.exit(-1);
 			}
-		} else {
+		} 
+		else 
+		{
 			System.out.println("LOOK");
 		}
 		System.out.println("---");
