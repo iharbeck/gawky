@@ -97,6 +97,11 @@ public class Validation
 		return false;
 	}
 	
+	public static boolean isBigger(String value, String ref) 
+	{
+		return isBigger(value, Format.getDouble(Locale.GERMAN, ref));
+	}
+	
 	public static boolean isBigger(String value, double ref) 
 	{
 		if(value == null)
@@ -108,6 +113,11 @@ public class Validation
 			return true;
 	
 		return false;
+	}
+	
+	public static boolean isSmaller(String value, String ref) 
+	{
+		return isSmaller(value, Format.getDouble(Locale.GERMAN, ref));
 	}
 	
 	public static boolean isSmaller(String value, double ref) 

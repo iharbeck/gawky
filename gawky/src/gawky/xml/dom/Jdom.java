@@ -7,6 +7,7 @@ import gawky.file.Locator;
 import gawky.xml.sax.SaxSample;
 
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
 
@@ -25,6 +26,8 @@ public class Jdom {
 		//xpath
 		List nodeList = XPath.selectNodes(doc, "/fias2/record/address");
 	
+		Element el = (Element)nodeList.get(0);
+		System.out.println( el.getParentElement().getParentElement().getAttributeValue("uniqueid") );
 		System.out.println( nodeList.size() );
 	}
 

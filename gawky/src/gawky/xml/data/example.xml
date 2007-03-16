@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- DOCTYPE fias2 SYSTEM "import.dtd" -->
-<fias2 uniqueid="">
+<fias2 uniqueid="123">
   <record>
     <client_id>client_id</client_id>
     <customer_id>customer_id</customer_id>
