@@ -12,34 +12,29 @@ public class EBProcessorDisk
 	SatzA satza;
 	SatzE satze;
 	
+	ArrayList satzcArray = new ArrayList();
+	
+	SatzC satzc;
+	
 	public void processSatzA(byte[] line) throws Exception
 	{
 		satza = new SatzA();
 		satza.parse(line);
-		
-		System.out.println(satza.toString());
 	}
 
 	public void processSatzE(byte[] line) throws Exception
 	{
 		satze = new SatzE();
 		satze.parse(line);
-		
-		System.out.println(satze.toString());
 	}
 
-	ArrayList CSaetze = new ArrayList();
-	
-	SatzC satzc;
-	
 	public SatzC processSatzC(byte[] line) throws Exception
 	{
 		satzc = new SatzC();
 		satzc.parse(line);
 		
-		CSaetze.add(satzc);
-		
-		System.out.println(satzc.toString());
+		satzcArray.add(satzc);
+
 		return satzc;
 	}
 	
@@ -49,17 +44,14 @@ public class EBProcessorDisk
 		satze.parse(line);
 		
 		satzc.addExtention(satze);
-		
-		System.out.println(satze.toString());
-		
 	}
 
-	public ArrayList getCSaetze() {
-		return CSaetze;
+	public ArrayList getSatzcArray() {
+		return satzcArray;
 	}
 
-	public void setCSaetze(ArrayList saetze) {
-		CSaetze = saetze;
+	public void setSatzcArray(ArrayList saetze) {
+		satzcArray = saetze;
 	}
 
 	public SatzA getSatza() {
