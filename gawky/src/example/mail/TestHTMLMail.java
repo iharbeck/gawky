@@ -1,10 +1,9 @@
 package example.mail;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 import gawky.global.Option;
 import gawky.mail.Mail;
+
+import java.util.Hashtable;
 
 public class TestHTMLMail {
  

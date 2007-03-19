@@ -24,7 +24,7 @@ public class HashMapBuilder {
 			  	{ "key3", "dritter" },
 		};
 		
-		HashMap m = buildMap(map);
+		//HashMap m = buildMap(map);
 
 	}
 	

@@ -1,7 +1,6 @@
 package gawky.host;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Locale;
 
 public class Ebcdic 
 {
@@ -21,7 +20,7 @@ public class Ebcdic
 	
 	public static void main(String[] args) throws Exception {
 		
-		String src = "12345";
+//		String src = "12345";
 		
 //		PackedDecimal pp = new PackedDecimal(5, 0);
 //		
