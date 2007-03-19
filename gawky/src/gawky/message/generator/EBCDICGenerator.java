@@ -4,7 +4,6 @@ import gawky.host.Ebcdic;
 import gawky.host.PackedDecimal;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
-import gawky.message.part.DescP;
 import gawky.message.part.Part;
 
 import org.apache.commons.logging.Log;
