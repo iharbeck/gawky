@@ -1,14 +1,14 @@
 package gawky.service.dtaus;
 
-import gawky.host.Ebcdic;
 import gawky.service.dtaus.dtaus_band.SatzC;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class EB extends EBProcessor
+public class EBDisk extends EBProcessorDisk
 {
     private void read(File f) throws IOException, Exception
     {
@@ -16,32 +16,39 @@ public class EB extends EBProcessor
 		FileInputStream fis = new FileInputStream(f);
 		FileChannel fc = fis.getChannel();
 	
-		// Zeile lesen
-		int len = 581; //146;
-		
 		// Get the file's size and then map it into memory
 		int sz = (int)fc.size();
-		mappedbuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
+		MappedByteBuffer mappedbuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
 
-		byte[] line = new byte[len];
+		int len = 128;
 		
+		byte[] line = new byte[256];
+		byte[] length = new byte[4];
 		
-		byte[] part = new byte[len];
+		byte[] part = new byte[29*2];
 		
-		
-		while(mappedbuffer.hasRemaining())
+		while(mappedbuffer.remaining() > 5)
 		{
-			mappedbuffer.get(line, 0, len);
+			
+			mappedbuffer.get(length, 0, 4);
+			
+			int linelen = Integer.parseInt(new String(length));
+			
+			if(linelen % 128 != 0)		// AUF SEGMENT LÄNGE VERGRÖSSERN
+				linelen = 256;
+			
+			mappedbuffer.get(line, 4, linelen-4);
+			
 
-			String type = Ebcdic.toUnicode(new byte[] {line[0]});
+			String type = new String(line, 4, linelen-4);
 			
 			if(type.startsWith("A"))
 			{
 				processSatzA(line);
-				
 				//System.exit(-1);
-			}
-			if(type.startsWith("E"))
+				len = 256;
+			} 
+			else if(type.startsWith("E"))
 			{
 				processSatzE(line);
 			}
@@ -50,18 +57,19 @@ public class EB extends EBProcessor
 				SatzC satz = processSatzC(line);
 
 				int ext = Integer.parseInt(satz.getErweiterungskennnzeichen());
-			
+				
 				for(int x=0; x < ext; x++)
 				{
-					part = new byte[29];
-					System.arraycopy(line, 144 + 2 + (x*29), part, 0, 29);
-					
+					//mappedbuffer.get(part, 0, 29);
+					System.arraycopy(line, 185, part, 0, 29*2);
 					processSatzCe(part, x);
 				}
-				
+
 				finishSatzC();
 			}
 		}
+
+		System.out.println("\ncount::" + count);
 
 		// Close the channel and the stream
 		fc.close();
@@ -69,17 +77,9 @@ public class EB extends EBProcessor
 
     public static void main(String[] args) throws Exception
     {
-		//File f = new File("C:/work/gawky/format/dtaus.bin");
-		File f = new File("C:/work/gawky/format/rtldti230207.org");
-	    
-		try {
-			new EB().read(f);
-		} catch (Exception e) {
-		
-			System.out.println(e);
-			System.exit(-1);
-		}
+		File f = new File("P:/bcos/pcama/DBDIRECT");
+		//File f = new File("C:/work/gawky/format/rtldti230207.org");
+		new EBDisk().read(f);
     }
-
 }
 

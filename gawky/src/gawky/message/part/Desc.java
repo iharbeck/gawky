@@ -122,7 +122,8 @@ public class Desc
 	
 	public Desc(int len) // Reserved
 	{	
-		this("", len);
+		//this("", len);
+		this(FMT_CONSTANT, CODE_O, len, "", null);
 	}
 	
 	public Desc setMask() 
