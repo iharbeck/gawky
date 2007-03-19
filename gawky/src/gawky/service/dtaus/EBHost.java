@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 public class EBHost
 {
-    private void read(File f, EBProcessorHost processor) throws IOException, Exception
+	public static void read(File f, EBProcessorHost processor) throws IOException, Exception
     {
 		// Open the file and then get a channel from the stream
 		FileInputStream fis = new FileInputStream(f);
@@ -72,7 +72,7 @@ public class EBHost
     }
     
     
-    private void write(File f, EBProcessorHost processor) throws IOException, Exception
+    public static void write(File f, EBProcessorHost processor) throws IOException, Exception
     {
     	//TODO check HOST FORMAT!!!!
 		FileOutputStream fos = new FileOutputStream(f);
@@ -122,18 +122,11 @@ public class EBHost
     	EBProcessorHost processor = new EBProcessorHost();
     	
 		//File f = new File("C:/work/gawky/format/dtaus.bin");
-		File f = new File("C:/work/gawky/format/rtldti230207.org");
-	    
-		try {
-			new EBHost().read(f, processor);
-		} catch (Exception e) {
-		
-			System.out.println(e);
-			System.exit(-1);
-		}
+		File fi = new File("C:/work/gawky/format/rtldti230207.org");    
+		EBHost.read(fi, processor);
 		
 		File fo = new File("P:/bcos/pcama/DBDIRECT.outhost");
-		new EBHost().write(fo, processor);
+		EBHost.write(fo, processor);
     }
 
 }

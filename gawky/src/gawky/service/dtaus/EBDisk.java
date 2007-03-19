@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 public class EBDisk 
 {
-    private void read(File f, EBProcessorDisk processor) throws IOException, Exception
+	public static void read(File f, EBProcessorDisk processor) throws IOException, Exception
     {
 		// Open the file and then get a channel from the stream
 		FileInputStream fis = new FileInputStream(f);
@@ -73,7 +73,7 @@ public class EBDisk
     }
     
     
-    private void write(File f, EBProcessorDisk processor) throws IOException, Exception
+	public static void write(File f, EBProcessorDisk processor) throws IOException, Exception
     {
 		FileOutputStream fos = new FileOutputStream(f);
 	
@@ -125,19 +125,12 @@ public class EBDisk
     {
     	EBProcessorDisk processor = new EBProcessorDisk();
     	
-    	File f = new File("P:/bcos/pcama/DBDIRECT");
+    	File fi = new File("P:/bcos/pcama/DBDIRECT");
 		//File f = new File("C:/work/gawky/format/rtldti230207.org");
-		new EBDisk().read(f, processor);
-		
-		// TODO WRITER (Eine Zeile)
-		// A Satz			128		Len 128
-		// C Satz + Ce[1-2]	256		Len 187 + x*29
-		// E Satz           128 	Len 128
+		EBDisk.read(fi, processor);
 		
 		File fo = new File("P:/bcos/pcama/DBDIRECT.out");
-		//File f = new File("C:/work/gawky/format/rtldti230207.org");
-		new EBDisk().write(fo, processor);
-		
+		EBDisk.write(fo, processor);
     }
 }
 
