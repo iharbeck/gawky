@@ -81,7 +81,7 @@ public class EBDisk
 		
 		fos.write(processor.getSatza().getBytes());
 		
-		Iterator it = processor.getCSaetze().iterator();
+		Iterator it = processor.getSatzcArray().iterator();
 		
 		long sumbetraege = 0;
 		long sumkto = 0;
