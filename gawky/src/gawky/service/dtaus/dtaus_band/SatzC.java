@@ -1,5 +1,7 @@
 package gawky.service.dtaus.dtaus_band;
 
+import java.util.ArrayList;
+
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
@@ -47,7 +49,18 @@ public class SatzC extends Part
 		}; 
 	}
 
+    ArrayList satzCe;
     
+    public void addExtention(SatzCe ext) {
+    	if(satzCe == null)
+    		satzCe = new ArrayList();
+    	
+    	satzCe.add(ext);
+    }
+  
+    public void reset() {
+    	satzCe = null;
+    }
     
     private String blzerstbeteiligt;
     private String blzkontofuehrend;
@@ -167,5 +180,13 @@ public class SatzC extends Part
 	}
 	public void setWaehrungskennzeichen(String waehrungskennzeichen) {
 		this.waehrungskennzeichen = waehrungskennzeichen;
+	}
+
+	public ArrayList getSatzCe() {
+		return satzCe;
+	}
+
+	public void setSatzCe(ArrayList satzCe) {
+		this.satzCe = satzCe;
 	}
 }
