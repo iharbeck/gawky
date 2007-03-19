@@ -73,7 +73,7 @@ public class Parser
 							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
 						
 						// Optionale Felder mit zu kurzem Wert gefüllt !!!
-						log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
+						//log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
 	
 						value = str.substring(start);
 						storeValue(bean, i, desc, value);
@@ -128,7 +128,8 @@ public class Parser
 				}
 	
 				// Inhaltlich prüfung	
-				typeCheck(desc, value);
+				if(desc.code != Desc.CODE_O)
+					typeCheck(desc, value);
 	
 			    storeValue(bean, i, desc, value);
 			}		

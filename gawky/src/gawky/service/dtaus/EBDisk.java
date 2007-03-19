@@ -20,8 +20,6 @@ public class EBDisk extends EBProcessorDisk
 		int sz = (int)fc.size();
 		MappedByteBuffer mappedbuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
 
-		int len = 128;
-		
 		byte[] line = new byte[256];
 		byte[] length = new byte[4];
 		
@@ -29,7 +27,6 @@ public class EBDisk extends EBProcessorDisk
 		
 		while(mappedbuffer.remaining() > 5)
 		{
-			
 			mappedbuffer.get(length, 0, 4);
 			
 			int linelen = Integer.parseInt(new String(length));
@@ -38,15 +35,13 @@ public class EBDisk extends EBProcessorDisk
 				linelen = 256;
 			
 			mappedbuffer.get(line, 4, linelen-4);
-			
 
-			String type = new String(line, 4, linelen-4);
+			String type = new String(line, 4, 1);
 			
 			if(type.startsWith("A"))
 			{
 				processSatzA(line);
 				//System.exit(-1);
-				len = 256;
 			} 
 			else if(type.startsWith("E"))
 			{
@@ -60,6 +55,7 @@ public class EBDisk extends EBProcessorDisk
 				
 				for(int x=0; x < ext; x++)
 				{
+					// TODO MORE THAN 2 EXTENTIONS
 					//mappedbuffer.get(part, 0, 29);
 					System.arraycopy(line, 185, part, 0, 29*2);
 					processSatzCe(part, x);
@@ -80,6 +76,11 @@ public class EBDisk extends EBProcessorDisk
 		File f = new File("P:/bcos/pcama/DBDIRECT");
 		//File f = new File("C:/work/gawky/format/rtldti230207.org");
 		new EBDisk().read(f);
+		
+		// TODO WRITER (Eine Zeile)
+		// A Satz			128
+		// C Satz + Ce[1-2]	256
+		// E Satz           128 
     }
 }
 

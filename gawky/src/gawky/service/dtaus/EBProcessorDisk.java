@@ -1,17 +1,12 @@
 package gawky.service.dtaus;
 
-import gawky.message.parser.Parser;
 import gawky.service.dtaus.dtaus_disc.SatzA;
 import gawky.service.dtaus.dtaus_disc.SatzC;
 import gawky.service.dtaus.dtaus_disc.SatzCe;
 import gawky.service.dtaus.dtaus_disc.SatzE;
 
-import java.nio.MappedByteBuffer;
-
-public class EBProcessorDisk {
-
-	MappedByteBuffer mappedbuffer;
-	
+public class EBProcessorDisk 
+{
 	long sumbetraege = 0;
 	long mandanten = 0;
 	long sumdeclines = 0;
@@ -22,14 +17,12 @@ public class EBProcessorDisk {
 	
 	long count = 0;
 	
-	Parser extparser = new Parser();
-
 	String[] cestore;  // Verwzweck
 	
 	public void processSatzA(byte[] line) throws Exception
 	{
 		SatzA satz = new SatzA();
-		satz.parse(extparser, line);
+		satz.parse(line);
 
 		System.out.println("========================================" );
 		//System.out.println(new String(line));
@@ -42,7 +35,7 @@ public class EBProcessorDisk {
 	public void processSatzE(byte[] line) throws Exception
 	{
 		SatzE satz = new SatzE();
-		satz.parse(extparser, line);
+		satz.parse(line);
 
 		
 		System.out.println("SUM Beträge: " + satz.getSumeurobetraege());
@@ -72,8 +65,7 @@ public class EBProcessorDisk {
 		booking++;
 
 		satzc = new SatzC();
-		satzc.parse(extparser, line);
-		
+		satzc.parse(line);
 		
 		System.out.println("BLZ/Kto Mandant:  " + satzc.getBlzkontofuehrend() + "/" + satzc.getKontonummer());				
 		//System.out.println("BLZ MandErst: " + satzc.getBlzerstbeteiligt());				
@@ -153,7 +145,7 @@ public class EBProcessorDisk {
 	public void processSatzCe(byte[] line, int x) throws Exception
 	{
 		SatzCe satze = new SatzCe();
-		satze.parse(extparser, line);
+		satze.parse(line);
 		
 		System.out.println("["+satze.getKennzeichen() +"]" + satze.getDaten());
 	

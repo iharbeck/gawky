@@ -6,6 +6,7 @@ import gawky.service.dtaus.dtaus_band.SatzC;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class EB extends EBProcessor
@@ -21,7 +22,7 @@ public class EB extends EBProcessor
 		
 		// Get the file's size and then map it into memory
 		int sz = (int)fc.size();
-		mappedbuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
+		MappedByteBuffer mappedbuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
 
 		byte[] line = new byte[len];
 		

@@ -14,14 +14,14 @@ public class SatzE extends gawky.service.dtaus.dtaus_band.SatzE
     public Desc[] getDesc() 
 	{
 		return new Desc[] {
-			new DescF(Desc.FMT_A, Desc.CODE_R, 4,  "len"),          
+			new DescF(Desc.FMT_A, Desc.CODE_O, 4,  "len"),          
 			new DescC("E"),
 		    new Reserved(5),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 7,  "anzahlcsaetze"),          
-			new DescF(Desc.FMT_A, Desc.CODE_R, 13, "sumbetraege"),          
-			new DescF(Desc.FMT_A, Desc.CODE_R, 17, "sumkontonummern"),          
-			new DescF(Desc.FMT_A, Desc.CODE_R, 17, "sumblz"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 13, "sumeurobetraege"),
+			new DescF(Desc.FMT_9, Desc.CODE_R, 7,  "anzahlcsaetze"),          
+			new DescF(Desc.FMT_9, Desc.CODE_R, 13, "sumbetraege"),          
+			new DescF(Desc.FMT_9, Desc.CODE_R, 17, "sumkontonummern"),          
+			new DescF(Desc.FMT_9, Desc.CODE_R, 17, "sumblz"),
+			new DescF(Desc.FMT_9, Desc.CODE_R, 13, "sumeurobetraege"),
 		    new Reserved(51),
 		}; 
 	}

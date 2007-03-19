@@ -6,12 +6,8 @@ import gawky.service.dtaus.dtaus_band.SatzC;
 import gawky.service.dtaus.dtaus_band.SatzCe;
 import gawky.service.dtaus.dtaus_band.SatzE;
 
-import java.nio.MappedByteBuffer;
-
-public class EBProcessor {
-
-	MappedByteBuffer mappedbuffer;
-	
+public class EBProcessor 
+{
 	long sumbetraege = 0;
 	long mandanten = 0;
 	long sumdeclines = 0;
