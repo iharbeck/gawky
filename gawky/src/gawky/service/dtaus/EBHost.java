@@ -1,13 +1,18 @@
 package gawky.service.dtaus;
 
 import gawky.host.Ebcdic;
+import gawky.message.Formatter;
 import gawky.service.dtaus.dtaus_band.SatzC;
+import gawky.service.dtaus.dtaus_band.SatzCe;
+import gawky.service.dtaus.dtaus_band.SatzE;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Iterator;
 
 public class EBHost
 {
@@ -59,13 +64,57 @@ public class EBHost
 					
 					processor.processSatzCe(part, x);
 				}
-				
-				processor.finishSatzC();
 			}
 		}
 
 		// Close the channel and the stream
 		fc.close();
+    }
+    
+    
+    private void write(File f, EBProcessorHost processor) throws IOException, Exception
+    {
+    	//TODO check HOST FORMAT!!!!
+		FileOutputStream fos = new FileOutputStream(f);
+	
+		
+		fos.write(processor.getSatza().getBytes());
+		
+		Iterator it = processor.getSatzcArray().iterator();
+		
+		long sumbetraege = 0;
+		long sumkto = 0;
+		long sumblz = 0;
+		long count = 0;
+		
+		while(it.hasNext())
+		{
+			SatzC c = (SatzC)it.next(); 
+			
+			sumbetraege += Long.parseLong(c.getBetrageuro());
+			sumkto      += Long.parseLong(c.getKontonummer());
+			sumblz      += Long.parseLong(c.getBlzkontofuehrend());
+			count++;
+			
+			fos.write(c.getBytes());
+			Iterator it2 = c.getSatzCe().iterator();
+			while(it2.hasNext())
+			{
+				SatzCe el = (SatzCe)it2.next();
+				fos.write(Formatter.getStringC(256-187, el.toString()).getBytes());
+			}
+		}
+		
+		SatzE e = processor.getSatze();
+		
+		e.setAnzahlcsaetze(Long.toString(count));
+		e.setSumeurobetraege(Long.toString(sumbetraege));
+		e.setSumkontonummern(Long.toString(sumkto));
+		e.setSumblz(Long.toString(sumblz));
+		
+		fos.write(processor.getSatze().getBytes());
+		
+		fos.close();
     }
 
     public static void main(String[] args) throws Exception
@@ -82,6 +131,9 @@ public class EBHost
 			System.out.println(e);
 			System.exit(-1);
 		}
+		
+		File fo = new File("P:/bcos/pcama/DBDIRECT.outhost");
+		new EBHost().write(fo, processor);
     }
 
 }

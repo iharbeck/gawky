@@ -60,12 +60,8 @@ public class EBtrimed extends EBProcessorHost
 
 					processSatzCe(part, x);
 				}
-
-				finishSatzC();
 			}
 		}
-
-		System.out.println("\ncount::" + count);
 
 		// Close the channel and the stream
 		fc.close();
