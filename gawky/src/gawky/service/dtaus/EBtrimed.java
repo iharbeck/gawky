@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class EBtrimed extends EBProcessorDebug
+public class EBtrimed extends EBProcessorHost
 {
     private void read(File f) throws IOException, Exception
     {
