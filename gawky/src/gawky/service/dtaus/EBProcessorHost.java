@@ -1,5 +1,6 @@
 package gawky.service.dtaus;
 
+import gawky.message.parser.EBCDICParser;
 import gawky.service.dtaus.dtaus_band.SatzA;
 import gawky.service.dtaus.dtaus_band.SatzC;
 import gawky.service.dtaus.dtaus_band.SatzCe;
@@ -16,22 +17,24 @@ public class EBProcessorHost
 	
 	SatzC satzc;
 	
+	EBCDICParser extparser = new EBCDICParser();
+	
 	public void processSatzA(byte[] line) throws Exception
 	{
 		satza = new SatzA();
-		satza.parse(line);
+		satza.parse(extparser, line);
 	}
 
 	public void processSatzE(byte[] line) throws Exception
 	{
 		satze = new SatzE();
-		satze.parse(line);
+		satze.parse(extparser, line);
 	}
 
 	public SatzC processSatzC(byte[] line) throws Exception
 	{
 		satzc = new SatzC();
-		satzc.parse(line);
+		satzc.parse(extparser, line);
 		
 		satzcArray.add(satzc);
 
@@ -41,7 +44,7 @@ public class EBProcessorHost
 	public void processSatzCe(byte[] line, int x) throws Exception
 	{
 		SatzCe satze = new SatzCe();
-		satze.parse(line);
+		satze.parse(extparser, line);
 		
 		satzc.addExtention(satze);
 	}

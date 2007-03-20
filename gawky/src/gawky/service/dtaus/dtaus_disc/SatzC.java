@@ -30,7 +30,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 			new Reserved(3),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "empfaengername"),
 			new Reserved(8),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "auftragnehmername"),
+			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "auftraggebername"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "verwendungszweck"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "waehrungskennzeichen"),
 			new Reserved(2),

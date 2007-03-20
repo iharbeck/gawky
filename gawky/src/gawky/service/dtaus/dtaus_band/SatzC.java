@@ -39,7 +39,7 @@ public class SatzC extends Part
 			new Reserved(3),
 			
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "empfaengername"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "auftragnehmername"),
+			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "auftraggebername"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "verwendungszweck"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "waehrungskennzeichen"),
 			
@@ -75,15 +75,16 @@ public class SatzC extends Part
     private String betrageuro;
     private String valuta;
     private String empfaengername;
-    private String auftragnehmername;
+    private String auftraggebername;
     private String verwendungszweck;
     private String waehrungskennzeichen;
     private String erweiterungskennnzeichen;
-	public String getAuftragnehmername() {
-		return auftragnehmername;
+    
+	public String getAuftraggebername() {
+		return auftraggebername;
 	}
-	public void setAuftragnehmername(String auftragnehmername) {
-		this.auftragnehmername = auftragnehmername;
+	public void setAuftraggebername(String auftragnehmername) {
+		this.auftraggebername = auftragnehmername;
 	}
 	public String getBankintern() {
 		return bankintern;
