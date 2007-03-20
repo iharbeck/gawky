@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 public class EBHost
 {
+	
 	public static void read(File f, EBProcessorHost processor) throws IOException, Exception
     {
 		// Open the file and then get a channel from the stream
