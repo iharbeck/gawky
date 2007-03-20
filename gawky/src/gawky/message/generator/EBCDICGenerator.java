@@ -1,5 +1,7 @@
 package gawky.message.generator;
 
+import java.util.Arrays;
+
 import gawky.host.Ebcdic;
 import gawky.host.PackedDecimal;
 import gawky.message.Formatter;
@@ -16,6 +18,7 @@ public class EBCDICGenerator extends Generator
 	public byte[] generateString(Part bean, int len)
 	{
 		byte str[] = new byte[len];
+		Arrays.fill(str, (byte)0x40); 
 
 		if(bean == null)
 			return str;
