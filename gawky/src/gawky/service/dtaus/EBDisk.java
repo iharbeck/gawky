@@ -97,14 +97,34 @@ public class EBDisk
 			sumblz      += Long.parseLong(c.getBlzkontofuehrend());
 			count++;
 			
-			c.setLen("0" + (187 + c.getSatzCe().size() * 29 ));
+			int len = 0;
+			
+			if(c.getSatzCe() != null)
+				len = c.getSatzCe().size();
+			
+			c.setLen("0" + (187 + len * 29 ));
 
-			fos.write(c.getBytes());
 			Iterator it2 = c.getSatzCe().iterator();
-			while(it2.hasNext())
+
+			String tmp = c.toString();
+			for(int i=1; it2.hasNext() && i <= 2; i++)
 			{
 				SatzCe el = (SatzCe)it2.next();
-				fos.write(Formatter.getStringC(256-187, el.toString()).getBytes());
+				tmp += el.toString();
+			}
+			
+			fos.write(Formatter.getStringC(256, tmp).getBytes());
+
+			if(len > 2)
+			{
+				tmp = "";
+				while(it2.hasNext())
+				{
+					SatzCe el = (SatzCe)it2.next();
+					tmp += el.toString();
+				}
+				
+				fos.write(Formatter.getStringC(256, tmp).getBytes());
 			}
 		}
 		
