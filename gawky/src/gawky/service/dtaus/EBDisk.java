@@ -58,13 +58,24 @@ public class EBDisk
 
 				int ext = Integer.parseInt(satz.getErweiterungskennnzeichen());
 				
-				for(int x=0; x < ext && x <= 1; x++)
+				int x=0;
+				for(; x < ext && x <= 1; x++)
 				{
-					// TODO MORE THAN 2 EXTENTIONS
-					//mappedbuffer.get(part, 0, 29);
 					System.arraycopy(line, 187 + 29*x, part, 0, 29);
 					processor.processSatzCe(part, x);
 				}
+				
+				// mehr als 2 Extention??
+				if(x < ext) {
+					mappedbuffer.get(line, 4, 128);
+
+					for(; x < ext; x++)
+					{
+						System.arraycopy(line, 4 + 29*(x-2), part, 0, 29);
+						processor.processSatzCe(part, x);
+					}
+				}
+				
 			}
 		}
 
