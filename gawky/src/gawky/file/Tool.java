@@ -14,6 +14,12 @@ import java.util.zip.ZipOutputStream;
 
 public class Tool {
 
+	public static boolean createFolder(String filename) 
+	{
+		String folder = filename.substring(0, Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\")));
+		return new File(folder).mkdirs();
+	}
+	
 	public static void unzip(String filename) throws IOException 
 	{
 		InputStream in = new BufferedInputStream(new FileInputStream(filename));
