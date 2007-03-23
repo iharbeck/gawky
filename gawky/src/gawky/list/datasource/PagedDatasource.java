@@ -46,7 +46,7 @@ public class PagedDatasource implements Datasource {
 	}
 
 	public boolean nextRow() {
-		return (currow++ < maxrow && ds.nextRow());
+		return (currow++ < maxrow&&ds.nextRow()  );
 	}
 
 	public void reset() {
