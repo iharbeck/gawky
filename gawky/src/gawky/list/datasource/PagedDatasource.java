@@ -45,19 +45,22 @@ public class PagedDatasource implements Datasource {
 		return ds.getWidth(i);
 	}
 
-	boolean notdone = false;
+	boolean notdone = true;
 	
 	public boolean nextRow() {
+		if(notdone == false)
+			return notdone;
+		
 		notdone = ds.nextRow();
 		return (currow++ < maxrow && notdone);
 	}
 
-	boolean hasnext() {
+	public boolean hasnext() {
 		return currow < maxrow;	
 	}
 		
-	boolean hasprev() {
-		return currow != rows;	
+	public boolean hasprev() {
+		return page > 1;	
 	}
 	
 	public void reset() {

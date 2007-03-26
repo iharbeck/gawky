@@ -76,12 +76,17 @@ public class PagerTable {
 		 rs.addColumn("val",      new Column("val").setListener(new NumberFormatListener()));
 		
 		int numberOfRows = 100;
-		int page = 30;
+		int page = 1;
 		
 		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();
 		hwalker.setTablestyle("width:100%");
-		System.out.println( hwalker.generate(new PagedDatasource(rs, numberOfRows, page) ));
+		
+		PagedDatasource ds2 = new PagedDatasource(rs, numberOfRows, page);
+		System.out.println( hwalker.generate( ds2 ));
+		
+		System.out.println(ds2.hasprev());
+		System.out.println(ds2.hasnext());
 		rs.reset();
 
 		System.exit(0);

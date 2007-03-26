@@ -138,28 +138,23 @@ public class ResultSetDatasource implements Datasource {
 		}
 	}
 	
+	boolean notdone = true;
+
 	public boolean nextRow() {
-		if(done)
-			return false;
+		if(notdone == false)
+			return notdone;
 		try {
-			if(rset.next() == false) {
-				done = true;
-				return false;
-			}
-			else {
-				return true;
-			}
+			notdone = rset.next();
+			return notdone;
 		} catch(Exception e) {
 			return false;
 		}
 	}
 	
-	boolean done = false;
-	
 	public void reset() {
 		try {
 			rset.beforeFirst();
-			done = false;
+			notdone = true;
 			
 			//rset.first();
 		} catch(Exception e) {
