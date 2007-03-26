@@ -217,7 +217,7 @@ public class Parser
 		try {
 			desc.setValue(bean, value);
 		} catch (Exception e) {	 
-			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value);
+			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value + ":" + bean.toString());
 		}
 	}
 	  
