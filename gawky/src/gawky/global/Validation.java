@@ -27,7 +27,7 @@ public class Validation
 			value = "";
 		
 		int len = value.length();
-		return len > min && len < max;
+		return len >= min && len <= max;
 	}
 	
 	/**

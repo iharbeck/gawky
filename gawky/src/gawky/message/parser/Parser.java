@@ -15,6 +15,9 @@ import org.apache.commons.logging.LogFactory;
 public class Parser 
 {
 	private static Log log = LogFactory.getLog(Parser.class);
+
+	private static boolean docheck = true;
+	private static boolean dotrim  = false;
 	
 	int    position = 0;
 	
@@ -128,7 +131,7 @@ public class Parser
 				}
 	
 				// Inhaltlich prüfung	
-				if(desc.code != Desc.CODE_O)
+				if(desc.code != Desc.CODE_O && Parser.docheck)
 					typeCheck(desc, value);
 	
 			    storeValue(bean, i, desc, value);
@@ -198,6 +201,8 @@ public class Parser
 		if(desc.nostore)
 			return;
 
+		if(Parser.dotrim)
+			value = value.trim();
 		
 //		switch(pos) {
 //		case 0:
@@ -285,5 +290,13 @@ public class Parser
 	
 	public final void setTimeFormat(String format) {
 		df_HHMMSS   = new SimpleDateFormat(format); 
+	}
+	
+	public static void setDotrim(boolean dotrim) {
+		Parser.dotrim = dotrim;
+	}
+	
+	public static void setDocheck(boolean docheck) {
+		Parser.docheck = docheck;
 	}
 }

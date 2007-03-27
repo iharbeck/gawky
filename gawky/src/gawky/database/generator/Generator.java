@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -24,6 +25,8 @@ public class Generator
 {
 	private static Log log = LogFactory.getLog(Generator.class);	
 
+	private static boolean dotrim = false;
+	
 	SimpleDateFormat df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
 	SimpleDateFormat df_HHMMSS = new SimpleDateFormat("HHmmss");
 	
@@ -99,6 +102,9 @@ public class Generator
 						break;
 				}
 	
+			    if(dotrim)
+			    	val = val.replaceAll("\\s+$", "");
+			    
 			    descs[i].setValue(part, val);
 
 			} catch(Exception e) {
@@ -203,7 +209,11 @@ public class Generator
 			descstr += "		return new Desc[]  {\n";
 				
 			for(int i=1; i <= c; i++){
-				descstr += "			new Column(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
+				System.out.println(i + " : " + md.getColumnType(i));
+				if(md.getColumnType(i) == Types.NUMERIC || md.getColumnType(i) == Types.INTEGER)
+					descstr += "			new NColumn(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
+				else	
+					descstr += "			new Column(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
 			}
 			
 			descstr += "		};\n";
@@ -473,7 +483,14 @@ public class Generator
 						break;
 				}
 			} catch(Exception e) {
-				try { stmt.setString(setter, null); } catch (Exception ee) {}
+				
+				try {
+					if(desc.format == Desc.FMT_DIGIT)
+						stmt.setDouble(setter, 0); 
+					else
+						stmt.setString(setter, ""); 
+				} catch (Exception ee) {
+				}
 			}
 		}
 		
@@ -512,5 +529,9 @@ public class Generator
 
 	public void setCustomparams(String customparams) {
 		this.customparams = customparams;
+	}
+	
+	public static void setDotrim(boolean dotrim) {
+		Generator.dotrim = dotrim;
 	}
 }

@@ -539,28 +539,28 @@ public abstract class Table extends Part
 		return list;
 	}
 	
-	public static void delete(Class clazz, long id) throws Exception 
+	public static int delete(Class clazz, long id) throws Exception 
 	{
-		delete(clazz, new Long(id));
+		return delete(clazz, new Long(id));
 	}
 	
-	public static void delete(Class clazz, Object id) throws Exception 
+	public static int delete(Class clazz, Object id) throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection();
-			delete(clazz, conn, id);
+			return delete(clazz, conn, id);
 		} finally {
 			DB.doClose(conn);
 		}
 	}
 	
-	public static void delete(Class clazz, Connection conn, long id) throws Exception 
+	public static int delete(Class clazz, Connection conn, long id) throws Exception 
 	{
-		delete(clazz, conn, new Long(id));
+		return delete(clazz, conn, new Long(id));
 	}
 	
-	public static void delete(Class clazz, Connection conn, Object id) throws Exception 
+	public static int delete(Class clazz, Connection conn, Object id) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
 		
@@ -574,10 +574,10 @@ public abstract class Table extends Part
 		
 		// Delete by ID
 		stmt.setObject(1, id);
-		stmt.execute();
+		return stmt.executeUpdate();
 	}
 	
-	public static void delete(Class clazz, Connection conn, Object id1, Object id2) throws Exception 
+	public static int delete(Class clazz, Connection conn, Object id1, Object id2) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
 		
@@ -592,43 +592,43 @@ public abstract class Table extends Part
 		// Delete by ID
 		stmt.setObject(1, id1);
 		stmt.setObject(2, id2);
-		stmt.execute();
+		return stmt.executeUpdate();
 	}
 
-	public void delete() throws Exception 
+	public int delete() throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection(defaultconnection);
-			delete(conn);
+			return delete(conn);
 		} finally {
 			DB.doClose(conn);
 		}
 	}
 
 	
-	public void delete(Connection conn) throws Exception 
+	public int delete(Connection conn) throws Exception 
 	{
 		// Delete current Object
 		if(getDescIDs().length == 1)
-			delete(getClass(), conn, getDescIDs()[0].getValue(this) );
+			return delete(getClass(), conn, getDescIDs()[0].getValue(this) );
 		else
-			delete(getClass(), conn, getDescIDs()[0].getValue(this),
+			return delete(getClass(), conn, getDescIDs()[0].getValue(this),
 									 getDescIDs()[1].getValue(this));
 	}
 	
-	public void update() throws Exception 
+	public int update() throws Exception 
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection(defaultconnection);
-			update(conn); 
+			return update(conn); 
 		} finally {
 			DB.doClose(conn);
 		}
 	}
 	
-	public void update (Connection conn) throws SQLException 
+	public int update (Connection conn) throws SQLException 
 	{
 		String sql = getQueries()[SQL_UPDATE];
 		if(sql == null)	{
@@ -640,7 +640,7 @@ public abstract class Table extends Part
 
 		fillPreparedStatement(stmt, false);
 		
-		stmt.execute();
+		return stmt.executeUpdate();
 	}
 	
 	public IDGenerator getIdgenerator() {
