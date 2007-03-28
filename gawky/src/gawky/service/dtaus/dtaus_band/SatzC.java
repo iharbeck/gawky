@@ -49,7 +49,7 @@ public class SatzC extends Part
 		}; 
 	}
 
-    ArrayList satzCe;
+    ArrayList satzCe = new ArrayList();
     
     public void addExtention(SatzCe ext) {
     	if(satzCe == null)
