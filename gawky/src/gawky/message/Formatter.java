@@ -6,6 +6,9 @@ package gawky.message;
 
 public class Formatter
 {
+	   public final static String getStringN(int size, long value) {
+		   return getStringN(size, Long.toString(value));
+	   }
 
 	   public final static String getStringN(int size, String value)
 	   {
@@ -20,6 +23,10 @@ public class Formatter
 	     return (getSpacer(size-value.length(), "0") + value).substring(0, size);
 	   }
 
+	   public final static String getStringNL(int size, long value) {
+		   return getStringNL(size, Long.toString(value));
+	   }
+	   
 	   public final static String getStringNL(int size, String value)
 	   {
 	     if(value == null)
@@ -64,12 +71,11 @@ public class Formatter
 
 	   public final static String getSpacer(int len, String filler)
 	   {
-		 StringBuilder value = new StringBuilder(200);
+		 StringBuilder value = new StringBuilder(100);
 
 	     for (int i=0; i < len; i++) {
 	       value.append(filler);
 	     }
 	     return value.toString();
 	   }
-
 }

@@ -18,6 +18,8 @@ public class PatternGenerator extends Generator
 		if(bean == null)
 			return "";
 		
+		bean.beforeStore();
+
 		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;

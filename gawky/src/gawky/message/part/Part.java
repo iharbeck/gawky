@@ -228,4 +228,8 @@ public abstract class Part
 	public void afterFill() {
 		
 	}
+	
+	public void beforeStore() {
+		
+	}
 }

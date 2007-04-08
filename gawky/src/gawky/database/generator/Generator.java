@@ -444,6 +444,8 @@ public class Generator
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
+		bean.beforeStore();
+		
 		int setter = 0;
 		
 		for(int i = 0; i < descs.length; i++)

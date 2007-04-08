@@ -23,6 +23,8 @@ public class EBCDICGenerator extends Generator
 		if(bean == null)
 			return str;
 		
+		bean.beforeStore();
+		
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 		
@@ -108,7 +110,9 @@ public class EBCDICGenerator extends Generator
 	{
 		if(bean == null)
 			return "";
-		
+
+		bean.beforeStore();
+
 		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;

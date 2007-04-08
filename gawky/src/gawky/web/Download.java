@@ -15,23 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- *
-    <servlet>
-        <servlet-name>download</servlet-name>
-        <servlet-class>gawky.web.Download</servlet-class>
-    	<init-param>
-    		<param-name>path</param-name>
-    		<param-value>c:/work/output</param-value>
-    	</init-param>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>download</servlet-name>
-        <url-pattern>/preview/*</url-pattern>
-    </servlet-mapping>
- * 
- */
 
 public class Download extends HttpServlet 
 { 

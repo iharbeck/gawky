@@ -18,6 +18,8 @@ public class Generator
 		if(bean == null)
 			return "";
 		
+		bean.beforeStore();
+		
 		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
@@ -81,7 +83,9 @@ public class Generator
 	{
 		if(bean == null)
 			return "";
-		
+
+		bean.beforeStore();
+
 		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
