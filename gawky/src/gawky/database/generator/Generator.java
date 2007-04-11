@@ -72,11 +72,12 @@ public class Generator
 		
 		String val = null;
 
+		int x = 0;
 		for(int i=0; i < descs.length; i++)
 		{
 			desc = descs[i];
 			
-			if(desc.dbname == null)
+			if(desc.dbname == null || desc.nostore)
 				continue;
 
 			try 
@@ -89,16 +90,16 @@ public class Generator
 					case Desc.FMT_UPPER :
 					case Desc.FMT_LOWER :
 					case Desc.FMT_BLANK_LETTER :
-						val = rset.getString(i+1); 
+						val = rset.getString(x+1); 
 						break;
 					case Desc.FMT_DIGIT :
-						val = formatNumber(rset.getDouble(i+1));
+						val = formatNumber(rset.getDouble(x+1));
 						break;
 					case Desc.FMT_DATE :
-						val =  df_YYYYMMDD.format( rset.getDate(i+1) );
+						val =  df_YYYYMMDD.format( rset.getDate(x+1) );
 						break;
 					case Desc.FMT_TIME :
-						val =  df_HHMMSS.format( rset.getTimestamp(i+1) );
+						val =  df_HHMMSS.format( rset.getTimestamp(x+1) );
 						break;
 				}
 	
@@ -110,6 +111,7 @@ public class Generator
 			} catch(Exception e) {
 				try  { descs[i].setValue(part, ""); } catch(Exception ee) {}
 			}
+			x++;
 		}
 		
 		part.afterFill();

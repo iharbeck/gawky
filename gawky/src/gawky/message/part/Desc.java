@@ -180,6 +180,7 @@ public class Desc
 	
 	public boolean nostring = false;
 
+	
 
 	public boolean isNostring() {
 		return nostring;
@@ -190,4 +191,8 @@ public class Desc
 		return this;
 	}
 	
+	public Desc setNostore() {
+		this.nostore = true;
+		return this;
+	}
 }

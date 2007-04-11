@@ -134,29 +134,35 @@ public class DB
 		}
 	}
 	
-	  public static void execute(String sql)
+	  public static int execute(String sql)
+		{
+		  return execute(0, sql);
+		}
+	
+	  public static int execute(int pool, String sql)
 		{
 			Connection conn = null;
 			
 			try 
 			{
-				conn = DB.getConnection(0);
-				execute(conn, sql);
+				conn = DB.getConnection(pool);
+				return execute(conn, sql, null);
 			} catch (Exception e) {
 				log.error(e);
 			} finally {
 				doClose(conn);
 			}
+			return 0;
 		}
 	  
-	public static void execute(Connection conn, String sql) throws Exception
+	public static int execute(Connection conn, String sql, Object[] params) throws Exception
 	{
 		PreparedStatement stmt_select = null;
 		
 		try {
 			
 			stmt_select = conn.prepareStatement(sql);
-			stmt_select.execute();
+			return stmt_select.executeUpdate();
 		} finally {
 			doClose(stmt_select); 
 		}
