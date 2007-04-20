@@ -78,6 +78,9 @@ public class AConnectionDriver implements Driver
         	throw new Exception("MISSING(" + driver + ")");
         }
         pool = new AConnectionPool(drivers_url, url, user, password, timeout);
+        
+        AShutdownHook shutdownHook = new AShutdownHook(pool);
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 
     public Connection connect(String url, Properties props) throws SQLException

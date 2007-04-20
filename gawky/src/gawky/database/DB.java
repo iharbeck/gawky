@@ -272,13 +272,14 @@ public class DB
 			rset = stmt_select.executeQuery();
 
 			ResultSetMetaData md = rset.getMetaData();
-			
+			boolean info = log.isInfoEnabled();
 			while (rset.next())
 			{
 				Map hs = new Hashtable();
 				
 				for (int i = md.getColumnCount(); i > 0; i --) {
-					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
+					if(info)
+						log.info(md.getColumnName(i) + " -- " + rset.getString(i));
 					hs.put(md.getColumnName(i), secString(rset.getString(i)));
 				}
 				
