@@ -10,8 +10,9 @@ public class AShutdownHook extends Thread {
 	
 	
 	public void run() {
-        System.out.println("Shutting down");
+        System.out.println("Shutting down pool start");
         pool.closeConnections();
+        System.out.println("Shutting down pool done");
     }
 	
 }
