@@ -17,14 +17,14 @@ public class Tester
 		CKMapping ck = new CKMapping();
 		
 		// Loop 30 Times
-		for(int i=0; i < 30; i++) {
+		for(int i=0; i < 300000; i++) {
 
 			source_obj.setClient_id("" + i);
 			
 			// do Mapping
 			Mapper.process(source_obj, target_obj, ck);
 
-			System.out.println(target_obj.toString());
+			//System.out.println(target_obj.toString());
 
 		}
 	}

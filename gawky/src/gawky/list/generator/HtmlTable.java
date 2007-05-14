@@ -35,9 +35,11 @@ public class HtmlTable extends AbstractTable
 		}
 		buffer.append("</TR>\n");
 		
+		String rollover = "onmouseover=\"this.className='rollover'\" onmouseout=\"this.className=''\"";
+		
 		while(ds.nextRow())
 		{
-			buffer.append("<TR>");
+			buffer.append("<TR " + rollover + ">");
 			for(int i=0; i < ds.getColumns(); i++)
 			{
 				if(ds.getWidth(i) == Column.HIDDEN)
@@ -45,6 +47,8 @@ public class HtmlTable extends AbstractTable
 				
 				// handler für spezielle Cell formatierungen
 				CellListener handler = getListener(ds, i);
+				
+				
 				
 				buffer
 				  .append("<TD class='" + handler.getAttribute("class") + "'>")
