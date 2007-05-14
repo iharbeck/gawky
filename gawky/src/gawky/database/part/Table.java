@@ -146,6 +146,13 @@ public abstract class Table extends Part
 		getStaticLocal().descidindex[1] = idindex2;
 		getStaticLocal().descidindex[2] = idindex3;
 	}
+	public void setDescID(int idindex1, int idindex2, int idindex3, int idindex4) {
+		getStaticLocal().descidindex = new int[4];
+		getStaticLocal().descidindex[0] = idindex1;
+		getStaticLocal().descidindex[1] = idindex2;
+		getStaticLocal().descidindex[2] = idindex3;
+		getStaticLocal().descidindex[3] = idindex4;
+	}
 	// Ende Multikey
 	
 	public void setDescID(IDGenerator idgenerator) {
@@ -226,6 +233,22 @@ public abstract class Table extends Part
 	
 	protected void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
 		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
+	}
+	
+	public void store() throws Exception 
+	{
+		if(isFound())
+			update();
+		else
+			insert();
+	}
+	
+	public void store(Connection conn) throws Exception 
+	{
+		if(isFound())
+			update(conn);
+		else
+			insert(conn);
 	}
 	
 	public void insert() throws SQLException 
