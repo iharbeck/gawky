@@ -33,6 +33,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class Table extends Part 
 {
 	int defaultconnection = 0;
+	boolean found = false;
 	
 	private final class StaticLocal 
 	{
@@ -292,6 +293,27 @@ public abstract class Table extends Part
 		DB.doClose(stmt);
 	}
 
+	public String getID() throws Exception 
+	{
+		getCachedDesc();
+		Desc[] descids = getDescIDs();
+
+		return descids[0].getValue(this); 
+	}
+	
+	public void setID(String id) throws Exception 
+	{
+		getCachedDesc();
+		Desc[] descids = getDescIDs();
+
+		descids[0].setValue(this, id); 
+	}
+	
+	public void find() throws Exception 
+	{
+		find(getID());
+	}
+	
 	public void find(long id) throws Exception 
 	{
 		find(new Long(id));
@@ -338,7 +360,8 @@ public abstract class Table extends Part
 		stmt.setObject(1, id);
 		ResultSet rset = stmt.executeQuery();
 		
-		if (rset.next()) {
+		found = rset.next(); 
+		if (found) {
 			getStaticLocal().generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
@@ -360,7 +383,8 @@ public abstract class Table extends Part
 		stmt.setObject(2, id2);
 		ResultSet rset = stmt.executeQuery();
 		
-		if (rset.next()) {
+		found = rset.next();
+		if (found) {
 			getStaticLocal().generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
@@ -396,7 +420,8 @@ public abstract class Table extends Part
 		
 		ResultSet rset = stmt.executeQuery();
 		
-		if (rset.next()) {
+		found = rset.next();
+		if (found) {
 			getStaticLocal().generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
@@ -659,5 +684,13 @@ public abstract class Table extends Part
 
 	public void setDefaultconnection(int defaultconnection) {
 		this.defaultconnection = defaultconnection;
+	}
+
+	public boolean isFound() {
+		return found;
+	}
+
+	public void setFound(boolean found) {
+		this.found = found;
 	}
 }

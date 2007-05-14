@@ -76,6 +76,20 @@ public class Mail
                 		   from, fromalias, to, toalias, null, subject, message, false, null, null, false, hash, null);
     }
     
+    public static int sendParameterHTMLMail(
+            String from,    String fromalias,
+            String to,      String toalias,
+            String subject, String message,
+            Hashtable hash) 
+    {
+        String username = Option.getProperty(DEFAULT_USER);
+        String password = Option.getProperty(DEFAULT_PASSWORD);
+        String server   = Option.getProperty(DEFAULT_SERVER);
+        
+        return sendMailGeneric(username, password, server, 
+                		   from, fromalias, to, toalias, null, subject, message, true, null, null, false, hash, null);
+    }
+    
     public static int sendMailAttachStream(
             String from,    String fromalias,
             String to,      String toalias,
