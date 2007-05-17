@@ -86,6 +86,9 @@ public class PagedDatasource implements Datasource {
 		return page > 1;	
 	}
 	
+	public void setCurrRow(int pos) {
+	}
+	
 	public void reset() {
 		ds.reset();
 		notdone = true;
@@ -93,8 +96,10 @@ public class PagedDatasource implements Datasource {
 		// move to current position
 		// TODO implement setCurrRow
 		currow = rows * (page-1);
-		for(int skip=0; skip < currow; skip++)
-			ds.nextRow();
+		
+		ds.setCurrRow(currow);
+		//for(int skip=0; skip < currow; skip++)
+		//	ds.nextRow();
 
 		maxrow = currow + rows;
 	}

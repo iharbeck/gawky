@@ -19,4 +19,6 @@ public interface Datasource
 	public int getColumnsHidden();
 	
 	public int getRowCount();
+	
+	public void setCurrRow(int pos);
 }

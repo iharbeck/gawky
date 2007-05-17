@@ -100,6 +100,10 @@ public class ArrayListDatasource implements Datasource
 		return ((Object[])array.get(pos))[i];
 	}
 
+	public void setCurrRow(int pos) {
+		this.pos = pos;
+	}
+	
 	public boolean nextRow() {
 		if(pos < rowcount) {
 			pos++;

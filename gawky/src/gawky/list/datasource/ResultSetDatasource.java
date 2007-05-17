@@ -36,16 +36,26 @@ public class ResultSetDatasource implements Datasource {
 		if(version == COUNT_NONE)
 			return;
 		
-		try {
+		try 
+		{
+//			if(rset.getType() == ResultSet.TYPE_FORWARD_ONLY)
+//			{
+//				throw new Exception("CHANGE RESULTSETTYPE: ResultSet.TYPE_SCROLL_INSENSITIVE");
+//			}
+			
 			if(version == COUNT_ITERATE) { 
 				rowcount = 0;
-				while(rset.next())
+				while(rset.next()) {
 					rowcount++;
+				}
 			} else if(version == COUNT_LAST) {
 				rset.last();
 				rowcount = rset.getRow();
 			}
-			rset.beforeFirst();
+			
+			if(rowcount > 0)
+				rset.beforeFirst();
+
 		} catch(Exception e) {
 			System.out.println("unable to get row count: " + e);	
 		}
@@ -169,6 +179,14 @@ public class ResultSetDatasource implements Datasource {
 			return rset.getString(i+1);
 		} catch(Exception e) {
 			return null;
+		}
+	}
+	
+	public void setCurrRow(int pos) {
+		try {
+			rset.absolute(pos);
+		} catch (Exception e) {
+			System.out.println("Set absolut position: " + e);
 		}
 	}
 	
