@@ -25,7 +25,7 @@ public class PagedDatasource implements Datasource {
 		
 		if(getRowCount() % rows != 0)
 			pages++;
-		
+				
 		return pages;
 	}
 
@@ -67,7 +67,7 @@ public class PagedDatasource implements Datasource {
 	boolean notdone = true;
 	
 	public boolean nextRow() {
-		if(notdone == false)
+		if(notdone == false || ds.getRowCount() == 0)
 			return notdone;
 		
 		notdone = ds.nextRow();
