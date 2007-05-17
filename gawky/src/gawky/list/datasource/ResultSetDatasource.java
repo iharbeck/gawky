@@ -13,9 +13,24 @@ public class ResultSetDatasource implements Datasource {
 	
 	int columnshidden = -1;
 	
+	int rowcount = 0;
+	
+	public int getRowCount() {
+		return rowcount;
+	}
+
 	public ResultSetDatasource(ResultSet rset) 
 	{
 		this.rset = rset;
+		
+		try {
+			rset.last();
+			rowcount = rset.getRow();
+			rset.beforeFirst();
+		} catch(Exception e) {
+			System.out.println("unable to get row count: " + e);	
+		}
+		
 	}
 	
 	public int getColumnsHidden()

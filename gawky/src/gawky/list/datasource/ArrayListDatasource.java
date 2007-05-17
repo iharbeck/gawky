@@ -6,6 +6,13 @@ import java.util.ArrayList;
 
 public class ArrayListDatasource implements Datasource 
 {
+	public int getRowCount() {
+		if(this.columns == null)
+			return array.size() -1;
+		else
+			return array.size();
+	}
+
 	ArrayList array;
 	Column[] columns;
 	ArrayList columnslist = new ArrayList();

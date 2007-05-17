@@ -17,4 +17,6 @@ public interface Datasource
 	
 	public CellListener getListener(int i);
 	public int getColumnsHidden();
+	
+	public int getRowCount();
 }

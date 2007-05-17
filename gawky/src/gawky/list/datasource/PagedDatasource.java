@@ -10,6 +10,15 @@ public class PagedDatasource implements Datasource {
 	int page;
 	int currow;
 	int maxrow;
+	
+	public int getRowCount() {
+		return ds.getRowCount();
+	}
+	
+	public int getPages() {
+		return (int)((getRowCount()/rows)+1);
+	}
+
 	public PagedDatasource(Datasource ds, int rows, int page) {
 		this.ds = ds;
 		this.rows = rows;
