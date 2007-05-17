@@ -65,7 +65,8 @@ public class PagedDatasource implements Datasource {
 	}
 
 	public boolean hasnext() {
-		return currow < maxrow;	
+		//return currow < maxrow;	
+		return currow < getRowCount();	
 	}
 		
 	public boolean hasprev() {

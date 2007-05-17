@@ -84,12 +84,12 @@ public class PagerTable {
 		
 		PagedDatasource ds2 = new PagedDatasource(rs, numberOfRows, page);
 		
-		System.out.println(ds2.getPages());
+		System.out.println("PAGES: " + page + "/" + ds2.getPages());
 		
 		System.out.println( hwalker.generate( ds2 ));
 		
-		System.out.println(ds2.hasprev());
-		System.out.println(ds2.hasnext());
+		System.out.println("previous: " + ds2.hasprev());
+		System.out.println("next:     " + ds2.hasnext());
 		rs.reset();
 
 		System.exit(0);

@@ -14,18 +14,37 @@ public class ResultSetDatasource implements Datasource {
 	int columnshidden = -1;
 	
 	int rowcount = 0;
+
+	public final static int COUNT_NONE    = 0;
+	public final static int COUNT_ITERATE = 1;
+	public final static int COUNT_LAST    = 2;
+	// ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY
 	
 	public int getRowCount() {
 		return rowcount;
 	}
 
-	public ResultSetDatasource(ResultSet rset) 
+	public ResultSetDatasource(ResultSet rset)
+	{
+		this(rset, COUNT_ITERATE);
+	}
+	
+	public ResultSetDatasource(ResultSet rset, int version) 
 	{
 		this.rset = rset;
 		
+		if(version == COUNT_NONE)
+			return;
+		
 		try {
-			rset.last();
-			rowcount = rset.getRow();
+			if(version == COUNT_ITERATE) { 
+				rowcount = 0;
+				while(rset.next())
+					rowcount++;
+			} else if(version == COUNT_LAST) {
+				rset.last();
+				rowcount = rset.getRow();
+			}
 			rset.beforeFirst();
 		} catch(Exception e) {
 			System.out.println("unable to get row count: " + e);	
