@@ -11,12 +11,22 @@ public class PagedDatasource implements Datasource {
 	int currow;
 	int maxrow;
 	
+	int pages = 0;
+	
 	public int getRowCount() {
 		return ds.getRowCount();
 	}
 	
 	public int getPages() {
-		return (int)((getRowCount()/rows)+1);
+		if(pages != 0)
+			return pages;
+		
+		pages = (int)((getRowCount()/rows));
+		
+		if(getRowCount() % rows != 0)
+			pages++;
+		
+		return pages;
 	}
 
 	public PagedDatasource(Datasource ds, int rows, int page) {
