@@ -235,20 +235,22 @@ public abstract class Table extends Part
 		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
 	}
 	
-	public void store() throws Exception 
+	public int store() throws Exception 
 	{
 		if(isFound())
-			update();
-		else
-			insert();
+			return update();
+
+		insert();
+		return 1;
 	}
 	
-	public void store(Connection conn) throws Exception 
+	public int store(Connection conn) throws Exception 
 	{
 		if(isFound())
-			update(conn);
-		else
-			insert(conn);
+			return update(conn);
+		
+		insert(conn);
+		return 1;
 	}
 	
 	public void insert() throws SQLException 
@@ -625,7 +627,7 @@ public abstract class Table extends Part
 		return stmt.executeUpdate();
 	}
 	
-	public static int delete(Class clazz, Connection conn, Object id1, Object id2) throws Exception 
+	public static int delete_multikey(Class clazz, Connection conn, Table table) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
 		
@@ -638,8 +640,11 @@ public abstract class Table extends Part
 		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
 		
 		// Delete by ID
-		stmt.setObject(1, id1);
-		stmt.setObject(2, id2);
+		Desc[] descs = table.getDescIDs();
+		
+		for(int i=0; i < descs.length; i++)
+			stmt.setObject(i+1, descs[i].getValue(table));
+		
 		return stmt.executeUpdate();
 	}
 
@@ -660,9 +665,8 @@ public abstract class Table extends Part
 		// Delete current Object
 		if(getDescIDs().length == 1)
 			return delete(getClass(), conn, getDescIDs()[0].getValue(this) );
-		else
-			return delete(getClass(), conn, getDescIDs()[0].getValue(this),
-									 getDescIDs()[1].getValue(this));
+		else 
+			return delete_multikey(getClass(), conn, this);
 	}
 	
 	public int update() throws Exception 
