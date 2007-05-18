@@ -70,13 +70,13 @@ public class PagerTable {
 		rset.absolute(row);
 */
 		
-		ResultSetDatasource rs = new ResultSetDatasource(rset);
+		ResultSetDatasource rs = new ResultSetDatasource(rset, 2);
 		 //rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
 		 rs.addColumn("name",     new Column("DER NAME"));
 		 rs.addColumn("val",      new Column("val").setListener(new NumberFormatListener()));
 		
 		int numberOfRows = 10;
-		int page = 1;
+		int page = 22;
 		
 		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();

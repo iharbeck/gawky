@@ -627,7 +627,7 @@ public abstract class Table extends Part
 		return stmt.executeUpdate();
 	}
 	
-	public static int delete_multikey(Class clazz, Connection conn, Table table) throws Exception 
+	public static int delete_combinedid(Class clazz, Connection conn, Table table) throws Exception 
 	{
 		Table inst = (Table)clazz.newInstance();
 		
@@ -639,7 +639,7 @@ public abstract class Table extends Part
 		
 		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
 		
-		// Delete by ID
+		// Delete by combined ID
 		Desc[] descs = table.getDescIDs();
 		
 		for(int i=0; i < descs.length; i++)
@@ -666,7 +666,7 @@ public abstract class Table extends Part
 		if(getDescIDs().length == 1)
 			return delete(getClass(), conn, getDescIDs()[0].getValue(this) );
 		else 
-			return delete_multikey(getClass(), conn, this);
+			return delete_combinedid(getClass(), conn, this);
 	}
 	
 	public int update() throws Exception 
