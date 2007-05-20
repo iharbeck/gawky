@@ -29,7 +29,6 @@ import org.apache.commons.logging.LogFactory;
 
 public abstract class Table extends Part 
 {
-	int defaultconnection = 0;
 	boolean found = false;
 	
 	private final class StaticLocal 
@@ -53,6 +52,7 @@ public abstract class Table extends Part
 		
 		Generator generator       = new Generator();
 		Dialect dialect           = new MySQL();
+		int defaultconnection     = 0;
 	}
 	
 	public void descAfterInterceptor(Desc[] descs) { 
@@ -117,20 +117,6 @@ public abstract class Table extends Part
 	abstract public String getTableName();
 	
 	
-
-	private void store(int idindex, IDGenerator idgenerator) 
-	{
-		StaticLocal local = getStaticLocal();
-		
-		local.descidindex = new int[1];
-		local.descidindex[0] = idindex;
-		local.idgenerator = idgenerator;
-	}
-	
-	public void setDescID(int idindex) {
-		store(idindex, null);
-	}
-	
 	// Start Multikey 
 	
 	/**
@@ -167,12 +153,21 @@ public abstract class Table extends Part
 	
 	// Ende Multikey
 	
-	public void setDescID(IDGenerator idgenerator) {
-		store(0, idgenerator);
+	public void setDescID(int idindex) {
+		setDescID(idindex, null);
 	}
 	
-	public void setDescID(int idindex, IDGenerator idgenerator) {
-		store(idindex, idgenerator);
+	public void setDescID(IDGenerator idgenerator) {
+		setDescID(0, idgenerator);
+	}
+	
+	public void setDescID(int idindex, IDGenerator idgenerator) 
+	{
+		StaticLocal local = getStaticLocal();
+		
+		local.descidindex = new int[1];
+		local.descidindex[0] = idindex;
+		local.idgenerator = idgenerator;
 	}
 	
 	public final boolean isPrimary(Desc desc) {
@@ -250,31 +245,31 @@ public abstract class Table extends Part
 		return stmt;
 	}
 	
-	protected String getInsertSQL() {
-		return getStaticLocal().generator.generateInsertSQL(this);
+	protected final String getInsertSQL() {
+		return getStaticLocal().generator.generateInsertSQL(this).toString();
 	}
 	
-	protected String getUpdateSQL() {
-		return getStaticLocal().generator.generateUpdateSQL(this);
+	protected final String getUpdateSQL() {
+		return getStaticLocal().generator.generateUpdateSQL(this).toString();
 	}
 
-	protected String getSelectSQL() {
-		return getStaticLocal().generator.generateSelectSQL(this);
+	protected final String getSelectSQL() {
+		return getStaticLocal().generator.generateSelectSQL(this).toString();
 	}
 
-	protected String getFindSQL() {
-		return getStaticLocal().generator.generateFindSQL(this);
+	protected final String getFindSQL() {
+		return getStaticLocal().generator.generateFindSQL(this).toString();
 	}
 	
-	protected String getDeleteSQL() {
-		return getStaticLocal().generator.generateDeleteSQL(this);
+	protected final String getDeleteSQL() {
+		return getStaticLocal().generator.generateDeleteSQL(this).toString();
 	}
 	
-	protected void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
+	protected final void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
 		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
 	}
 	
-	public int store() throws Exception 
+	public final int store() throws Exception 
 	{
 		if(isFound())
 			return update();
@@ -283,7 +278,7 @@ public abstract class Table extends Part
 		return 1;
 	}
 	
-	public int store(Connection conn) throws Exception 
+	public final int store(Connection conn) throws Exception 
 	{
 		if(isFound())
 			return update(conn);
@@ -296,7 +291,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(defaultconnection);
+			conn = DB.getConnection(getStaticLocal().defaultconnection);
 			insert(conn);
 		} finally {
 			DB.doClose(conn);
@@ -382,7 +377,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(defaultconnection);
+			conn = DB.getConnection(getStaticLocal().defaultconnection);
 			find(conn, id);
 		} finally {
 			DB.doClose(conn);
@@ -398,7 +393,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(defaultconnection);
+			conn = DB.getConnection(getStaticLocal().defaultconnection);
 			find(conn, ids);
 		} finally {
 			DB.doClose(conn);
@@ -430,7 +425,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(defaultconnection);
+			conn = DB.getConnection(getStaticLocal().defaultconnection);
 			find(conn, where, params);
 		} finally {
 			DB.doClose(conn);
@@ -577,7 +572,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(defaultconnection);
+			conn = DB.getConnection(getStaticLocal().defaultconnection);
 			return delete(conn);
 		} finally {
 			DB.doClose(conn);
@@ -604,7 +599,7 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(defaultconnection);
+			conn = DB.getConnection(getStaticLocal().defaultconnection);
 			return update(conn); 
 		} finally {
 			DB.doClose(conn);
@@ -633,11 +628,11 @@ public abstract class Table extends Part
 	}
 
 	public int getDefaultconnection() {
-		return defaultconnection;
+		return getStaticLocal().defaultconnection;
 	}
 
 	public void setDefaultconnection(int defaultconnection) {
-		this.defaultconnection = defaultconnection;
+		getStaticLocal().defaultconnection = defaultconnection;
 	}
 
 	public boolean isFound() {

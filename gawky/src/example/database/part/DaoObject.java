@@ -40,8 +40,8 @@ public class DaoObject extends Table {
 		
 		DaoObject daoobject = new DaoObject();
 		
-		daoobject.setName("HELO");
-		daoobject.setKunde_id("45");
+	//	daoobject.setName("HELO");
+	//	daoobject.setKunde_id("45");
 	//	daoobject.insert(conn);
 		
 		daoobject.find(conn, "45");
