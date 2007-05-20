@@ -65,7 +65,7 @@ public class Generator
 		return fmt.format(val);
 	}
 	
-	public void fillPart(ResultSet rset, Table part)
+	public final void fillPart(ResultSet rset, Table part)
 	{
 		Desc[] descs = part.getCachedDesc();
 		Desc   desc;
