@@ -3,6 +3,7 @@ package gawky.database.generator;
 import gawky.database.DB;
 import gawky.database.part.Table;
 import gawky.global.Option;
+import gawky.message.Formatter;
 import gawky.message.part.Desc;
 
 import java.sql.Connection;
@@ -104,7 +105,7 @@ public class Generator
 				}
 	
 			    if(dotrim)
-			    	val = val.replaceAll("\\s+$", "");
+			    	val = Formatter.rtrim(val);
 			    
 			    descs[i].setValue(part, val);
 

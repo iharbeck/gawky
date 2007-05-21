@@ -1,5 +1,6 @@
 package gawky.message.parser;
 
+import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -202,7 +203,7 @@ public class Parser
 			return;
 
 		if(Parser.dotrim)
-			value = value.trim();
+			value = Formatter.rtrim(value);
 		
 //		switch(pos) {
 //		case 0:

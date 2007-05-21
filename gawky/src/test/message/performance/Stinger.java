@@ -12,7 +12,7 @@ public class Stinger {
 		
 		for(int i=0; i < 1000; i++)
 		{
-			fo = Formatter.getStringC(12, "INGO");
+			fo = Formatter.rtrim("    asINGO22   ");
 		}
 		System.out.println(fo);
 

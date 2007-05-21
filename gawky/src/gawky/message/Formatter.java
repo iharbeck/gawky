@@ -17,6 +17,31 @@ public class Formatter
 	   return lpad(size, value, '0');
    }
 
+   public final static String ltrim(String value)
+   {
+	   int len = value.length();
+	   char[] src = value.toCharArray();
+
+	   int i=0;
+	   while ((i < len) && (src[i] <= ' ')) {
+		    i++;
+	   }
+	   
+	   return value.substring(i, len);
+   }
+
+   public final static String rtrim(String value)
+   {
+	   int len = value.length();
+	   char[] src = value.toCharArray();
+
+	   while ((len >= 0) && (src[len-1] <= ' ')) {
+		    len--;
+	   }
+
+	   return value.substring(0, len);
+   }
+
    static char[] iv = "\n\r\0\t".toCharArray();
    
    public final static String lpad(int size, String value, char filler)
@@ -38,11 +63,13 @@ public class Formatter
    	    target[i] = filler;
    	
      
-     for(int i=0; i < size; i++)
+     for(int i=0; i < size; i++) {
    	  for(int a=0; a < 4; a++)
-   		  if(target[i] == iv[a])
+   		  if(target[i] == iv[a]) {
    			  target[i] = ' ';
-     
+   			  continue;
+   		  }
+     }
      return new String(target);
    }
    
@@ -66,11 +93,14 @@ public class Formatter
     	  target[i] = filler;
     
     
-      for(int i=0; i < size; i++)
-    	  for(int a=0; a < 4; a++)
-    		  if(target[i] == iv[a])
-    			  target[i] = ' ';
-    			  
+      for(int i=0; i < size; i++) {
+       	  for(int a=0; a < 4; a++)
+       		  if(target[i] == iv[a]) {
+       			  target[i] = ' ';
+       			  continue;
+       		  }
+      }
+      
       return new String(target);
    }
    
