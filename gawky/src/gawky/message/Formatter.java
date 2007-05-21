@@ -1,95 +1,139 @@
 package gawky.message;
 
+import java.util.regex.Pattern;
+
 /*
   Generate Char and Number Format
 */
 
 public class Formatter
 {
-	   public final static String getStringN(int size, long value) {
-		   return getStringN(size, Long.toString(value));
-	   }
+   public final static String getStringN(int size, long value) {
+	   return getStringN(size, Long.toString(value));
+   }
 
-	   public final static String getStringN(int size, String value)
-	   {
-	     if(value == null)
-	        value = "";
-	     
-	     value = value.replaceAll("[\n\r\0\t]", " ");
-	     
-	     if(size == 0)
-	    	 return value;
-	     
-	     return (getSpacer(size-value.length(), "0") + value).substring(0, size);
-	   }
+   public final static String getStringN(int size, String value)
+   {
+	   return lpad(size, value, '0');
+   }
 
-	   public final static String getStringNL(int size, long value) {
-		   return getStringNL(size, Long.toString(value));
-	   }
-	   
-	   public final static String getStringNL(int size, String value)
-	   {
-	     if(value == null)
-	    	 value = "";
-	    
-	     if(size == 0)
-	    	 return value;
-	    
-	     return (value + getSpacer(size-value.length(), "0") ).substring(0, size);
-	   }
+   static char[] iv = "\n\r\0\t".toCharArray();
+   
+   public final static String lpad(int size, String value, char filler)
+   {
+     if(value == null)
+         value = "";
 
-	   public final static String getStringC(int size, String value)
-	   {
-	     if(value == null)
+	 if(size == 0)
+		 return value;
+
+     char[] target = new char[size];
+
+     int len = value.length();
+     int spos = (len <= size) ? len : size ;
+     
+     value.getChars(0, spos, target, size-spos);
+     
+     for(int i=0; i < size-spos; i++)
+   	    target[i] = filler;
+   	
+     
+     for(int i=0; i < size; i++)
+   	  for(int a=0; a < 4; a++)
+   		  if(target[i] == iv[a])
+   			  target[i] = ' ';
+     
+     return new String(target);
+   }
+   
+   public final static String rpad(int size, String value, char filler)
+   {
+	  if(value == null)
 	      value = "";
-	    
-	     value = value.replaceAll("[\n\r\0\t]", " ");
-	    
-	     if(size == 0)
-	    	 return value;
-	    
-	     return (value + getSpacer(size-value.length())).substring(0, size);
-	   }
-
-	   public final static String getStringCR(int size, String value)
-	   {
-	     if(value == null)
-	      value = "";
-	    
-	     value = value.replaceAll("[\n\r\0\t]", " ");
-	    
-	     if(size == 0)
-	    	 return value;
-	    
-	     return (getSpacer(size-value.length()) + value).substring(0, size);
-	   }
-
-
-	   public final static String getStringV(int size, String value) 
-	   {
-		   return getStringV(size, value, ""+'\001');
-	   }
 	   
-	   public final static String getStringV(int size, String value, String delim) 
-	   {
-		   if (value == null)
-            value = "";
-        
-		   return (value + delim);
-	   }
+	  if(size == 0)
+		 return value;
 
-	   public final static String getSpacer(int len)
-	   {
-	     return getSpacer(len, " ");
-	   }
+	  
+	  char[] target = new char[size];
+     
+      int len = value.length();
+      int epos = (len <= size) ? len : size;
+      
+      value.getChars(0, epos, target, 0);
+      
+      for(int i=epos; i < size; i++)
+    	  target[i] = filler;
+    
+    
+      for(int i=0; i < size; i++)
+    	  for(int a=0; a < 4; a++)
+    		  if(target[i] == iv[a])
+    			  target[i] = ' ';
+    			  
+      return new String(target);
+   }
+   
+   public final static String getStringNL(int size, long value) {
+	   return getStringNL(size, Long.toString(value));
+   }
+   
+   public final static String getStringNL(int size, String value)
+   {
+	 return rpad(size, value, '0');  
+   }
 
-	   public final static String getSpacer(int len, String filler)
-	   {
-		 StringBuilder value = new StringBuilder(100);
+   static Matcher spaces = new Matcher("[\n\r\0\t]");
+   
+   public final static String getStringC(int size, String value)
+   {
+	  return rpad(size, value, ' ');
+   }
 
-	     for (int i=0; i < len; i++) {
-	       value.append(filler);
-	     }
-	     return value.toString();
-	   }
+   public final static String getStringCR(int size, String value)
+   {
+	   return lpad(size, value, ' ');  
+   }
+
+
+   public final static String getStringV(int size, String value) 
+   {
+	   return getStringV(size, value, ""+'\001');
+   }
+   
+   public final static String getStringV(int size, String value, String delim) 
+   {
+	   if (value == null)
+          value = "";
+    
+	   return (value + delim);
+   }
+
+   public final static String getSpacer(int len)
+   {
+     return rpad(len, null, ' ');
+   }
+//
+//   public final static String getSpacer(int len, String filler)
+//   {
+//	 StringBuilder value = new StringBuilder(100);
+//
+//     for (int i=0; i < len; i++) {
+//       value.append(filler);
+//     }
+//     return value.toString();
+//   }
+}
+
+class Matcher 
+{
+    Pattern pattern;
+   
+    public Matcher(String regex) { 
+    	pattern = Pattern.compile(regex);   
+    }
+  
+    public final String process(String text, String replace) {
+    	return pattern.matcher(text).replaceAll(replace);
+    }
 }
