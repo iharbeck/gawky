@@ -1,7 +1,5 @@
 package test.message.performance;
 
-import java.util.ArrayList;
-
 import example.message.filereader.Address;
 import gawky.message.parser.Parser;
 

@@ -1,9 +1,9 @@
 package test;
 
-import test.file.TestLocator;
-import test.message.TestPart;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import test.file.TestLocator;
+import test.message.TestPart;
 
 public class AllTests {
 

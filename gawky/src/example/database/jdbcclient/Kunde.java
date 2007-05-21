@@ -1,7 +1,7 @@
 package example.database.jdbcclient;
 
-import gawky.database.jdbcclient.JdbcSelectMapper;
 import gawky.database.jdbcclient.JdbcParameterMapper;
+import gawky.database.jdbcclient.JdbcSelectMapper;
 import gawky.database.jdbcclient.StatementDecorator;
 
 import java.sql.ResultSet;

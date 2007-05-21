@@ -1,10 +1,10 @@
 package gawky.database.generator;
 
 
-import java.sql.Connection;
-
 import gawky.database.DB;
 import gawky.database.part.Table;
+
+import java.sql.Connection;
 
 public class IDGenerator {
 

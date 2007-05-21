@@ -2,8 +2,8 @@ package example.database.jdbcclient;
 
 import gawky.database.DB;
 import gawky.database.jdbcclient.JdbcClient;
-import gawky.database.jdbcclient.JdbcSelectMapper;
 import gawky.database.jdbcclient.JdbcParameterMapper;
+import gawky.database.jdbcclient.JdbcSelectMapper;
 import gawky.database.jdbcclient.StatementDecorator;
 import gawky.global.Option;
 

@@ -1,8 +1,8 @@
 package gawky.list.listener;
 
-import java.text.DecimalFormat;
-
 import gawky.list.datasource.Datasource;
+
+import java.text.DecimalFormat;
 
 public class NumberFormatListener implements CellListener
 {

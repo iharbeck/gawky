@@ -1,7 +1,5 @@
 package gawky.incubator.message.dispatcher;
 
-import java.util.HashMap;
-
 import gawky.message.part.Part;
 import gawky.service.mt940.Satz20;
 import gawky.service.mt940.Satz21;
@@ -9,6 +7,8 @@ import gawky.service.mt940.Satz25;
 import gawky.service.mt940.Satz28;
 import gawky.service.mt940.Satz61;
 import gawky.service.mt940.Satz86;
+
+import java.util.HashMap;
 
 public class Dispatcher {
 

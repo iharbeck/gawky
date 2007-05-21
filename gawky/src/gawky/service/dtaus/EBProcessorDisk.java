@@ -1,11 +1,11 @@
 package gawky.service.dtaus;
 
-import java.util.ArrayList;
-
 import gawky.service.dtaus.dtaus_disc.SatzA;
 import gawky.service.dtaus.dtaus_disc.SatzC;
 import gawky.service.dtaus.dtaus_disc.SatzCe;
 import gawky.service.dtaus.dtaus_disc.SatzE;
+
+import java.util.ArrayList;
 
 public class EBProcessorDisk 
 {

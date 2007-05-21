@@ -1,9 +1,9 @@
 package example.global;
 
-import java.util.Date;
-
 import gawky.global.Format;
 import gawky.global.Validation;
+
+import java.util.Date;
 
 public class TestFormat {
 

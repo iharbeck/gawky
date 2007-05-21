@@ -1,6 +1,7 @@
 package gawky.web;
-import java.io.*;
+import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 

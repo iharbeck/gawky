@@ -1,10 +1,10 @@
 package gawky.xml.dom;
 
-import java.io.File;
-import java.util.List;
-
 import gawky.file.Locator;
 import gawky.xml.sax.SaxSample;
+
+import java.io.File;
+import java.util.List;
 
 import org.jdom.Document;
 import org.jdom.Element;
