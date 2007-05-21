@@ -51,6 +51,20 @@ public class Formatter
 	     return (value + getSpacer(size-value.length())).substring(0, size);
 	   }
 
+	   public final static String getStringCR(int size, String value)
+	   {
+	     if(value == null)
+	      value = "";
+	    
+	     value = value.replaceAll("[\n\r\0\t]", " ");
+	    
+	     if(size == 0)
+	    	 return value;
+	    
+	     return (getSpacer(size-value.length()) + value).substring(0, size);
+	   }
+
+
 	   public final static String getStringV(int size, String value) 
 	   {
 		   return getStringV(size, value, ""+'\001');

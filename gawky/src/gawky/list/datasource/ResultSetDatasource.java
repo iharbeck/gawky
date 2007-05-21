@@ -184,7 +184,10 @@ public class ResultSetDatasource implements Datasource {
 	
 	public void setCurrRow(int pos) {
 		try {
-			rset.absolute(pos);
+			if(pos == 0)
+				rset.beforeFirst();
+			else
+				rset.absolute(pos);
 		} catch (Exception e) {
 			System.out.println("Set absolut position: " + e);
 		}
