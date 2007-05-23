@@ -146,7 +146,7 @@ public class Generator
 		}
 		
 		sql.deleteCharAt(sql.length()-1);
-		params.deleteCharAt(sql.length()-1);
+		params.deleteCharAt(params.length()-1);
 		
 		if(bean.getDescIDs()[0] != null) // descid != null)
 		{
