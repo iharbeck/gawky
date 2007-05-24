@@ -72,6 +72,33 @@ public class Ftp
 		return (String[])files.toArray(new String[files.size()]);
 	}
 
+	public String[] retrieveFilesRegex(String regex) throws Exception
+	{
+		FTPFile ftpFileList [] = null;
+	
+		ftpFileList = ftp.listFiles();
+
+		ArrayList files = new ArrayList();
+		
+		for(int i=0; i < ftpFileList.length; i++)
+		{
+			if(!ftpFileList[i].isFile() || (regex != null &&
+			   !ftpFileList[i].getName().matches(regex)))
+				continue;
+			
+			String file = ftpFileList[i].getName();
+		
+			files.add(file);
+			log.info("downloading: " + file);
+			
+			FileOutputStream fos = new FileOutputStream(localdir + file); 
+			
+			ftp.retrieveFile(file, fos);
+		}
+		
+		return (String[])files.toArray(new String[files.size()]);
+	}
+
 	public void renameRemoteFile(String src, String dest) throws Exception
 	{
 		ftp.rename(src, dest);
