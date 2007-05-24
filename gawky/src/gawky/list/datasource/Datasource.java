@@ -1,6 +1,7 @@
 package gawky.list.datasource;
 
 import gawky.list.listener.CellListener;
+import gawky.list.listener.RowListener;
 
 public interface Datasource 
 {
@@ -16,6 +17,8 @@ public interface Datasource
 	int getWidth(int i);	  // get width
 	
 	public CellListener getListener(int i);
+	public RowListener  getRowListener();
+
 	public int getColumnsHidden();
 	
 	public int getRowCount();

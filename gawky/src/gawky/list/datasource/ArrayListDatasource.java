@@ -1,6 +1,7 @@
 package gawky.list.datasource;
 
 import gawky.list.listener.CellListener;
+import gawky.list.listener.RowListener;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,16 @@ public class ArrayListDatasource implements Datasource
 	
 	int columncount;
 	int columnshidden = -1;
+	
+	RowListener rowlistener = null;
+	
+	public RowListener getRowListener() {
+		return rowlistener;
+	}
+	
+	public void setRowListener(RowListener rowlistener) {
+		this.rowlistener = rowlistener;
+	}
 	
 	/**
 	 * Initialisiere Datenquelle

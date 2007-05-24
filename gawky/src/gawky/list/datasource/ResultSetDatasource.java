@@ -1,6 +1,7 @@
 package gawky.list.datasource;
 
 import gawky.list.listener.CellListener;
+import gawky.list.listener.RowListener;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
@@ -20,6 +21,16 @@ public class ResultSetDatasource implements Datasource {
 	public final static int COUNT_LAST    = 2;
 	// ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY
 	
+	RowListener rowlistener = null;
+	
+	public RowListener getRowListener() {
+		return rowlistener;
+	}
+	
+	public void setRowListener(RowListener rowlistener) {
+		this.rowlistener = rowlistener;
+	}
+
 	public int getRowCount() {
 		return rowcount;
 	}

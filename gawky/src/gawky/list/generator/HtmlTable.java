@@ -3,6 +3,7 @@ package gawky.list.generator;
 import gawky.list.datasource.Column;
 import gawky.list.datasource.Datasource;
 import gawky.list.listener.CellListener;
+import gawky.list.listener.RowListener;
 
 public class HtmlTable extends AbstractTable
 {
@@ -37,9 +38,12 @@ public class HtmlTable extends AbstractTable
 		
 		String rollover = "onmouseover=\"this.className='rollover'\" onmouseout=\"this.className=''\"";
 		
+		RowListener rowlistener = getRowListener(ds);
+		
+		int x = 0;
 		while(ds.nextRow())
 		{
-			buffer.append("<TR " + rollover + ">");
+			buffer.append("<TR " + rollover + " " + rowlistener.process(ds, x) + ">");
 			for(int i=0; i < ds.getColumns(); i++)
 			{
 				if(ds.getWidth(i) == Column.HIDDEN)
@@ -57,6 +61,7 @@ public class HtmlTable extends AbstractTable
 
 			}
 			buffer.append("</TR>\n");
+			x++;
 		}
 		
 		buffer.append("</TABLE>\n");

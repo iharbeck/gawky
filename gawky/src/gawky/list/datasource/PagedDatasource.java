@@ -1,6 +1,7 @@
 package gawky.list.datasource;
 
 import gawky.list.listener.CellListener;
+import gawky.list.listener.RowListener;
 
 
 public class PagedDatasource implements Datasource {
@@ -12,6 +13,16 @@ public class PagedDatasource implements Datasource {
 	int maxrow;
 	
 	int pages = 0;
+	
+	RowListener rowlistener = null;
+	
+	public RowListener getRowListener() {
+		return rowlistener;
+	}
+	
+	public void setRowListener(RowListener rowlistener) {
+		this.rowlistener = rowlistener;
+	}
 	
 	public int getRowCount() {
 		return ds.getRowCount();
