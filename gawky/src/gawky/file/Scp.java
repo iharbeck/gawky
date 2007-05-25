@@ -20,7 +20,7 @@ public class Scp
 {
 	private static Log log = LogFactory.getLog(Scp.class);
 	
-	public static void copytohost(String host, String user, String pass, String lfile, String rfile) 
+	public static void copytohost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{
 		FileInputStream fis = null;
 		try 
@@ -95,8 +95,7 @@ public class Scp
 			session.disconnect();
 
 			System.exit(0);
-		} catch (Exception e) {
-			log.error(e);
+		} finally {
 			try {
 				if (fis != null)
 					fis.close();
@@ -105,7 +104,7 @@ public class Scp
 		}
 	}
 	
-	public static void copyfromhost(String host, String user, String pass, String lfile, String rfile) 
+	public static void copyfromhost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{
 		FileOutputStream fos = null;
 		
@@ -211,8 +210,7 @@ public class Scp
 			session.disconnect();
 
 			System.exit(0);
-		} catch (Exception e) {
-			log.error(e);
+		} finally {
 			try {
 				if (fos != null)
 					fos.close();
