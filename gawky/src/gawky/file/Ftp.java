@@ -106,6 +106,11 @@ public class Ftp
 		checkReply("rename failed:" + src);
 	}
 	
+	public void renameLocaleFile(String src, String dest) throws Exception
+	{
+		new File(localdir + "/" + src).renameTo(new File(localdir + "/" + dest));
+	}
+	
 	public final void checkReply(String info) throws Exception {
 		if(!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
 	        log.error(info);
