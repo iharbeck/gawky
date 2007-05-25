@@ -56,7 +56,7 @@ public class Ftp
 		for(int i=0; i < ftpFileList.length; i++)
 		{
 			if(!ftpFileList[i].isFile() || (filefilter != null &&
-			   !ftpFileList[i].getName().matches(".*\\" + filefilter)))
+			   !ftpFileList[i].getName().endsWith(filefilter)))
 				continue;
 			
 			String file = ftpFileList[i].getName();
