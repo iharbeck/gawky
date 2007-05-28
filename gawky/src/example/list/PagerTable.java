@@ -4,11 +4,13 @@ import gawky.database.DB;
 import gawky.global.Option;
 import gawky.list.datasource.ArrayListDatasource;
 import gawky.list.datasource.Column;
+import gawky.list.datasource.Datasource;
 import gawky.list.datasource.PagedDatasource;
 import gawky.list.datasource.ResultSetDatasource;
 import gawky.list.generator.HtmlTable;
 import gawky.list.listener.LinkListener;
 import gawky.list.listener.NumberFormatListener;
+import gawky.list.listener.RowListener;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -75,14 +77,23 @@ public class PagerTable {
 		 rs.addColumn("name",     new Column("DER NAME"));
 		 rs.addColumn("val",      new Column("val").setListener(new NumberFormatListener()));
 		
+		 RowListener t =  new RowListener() {
+				public String process(Datasource ds, int row) {
+					
+					return "" + ds.getValue(0);
+				} 
+			};
+			
+		 rs.setRowListener( t );
+		 
 		int numberOfRows = 10;
 		int page = 22;
 		
 		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();
 		hwalker.setTablestyle("width:100%");
-		
 		PagedDatasource ds2 = new PagedDatasource(rs, numberOfRows, page);
+		
 		
 		System.out.println("PAGES: " + page + "/" + ds2.getPages());
 		

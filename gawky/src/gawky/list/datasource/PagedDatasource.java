@@ -14,14 +14,13 @@ public class PagedDatasource implements Datasource {
 	
 	int pages = 0;
 	
-	RowListener rowlistener = null;
 	
 	public RowListener getRowListener() {
-		return rowlistener;
+		return ds.getRowListener();
 	}
 	
 	public void setRowListener(RowListener rowlistener) {
-		this.rowlistener = rowlistener;
+		ds.setRowListener(rowlistener); 
 	}
 	
 	public int getRowCount() {

@@ -97,4 +97,12 @@ public class Tool {
 		 for(int i=0; i < files.length; i++)
 			 new File(folder + "/" + files[i]).delete();
 	 }
+	 
+	 public static String getFolder(String path) {
+		 return path.substring(0, path.lastIndexOf("/")+1);
+	 }
+
+	 public static String getFilename(String path) {
+		 return path.substring(path.lastIndexOf("/")+1);
+	 }
 }

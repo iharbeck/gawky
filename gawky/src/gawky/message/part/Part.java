@@ -57,12 +57,16 @@ public abstract class Part
 		
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
 		
+		String folder = "file://" + Locator.findBinROOT() + "worker/";
+		
+		log.info("JavaAssist folder: " + folder);
 		ClassLoader urlCl = null;
 		
 		try {
 			urlCl  = URLClassLoader.newInstance(
-					    new URL[]{new URL( "file://" + Locator.findBinROOT() + "worker/" )});
+					    new URL[]{new URL( folder )});
 		} catch(Exception e) {
+			log.error("Missing temp folder: " + folder);
 			hasJavaAssist = false;
 		}
 
