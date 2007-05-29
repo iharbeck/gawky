@@ -98,11 +98,11 @@ public class Tool {
 			 new File(folder + "/" + files[i]).delete();
 	 }
 	 
-	 public static String getFolder(String path) {
-		 return path.substring(0, path.lastIndexOf("/")+1);
+	 public static String getFolder(String fullpath) {
+		return fullpath.substring(0, fullpath.lastIndexOf("/")+1);
 	 }
-
-	 public static String getFilename(String path) {
-		 return path.substring(path.lastIndexOf("/")+1);
+		
+	 public static String getFilename(String fullpath) {
+		return fullpath.substring(fullpath.lastIndexOf("/")+1);
 	 }
 }
