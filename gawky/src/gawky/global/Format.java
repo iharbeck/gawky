@@ -58,4 +58,40 @@ public class Format {
 		return df.format(value);
 	}
 	
+	public static String stringformat(long cent) 
+	{
+		return stringformat(Long.toString(cent));
+	}
+	
+	public static String stringformat(String cent) 
+	{
+		int nachkomma = 2;
+		int len = cent.length();
+		int pos = len + (len-nachkomma) / 3;
+		
+		if((len-nachkomma) % 3 == 0)
+			pos--;
+		
+		char[] target = new char[pos+1];
+		
+		int a = 0;
+		for(int i = len-1; i >= 0; i--, pos--, a++)
+		{
+			if(a == nachkomma) {
+				target[pos] = ',';
+				i++;
+				continue;
+			}
+			if((a-nachkomma)%4 == 0 && a > nachkomma) {
+				target[pos] = '.';
+				i++;
+				continue;
+			}
+				
+			target[pos] = cent.charAt(i);
+		}
+		
+		return new String(target);
+	}
+	
 }

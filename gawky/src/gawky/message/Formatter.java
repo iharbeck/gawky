@@ -35,7 +35,7 @@ public class Formatter
 	   int len = value.length();
 	   char[] src = value.toCharArray();
 
-	   while ((len >= 0) && (src[len-1] <= ' ')) {
+	   while ((len > 0) && (src[len-1] <= ' ')) {
 		    len--;
 	   }
 
@@ -143,16 +143,7 @@ public class Formatter
    {
      return rpad(len, null, ' ');
    }
-//
-//   public final static String getSpacer(int len, String filler)
-//   {
-//	 StringBuilder value = new StringBuilder(100);
-//
-//     for (int i=0; i < len; i++) {
-//       value.append(filler);
-//     }
-//     return value.toString();
-//   }
+
 }
 
 class Matcher 
