@@ -1,9 +1,12 @@
 package gawky.service.dtaus.dtaus_disc;
 
+import gawky.global.Constant;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
 import gawky.message.part.Reserved;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -26,17 +29,21 @@ public class SatzE extends gawky.service.dtaus.dtaus_band.SatzE
 		}; 
 	}
 
-    public byte[] getSatzE() 
+    public byte[] getSatzE() throws UnsupportedEncodingException
     {
-    	return this.getBytes();
+    	anzahlcsaetze   = Long.toString(count);
+        sumbetraege     = Long.toString(0);
+        sumkontonummern = Long.toString(lsumkto);
+        sumblz          = Long.toString(lsumblz);
+        sumeurobetraege = Long.toString(lsumbetraege);
+        
+    	return this.getBytes(Constant.ENCODE_LATIN1);
     }
     
-    private String len = "0128";
 
     public String getLen() {
-		return len;
+		return "0128";
 	}
 	public void setLen(String len) {
-		this.len = len;
 	}
 }

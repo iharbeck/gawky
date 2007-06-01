@@ -9,6 +9,7 @@ import gawky.message.part.DescP;
 import gawky.message.part.Part;
 import gawky.message.part.Reserved;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -69,7 +70,7 @@ public class SatzC extends Part
     static int linelen = 581;
     static EBCDICGenerator generator = new EBCDICGenerator();
     
-    public byte[] getSatzC() 
+    public byte[] getSatzC() throws UnsupportedEncodingException
     {
     	int len = 0;
 		if(getSatzCe() != null) 

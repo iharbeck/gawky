@@ -1,7 +1,9 @@
 package gawky.service.dtaus;
 
 import gawky.global.Constant;
+import gawky.message.Formatter;
 import gawky.service.dtaus.dtaus_disc.SatzC;
+import gawky.service.dtaus.dtaus_disc.SatzCe;
 import gawky.service.dtaus.dtaus_disc.SatzE;
 
 import java.io.File;
@@ -10,12 +12,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
-public class EBDisk 
+public class EBDiskMulti 
 {
-	public static void read(File f, EBProcessorDisk processor) throws IOException, Exception
+	public static EBProcessorDisk[] read(File f) throws IOException, Exception
     {
+		ArrayList logics = new ArrayList();
+		
+		EBProcessorDisk processor = null;
+		
 		// Open the file and then get a channel from the stream
 		FileInputStream fis = new FileInputStream(f);
 		FileChannel fc = fis.getChannel();
@@ -65,55 +73,42 @@ public class EBDisk
 						processor.processSatzCe(part, x);
 					}
 				}
-			}
+				
+			} 
 			else if(type.startsWith("A"))
 			{
+				processor = new EBProcessorDisk();
+				
 				processor.processSatzA(line);
+				//System.exit(-1);
 			} 
 			else if(type.startsWith("E"))
 			{
 				processor.processSatzE(line);
+				
+				logics.add(processor);
 			}
 		}
 
 		// Close the channel and the stream
 		fc.close();
+
+		return (EBProcessorDisk[]) logics.toArray(new EBProcessorDisk[logics.size()]);
     }
     
     
-	public static void write(File f, EBProcessorDisk processor) throws IOException, Exception
-    {
-		FileOutputStream fos = new FileOutputStream(f);
 	
-		fos.write(processor.getSatza().getSatzA());
-		
-		Iterator it = processor.getSatzcArray().iterator();
-		
-		SatzE satze = new SatzE();
-		
-		while(it.hasNext())
-		{
-			SatzC c = (SatzC)it.next(); 
-			satze.add(c); // Abstimmsatz
-			
-			fos.write(c.getSatzC());
-		}
-		
-		fos.write(satze.getSatzE());
-		
-		fos.close();
-    }
 
     public static void main(String[] args) throws Exception
     {
     	EBProcessorDisk processor = new EBProcessorDisk();
     	
-    	File fi = new File("G:/bcos/pcama/DBDIRECT");
+    	File fi = new File("P:/bcos/pcama/DBDIRECT");
 		//File f = new File("C:/work/gawky/format/rtldti230207.org");
-		EBDisk.read(fi, processor);
-		
-		File fo = new File("G:/bcos/pcama/DBDIRECT.out");
-		EBDisk.write(fo, processor);
+//		EBDiskMulti.read(fi, processor);
+//		
+//		File fo = new File("P:/bcos/pcama/DBDIRECT.out");
+//		EBDiskMulti.write(fo, processor);
     }
 }
 

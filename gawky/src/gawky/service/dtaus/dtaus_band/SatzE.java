@@ -1,11 +1,14 @@
 package gawky.service.dtaus.dtaus_band;
 
+import gawky.global.Format;
 import gawky.message.generator.EBCDICGenerator;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescP;
 import gawky.message.part.Part;
 import gawky.message.part.Reserved;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -30,16 +33,35 @@ public class SatzE extends Part
     static int linelen = 581;
     static EBCDICGenerator generator = new EBCDICGenerator();
     
-    public byte[] getSatzE() 
+    public byte[] getSatzE() throws UnsupportedEncodingException
     {
+    	anzahlcsaetze   = Long.toString(count);
+        sumbetraege     = Long.toString(0);
+        sumkontonummern = Long.toString(lsumkto);
+        sumblz          = Long.toString(lsumblz);
+        sumeurobetraege = Long.toString(lsumbetraege);
+        	
     	return generator.generateString(this, linelen);
     }
     
-    private String anzahlcsaetze;
-    private String sumbetraege;
-    private String sumkontonummern;
-    private String sumblz;
-    private String sumeurobetraege;
+    protected long lsumbetraege;
+    protected long lsumkto;
+    protected long lsumblz;
+    protected long count;
+	
+	public void add(SatzC satzc) {
+		lsumbetraege += Format.getLong(satzc.getBetrageuro());
+		lsumkto      += Format.getLong(satzc.getKontonummer());
+		lsumblz      += Format.getLong(satzc.getBlzkontofuehrend());
+		count++;
+	}
+
+    
+    protected String anzahlcsaetze;
+    protected String sumbetraege;
+    protected String sumkontonummern;
+    protected String sumblz;
+    protected String sumeurobetraege;
     
 	public String getAnzahlcsaetze() {
 		return anzahlcsaetze;
@@ -71,6 +93,4 @@ public class SatzE extends Part
 	public void setSumkontonummern(String sumkontonummern) {
 		this.sumkontonummern = sumkontonummern;
 	}
-    
-    
 }

@@ -1,12 +1,14 @@
 package gawky.service.dtaus.dtaus_disc;
 
-import java.util.Iterator;
-
+import gawky.global.Constant;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
 import gawky.message.part.Reserved;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 
 /**
  *
@@ -50,7 +52,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 		this.len = len;
 	}
 	
-	public byte[] getSatzC() {
+	public byte[] getSatzC() throws UnsupportedEncodingException {
 		
 		int len = 0;
 		if(getSatzCe() != null) 
@@ -61,6 +63,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 		setLen("0" + (187 + len * 29 ));
 
 		String tmp = this.toString();
+		
 		
 		// Erweiterungsätze
 		Iterator it2 = null;
@@ -77,18 +80,24 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 		
 		tmp =  Formatter.getStringC(256, tmp);
 
-		String exttmp = "";
+		// ersten Block
+		
 		if(len > 2)
 		{
+			StringBuilder exttmp = new StringBuilder();
 			while(it2.hasNext())
 			{
 				SatzCe el = (SatzCe)it2.next();
-				exttmp += el.toString();
+				exttmp.append(el.toString());
 			}
 			
-			Formatter.getStringC(256, exttmp);
+			
+			return (tmp + Formatter.getStringC(128, exttmp.toString())).getBytes(Constant.ENCODE_LATIN1);
+		} 
+		else 
+		{
+			return tmp.getBytes(Constant.ENCODE_LATIN1);
 		}
 		
-		return (tmp + exttmp).getBytes();
 	}
 }

@@ -8,6 +8,8 @@ import gawky.message.part.DescP;
 import gawky.message.part.Part;
 import gawky.message.part.Reserved;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  *
  * @author  Ingo Harbeck
@@ -23,7 +25,8 @@ public class SatzA extends Part
 			new DescP(5, "blzsender"),          
 			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "empfaenger"),
 			new DescP(4, "dateidatum"),
-			new DescF(Desc.FMT_A, Desc.CODE_O, 4,   "valutadatum"),
+			new DescP(4, "valutadatum"),
+			//new DescF(Desc.FMT_A, Desc.CODE_O, 4,   "valutadatum"),
 			new DescP(6, "kontonummer"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 10, "referenznummer"),
 		    new Reserved(15),
@@ -36,7 +39,7 @@ public class SatzA extends Part
     static int linelen = 581;
     static EBCDICGenerator generator = new EBCDICGenerator();
     
-    public byte[] getSatzA() 
+    public byte[] getSatzA() throws UnsupportedEncodingException
     {
     	return generator.generateString(this, linelen);
     }

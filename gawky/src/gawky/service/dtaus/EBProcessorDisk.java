@@ -1,5 +1,6 @@
 package gawky.service.dtaus;
 
+import gawky.global.Constant;
 import gawky.service.dtaus.dtaus_disc.SatzA;
 import gawky.service.dtaus.dtaus_disc.SatzC;
 import gawky.service.dtaus.dtaus_disc.SatzCe;
@@ -19,19 +20,19 @@ public class EBProcessorDisk
 	public void processSatzA(byte[] line) throws Exception
 	{
 		satza = new SatzA();
-		satza.parse(line);
+		satza.parse(new String(line, Constant.ENCODE_LATIN1));
 	}
 
 	public void processSatzE(byte[] line) throws Exception
 	{
 		satze = new SatzE();
-		satze.parse(line);
+		satze.parse(new String(line, Constant.ENCODE_LATIN1));
 	}
 
 	public SatzC processSatzC(byte[] line) throws Exception
 	{
 		satzc = new SatzC();
-		satzc.parse(line);
+		satzc.parse(new String(line, Constant.ENCODE_LATIN1));
 		
 		satzcArray.add(satzc);
 
@@ -41,7 +42,7 @@ public class EBProcessorDisk
 	public void processSatzCe(byte[] line, int x) throws Exception
 	{
 		SatzCe satze = new SatzCe();
-		satze.parse(line);
+		satze.parse(new String(line, Constant.ENCODE_LATIN1));
 		
 		satzc.addExtention(satze);
 	}
