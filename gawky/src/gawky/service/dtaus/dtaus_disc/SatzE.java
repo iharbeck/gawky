@@ -26,7 +26,7 @@ public class SatzE extends gawky.service.dtaus.dtaus_band.SatzE
 		}; 
 	}
 
-    private String len;
+    private String len = "0128";
 
     public String getLen() {
 		return len;

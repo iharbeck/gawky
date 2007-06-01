@@ -35,7 +35,6 @@ public class SatzE extends Part
     	return generator.generateString(this, linelen);
     }
     
-    private String len = "0128";
     private String anzahlcsaetze;
     private String sumbetraege;
     private String sumkontonummern;
@@ -47,12 +46,6 @@ public class SatzE extends Part
 	}
 	public void setAnzahlcsaetze(String anzahlcsaetze) {
 		this.anzahlcsaetze = anzahlcsaetze;
-	}
-	public String getLen() {
-		return len;
-	}
-	public void setLen(String len) {
-		this.len = len;
 	}
 	public String getSumbetraege() {
 		return sumbetraege;
