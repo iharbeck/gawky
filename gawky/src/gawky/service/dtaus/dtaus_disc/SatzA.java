@@ -31,6 +31,11 @@ public class SatzA extends gawky.service.dtaus.dtaus_band.SatzA
 		}; 
 	}
 
+    public byte[] getSatzA() 
+    {
+    	return this.getBytes();
+    }
+    
     private String len = "0128";
 
     public String getLen() {
