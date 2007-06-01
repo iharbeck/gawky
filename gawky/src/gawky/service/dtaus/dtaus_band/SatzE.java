@@ -1,5 +1,6 @@
 package gawky.service.dtaus.dtaus_band;
 
+import gawky.message.generator.EBCDICGenerator;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescP;
@@ -26,7 +27,15 @@ public class SatzE extends Part
 		}; 
 	}
 
-    private String len;
+    static int linelen = 581;
+    static EBCDICGenerator generator = new EBCDICGenerator();
+    
+    public byte[] getSatzE() 
+    {
+    	return generator.generateString(this, linelen);
+    }
+    
+    private String len = "0128";
     private String anzahlcsaetze;
     private String sumbetraege;
     private String sumkontonummern;

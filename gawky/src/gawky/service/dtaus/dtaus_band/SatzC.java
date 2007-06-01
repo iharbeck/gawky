@@ -1,5 +1,7 @@
 package gawky.service.dtaus.dtaus_band;
 
+import gawky.message.Formatter;
+import gawky.message.generator.EBCDICGenerator;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
@@ -8,6 +10,8 @@ import gawky.message.part.Part;
 import gawky.message.part.Reserved;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  *
@@ -60,6 +64,37 @@ public class SatzC extends Part
   
     public void reset() {
     	satzCe = null;
+    }
+    
+    static int linelen = 581;
+    static EBCDICGenerator generator = new EBCDICGenerator();
+    
+    public byte[] getSatzC() 
+    {
+    	int len = 0;
+		if(getSatzCe() != null) 
+			len = getSatzCe().size();
+		
+		setErweiterungskennnzeichen(Formatter.getStringN(2, ""+len));
+		
+		byte[] satz = new byte[linelen];
+		Arrays.fill(satz, (byte)0x40);
+
+		System.arraycopy(generator.generateString(this, 150), 0, satz, 0, 150);
+		
+		if(len > 0)
+		{
+			int i = 0;
+			Iterator it2 = getSatzCe().iterator();
+			while(it2.hasNext())
+			{
+				SatzCe satzcext = (SatzCe)it2.next();
+				
+				System.arraycopy(generator.generateString(satzcext, 29), 0, satz, 150 + i*29 -1, 29);
+				i++;
+			}
+		}
+		return satz;
     }
     
     private String blzerstbeteiligt;

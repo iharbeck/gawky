@@ -2,6 +2,7 @@ package gawky.service.dtaus;
 
 import gawky.host.Ebcdic;
 import gawky.message.Formatter;
+import gawky.message.generator.EBCDICGenerator;
 import gawky.service.dtaus.dtaus_band.SatzC;
 import gawky.service.dtaus.dtaus_band.SatzCe;
 import gawky.service.dtaus.dtaus_band.SatzE;
@@ -12,10 +13,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class EBHost
 {
+	static EBCDICGenerator generator = new EBCDICGenerator();
+	
+	static int linelen = 581; //146;
 	
 	public static void read(File f, EBProcessorHost processor) throws IOException, Exception
     {
@@ -23,22 +28,21 @@ public class EBHost
 		FileInputStream fis = new FileInputStream(f);
 		FileChannel fc = fis.getChannel();
 	
-		// Zeile lesen
-		int len = 581; //146;
+		
 		
 		// Get the file's size and then map it into memory
 		int sz = (int)fc.size();
 		MappedByteBuffer mappedbuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, sz);
 
-		byte[] line = new byte[len];
+		byte[] line = new byte[linelen];
 		
 		
-		byte[] part = new byte[len];
+		byte[] part = new byte[linelen];
 		
 		
 		while(mappedbuffer.hasRemaining())
 		{
-			mappedbuffer.get(line, 0, len);
+			mappedbuffer.get(line, 0, linelen);
 
 			String type = Ebcdic.toUnicode(new byte[] {line[0]});
 			
@@ -75,11 +79,9 @@ public class EBHost
     
     public static void write(File f, EBProcessorHost processor) throws IOException, Exception
     {
-    	//TODO check HOST FORMAT!!!!
 		FileOutputStream fos = new FileOutputStream(f);
 	
-		
-		fos.write(processor.getSatza().getBytes());
+		fos.write(generator.generateString(processor.getSatza(), linelen));
 		
 		Iterator it = processor.getSatzcArray().iterator();
 		
@@ -97,12 +99,30 @@ public class EBHost
 			sumblz      += Long.parseLong(c.getBlzkontofuehrend());
 			count++;
 			
-			fos.write(c.getBytes());
-			Iterator it2 = c.getSatzCe().iterator();
-			while(it2.hasNext())
+			int len = 0;
+			if(c.getSatzCe() != null) 
+				len = c.getSatzCe().size();
+			
+			c.setErweiterungskennnzeichen(Formatter.getStringN(2, ""+len));
+			
+			fos.write(generator.generateString(c, 150));
+
+			if(len > 0)
 			{
-				SatzCe el = (SatzCe)it2.next();
-				fos.write(Formatter.getStringC(256-187, el.toString()).getBytes());
+				Iterator it2 = c.getSatzCe().iterator();
+				while(it2.hasNext())
+				{
+					SatzCe satzcext = (SatzCe)it2.next();
+					fos.write(generator.generateString(satzcext, 29));
+				}
+
+				// Auf Segmentlaenge auffuellen
+				int missing = Math.abs(linelen - 150 - (len*29));
+
+				byte[] temp = new byte[missing];
+				Arrays.fill(temp, (byte)0x40);
+				
+				fos.write(temp, 0, missing);
 			}
 		}
 		
@@ -113,7 +133,7 @@ public class EBHost
 		e.setSumkontonummern(Long.toString(sumkto));
 		e.setSumblz(Long.toString(sumblz));
 		
-		fos.write(processor.getSatze().getBytes());
+		fos.write(generator.generateString(processor.getSatze(), linelen));
 		
 		fos.close();
     }

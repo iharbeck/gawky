@@ -1,5 +1,8 @@
 package gawky.service.dtaus.dtaus_disc;
 
+import java.util.Iterator;
+
+import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
@@ -45,5 +48,47 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 	}
 	public void setLen(String len) {
 		this.len = len;
+	}
+	
+	public byte[] getSatzC() {
+		
+		int len = 0;
+		if(getSatzCe() != null) 
+			len = getSatzCe().size();
+		
+		setErweiterungskennnzeichen(Formatter.getStringN(2, ""+len));
+		
+		setLen("0" + (187 + len * 29 ));
+
+		String tmp = this.toString();
+		
+		// Erweiterungsätze
+		Iterator it2 = null;
+		if(len > 0) 
+		{
+			it2 = getSatzCe().iterator();
+
+			for(int i=1; it2.hasNext() && i <= 2; i++)
+			{
+				SatzCe el = (SatzCe)it2.next();
+				tmp += el.toString();
+			}
+		}
+		
+		tmp =  Formatter.getStringC(256, tmp);
+
+		String exttmp = "";
+		if(len > 2)
+		{
+			while(it2.hasNext())
+			{
+				SatzCe el = (SatzCe)it2.next();
+				exttmp += el.toString();
+			}
+			
+			Formatter.getStringC(256, exttmp);
+		}
+		
+		return (tmp + exttmp).getBytes();
 	}
 }

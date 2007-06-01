@@ -1,5 +1,6 @@
 package gawky.service.dtaus.dtaus_band;
 
+import gawky.message.generator.EBCDICGenerator;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
@@ -32,6 +33,14 @@ public class SatzA extends Part
 		}; 
 	}
 
+    static int linelen = 581;
+    static EBCDICGenerator generator = new EBCDICGenerator();
+    
+    public byte[] getSatzA() 
+    {
+    	return generator.generateString(this, linelen);
+    }
+    
     private String kennzeichen;
     private String blzempfaenger;
     private String blzsender;
