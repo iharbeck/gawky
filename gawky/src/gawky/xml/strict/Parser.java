@@ -12,8 +12,8 @@ public class Parser {
 	
 	int size;
 	
-	public Parser(byte[] data) {
-		xml = new String(data);
+	public Parser(byte[] data, String encoding) throws Exception {
+		xml = new String(data, encoding);
 		cxml = xml.toCharArray();
 		size = xml.length();
 	}

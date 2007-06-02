@@ -1,5 +1,6 @@
 package gawky.bcos;
 
+import gawky.global.Constant;
 import gawky.xml.strict.Parser;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class Processor
 
 	public void initFile(String filename) throws Exception
 	{
-		ps = new Parser(readFile(filename));
+		ps = new Parser(readFile(filename), Constant.ENCODE_UTF8);
 	}
 	
 	public static void main(String[] args) throws Exception
