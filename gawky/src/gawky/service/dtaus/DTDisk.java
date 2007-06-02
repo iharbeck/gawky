@@ -150,7 +150,7 @@ public class DTDisk
 				satzc = new SatzC();
 				satzc.parse(parser, new String(line, Constant.ENCODE_LATIN1));
 
-				SatzCe satzce = new SatzCe();
+				
 				
 				int ext = Integer.parseInt(satzc.getErweiterungskennnzeichen());
 				
@@ -158,6 +158,7 @@ public class DTDisk
 				for(; x < ext && x <= 1; x++)
 				{
 					System.arraycopy(line, 187 + 29*x, part, 0, 29);
+					SatzCe satzce = new SatzCe();
 					satzce.parse(new String(part, Constant.ENCODE_LATIN1));
 					
 					satzc.addExtention(satzce);
@@ -171,6 +172,7 @@ public class DTDisk
 					for(; x < ext; x++)
 					{
 						System.arraycopy(line, 4 + 29*(x-2), part, 0, 29);
+						SatzCe satzce = new SatzCe();
 						satzce.parse(new String(part, Constant.ENCODE_LATIN1));
 						
 						satzc.addExtention(satzce);
