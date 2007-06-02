@@ -35,7 +35,7 @@ public class EBHost
 			{
 				SatzC satzc = handler.getSatzc();
 				
-				processor.satzcArray.add(satzc);
+				processor.getSatzcArray().add(satzc);
 			} 
 			else if(handler.isSatzE())
 			{
@@ -192,23 +192,17 @@ public class EBHost
 		EBHost.read(fi, processor);
 		
 		System.out.println(processor.getSatza().getBlzsender());
-		System.out.println(processor.getSatza().getBlzempfaenger());
-		System.out.println(processor.getSatza().getKontonummer());
 		
 		File fo = new File("G:/bcos/pcama/DBDIRECT.outhost__");
 		EBHost.write(fo, processor);
 
 		System.out.println(processor.getSatza().getBlzsender());
-		System.out.println(processor.getSatza().getBlzempfaenger());
-		System.out.println(processor.getSatza().getKontonummer());
 		
 		processor = new EBProcessorHost();
 		fi = new File("G:/bcos/pcama/DBDIRECT.outhost__");    
 		EBHost.read(fi, processor);
 
 		System.out.println(processor.getSatza().getBlzsender());
-		System.out.println(processor.getSatza().getBlzempfaenger());
-		System.out.println(processor.getSatza().getKontonummer());
     }
 
 }

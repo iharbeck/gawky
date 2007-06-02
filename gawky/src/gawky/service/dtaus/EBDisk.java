@@ -31,7 +31,7 @@ public class EBDisk
 			{
 				SatzC satzc = handler.getSatzc();
 				
-				processor.satzcArray.add(satzc);
+				processor.getSatzcArray().add(satzc);
 			} 
 			else if(handler.isSatzE())
 			{
