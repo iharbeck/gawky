@@ -26,7 +26,6 @@ public abstract class Part
     private static Parser    parser;
     private static Generator generator;
 
-	
 	/**
 	 * used by matcher
 	 * @param name
@@ -189,20 +188,15 @@ public abstract class Part
 		return toString().getBytes(charset);
 	}
 	
-	public final byte[] getBytes()
-	{
-		return toString().getBytes();
-	}
-	
 	public final Generator getGenerator() {
 		if(generator == null)
-			generator = new Generator();
+			generator = Generator.getInstance();
 		return generator;
 	}
 
 	public final Parser getParser() {
 		if(parser == null)
-			parser = new Parser();
+			parser = Parser.getInstance();
 		return parser;
 	}
 
@@ -211,11 +205,6 @@ public abstract class Part
 		getParser().parse(str, this);
 	}
 	
-	public final void parse(byte[] str) throws ParserException
-	{
-		getParser().parse(str, this);
-	}
-
 	/**
 	 * for specialized parsers
 	 */
@@ -224,9 +213,9 @@ public abstract class Part
 		extparser.parse(str, this);
 	}
 	
-	public final void parse(Parser extparser, byte[] str) throws ParserException
+	public final void parse(Parser extparser, byte[] bytes) throws ParserException, UnsupportedEncodingException
 	{
-		extparser.parse(str, this);
+		extparser.parsebytes(bytes, this);
 	}
 	
 	public void afterFill() {

@@ -16,7 +16,7 @@ public class ActionOliva
 {
 	private static final Log log = LogFactory.getLog(ActionOliva.class);
 
-	public static void doSettlement(Session session)
+	public static void doSettlement(Session session) throws Exception
 	{
 	  // REQUEST Object 
        Request req = new Request();

@@ -17,6 +17,14 @@ public class Parser
 {
 	private static Log log = LogFactory.getLog(Parser.class);
 
+	static Parser instance;
+	
+	public static Parser getInstance() {
+		if(instance == null)
+			instance = new Parser();
+		return instance;
+	}
+	
 	private static boolean docheck = true;
 	private static boolean dotrim  = false;
 	
@@ -35,9 +43,9 @@ public class Parser
 		return line.substring(position);
 	}
 	
-	public void parse(byte[] str, Object bean) throws ParserException
+	public void parsebytes(byte[] str, Object bean) throws ParserException
 	{
-		parse(new String(str), bean);
+		throw new ParserException(1, "ONLY String support");
 	}
 	
 	public void parse(String str, Object bean) throws ParserException

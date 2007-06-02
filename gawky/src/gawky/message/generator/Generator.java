@@ -11,6 +11,14 @@ import org.apache.commons.logging.LogFactory;
 
 public class Generator 
 {
+	static Generator instance;
+	
+	public static Generator getInstance() {
+		if(instance == null)
+			instance = new Generator();
+		return instance;
+	}
+	
 	private static Log log = LogFactory.getLog(Generator.class);
 
 	public String generateString(Part bean)

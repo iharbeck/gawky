@@ -1,6 +1,9 @@
 package gawky.service.oliva;
 
+import gawky.global.Constant;
 import gawky.message.part.Part;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author Ingo Harbeck
@@ -17,11 +20,11 @@ public class Request
 	RequestAddress addr;
 	Part /*RequestPayment*/ paym;
 
-	public String toRequestString()
+	public String toRequestString() throws UnsupportedEncodingException
     {
         String parts = paym.toString() + addr.toString(); 
         
-        int ilen = head.getBytes().length + parts.getBytes().length;
+        int ilen = head.getBytes(Constant.ENCODE_US_ASCII).length + parts.getBytes().length;
         head.setMessage_length(ilen);
             
         return head.toString() + parts;

@@ -17,10 +17,10 @@ public class EBCDICParser extends Parser
 
 	public void parse(String str, Object bean) throws ParserException
 	{
-		parse(str.getBytes(), bean);
+		throw new ParserException(1, "ONLY byte[] support");
 	}
 
-	public void parse(byte[] str, Object bean) throws ParserException
+	public void parsebytes(byte[] str, Object bean) throws ParserException
 	{
 		try 
 		{

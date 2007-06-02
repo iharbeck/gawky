@@ -35,25 +35,19 @@ public class SatzE extends Part
     
     public byte[] getSatzE() throws UnsupportedEncodingException
     {
-    	anzahlcsaetze   = Long.toString(count);
-        sumbetraege     = Long.toString(0);
-        sumkontonummern = Long.toString(lsumkto);
-        sumblz          = Long.toString(lsumblz);
-        sumeurobetraege = Long.toString(lsumbetraege);
-        	
     	return generator.generateString(this, linelen);
     }
     
-    protected long lsumbetraege;
-    protected long lsumkto;
+    protected long lsumeurobetraege;
+    protected long lsumkontonummern;
     protected long lsumblz;
-    protected long count;
+    protected long lanzahlcsaetze;
 	
 	public void add(SatzC satzc) {
-		lsumbetraege += Format.getLong(satzc.getBetrageuro());
-		lsumkto      += Format.getLong(satzc.getKontonummer());
-		lsumblz      += Format.getLong(satzc.getBlzkontofuehrend());
-		count++;
+		lsumeurobetraege += Format.getLong(satzc.getBetrageuro());
+		lsumkontonummern += Format.getLong(satzc.getKontonummer());
+		lsumblz          += Format.getLong(satzc.getBlzkontofuehrend());
+		lanzahlcsaetze++;
 	}
 
     
@@ -64,33 +58,32 @@ public class SatzE extends Part
     protected String sumeurobetraege;
     
 	public String getAnzahlcsaetze() {
-		return anzahlcsaetze;
+		return Long.toString(lanzahlcsaetze);
 	}
 	public void setAnzahlcsaetze(String anzahlcsaetze) {
-		this.anzahlcsaetze = anzahlcsaetze;
+		this.lanzahlcsaetze = Long.parseLong(anzahlcsaetze);
 	}
 	public String getSumbetraege() {
-		return sumbetraege;
+		return "0";
 	}
 	public void setSumbetraege(String sumbetraege) {
-		this.sumbetraege = sumbetraege;
 	}
 	public String getSumblz() {
-		return sumblz;
+		return Long.toString(lsumblz);
 	}
 	public void setSumblz(String sumblz) {
-		this.sumblz = sumblz;
+		this.lsumblz = Long.parseLong(sumblz);
 	}
 	public String getSumeurobetraege() {
-		return sumeurobetraege;
+		return Long.toString(lsumeurobetraege);
 	}
 	public void setSumeurobetraege(String sumeurobetraege) {
-		this.sumeurobetraege = sumeurobetraege;
+		this.lsumeurobetraege = Long.parseLong(sumeurobetraege);
 	}
 	public String getSumkontonummern() {
-		return sumkontonummern;
+		return Long.toString(lsumkontonummern);
 	}
 	public void setSumkontonummern(String sumkontonummern) {
-		this.sumkontonummern = sumkontonummern;
+		this.lsumkontonummern = Long.parseLong(sumkontonummern);
 	}
 }

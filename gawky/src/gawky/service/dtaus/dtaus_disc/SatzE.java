@@ -31,12 +31,6 @@ public class SatzE extends gawky.service.dtaus.dtaus_band.SatzE
 
     public byte[] getSatzE() throws UnsupportedEncodingException
     {
-    	anzahlcsaetze   = Long.toString(count);
-        sumbetraege     = Long.toString(0);
-        sumkontonummern = Long.toString(lsumkto);
-        sumblz          = Long.toString(lsumblz);
-        sumeurobetraege = Long.toString(lsumbetraege);
-        
     	return this.getBytes(Constant.ENCODE_LATIN1);
     }
     
