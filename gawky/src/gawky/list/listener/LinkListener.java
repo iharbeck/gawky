@@ -5,11 +5,14 @@ import gawky.list.datasource.Datasource;
 public class LinkListener implements CellListener
 {
 	int reference;
+	String url;
+	
 	String classname;
 	
-	public LinkListener(int reference)
+	public LinkListener(int reference, String url)
 	{
 		this.reference = reference;
+		this.url = url;
 	}
 	
 	public String getAttribute(String name) 
@@ -22,7 +25,7 @@ public class LinkListener implements CellListener
 	
 	public String process(Datasource ds, int column)
 	{
-		return "<a href='" + ds.getValue(reference) + "'>" + ds.getValue(column) + "</a>";
+		return "<a href='" + url + ds.getValue(reference) + "'>" + ds.getValue(column) + "</a>";
 	}
 
 	public void setClassname(String classname) {

@@ -57,7 +57,7 @@ public class PagerTable {
 		
 		ArrayListDatasource ds = new ArrayListDatasource( rows );
 		 ds.addColumn(new Column("CHEAD1", Column.TYPE_STRING).setWidth(100).setHidden());
-		 ds.addColumn(new Column("CHEAD2", Column.TYPE_STRING, new LinkListener(0)).setWidth(300));
+		 ds.addColumn(new Column("CHEAD2", Column.TYPE_STRING, new LinkListener(0, "url")).setWidth(300));
 		 ds.addColumn(new Column("CHEAD3", Column.TYPE_STRING).setWidth(200));
 	
 		//Database Source

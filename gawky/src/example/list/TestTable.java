@@ -33,7 +33,7 @@ public class TestTable {
 		
 		Column[] columns = new Column[] {
 			new Column("CHEAD1", Column.TYPE_STRING).setWidth(100),
-			new Column("CHEAD2", Column.TYPE_STRING, new LinkListener(0)).setWidth(300),
+			new Column("CHEAD2", Column.TYPE_STRING, new LinkListener(0, "test")).setWidth(300),
 			new Column("CHEAD3", Column.TYPE_STRING).setWidth(200)
 		};
 		
