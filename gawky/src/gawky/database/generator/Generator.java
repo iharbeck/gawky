@@ -145,8 +145,10 @@ public class Generator
 			params.append(",");
 		}
 		
-		sql.deleteCharAt(sql.length()-1);
-		params.deleteCharAt(params.length()-1);
+		if(sql.length() > 0) {
+			sql.deleteCharAt(sql.length()-1);
+			params.deleteCharAt(params.length()-1);
+		}
 		
 		if(bean.getDescIDs()[0] != null) // descid != null)
 		{
