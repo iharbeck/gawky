@@ -1,6 +1,7 @@
 package example.database.part;
 
 import gawky.database.DB;
+import gawky.database.generator.Generator;
 import gawky.database.part.Column;
 import gawky.database.part.Table;
 import gawky.global.Option;
@@ -38,6 +39,9 @@ public class DaoObject extends Table {
 		Option.init();
 		Connection conn = DB.getConnection();
 		
+		Generator.setDoclone(true);
+		
+		
 		DaoObject daoobject = new DaoObject();
 		
 	//	daoobject.setName("HELO");
@@ -54,7 +58,9 @@ public class DaoObject extends Table {
 //		daoobject.setName("INGO");
 //		daoobject.insert(conn);
 		
-		daoobject.setName("INGO2");
+		daoobject.setName("INGO____2");
+		System.out.println(daoobject.getBackup().toString());
+		System.out.println(daoobject.toString());
 		daoobject.update(conn);
 		
 		daoobject.queryToStream(conn, "WHERE 1=1", System.out);
