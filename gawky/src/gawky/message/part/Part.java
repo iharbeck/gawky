@@ -19,13 +19,15 @@ import javassist.CtNewMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public abstract class Part 
+public abstract class Part implements Cloneable
 {
 	Log log = LogFactory.getLog(Part.class);
-	
-    private static Parser    parser;
+
+	private static Parser    parser;
     private static Generator generator;
 
+    private Object clone;
+    
 	/**
 	 * used by matcher
 	 * @param name
@@ -224,5 +226,22 @@ public abstract class Part
 	
 	public void beforeStore() {
 		
+	}
+	
+	public Object clone() {
+		try {
+			Object clone = (Object) super.clone();
+	            return clone;
+	     } catch (CloneNotSupportedException e) {
+	       return null;
+	     }
+	}
+	
+	public void doclone() {
+		clone = clone();
+	}
+	
+	public Object getBackup() {
+		return clone;
 	}
 }

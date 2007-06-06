@@ -25,8 +25,9 @@ public class Parser
 		return instance;
 	}
 	
-	private static boolean docheck = true;
-	private static boolean dotrim  = false;
+	private static boolean docheck  = true;
+	private static boolean dotrim   = false;
+	private static boolean doclone  = false;
 	
 	int    position = 0;
 	
@@ -149,6 +150,8 @@ public class Parser
 			return;
 		} finally {
 			((Part)bean).afterFill();
+			if(doclone)
+				((Part)bean).doclone();
 		}
 	}
 	
@@ -307,5 +310,9 @@ public class Parser
 	
 	public static void setDocheck(boolean docheck) {
 		Parser.docheck = docheck;
+	}
+	
+	public static void setDoclone(boolean doclone) {
+		Parser.doclone = doclone;
 	}
 }

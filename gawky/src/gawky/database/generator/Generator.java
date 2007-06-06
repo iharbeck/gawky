@@ -27,6 +27,7 @@ public class Generator
 	private static Log log = LogFactory.getLog(Generator.class);	
 
 	private static boolean dotrim = false;
+	private static boolean doclone = false;
 	
 	SimpleDateFormat df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
 	SimpleDateFormat df_HHMMSS = new SimpleDateFormat("HHmmss");
@@ -116,6 +117,9 @@ public class Generator
 		}
 		
 		part.afterFill();
+		
+		if(doclone)
+			part.doclone();
 	}
 	
 	public StringBuilder generateInsertSQL(Table bean)
@@ -577,5 +581,9 @@ public class Generator
 	
 	public static void setDotrim(boolean dotrim) {
 		Generator.dotrim = dotrim;
+	}
+	
+	public static void setDoclone(boolean doclone) {
+		Generator.doclone = doclone;
 	}
 }
