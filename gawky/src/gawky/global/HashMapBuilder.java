@@ -24,8 +24,9 @@ public class HashMapBuilder {
 			  	{ "key3", "dritter" },
 		};
 		
-		//HashMap m = buildMap(map);
+		HashMap m = HashMapBuilder.buildMap(map);
 
+		System.out.println(m.get("key2"));
 	}
 	
 }

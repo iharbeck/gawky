@@ -29,17 +29,28 @@
 		 </delete>
          <jar destfile="bin/${name}${version}.jar">
          	<fileset dir="${bin}" >
+				<exclude name="gawky/bcos/**"/>
+				<exclude name="gawky/incubator/**"/>
+				<exclude name="example/**"/>
+				<exclude name="test/**"/>
+				<exclude name="*.bat"/>
          	</fileset>
          	<fileset dir="${src}" >
+				<exclude name="gawky/bcos/**"/>
+				<exclude name="gawky/incubator/**"/>
+				<exclude name="example/**"/>
+				<exclude name="test/**"/>
+				<exclude name="*.xml"/>
+				<exclude name="*.bat"/>
          	</fileset>
          </jar>
 		 <jar destfile="bin/${name}-crypt${version}.jar">
-		         	<fileset dir="${bin}" >
-		         		<include name="gawky/crypt/**"/>
-		         	</fileset>
-		     		<fileset dir="${src}" >
-		         		<include name="gawky/crypt/**"/>
-		     		</fileset>
+         	<fileset dir="${bin}" >
+         		<include name="gawky/crypt/**"/>
+         	</fileset>
+     		<fileset dir="${src}" >
+         		<include name="gawky/crypt/**"/>
+     		</fileset>
          </jar>
          <jar destfile="bin/${name}-servicecrm${version}.jar">
          	<fileset dir="${bin}" >

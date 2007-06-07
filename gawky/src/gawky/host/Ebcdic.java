@@ -1,18 +1,20 @@
 package gawky.host;
 
+import gawky.global.Constant;
+
 import java.io.UnsupportedEncodingException;
 
 public class Ebcdic 
 {
 	public final static byte[] toEbcdic(String unicode) throws UnsupportedEncodingException
 	{
-		String encoding = "Cp1047";
+		String encoding = Constant.ENCODE_EBCDIC;
 		return unicode.getBytes(encoding);
 	}
 	
 	public final static String toUnicode(byte[] ebcdic) throws UnsupportedEncodingException
 	{
-		String encoding = "Cp1047";  
+		String encoding = Constant.ENCODE_EBCDIC;  
 		Integer.toBinaryString(13);
 		return new String(ebcdic, encoding);
 	}
