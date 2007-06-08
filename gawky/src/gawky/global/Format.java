@@ -44,6 +44,17 @@ public class Format {
 			return null;
 		}
 	}
+	
+	public static String convertDate( String datum, String pattern, String targetPattern ) throws Exception {
+		
+		if( datum == null )
+			datum = "";
+		try{
+			return	new SimpleDateFormat(targetPattern).format( new SimpleDateFormat(pattern).parse(datum) );
+		}catch ( Exception ex ) {
+			return datum;
+		}
+	}
 
 	public static String getDecimal(Locale loc, String value, String pattern) {
 		return getDecimal(getDouble(loc, value), pattern);
@@ -92,6 +103,14 @@ public class Format {
 		}
 		
 		return new String(target);
+	}
+	
+	public static String substr(String val, int begin, int end) {
+		try {
+			return val.substring(begin, end); 
+		} catch(Exception e) {
+			return val;
+		}
 	}
 	
 }

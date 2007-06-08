@@ -1,5 +1,7 @@
 package gawky.message;
 
+import gawky.global.Matcher;
+
 import java.util.regex.Pattern;
 
 /*
@@ -146,15 +148,3 @@ public class Formatter
 
 }
 
-class Matcher 
-{
-    Pattern pattern;
-   
-    public Matcher(String regex) { 
-    	pattern = Pattern.compile(regex);   
-    }
-  
-    public final String process(String text, String replace) {
-    	return pattern.matcher(text).replaceAll(replace);
-    }
-}
