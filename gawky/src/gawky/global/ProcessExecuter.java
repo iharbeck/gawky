@@ -20,7 +20,7 @@ public class ProcessExecuter {
 		BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
 		while ((line = input.readLine()) != null) {
-			buf.append(line);
+			buf.append(line).append("\n");
 		}
 
 		input.close();
