@@ -3,21 +3,29 @@ package gawky.file;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 
+ * prot://user:pass@server:path(#option)
+ * 
+ * @author harb05
+ *
+ */
 public class URLParser {
 
 	static String regExpr = "(.+)://(.+):(.+)@(.+):(.+)";
-
+	
 	// Pattern Matching will be case insensitive.
 	static Pattern pat = Pattern.compile(regExpr,Pattern.CASE_INSENSITIVE);
 
-	Matcher matcher; 
+	private Matcher matcher; 
 
-	String protocoll;	
-	String user;	
-	String pass;
-	String server;
+	private String protocoll;	
+	private String user;	
+	private String pass;
+	private String server;
 
-	String serverpath;
+	private String serverpath;
+	private String option;
 	
 	public URLParser(String url) throws Exception 
 	{
@@ -32,6 +40,13 @@ public class URLParser {
 		server     = matcher.group(4);
 
 		serverpath = matcher.group(5);
+		
+		String[] opt = serverpath.split("#");
+		
+		if(opt.length > 1) {	
+			serverpath = opt[0];
+			option     = opt[1];
+		}
 	}
 
 	public String getUser() {
@@ -72,5 +87,20 @@ public class URLParser {
 
 	public void setProtocoll(String protocoll) {
 		this.protocoll = protocoll;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		URLParser url = new URLParser("ftp://ingo:geheim@server:/path/to/file#option");
+		System.out.println(url.getUser());
+		System.out.println(url.getServerpath());
+		System.out.println(url.getOption());
+	}
+
+	public String getOption() {
+		return option;
+	}
+
+	public void setOption(String option) {
+		this.option = option;
 	}
 }
