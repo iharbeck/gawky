@@ -12,20 +12,28 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
-public class Ftp 
+public class Ftp extends BaseFtp
 {
 	private static Log log = LogFactory.getLog(Ftp.class);
 
 	FTPClient ftp = null;
 	String localdir;
-	
+	int port = 21;
+
 	public Ftp(String server, String user, String pass) throws Exception 
 	{
+		this(server, user, pass, 21);
+	}
+	
+	public Ftp(String server, String user, String pass, int port) throws Exception 
+	{
 		log.info("Login to FTP: " + server);
+	
+		this.port = port;
 		ftp = new FTPClient();
-
+		
 		//Connect to FTP Server
-		ftp.connect(server);
+		ftp.connect(server, port);
 		ftp.login(user, pass);
 		
 		checkReply("FTP server refused connection." + server);
@@ -55,8 +63,8 @@ public class Ftp
 		
 		for(int i=0; i < ftpFileList.length; i++)
 		{
-			if(!ftpFileList[i].isFile() || (filefilter != null &&
-			   !ftpFileList[i].getName().endsWith(filefilter)))
+			if(!ftpFileList[i].isFile() || 
+			   (filefilter != null && !ftpFileList[i].getName().endsWith(filefilter)))
 				continue;
 			
 			String file = ftpFileList[i].getName();

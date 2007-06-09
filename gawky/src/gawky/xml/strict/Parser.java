@@ -99,7 +99,7 @@ public class Parser {
 	{
 		int targetcount = name.length(); // length;
 
-		char first  = name.charAt(0); // [0];
+		char first  = name.charAt(0); 
 		for (int i = pos; i <= epos; i++) {
             /* Look for first character. */
             if (cxml[i] != first) {
