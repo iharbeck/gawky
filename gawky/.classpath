@@ -19,7 +19,6 @@
 	<classpathentry kind="lib" path="lib/xml/mstax/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/xml/mstax/wstx-asl-3.1.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.30.jar"/>
 	<classpathentry kind="lib" path="lib/commandline/commons-cli-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/xls/poi-2.0-pre2-20030711.jar"/>
 	<classpathentry kind="lib" path="lib/mail/activation.jar"/>
@@ -37,5 +36,6 @@
 	<classpathentry kind="lib" path="lib/codegen/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/hash/trove.jar" sourcepath="lib/hash/trove.jar"/>
 	<classpathentry kind="lib" path="lib/xml/vtd-xml.jar"/>
+	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.33.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

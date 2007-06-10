@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,16 +17,26 @@ public class Ftp extends BaseFtp
 {
 	private static Log log = LogFactory.getLog(Ftp.class);
 
-	FTPClient ftp = null;
+	FTPClient ftp;
 	String localdir;
-	int port = 21;
 
+	public Ftp() throws Exception 
+	{
+		this.me = this; 
+		this.port = 21;
+	}
+	
 	public Ftp(String server, String user, String pass) throws Exception 
 	{
 		this(server, user, pass, 21);
 	}
 	
 	public Ftp(String server, String user, String pass, int port) throws Exception 
+	{
+		open(server, user, pass, port);
+	}
+
+	public void open(String server, String user, String pass, int port) throws Exception 
 	{
 		log.info("Login to FTP: " + server);
 	
@@ -39,8 +50,10 @@ public class Ftp extends BaseFtp
 		checkReply("FTP server refused connection." + server);
 
 		modeBINARY();
+		
+		this.me = this;
 	}
-
+	
 	public void close() throws Exception
 	{
 		ftp.logout();
@@ -55,43 +68,19 @@ public class Ftp extends BaseFtp
 	
 	public String[] retrieveFiles(String filefilter) throws Exception
 	{
-		FTPFile ftpFileList [] = null;
-	
-		ftpFileList = ftp.listFiles();
+		FTPFile ftpFileList [] = ftp.listFiles();
 
+		filefilter = Tool.regbuilder(filefilter);
+		
 		ArrayList files = new ArrayList();
 		
 		for(int i=0; i < ftpFileList.length; i++)
 		{
-			if(!ftpFileList[i].isFile() || 
-			   (filefilter != null && !ftpFileList[i].getName().endsWith(filefilter)))
+			if(!ftpFileList[i].isFile() || filefilter == null)
 				continue;
 			
-			String file = ftpFileList[i].getName();
-		
-			files.add(file);
-			log.info("downloading: " + file);
-			
-			FileOutputStream fos = new FileOutputStream(localdir + file); 
-			
-			ftp.retrieveFile(file, fos);
-		}
-		
-		return (String[])files.toArray(new String[files.size()]);
-	}
-
-	public String[] retrieveFilesRegex(String regex) throws Exception
-	{
-		FTPFile ftpFileList [] = null;
-	
-		ftpFileList = ftp.listFiles();
-
-		ArrayList files = new ArrayList();
-		
-		for(int i=0; i < ftpFileList.length; i++)
-		{
-			if(!ftpFileList[i].isFile() || (regex != null &&
-			   !ftpFileList[i].getName().matches(regex)))
+			if(! (ftpFileList[i].getName().matches(filefilter) || 
+			      ftpFileList[i].getName().endsWith(filefilter)) )
 				continue;
 			
 			String file = ftpFileList[i].getName();
@@ -126,17 +115,26 @@ public class Ftp extends BaseFtp
 		}
 	}
 	
-	public void sendLocalFile(String src) throws Exception
+	public void sendLocalFile(String filename) throws Exception
 	{
 		String tmp_prefix = ".temp";
-		File f = new File(localdir + src);
-		FileInputStream is = new FileInputStream(localdir + src);
-		ftp.storeFile(f.getName() + tmp_prefix, is);
-		is.close();
+		ArrayList filesources = Tool.getFiles(localdir + filename);
+		
+		Iterator it = filesources.iterator();
+		
+		while(it.hasNext())
+		{
+			String file = (String)it.next();
 
-		renameRemoteFile(f.getName() + tmp_prefix, f.getName());
-
-		checkReply("send failed: " + f.getName());
+			File f = new File(file);
+			FileInputStream is = new FileInputStream(f);
+			ftp.storeFile(f.getName() + tmp_prefix, is);
+			is.close();
+	
+			renameRemoteFile(f.getName() + tmp_prefix, f.getName());
+	
+			checkReply("send failed: " + f.getName());
+		}
 	}
 	
 	public void changeRemoteDir(String path) throws Exception {

@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,64 +39,77 @@ public class Scp
 			java.util.Hashtable config=new java.util.Hashtable();
 		    config.put("StrictHostKeyChecking", "no");
   	        session.setConfig(config);
-			
+  	      
 			session.connect();
 
-			// exec 'scp -t rfile' remotely
-			String command = "scp -p -t " + rfile;
-			Channel channel = session.openChannel("exec");
-			((ChannelExec) channel).setCommand(command);
-
-			// get I/O streams for remote scp
-			OutputStream out = channel.getOutputStream();
-			InputStream in = channel.getInputStream();
-
-			channel.connect();
-
-			if (checkAck(in) != 0) {
-				System.exit(0);
+			boolean tofolder = rfile.endsWith("/");
+			
+			ArrayList list = Tool.getFiles(lfile);
+			Iterator it = list.iterator();
+			
+			while(it.hasNext())
+			{
+				String lfilepath = (String)it.next();
+				
+				// exec 'scp -t rfile' remotely
+				String command = "scp -p -t " + (tofolder ? Tool.getFilename(lfilepath) : rfile);
+				Channel channel = session.openChannel("exec");
+				((ChannelExec) channel).setCommand(command);
+	
+				// get I/O streams for remote scp
+				OutputStream out = channel.getOutputStream();
+				InputStream in = channel.getInputStream();
+	
+				channel.connect();
+	
+				if (checkAck(in) != 0) {
+					return;
+				}
+	
+				// send "C0644 filesize filename", where filename should not include
+				// '/'
+				long filesize = (new File(lfilepath)).length();
+				command = "C0644 " + filesize + " ";
+				if (lfilepath.lastIndexOf('/') > 0) {
+					command += lfilepath.substring(lfile.lastIndexOf('/') + 1);
+				} else {
+					command += lfilepath;
+				}
+				command += "\n";
+				out.write(command.getBytes());
+				out.flush();
+				if (checkAck(in) != 0) {
+					return;
+				}
+	
+				// send a content of lfile
+				fis = new FileInputStream(lfilepath);
+				byte[] buf = new byte[1024];
+				while (true) {
+					int len = fis.read(buf, 0, buf.length);
+					if (len <= 0)
+						break;
+					out.write(buf, 0, len); // out.flush();
+				}
+				fis.close();
+				fis = null;
+				
+				// send '\0'
+				buf[0] = 0;
+				out.write(buf, 0, 1);
+				out.flush();
+				if (checkAck(in) != 0) {
+					return;
+				}
+				
+				out.close();
+	
+				channel.disconnect();
 			}
 
-			// send "C0644 filesize filename", where filename should not include
-			// '/'
-			long filesize = (new File(lfile)).length();
-			command = "C0644 " + filesize + " ";
-			if (lfile.lastIndexOf('/') > 0) {
-				command += lfile.substring(lfile.lastIndexOf('/') + 1);
-			} else {
-				command += lfile;
-			}
-			command += "\n";
-			out.write(command.getBytes());
-			out.flush();
-			if (checkAck(in) != 0) {
-				System.exit(0);
-			}
-
-			// send a content of lfile
-			fis = new FileInputStream(lfile);
-			byte[] buf = new byte[1024];
-			while (true) {
-				int len = fis.read(buf, 0, buf.length);
-				if (len <= 0)
-					break;
-				out.write(buf, 0, len); // out.flush();
-			}
-			fis.close();
-			fis = null;
-			// send '\0'
-			buf[0] = 0;
-			out.write(buf, 0, 1);
-			out.flush();
-			if (checkAck(in) != 0) {
-				System.exit(0);
-			}
-			out.close();
-
-			channel.disconnect();
 			session.disconnect();
 
-			System.exit(0);
+			return;
 		} finally {
 			try {
 				if (fis != null)
@@ -175,9 +190,9 @@ public class Scp
 				out.write(buf, 0, 1);
 				out.flush();
 
+				// directory or individual file
 				// read a content of lfile
-				fos = new FileOutputStream(prefix == null ? lfile : prefix
-						+ file);
+				fos = new FileOutputStream(prefix == null ? lfile : prefix + file);
 				int foo;
 				while (true) {
 					if (buf.length < filesize)
@@ -198,7 +213,7 @@ public class Scp
 				fos = null;
 
 				if (checkAck(in) != 0) {
-					System.exit(0);
+					return;
 				}
 
 				// send '\0'
@@ -209,7 +224,7 @@ public class Scp
 
 			session.disconnect();
 
-			System.exit(0);
+			return;
 		} finally {
 			try {
 				if (fos != null)
@@ -273,7 +288,7 @@ public class Scp
 		}
 
 		public boolean promptYesNo(String arg0) {
-			return false;
+			return true;  // accept all
 		}
 
 		public void showMessage(String arg0) {

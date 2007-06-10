@@ -8,16 +8,78 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Tool {
 
+	public static String regbuilder(String dummy) 
+	{
+		if(dummy == null)
+			return null;
+		
+		StringBuilder buf = new StringBuilder();
+		
+		for(int i=0; i < dummy.length(); i++) {
+			switch (dummy.charAt(i)) {
+			case '.':
+				buf.append("\\.");
+				break;
+			case '?':
+				buf.append(".");
+				break;
+			case '*':
+				buf.append(".+");
+				break;
+			default:
+				buf.append(dummy.charAt(i));
+				break;
+			}
+		}
+		
+		return buf.toString();
+	}
+
+//	static boolean isRegularexpression(String exp) {
+//		return  exp.contains("?") || 
+//        		exp.contains("*") || 
+//        		exp.contains("[") || 
+//        		exp.contains("]") || 
+//        		exp.contains("+");
+//	}
+	
+	public static ArrayList getFiles(String path) 
+	{
+		ArrayList filelist = new ArrayList();
+		
+		path = regbuilder(path);
+		
+//		if(isRegularexpression(path))
+//		{
+			File[] files = new File( getFolder(path) ).listFiles();
+			String map = getFilename(path);
+			
+			for (int i = 0; i < files.length; i++) {
+				if(files[i].getName().matches(map))
+					filelist.add(files[i].getAbsoluteFile());
+			}
+//		} else {
+//			filelist.add(path);
+//		}
+
+		return filelist;
+	}
+	
 	public static boolean createFolder(String filename) 
 	{
-		String folder = filename.substring(0, Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\")));
-		return new File(folder).mkdirs();
+		try {
+			String folder = filename.substring(0, Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\")));
+			return new File(folder).mkdirs();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public static void unzip(String filename) throws IOException 
@@ -99,10 +161,18 @@ public class Tool {
 	 }
 	 
 	 public static String getFolder(String fullpath) {
-		return fullpath.substring(0, fullpath.lastIndexOf("/")+1);
+		try {
+			return fullpath.substring(0, fullpath.lastIndexOf("/")+1);
+		} catch (Exception e) {
+			return null;
+		}
 	 }
 		
 	 public static String getFilename(String fullpath) {
-		return fullpath.substring(fullpath.lastIndexOf("/")+1);
+		try {
+			return fullpath.substring(fullpath.lastIndexOf("/")+1);
+		} catch (Exception e) {
+			return null;
+		}
 	 }
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Vector;
 
 import com.jcraft.jsch.Channel;
@@ -14,14 +15,24 @@ import com.jcraft.jsch.ChannelSftp.LsEntry;
 
 public class Sftp extends BaseFtp {
 
-	ChannelSftp c = null;
-	int port = 22;
+	ChannelSftp sftpclient;
+
+	public Sftp() throws Exception 
+	{
+		this.me = this; 
+		this.port = 22;
+	}
 
 	public Sftp(String server, String user, String pass) throws Exception {
 		this(server, user, pass, 22);
 	}
 	
 	public Sftp(String server, String user, String pass, int port) throws Exception 
+	{
+		open(server, user, pass, port);
+	}
+	
+	public void open(String server, String user, String pass, int port) throws Exception 
 	{
 		this.port = port;
 		JSch jsch = new JSch();
@@ -47,84 +58,75 @@ public class Sftp extends BaseFtp {
         System.out.println("Opening Channel.");
         channel = session.openChannel("sftp");
         channel.connect();
-        c = (ChannelSftp)channel;
-
+        sftpclient = (ChannelSftp)channel;
+        
+        this.me = this;
 	}
 	
 	public String[] retrieveFiles(String filefilter) throws Exception
 	{
-        Vector vfiles = c.ls(".");
+        Vector vfiles = sftpclient.ls(".");
 
+        filefilter = Tool.regbuilder(filefilter);
+        
 		ArrayList files = new ArrayList();
 		
 		for(int i=0; i < vfiles.size(); i++)
 		{
 			LsEntry lsEntry = (LsEntry) vfiles.get(i);
 			
-			if(lsEntry.getAttrs().isDir() || 
-			   (filefilter != null && !lsEntry.getFilename().endsWith(filefilter)))
+			if(lsEntry.getAttrs().isDir() || filefilter == null)
+				continue;
+			   
+			if(! (lsEntry.getFilename().matches(filefilter) || 
+				  lsEntry.getFilename().endsWith(filefilter)) )
 				continue;
 			
 			String file = lsEntry.getFilename();
 		
 			files.add(file);
 			
-            c.get(file, new FileOutputStream(localdir + file));
+            sftpclient.get(file, new FileOutputStream(localdir + file));
 		}
 		
 		return (String[])files.toArray(new String[files.size()]);
-	}
-
-	public String[] retrieveFilesRegex(String regex) throws Exception
-	{
-        Vector vfiles = c.ls(".");
-
-		ArrayList files = new ArrayList();
-		
-		for(int i=0; i < vfiles.size(); i++)
-		{
-			LsEntry lsEntry = (LsEntry) vfiles.get(i);
-			
-			if(lsEntry.getAttrs().isDir() || 
-			   (regex != null && !lsEntry.getFilename().matches(regex)))
-				continue;
-			
-			String file = lsEntry.getFilename();
-		
-			files.add(file);
-			
-            c.get(file, new FileOutputStream(localdir + file));
-		}
-		
-		return (String[])files.toArray(new String[files.size()]);
-	}
-	
+	}	
 
 	public void changeRemoteDir(String path) throws Exception {
-		c.cd(path);
+		sftpclient.cd(path);
 	}
 
 	public void deleteRemoteFile(String path) throws Exception {
-		c.rm(path);
+		sftpclient.rm(path);
 	}
 
 	public void renameRemoteFile(String src, String dest) throws Exception {
-		c.rename(src, dest);
+		sftpclient.rename(src, dest);
 	}
 
 	public void close() throws Exception 
 	{
-		c.quit();
+		sftpclient.quit();
 	}
 	
-	public void sendLocalFile(String src) throws Exception
+	public void sendLocalFile(String filename) throws Exception
 	{
 		String tmp_prefix = ".temp";
-		File f = new File(localdir + src);
-		FileInputStream is = new FileInputStream(localdir + src);
-		c.put(is, f.getName() + tmp_prefix);
-		is.close();
+		
+		ArrayList filesources = Tool.getFiles(localdir + filename);
+		
+		Iterator it = filesources.iterator();
+		
+		while(it.hasNext())
+		{
+			String file = (String)it.next();
 
-		renameRemoteFile(f.getName() + tmp_prefix, f.getName());
+			File f = new File(file);
+			FileInputStream is = new FileInputStream(f);
+			sftpclient.put(is, f.getName() + tmp_prefix);
+			is.close();
+	
+			renameRemoteFile(f.getName() + tmp_prefix, f.getName());
+		}
 	}
 }
