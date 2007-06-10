@@ -42,7 +42,9 @@ public class Scp
   	      
 			session.connect();
 
-			boolean tofolder = rfile.endsWith("/");
+			boolean tofolder = rfile.endsWith("/") || rfile.endsWith("~");
+			
+			rfile = rfile.replaceFirst("~", "");
 			
 			ArrayList list = Tool.getFiles(lfile);
 			Iterator it = list.iterator();
@@ -52,7 +54,7 @@ public class Scp
 				String lfilepath = (String)it.next();
 				
 				// exec 'scp -t rfile' remotely
-				String command = "scp -p -t " + (tofolder ? Tool.getFilename(lfilepath) : rfile);
+				String command = "scp -p -t " + (tofolder ? rfile + Tool.getFilename(lfilepath) : rfile);
 				Channel channel = session.openChannel("exec");
 				((ChannelExec) channel).setCommand(command);
 	
@@ -71,7 +73,7 @@ public class Scp
 				long filesize = (new File(lfilepath)).length();
 				command = "C0644 " + filesize + " ";
 				if (lfilepath.lastIndexOf('/') > 0) {
-					command += lfilepath.substring(lfile.lastIndexOf('/') + 1);
+					command += lfilepath.substring(lfilepath.lastIndexOf('/') + 1);
 				} else {
 					command += lfilepath;
 				}

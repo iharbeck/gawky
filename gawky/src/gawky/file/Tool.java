@@ -63,7 +63,7 @@ public class Tool {
 			
 			for (int i = 0; i < files.length; i++) {
 				if(files[i].getName().matches(map))
-					filelist.add(files[i].getAbsoluteFile());
+					filelist.add(files[i].getPath().replaceAll("\\\\","/"));
 			}
 //		} else {
 //			filelist.add(path);
