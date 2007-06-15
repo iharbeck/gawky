@@ -120,6 +120,9 @@ public class RequestPayment extends Part
         }        
     }
 
+    public void setPayment_details(String payment_details) {
+    	
+    }
     public String getPayment_details()
     {
     	StringBuilder buff = new StringBuilder(500);
