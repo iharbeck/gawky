@@ -38,17 +38,18 @@ public class TestCRMObject {
        
        String CHARSET = "U";
        String ENC     =  Constant.ENCODE_ISO;
-       String UNIFI   = "A";
+       String UNIFI   = "AB";
        
        // HEAD Information
        RequestHeadPaymentech head = new RequestHeadPaymentech();
        
-       head.setTransaction_type("71"); //20 22
+       head.setTransaction_type("20"); //20 NEW 21 UPDATE 22
        //head.head_client_id        = "700340202";
        //head.head_client_id        = "700343500";
       
-       head.setClient_id("700343550"); //"700341502"; // 700341002
-       head.setClient_subcode("104080"); // paymentech subcode
+       //head.setClient_id("700343550"); //"700341502"; // 700341002
+       head.setClient_id("700341002"); //"700341502"; // 700341002
+       //head.setClient_subcode("104080"); // paymentech subcode
        
        
        head.setCustomer_id(""); //UNIFI + "445566";
@@ -99,14 +100,14 @@ public class TestCRMObject {
        adr.addr_email_address  = "wer@wer.wer";
        adr.addr_country        = "DE";
        */
-       adr.setName(UNIFI + "Gottfried");   
-       adr.setName_2(UNIFI + "Müller");
+       adr.setName("tom");   
+       adr.setName_2("tom");
        adr.setDate_of_birth("19800503");
        
-       adr.setStreet(UNIFI + "Auf der Reihe");
-       adr.setStreet_number("20");
-       adr.setCity(UNIFI + "Gütersloh");
-       adr.setZip("33311");
+       adr.setStreet("tom");
+       adr.setStreet_number("0");
+       adr.setCity("tom");
+       adr.setZip("12345");
        adr.setEmail_address(UNIFI + "@bertelsmann.de");
        adr.setCountry("DE");
       
@@ -121,7 +122,8 @@ public class TestCRMObject {
        //Comm.setServer("debmu720", 30680);
        //Comm.setServer("debmu720", 31999);
        //Comm.setServer("lnxcrm01", 31680);
-       Client client = new Client("crmtest.bertelsmann.de", 31680);
+       //Client client = new Client("crmtest.bertelsmann.de", 31680);
+       Client client = new Client("debmu720", 31680);
        
        // SSL
        //Comm.setServer("crm.bertelsmann.de", 31682, "storepath", "passphrase");
@@ -142,7 +144,7 @@ public class TestCRMObject {
 //       adr.addr_name           = "Doe4";   
 //       r += req.toRequestString() + "\n";
 //       
-       String tmp = client.sendRequestPlain(r, req.getEncoding(), 5000); 
+       String tmp = client.sendRequestPlain(r, req.getEncoding(), 180000); 
        
        
        System.out.println( r );

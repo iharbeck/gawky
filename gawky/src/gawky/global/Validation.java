@@ -97,6 +97,15 @@ public class Validation
 		return false;
 	}
 	
+	public static boolean isBetween(String value, String min, String max) 
+	{
+		try {
+			return isBetween(value, Double.parseDouble(min), Double.parseDouble(max));
+		} catch(Exception e) {
+			return false;
+		}
+	}
+	
 	public static boolean isBigger(String value, String ref) 
 	{
 		return isBigger(value, Format.getDouble(Locale.GERMAN, ref));
