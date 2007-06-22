@@ -10,6 +10,8 @@ public class Reg {
 	 */
 	public static void main(String[] args) {
 		
+		// ([a-z/]*):([a-z/]*)(:(.*))?
+		
 	   String inputstr = "/PY/123456/OB/Citibank// ltd/OB3/Mr Smith/EI/12345678/";
 		
 	   String patternStr = "/(.*?)/(.*?)[/$]";
