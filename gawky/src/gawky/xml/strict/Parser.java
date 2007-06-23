@@ -12,8 +12,12 @@ public class Parser {
 	
 	int size;
 	
+	StringBuilder builder;
+	
 	public Parser(byte[] data, String encoding) throws Exception {
 		xml = new String(data, encoding);
+		builder = new StringBuilder(xml);
+
 		cxml = xml.toCharArray();
 		size = xml.length();
 	}
@@ -133,9 +137,27 @@ public class Parser {
 
 		while (++a <= epos && cxml[a] != '"');
 		
-		//System.out.println(xml.substring(start, a) + name);
-		
 		return xml.substring(start, a);
+	}
+
+	public final void setAttribut(String name, String val)
+	{
+		int a = moveattribut(name);
+		
+		if(a == -1)
+			return;
+
+		int start = a + 2;  // ="
+		
+		a++;
+
+		while (++a <= epos && cxml[a] != '"');
+		
+		builder.replace(start, a, val);
+	}
+	
+	public StringBuilder getDoc() {
+		return builder;
 	}
 	
 	/**
