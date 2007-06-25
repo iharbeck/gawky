@@ -83,7 +83,7 @@ public class DTDisk
 	SatzE satze = new SatzE();
 	SatzC satzc = new SatzC();
 
-	byte[] line   = new byte[256];
+	byte[] line   = new byte[128*6];
 	byte[] length = new byte[4];
 	
 	byte[] part   = new byte[29];
@@ -139,7 +139,9 @@ public class DTDisk
 			int linelen = Integer.parseInt(new String(length, Constant.ENCODE_LATIN1));
 			
 			if(linelen % 128 != 0)		// AUF SEGMENT LÄNGE VERGRÖSSERN
-				linelen = 256;
+			{
+				linelen = 256; //((linelen / 128) + 1) * 128;
+			}
 
 			mappedbuffer.get(line, 4, linelen-4);
 
@@ -167,16 +169,18 @@ public class DTDisk
 				// mehr als 2 Extention??
 				if(x < ext) 
 				{
-					mappedbuffer.get(line, 4, 128);
-
-					for(; x < ext; x++)
-					{
-						System.arraycopy(line, 4 + 29*(x-2), part, 0, 29);
-						SatzCe satzce = new SatzCe();
-						satzce.parse(new String(part, Constant.ENCODE_LATIN1));
-						
-						satzc.addExtention(satzce);
-					}
+					do {
+						mappedbuffer.get(line, 4, 128);
+	
+						for(int p=0; x < ext && p < 4; x++, p++)
+						{
+							System.arraycopy(line, 4 + 29*(p), part, 0, 29);
+							SatzCe satzce = new SatzCe();
+							satzce.parse(new String(part, Constant.ENCODE_LATIN1));
+							
+							satzc.addExtention(satzce);
+						}
+					} while(x < ext);
 				}
 				satztype = SATZC;
 			} 
