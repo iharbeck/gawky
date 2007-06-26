@@ -22,7 +22,7 @@ public class DesCrypter {
      // Iteration count
      int iterationCount = 19;
  
-     DesCrypter(String passPhrase) 
+     public DesCrypter(String passPhrase) 
      {
          try {
              // Create the key
