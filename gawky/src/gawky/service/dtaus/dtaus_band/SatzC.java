@@ -76,7 +76,7 @@ public class SatzC extends Part
 		if(getSatzCe() != null) 
 			ext = getSatzCe().size();
 
-		int linelen = 160;
+		int linelen = 150;
 		int linelen_total = linelen + ext*29;
 		
 		setErweiterungskennnzeichen(Formatter.getStringN(2, ""+ext));
@@ -96,7 +96,7 @@ public class SatzC extends Part
 			{
 				SatzCe satzcext = (SatzCe)it2.next();
 				
-				System.arraycopy(generator.generateString(satzcext, 29), 0, satz, linelen + i*29 -1, 29);
+				System.arraycopy(generator.generateString(satzcext, 29), 0, satz, linelen + i*29, 29);
 				i++;
 			}
 		}

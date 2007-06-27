@@ -22,7 +22,7 @@ public class DTBand
 {
 	EBCDICParser extparser = new EBCDICParser();
 	
-	static int linelen = 581; 
+	int linelen = 581;
 	
 	public static void read(File f, DTProcessorBand processor) throws IOException, Exception
     {
@@ -30,22 +30,31 @@ public class DTBand
 		
 		handler.open(f);
 		
-		while(handler.next())
+		long asatz = 0;
+		long csatz = 0;
+		long cesatz = 0;
+		long esatz = 0;
+		
+		while(handler.nextvar())
 		{
 			if(handler.isSatzC()) 
 			{
+				csatz++;
 				SatzC satzc = handler.getSatzc();
-				
+
+				cesatz += Integer.parseInt(satzc.getErweiterungskennnzeichen());
 				processor.getSatzcArray().add(satzc);
 			} 
 			else if(handler.isSatzE())
 			{
+				esatz++;
 				SatzE satze = handler.getSatze();
 
 				processor.setSatze(satze);
 			}
 			else if(handler.isSatzA())  // Kopfsatz Mandant ermitteln
 			{
+				asatz++;
 				SatzA satza = handler.getSatza();
 
 				processor.setSatza(satza);
@@ -71,6 +80,7 @@ public class DTBand
 			satze.add(c); // Abstimmsatz
 			
 			fos.write(c.getSatzC());
+			
 		}
 		
 		fos.write(satze.getSatzE());
@@ -83,13 +93,16 @@ public class DTBand
 		if(mappedbuffer.hasRemaining())
 		{
 			byte[] blen = new byte[4];
+			
+			mappedbuffer.mark();
 			mappedbuffer.get(blen, 0, 4);
+			mappedbuffer.reset();
 			
 			linelen = (int)Helper.readNumberBinary(blen);
 			
-			mappedbuffer.get(line, 0, linelen);
+			mappedbuffer.get(line, 0, linelen + 4);
 
-			String type = Ebcdic.toUnicode(new byte[] {line[0]});
+			String type = Ebcdic.toUnicode(new byte[] {line[4]});
 			
 			if(type.charAt(0) == 'C') 
 			{
@@ -101,7 +114,7 @@ public class DTBand
 				for(int x=0; x < ext; x++)
 				{
 					part = new byte[29];
-					System.arraycopy(line, 144 + 2 + (x*29), part, 0, 29);
+					System.arraycopy(line, 150 + (x*29), part, 0, 29);
 				
 					SatzCe satzce = new SatzCe();
 					satzce.parse(extparser, part);
@@ -237,22 +250,41 @@ public class DTBand
     	DTProcessorBand processor = new DTProcessorBand();
     	
 		//File f = new File("C:/work/gawky/format/dtaus.bin");
-		File fi = new File("G:/bcos/pcama/rtldti230207.org");    
+		//File fi = new File("G:/bcos/pcama/rtldti230207.org");    
+		File fi = new File("G:/TESTFILE3.RAW");    
 //		File fi = new File("G:/bcos/pcama/DBDIRECT.outhost");    
 		DTBand.read(fi, processor);
 		
-		System.out.println(processor.getSatza().getBlzsender());
-		
-		File fo = new File("G:/bcos/pcama/DBDIRECT.outhost__");
+		File fo = new File("G:/TESTFILE3.RAW_RE");
 		DTBand.write(fo, processor);
 
-		System.out.println(processor.getSatza().getBlzsender());
 		
 		processor = new DTProcessorBand();
-		fi = new File("G:/bcos/pcama/DBDIRECT.outhost__");    
+		
+		fi = new File("G:/TESTFILE3.RAW_RE");    
+//		File fi = new File("G:/bcos/pcama/DBDIRECT.outhost");    
 		DTBand.read(fi, processor);
-
-		System.out.println(processor.getSatza().getBlzsender());
+		
+		fo = new File("G:/TESTFILE3.RAW_RE2");
+		DTBand.write(fo, processor);
+		
+		
+		processor = new DTProcessorBand();
+		
+		fi = new File("G:/TESTFILE3.RAW_RE2");    
+//		File fi = new File("G:/bcos/pcama/DBDIRECT.outhost");    
+		DTBand.read(fi, processor);
+		
+		fo = new File("G:/TESTFILE3.RAW_RE3");
+		DTBand.write(fo, processor);
+		
+//		System.out.println(processor.getSatza().getBlzsender());
+//		
+//		processor = new DTProcessorBand();
+//		fi = new File("G:/bcos/pcama/DBDIRECT.outhost__");    
+//		DTBand.read(fi, processor);
+//
+//		System.out.println(processor.getSatza().getBlzsender());
     }
 
 }
