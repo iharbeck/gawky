@@ -19,6 +19,7 @@ public class SatzE extends Part
     public Desc[] getDesc() 
 	{
 		return new Desc[] {
+			new Reserved(4),	
 			new DescC("E"),
 		    new Reserved(5),
 			new DescP(4, "anzahlcsaetze"),          
@@ -30,12 +31,16 @@ public class SatzE extends Part
 		}; 
 	}
 
-    static int linelen = 581;
     static EBCDICGenerator generator = new EBCDICGenerator();
     
     public byte[] getSatzE() throws UnsupportedEncodingException
     {
-    	return generator.generateString(this, linelen);
+    	int linelen = 150;
+    	byte[] satz = generator.generateString(this, linelen);
+    	
+    	Helper.writeNumberBinary(satz, linelen-4);
+    	
+    	return satz;
     }
     
     protected long lsumeurobetraege;

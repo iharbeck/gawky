@@ -3,6 +3,7 @@ package gawky.service.dtaus;
 import gawky.host.Ebcdic;
 import gawky.message.parser.EBCDICParser;
 import gawky.message.parser.ParserException;
+import gawky.service.dtaus.dtaus_band.Helper;
 import gawky.service.dtaus.dtaus_band.SatzA;
 import gawky.service.dtaus.dtaus_band.SatzC;
 import gawky.service.dtaus.dtaus_band.SatzCe;
@@ -77,74 +78,6 @@ public class DTBand
 		fos.close();
     }
 
-    /*
-  //public static void main(String[] args) {
-	//150+10
-	//0
-	//}
-	
-	protected long readNumberBinary(byte[] buffer, int len)
-	{
-	    long ret;
-	    int shift;
-	
-	    ret = 0L;
-	    shift = (len - 1) * 8;
-	    
-	    for(int i = 0; i < len;)
-	    {
-	        long read = buffer[i] << shift;
-	        if(read < 0L)
-	        {
-	            read += 256L;
-	        }
-	        ret |= read;
-	        i++;
-	        shift -= 8;
-	    }
-	
-	    return ret;
-	}
-	
-	protected void writeNumberBinary(byte[] buffer, int off, int len, long number)
-	{
-	    if(len <= 0 || len > 8)
-	    {
-	        throw new IllegalArgumentException("len=" + len);
-	    }
-	    int shift = (len - 1) * 8;
-	
-		for(int i = 0; i < len;)
-	    {
-	        buffer[off + i] = (byte)(int)(number >> shift & 255L);
-	        i++;
-	        shift -= 8;
-	    }
-	}
-	*/
-
-    
-	long readNumberBinary(byte[] buffer, int len)
-	{
-		int value = 0;
-        for (int i = 0; i < len; i++) {
-            int shift = (len - 1 - i) * 8;
-            value += (buffer[len-1-i] & 0x000000FF) << shift;
-        }
-        return value;
-	}
-	
-	
-	void writeNumberBinary(byte[] buffer, int len, final long number) {
-   
-           int shift = (len - 1) * 8;
-           int i;
-           
-           for(i = 0; i < len; i++, shift -= 8) {
-               buffer[len-1-i] = (byte) ((number >> shift) & 0xFFL);
-           }
-    }
-    
 	public boolean nextvar()  throws ParserException, UnsupportedEncodingException
 	{	
 		if(mappedbuffer.hasRemaining())
@@ -152,8 +85,7 @@ public class DTBand
 			byte[] blen = new byte[4];
 			mappedbuffer.get(blen, 0, 4);
 			
-			linelen = (int)readNumberBinary(blen, 4);
-			
+			linelen = (int)Helper.readNumberBinary(blen);
 			
 			mappedbuffer.get(line, 0, linelen);
 

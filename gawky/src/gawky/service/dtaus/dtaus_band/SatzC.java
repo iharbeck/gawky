@@ -23,6 +23,7 @@ public class SatzC extends Part
     public Desc[] getDesc() 
 	{
 		return new Desc[] {
+			new Reserved(4),
 			new DescC("C"),
 			new DescP(5, "blzerstbeteiligt"),          
 			new DescP(5, "blzkontofuehrend"),          
@@ -67,23 +68,27 @@ public class SatzC extends Part
     	satzCe = null;
     }
     
-    static int linelen = 581;
     static EBCDICGenerator generator = new EBCDICGenerator();
     
     public byte[] getSatzC() throws UnsupportedEncodingException
     {
-    	int len = 0;
+    	int ext = 0;
 		if(getSatzCe() != null) 
-			len = getSatzCe().size();
+			ext = getSatzCe().size();
+
+		int linelen = 160;
+		int linelen_total = linelen + ext*29;
 		
-		setErweiterungskennnzeichen(Formatter.getStringN(2, ""+len));
+		setErweiterungskennnzeichen(Formatter.getStringN(2, ""+ext));
 		
-		byte[] satz = new byte[linelen];
+		byte[] satz = new byte[linelen_total];
 		Arrays.fill(satz, (byte)0x40);
 
-		System.arraycopy(generator.generateString(this, 150), 0, satz, 0, 150);
+		System.arraycopy(generator.generateString(this, linelen), 4, satz, 4, linelen-4);
 		
-		if(len > 0)
+		Helper.writeNumberBinary(satz, linelen_total-4);
+		
+		if(ext > 0)
 		{
 			int i = 0;
 			Iterator it2 = getSatzCe().iterator();
@@ -91,7 +96,7 @@ public class SatzC extends Part
 			{
 				SatzCe satzcext = (SatzCe)it2.next();
 				
-				System.arraycopy(generator.generateString(satzcext, 29), 0, satz, 150 + i*29 -1, 29);
+				System.arraycopy(generator.generateString(satzcext, 29), 0, satz, linelen + i*29 -1, 29);
 				i++;
 			}
 		}

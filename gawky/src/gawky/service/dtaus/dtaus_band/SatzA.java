@@ -19,6 +19,7 @@ public class SatzA extends Part
     public Desc[] getDesc() 
 	{
 		return new Desc[] {
+			new Reserved(4),	
 			new DescC("A"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 2,   "kennzeichen"),          
 			new DescP(5, "blzempfaenger"),          
@@ -36,12 +37,16 @@ public class SatzA extends Part
 		}; 
 	}
 
-    static int linelen = 581;
     static EBCDICGenerator generator = new EBCDICGenerator();
     
     public byte[] getSatzA() throws UnsupportedEncodingException
     {
-    	return generator.generateString(this, linelen);
+    	int linelen = 150;
+    	byte[] satz = generator.generateString(this, linelen);
+    	
+    	Helper.writeNumberBinary(satz, linelen-4);
+    	
+    	return satz;
     }
     
     private String kennzeichen;
