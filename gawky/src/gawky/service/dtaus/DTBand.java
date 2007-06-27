@@ -77,6 +77,124 @@ public class DTBand
 		fos.close();
     }
 
+    /*
+  //public static void main(String[] args) {
+	//150+10
+	//0
+	//}
+	
+	protected long readNumberBinary(byte[] buffer, int len)
+	{
+	    long ret;
+	    int shift;
+	
+	    ret = 0L;
+	    shift = (len - 1) * 8;
+	    
+	    for(int i = 0; i < len;)
+	    {
+	        long read = buffer[i] << shift;
+	        if(read < 0L)
+	        {
+	            read += 256L;
+	        }
+	        ret |= read;
+	        i++;
+	        shift -= 8;
+	    }
+	
+	    return ret;
+	}
+	
+	protected void writeNumberBinary(byte[] buffer, int off, int len, long number)
+	{
+	    if(len <= 0 || len > 8)
+	    {
+	        throw new IllegalArgumentException("len=" + len);
+	    }
+	    int shift = (len - 1) * 8;
+	
+		for(int i = 0; i < len;)
+	    {
+	        buffer[off + i] = (byte)(int)(number >> shift & 255L);
+	        i++;
+	        shift -= 8;
+	    }
+	}
+	*/
+
+    
+	long readNumberBinary(byte[] buffer, int len)
+	{
+		int value = 0;
+        for (int i = 0; i < len; i++) {
+            int shift = (len - 1 - i) * 8;
+            value += (buffer[len-1-i] & 0x000000FF) << shift;
+        }
+        return value;
+	}
+	
+	
+	void writeNumberBinary(byte[] buffer, int len, final long number) {
+   
+           int shift = (len - 1) * 8;
+           int i;
+           
+           for(i = 0; i < len; i++, shift -= 8) {
+               buffer[len-1-i] = (byte) ((number >> shift) & 0xFFL);
+           }
+    }
+    
+	public boolean nextvar()  throws ParserException, UnsupportedEncodingException
+	{	
+		if(mappedbuffer.hasRemaining())
+		{
+			byte[] blen = new byte[4];
+			mappedbuffer.get(blen, 0, 4);
+			
+			linelen = (int)readNumberBinary(blen, 4);
+			
+			
+			mappedbuffer.get(line, 0, linelen);
+
+			String type = Ebcdic.toUnicode(new byte[] {line[0]});
+			
+			if(type.charAt(0) == 'C') 
+			{
+				satzc = new SatzC();
+				satzc.parse(extparser, line);
+
+				int ext = Integer.parseInt(satzc.getErweiterungskennnzeichen());
+			
+				for(int x=0; x < ext; x++)
+				{
+					part = new byte[29];
+					System.arraycopy(line, 144 + 2 + (x*29), part, 0, 29);
+				
+					SatzCe satzce = new SatzCe();
+					satzce.parse(extparser, part);
+					
+					satzc.addExtention(satzce);
+				}
+				satztype = SATZC;
+			} 
+			else if(type.charAt(0) == 'A')
+			{
+				satza.parse(extparser, line);
+				satztype = SATZA;
+			}
+			else if(type.charAt(0) == 'E')
+			{
+				satze.parse(extparser, line);
+				satztype = SATZE;
+			}
+		} else {
+			return false;
+		}
+		
+		return true;
+    }
+
 	
 	public boolean next()  throws ParserException, UnsupportedEncodingException
 	{	
@@ -99,7 +217,7 @@ public class DTBand
 					System.arraycopy(line, 144 + 2 + (x*29), part, 0, 29);
 				
 					SatzCe satzce = new SatzCe();
-					satzce.parse(extparser, line);
+					satzce.parse(extparser, part);
 					
 					satzc.addExtention(satzce);
 				}
