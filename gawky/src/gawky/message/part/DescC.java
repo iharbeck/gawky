@@ -12,8 +12,8 @@ public class DescC extends Desc {
 	{
 		super(val);
 	}
-	public DescC(String val, int len)
+	public DescC(int len, String val)
 	{
-		super(val, len);
+		super(len, val);
 	}
 }

@@ -115,7 +115,7 @@ public class Desc
 		this(FMT_CONSTANT, CODE_F, value.length(), value, null);
 	}
 	
-	public Desc(String value, int len) // DescConst mit Länge
+	public Desc(int len, String value) // DescConst mit Länge
 	{	
 		this(FMT_CONSTANT, CODE_F, len, value, null);
 	}
