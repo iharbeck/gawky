@@ -11,7 +11,7 @@ public class Satz25 extends Part
 	public Desc[] getDesc() {
 		return new Desc[] {
 			new DescC(":25:"),
-			new DescV(35,  "accountident", Desc.NL)
+			new DescV(35,  "accountident", Desc.LF)
 		};
 	}
 	

@@ -16,7 +16,7 @@ public class Satz60_62_64 extends Part
 			new DescF(1,  "dc"),
 			new DescF(6,  "bookingdate"),
 			new DescF(3,  "currencycode"),
-			new DescV(15, "amount", Desc.NL)
+			new DescV(15, "amount", Desc.LF)
 		};
 	}
 	

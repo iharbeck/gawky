@@ -28,7 +28,7 @@ public class RequestPosition extends Part
 			new DescV(Desc.FMT_A, Desc.CODE_O, 20,  "campaign_id"),   
 			new DescV(Desc.FMT_A, Desc.CODE_O, 3,   "title_id"),    
 			new DescV(Desc.FMT_A, Desc.CODE_O, 196, "description"),
-			new DescC(Desc.ENDPART)
+			new DescC(Desc.END02)
 		}; 
 	}
     public  String gross_amount    = "";

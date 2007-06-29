@@ -19,7 +19,7 @@ public class RequestUrl extends Part
 			new DescC("URL "),	
 			new DescC("00"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 100,  "client_redirect_url"),
-			new DescC(Desc.ENDPART)
+			new DescC(Desc.END02)
 		}; 
 	}
 

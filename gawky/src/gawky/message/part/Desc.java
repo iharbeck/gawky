@@ -11,12 +11,14 @@ import java.lang.reflect.Method;
 public class Desc 
 {
 	// CONSTANTS
-	public static final String NL       = new String(new char[] {'\n'});
-	public static final String END      = new String(new char[] {'\001'});
-	public static final String ENDPART  = new String(new char[] {'\002'});
+	public static final String CRLF     = new String(new char[] {'\r', '\n'}); // "x0D x0A"
+	public static final String LF       = new String(new char[] {'\n'});
+	public static final String END01    = new String(new char[] {'\001'});
+	public static final String END02    = new String(new char[] {'\002'});
 	public static final String ENDCOMMA = new String(new char[] {','});
 	public static final String ENDCOLON = new String(new char[] {';'});
 	public static final String ENDHASH  = new String(new char[] {'#'});
+	public static final String ENDALL   = null;
 	
 	// FORMAT
 	public static final char FMT_C          = 'C';    

@@ -18,8 +18,8 @@ public class RequestHead extends Part
 			new Desc(Desc.FMT_A,      Desc.CODE_F, 10, "account"),
 			new Desc(Desc.FMT_A,      Desc.CODE_F, 10, "sortcode"),
 			new Desc(Desc.FMT_BINARY, Desc.CODE_F, 4,  "binary"),
-			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "vlist1", Desc.END),
-			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "vlist2", Desc.END),
+			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "vlist1", Desc.END01),
+			new Desc(Desc.FMT_LOWER,  Desc.CODE_O, 20, "vlist2", Desc.END01),
 			new Desc(Desc.FMT_DATE,   Desc.CODE_O, 8,  "datum")
 		};
 	}

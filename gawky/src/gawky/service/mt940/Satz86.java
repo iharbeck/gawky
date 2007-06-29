@@ -11,7 +11,7 @@ public class Satz86 extends Part
 	public Desc[] getDesc() {
 		return new Desc[] {
 			new DescC(":86:"),     
-			new DescV(390, "all", Desc.NL)
+			new DescV(390, "all", Desc.LF)
 // citibank
 //			new DescF(4,  "producttype"),
 //			new DescV(2,  "paymenttype", "/"),

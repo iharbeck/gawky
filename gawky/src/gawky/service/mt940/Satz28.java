@@ -12,7 +12,7 @@ public class Satz28 extends Part
 		return new Desc[] {
 			new DescC(":28:"),
 			new DescV(5,  "statementnr", "/"),
-			new DescV(3,  "pagenr", Desc.NL)
+			new DescV(3,  "pagenr", Desc.LF)
 		};
 	}
 	

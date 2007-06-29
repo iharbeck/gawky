@@ -11,7 +11,7 @@ public class ResponseRes extends Part {
 		return new Desc[]  {
 			new DescC("RESP00"),
 			new Desc(Desc.FMT_A, Desc.CODE_F, 4,  "code"),
-			new Desc(Desc.FMT_A, Desc.CODE_F, 60, "detail", Desc.END)
+			new Desc(Desc.FMT_A, Desc.CODE_F, 60, "detail", Desc.END01)
 		};
 	}
 	

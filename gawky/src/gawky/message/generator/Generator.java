@@ -3,6 +3,7 @@ package gawky.message.generator;
 
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
+import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
 import org.apache.commons.logging.Log;
@@ -62,13 +63,13 @@ public class Generator
 				}
 				else
 				{
-					if(desc.delimiter != null)
+					if(desc.delimiter  != null)
 						str.append( Formatter.getStringV(desc.len, val, desc.delimiter) );
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
-							if(desc.len != 0)
+							if(desc.len != 0 && !(desc instanceof DescV))
 								str.append( Formatter.getStringC(desc.len, val) );
 							else
 								str.append( val );
