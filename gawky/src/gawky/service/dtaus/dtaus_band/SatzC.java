@@ -32,6 +32,11 @@ public class SatzC extends Part
 			
 			new Reserved(7),
 			
+			//ABBUCHUNGSAUFTRAG       <04000> nach schriftlicher Authorisierung bei Bank möglich
+			//EINZUGSERMAECHTIGUNG    <05000> nach schriftlicher Authorisierung bei Mandant möglich
+
+			//UEBERWEISUNG            <51000> Auszahlung
+			
 			new DescP(1, "textschluessel", false),
 			new DescP(2, "textschluesselergaenzung"),
 
