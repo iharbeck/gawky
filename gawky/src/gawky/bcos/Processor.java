@@ -38,7 +38,7 @@ public class Processor
 	{
 		long start = System.currentTimeMillis();
 
-		Processor sp = new Processor("c:/test.xml");
+		Processor sp = new Processor("D:/3D/ttt/20070706");
 	
 		BaseObjectI obj = new BaseObject();
 
@@ -93,6 +93,8 @@ public class Processor
 			obj.setCompanyname(ps.getAttribut("companyname"));
 			obj.setAccountnowner(ps.getAttribut("accountnowner"));
 			obj.setAuthtime(ps.getAttribut("authtime"));
+			
+			ps.setAttribut("tag", "1234");
 			
 			consumer.processline(obj);
 		}

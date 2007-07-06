@@ -1,5 +1,7 @@
 package gawky.xml.strict;
 
+import gawky.lang.Stringer;
+
 public class Parser {
 
 	int pos = 0;   //tag position
@@ -12,11 +14,11 @@ public class Parser {
 	
 	int size;
 	
-	StringBuilder builder;
+	Stringer builder;
 	
 	public Parser(byte[] data, String encoding) throws Exception {
 		xml = new String(data, encoding);
-		builder = new StringBuilder(xml);
+		builder = new Stringer(xml);
 
 		cxml = xml.toCharArray();
 		size = xml.length();
@@ -156,8 +158,8 @@ public class Parser {
 		builder.replace(start, a, val);
 	}
 	
-	public StringBuilder getDoc() {
-		return builder;
+	public String getDoc() {
+		return builder.toString();
 	}
 	
 	/**
