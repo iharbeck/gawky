@@ -8,10 +8,12 @@ public class Stringer
 	int count = 0;  // use character
 	char[] value;
 	
-	StringBuffer buf;
-	
 	public Stringer(int init) {
 		value = new char[init];
+	}
+	
+	public char[] getValue() {
+		return value;
 	}
 
 	public Stringer(String str) {

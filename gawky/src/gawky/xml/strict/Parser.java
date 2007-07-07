@@ -13,15 +13,15 @@ public class Parser {
 	char[] cxml;
 	
 	int size;
-	
+
 	Stringer builder;
 	
 	public Parser(byte[] data, String encoding) throws Exception {
 		xml = new String(data, encoding);
-		builder = new Stringer(xml);
-
-		cxml = xml.toCharArray();
 		size = xml.length();
+		
+		builder = new Stringer(xml);
+		cxml = builder.getValue();
 	}
 	
 	public final void toStart() {
@@ -153,8 +153,8 @@ public class Parser {
 		
 		a++;
 
-		while (++a <= epos && cxml[a] != '"');
-		
+		while (++a <= epos && cxml[a] != '"')
+			;
 		
 		builder.replace(start, a, val);
 	}
