@@ -38,7 +38,7 @@ public class Processor
 	{
 		long start = System.currentTimeMillis();
 
-		Processor sp = new Processor("D:/3D/ttt/20070706");
+		Processor sp = new Processor("D:/20070706");
 	
 		BaseObjectI obj = new BaseObject();
 

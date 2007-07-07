@@ -155,6 +155,7 @@ public class Parser {
 
 		while (++a <= epos && cxml[a] != '"');
 		
+		
 		builder.replace(start, a, val);
 	}
 	
