@@ -150,6 +150,25 @@ public class Banko {
 		return true; 
 	}
 	
+	public static boolean method14(String konto)
+	{
+		return method02(konto, new int[]{0,0,0,7,6,5,4,3,2,0}); 
+	}
+	
+	public static boolean method15(String konto)
+	{
+		return method06(konto, new int[]{0,0,0,0,0,5,4,3,2,0}); 
+	}
+	
+	public static boolean method32(String konto)
+	{
+		return method06(konto, new int[]{0,0,0,7,6,5,4,3,2,0}); 
+	}
+	
+	public static boolean method81(String konto)
+	{
+		return method06(konto, new int[]{0,0,0,7,6,5,4,3,2,0}); 
+	}
 	
 	public static void main(String[] args) 
 	{
@@ -163,6 +182,16 @@ public class Banko {
 
 		System.out.println( method10("0012345008") );
 		System.out.println( method10("0087654008") );
+
+		System.out.println( method32("0009141405") );
+		System.out.println( method32("1709107983") );
+		System.out.println( method32("0122116979") );
+		System.out.println( method32("0121114867") );
+		System.out.println( method32("9030101192") );
+		System.out.println( method32("9245500460") );
+
+		System.out.println( method81("0000646440") );
+		System.out.println( method81("0001359100") );
 		
 		
 		
