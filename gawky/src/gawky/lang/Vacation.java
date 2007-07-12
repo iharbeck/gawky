@@ -7,47 +7,80 @@ import java.util.GregorianCalendar;
 
 public class Vacation 
 {
+	public static final int COUNTRY_NRW = 1;
+
 	GregorianCalendar ostern;
 
 	int[] feiertage = new int[30];
 	int   feiercount = 0;
 	int   year;
+	int   country = COUNTRY_NRW;
 	
-	public Vacation(int year) 
+	
+	public Vacation() 
 	{
-		this.year = year;
+	}
+
+	public Vacation(int year, int country) 
+	{
+		setYear(year, country);
+	}
+	
+	public void setYear(int year, int country) {
+		this.year    = year;
+		this.country = country;
 		
 		// Ostersonntag ermitteln
 		ostern = new GregorianCalendar(year, 2, 1);
 		ostern.add(Calendar.DAY_OF_MONTH, gaussformel(year)-1);
 
 		// Feiertage NRW einfügen
-		dayinyear(year, 0, 1);   // DAY_NEUJAHR
-		dayinyear(-2);	         // DAY_KARFREITAG
-		dayinyear(1);            // DAY_OSTERMONTAG
-		dayinyear(year, 4, 1);   // DAY_MAIFEIERTAG
-		dayinyear(39);           // DAY_CHRISTIHIMMELFAHRT
-		dayinyear(50);           // DAY_PFINGSTMONTAG
-		dayinyear(60);           // DAY_FRONLEICHNAM
-		dayinyear(year, 9, 3);   // DAY_TAGDERDEUTSCHENEINHEIT
-		dayinyear(year, 10, 1);  // DAY_ALLERHEILIGEN
-		dayinyear(year, 11, 25); // DAY_1WEIHNACHTSTAG
-		dayinyear(year, 11, 26); // DAY_2WEIHNACHTSTAG
-	}
-	
-	public Date getOstern() {
-		return ostern.getTime();
+		if(country == COUNTRY_NRW) {
+			dayinyear(year, 0, 1);   // DAY_NEUJAHR
+			dayinyear(-2);	         // DAY_KARFREITAG
+			dayinyear(1);            // DAY_OSTERMONTAG
+			dayinyear(year, 4, 1);   // DAY_MAIFEIERTAG
+			dayinyear(39);           // DAY_CHRISTIHIMMELFAHRT
+			dayinyear(50);           // DAY_PFINGSTMONTAG
+			dayinyear(60);           // DAY_FRONLEICHNAM
+			dayinyear(year, 9, 3);   // DAY_TAGDERDEUTSCHENEINHEIT
+			dayinyear(year, 10, 1);  // DAY_ALLERHEILIGEN
+			dayinyear(year, 11, 25); // DAY_1WEIHNACHTSTAG
+			dayinyear(year, 11, 26); // DAY_2WEIHNACHTSTAG
+		}
 	}
 	
 	public static void main(String[] args) {
 		
-		Vacation vacation = new Vacation(2010);
+		Vacation vacation = new Vacation(2007, Vacation.COUNTRY_NRW);
 		
 		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
 
-		System.out.println( "Ostersonntag: " + df.format(vacation.getOstern()) );
-		
 		vacation.list();
+	}
+	
+	public Date getNextWorkingday(Date date)
+	{
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(date);
+
+		do {
+			cal.add(Calendar.DATE, 1);
+		} while(!isWorkingday(cal));
+		
+		return cal.getTime();
+	}
+	
+	public Date getPrevWorkingday(Date date)
+	{
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(date);
+
+		do {
+			cal.add(Calendar.DATE, -1);
+		} while(!isWorkingday(cal));
+		
+		return cal.getTime();
 	}
 	
 	public boolean isWorkingday(Date date) 
@@ -66,6 +99,9 @@ public class Vacation
 		if(d == Calendar.SATURDAY || d == Calendar.SUNDAY)
 			return false;
 		
+		if(year == 0) // Feiertage nicht betrachten
+			return true;
+		
 		// Tag im Jahr ermitteln
 		int dy = cal.get(Calendar.DAY_OF_YEAR);
 		
@@ -73,7 +109,6 @@ public class Vacation
 			if(feiertage[i] == dy)
 				return false;
 		}
-		
 		return true;
 	}
 	
