@@ -275,6 +275,9 @@ public abstract class Table extends Part
 			return update();
 
 		insert();
+		
+		setFound(true);
+
 		return 1;
 	}
 	
