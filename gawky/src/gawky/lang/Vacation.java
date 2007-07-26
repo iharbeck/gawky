@@ -19,6 +19,7 @@ public class Vacation
 	
 	public Vacation() 
 	{
+		year = GregorianCalendar.getInstance().get(Calendar.YEAR);
 	}
 
 	public Vacation(int year, int country) 

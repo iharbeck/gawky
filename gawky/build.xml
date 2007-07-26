@@ -26,6 +26,7 @@
 		 	<fileset dir="bin" includes="${name}-jasper-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-template-?.?.*.jar"/>
 		 	<fileset dir="bin" includes="${name}-crypt-?.?.*.jar"/>
+		 	<fileset dir="bin" includes="${name}-lang-?.?.*.jar"/>
 		 </delete>
          <jar destfile="bin/${name}${version}.jar">
          	<fileset dir="${bin}" >
@@ -100,6 +101,14 @@
          	</fileset>
          	<fileset dir="${src}" >
          		<include name="gawky/database/**"/>
+         	</fileset>
+        </jar>
+		<jar destfile="bin/${name}-lang${version}.jar">
+         	<fileset dir="${bin}" >
+         		<include name="gawky/lang/**"/>
+         	</fileset>
+         	<fileset dir="${src}" >
+         		<include name="gawky/lang/**"/>
          	</fileset>
         </jar>
 		<jar destfile="bin/${name}-mail${version}.jar">

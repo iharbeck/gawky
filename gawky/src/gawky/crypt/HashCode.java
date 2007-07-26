@@ -18,9 +18,18 @@ public class HashCode {
 	} 
 
 	public static String getSHA1Hash(String value) {
+		return getHash(value, "SHA-1");
+	}
+	
+	public static String getMD5Hash(String value) {
+		return getHash(value, "MD5");
+	}
+	
+	public static String getHash(String value, String type) 
+	{
 		try 
 		{
-			MessageDigest sha1 = MessageDigest.getInstance("MD5"/*"SHA-1"*/);
+			MessageDigest sha1 = MessageDigest.getInstance(type);
 		
 			byte d[] = sha1.digest(value.getBytes());
 			
