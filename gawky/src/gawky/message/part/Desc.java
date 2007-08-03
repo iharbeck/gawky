@@ -68,7 +68,6 @@ public class Desc
 	public static final char  CODE_L = 'l';  //list of values
 	
 	
-	
 	// Optimize relection
 	// store Method Definition
 	public Method smethod;
@@ -165,7 +164,7 @@ public class Desc
 	}
 
 	public char    format;
-	public char     code;
+	public char    code;
 	public int     len;
 	public String  delimiter;
 	public String  name;
@@ -175,6 +174,8 @@ public class Desc
 
 	public boolean packed = false;
 	public boolean unsigned = false;
+	
+	public String  xmlpath;
 	
 	// constant informationen müssen nicht im Part
 	// gespeichert werden.

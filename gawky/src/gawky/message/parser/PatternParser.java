@@ -4,6 +4,7 @@ import gawky.message.part.Desc;
 import gawky.message.part.DescL;
 import gawky.message.part.Part;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,8 @@ public class PatternParser extends Parser
 	public final static String DELIMITER_NUMBER    = "#[0-9]";
 	public final static String DELIMITER_NOTNUMBER = "#[^0-9]";
 	public final static String PATTERN_CURRENCY    = "%[0-9]*,[0-9]{0,2}"; // ####,##
+	
+	HashMap patternstore;
 	
 	boolean hasDelimiter;
 	

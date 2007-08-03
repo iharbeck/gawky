@@ -38,6 +38,8 @@ public class ParserException extends Exception
 	
 	public final static int ERROR_EXTRA_DATA        = 2511;
 
+	public final static int ERROR_PARSING           = 2600;
+
 	static {
 		addError(ERROR_MISSING_SETTER,   "MISSING SETTER");
 		addError(ERROR_LINE_TO_SHORT,    "LINE TO SHORT");
