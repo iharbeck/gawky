@@ -93,6 +93,10 @@ public class Sftp extends BaseFtp {
 	}	
 
 	public void changeRemoteDir(String path) throws Exception {
+		
+//		if(path.endsWith("/") && path.length() > 1)
+//			path = path.substring(0, path.length()-1);
+		
 		sftpclient.cd(path);
 	}
 
