@@ -109,7 +109,7 @@ public class Sftp extends BaseFtp {
 		sftpclient.quit();
 	}
 	
-	public void sendLocalFile(String filename) throws Exception
+	public void sendLocalFiles(String filename) throws Exception
 	{
 		String tmp_prefix = ".temp";
 		

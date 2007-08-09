@@ -28,7 +28,7 @@ public class TestFTP {
 		
 
 		// File auf Server senden
-		f.sendLocalFile("C:/work/gawky/build.xml");
+		f.sendLocalFiles("C:/work/gawky/build.xml");
 		
 		// File löschen
 		//f.deleteRemoteFile("build.xml");

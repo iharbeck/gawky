@@ -115,7 +115,7 @@ public class Ftp extends BaseFtp
 		}
 	}
 	
-	public void sendLocalFile(String filename) throws Exception
+	public void sendLocalFiles(String filename) throws Exception
 	{
 		String tmp_prefix = ".temp";
 		ArrayList filesources = Tool.getFiles(localdir + filename);

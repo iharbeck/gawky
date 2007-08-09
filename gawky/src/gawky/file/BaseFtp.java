@@ -24,7 +24,7 @@ public abstract class BaseFtp
 		new File(localdir + "/" + src).renameTo(new File(localdir + "/" + dest));
 	}
 	
-	public abstract void sendLocalFile(String src) throws Exception;
+	public abstract void sendLocalFiles(String src) throws Exception;
 	
 	public abstract void changeRemoteDir(String path) throws Exception; 
 
@@ -63,9 +63,10 @@ public abstract class BaseFtp
 		me.changeRemoteDir(targetfolder);
 		me.changeLocalDir(sourcefolder);
 
-		me.sendLocalFile(sourcefilename);
-		
-		me.renameRemoteFile(sourcefilename, targetfilename);
+		me.sendLocalFiles(sourcefilename);
+
+		if(targetfilename != null)
+			me.renameRemoteFile(sourcefilename, targetfilename);
 		
 		me.close();
 	}
