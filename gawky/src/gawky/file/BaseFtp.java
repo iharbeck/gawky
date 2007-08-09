@@ -65,8 +65,8 @@ public abstract class BaseFtp
 
 		me.sendLocalFiles(sourcefilename);
 
-		if(targetfilename != null)
-			me.renameRemoteFile(sourcefilename, targetfilename);
+//		if(targetfilename != null)
+//			me.renameRemoteFile(sourcefilename, targetfilename);
 		
 		me.close();
 	}
@@ -93,8 +93,8 @@ public abstract class BaseFtp
 
 		me.retrieveFiles(sourcefilename);
 		
-		if(targetfilename != null)
-			me.renameLocaleFile(sourcefilename, targetfilename);
+//		if(targetfilename != null)
+//			me.renameLocaleFile(sourcefilename, targetfilename);
 		
 		me.close();
 	}
