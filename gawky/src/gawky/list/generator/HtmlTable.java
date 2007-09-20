@@ -10,8 +10,6 @@ public class HtmlTable extends AbstractTable
 	private String tableclass = null;
 	private String tablestyle = null;
 
-	public static String secondline = "";
-
 	public String generate(Datasource ds)
 	{
 		StringBuilder buffer = new StringBuilder();
@@ -45,7 +43,7 @@ public class HtmlTable extends AbstractTable
 		int x = 0;
 		while(ds.nextRow())
 		{
-			buffer.append("<TR class='" + secondline + "'" + rollover + " " + rowlistener.process(ds, x) + ">");
+			buffer.append("<TR class='" + ((x%2==0) ? "secondline" : "firstline") + "'" + rollover + " " + rowlistener.process(ds, x) + ">");
 			for(int i=0; i < ds.getColumns(); i++)
 			{
 				if(ds.getWidth(i) == Column.HIDDEN)
@@ -86,14 +84,5 @@ public class HtmlTable extends AbstractTable
 
 	public void setTablestyle(String tablestyle) {
 		this.tablestyle = tablestyle;
-	}
-
-
-	public static String getSecondline() {
-		return secondline;
-	}
-
-	public static void setSecondline(String secondline) {
-		HtmlTable.secondline = secondline;
 	}
 }
