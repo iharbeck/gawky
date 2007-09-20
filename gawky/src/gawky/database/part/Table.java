@@ -23,39 +23,39 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Persistence Layer for Part based Objects
  * Insert / Update / Delete / Find
- * 
- * @author Ingo Harbeck 
+ *
+ * @author Ingo Harbeck
  */
 
-public abstract class Table extends Part 
+public abstract class Table extends Part
 {
 	boolean found = false;
-	
-	private final class StaticLocal 
+
+	private final class StaticLocal
 	{
 		public String[]            sql  = new String[5];
 		public PreparedStatement[] stmt = new PreparedStatement[4];
 		public boolean             parameter = false;
 		public int[]               descidindex;
-		
+
 		public StaticLocal() {
 			descidindex = new int[1];
 			descidindex[0] = NO_ID;
-	
+
 			descIds = new Desc[1];
 			descIds[0] = null;
 		}
-		
+
 		public Desc[] descIds = null;
-		
+
 		IDGenerator idgenerator   = null;
-		
+
 		Generator generator       = new Generator();
 		Dialect dialect           = new MySQL();
 		int defaultconnection     = 0;
 	}
-	
-	public void descAfterInterceptor(Desc[] descs) { 
+
+	public void descAfterInterceptor(Desc[] descs) {
 
 		StaticLocal local = getStaticLocal();
 		local.descIds = new Desc[local.descidindex.length];
@@ -69,31 +69,31 @@ public abstract class Table extends Part
 		}
 		//getStaticLocal().descId = descs[getStaticLocal().descidindex];
 	}
-	
+
 	private static Log log = LogFactory.getLog(Table.class);
-	
+
 	private static final int SQL_INSERT = 0;
 	private static final int SQL_FIND   = 1;
 	private static final int SQL_UPDATE = 2;
 	private static final int SQL_DELETE = 3;
 	private static final int SQL_SELECT = 4;
-	
+
 	public  static final int NO_ID = -1;
-	
+
 	//Instance Cache
 	StaticLocal staticlocal;
-	
+
 	public final static StaticLocal getStaticLocal(Table bean) {
 		return bean.getStaticLocal();
 	}
-	
-	public final StaticLocal getStaticLocal() 
+
+	public final StaticLocal getStaticLocal()
 	{
-		if(staticlocal != null) 
+		if(staticlocal != null)
 			return staticlocal;
 
 		staticlocal = (StaticLocal)hmStaticLocal.get(getClass());
-		
+
 		if(staticlocal == null)
 		{
 			staticlocal = new StaticLocal();
@@ -103,22 +103,22 @@ public abstract class Table extends Part
 		return staticlocal;
 	}
 
-	public void setParameter(boolean val) 
+	public void setParameter(boolean val)
 	{
 		getStaticLocal().parameter = val;
 	}
-	
+
 	public boolean getParameter()
 	{
 		return getStaticLocal().parameter;
 	}
-	
+
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
-	
-	
-	// Start Multikey 
-	
+
+
+	// Start Multikey
+
 	/**
 	 * @deprecated use setDescID(new int[] {i1, i2...})
 	 */
@@ -146,52 +146,52 @@ public abstract class Table extends Part
 		getStaticLocal().descidindex[2] = idindex3;
 		getStaticLocal().descidindex[3] = idindex4;
 	}
-	
+
 	public void setDescID(int[] index) {
 		getStaticLocal().descidindex = index;
 	}
-	
+
 	// Ende Multikey
-	
+
 	public void setDescID(int idindex) {
 		setDescID(idindex, null);
 	}
-	
+
 	public void setDescID(IDGenerator idgenerator) {
 		setDescID(0, idgenerator);
 	}
-	
-	public void setDescID(int idindex, IDGenerator idgenerator) 
+
+	public void setDescID(int idindex, IDGenerator idgenerator)
 	{
 		StaticLocal local = getStaticLocal();
-		
+
 		local.descidindex = new int[1];
 		local.descidindex[0] = idindex;
 		local.idgenerator = idgenerator;
 	}
-	
+
 	public final boolean isPrimary(Desc desc) {
 		Desc[] descs = getStaticLocal().descIds;
-		
+
 		for(int i=0; i < descs.length; i++)
 			if(descs[i] == desc)
 				return true;
 		return false;
 	}
-	
-	public Desc[] getDescIDs() 
+
+	public Desc[] getDescIDs()
 	{
 		return getStaticLocal().descIds;
 	}
-	
-	private static HashMap hmStaticLocal    = new HashMap(); 
 
-	public final String[] getQueries() 
+	private static HashMap hmStaticLocal    = new HashMap();
+
+	public final String[] getQueries()
 	{
-		return getStaticLocal().sql; 
+		return getStaticLocal().sql;
 	}
-	
-	public final String getQuery(int type) 
+
+	public final String getQuery(int type)
 	{
 		String sql = getQueries()[type];
 		if(sql == null)	{
@@ -217,12 +217,12 @@ public abstract class Table extends Part
 
 		return sql;
 	}
-	
-	public final PreparedStatement[] getStmts() 
+
+	public final PreparedStatement[] getStmts()
 	{
-		return getStaticLocal().stmt; 
+		return getStaticLocal().stmt;
 	}
-	
+
 	/**
 	 * Read from or fill Cache
 	 * @param conn
@@ -231,24 +231,24 @@ public abstract class Table extends Part
 	 * @return
 	 * @throws SQLException
 	 */
-	public final PreparedStatement getStmt(Connection conn, String sql, int type) throws SQLException 
+	public final PreparedStatement getStmt(Connection conn, String sql, int type) throws SQLException
 	{
-		PreparedStatement stmt = getStmts()[type];		
-		
+		PreparedStatement stmt = getStmts()[type];
+
 		if(stmt == null || stmt.getConnection() != conn)
-		{	
+		{
 			try { stmt.close(); } catch (Exception e) {}
 			stmt = conn.prepareStatement(sql);
 			getStmts()[type] = stmt;
 		}
-		
+
 		return stmt;
 	}
-	
+
 	protected final String getInsertSQL() {
 		return getStaticLocal().generator.generateInsertSQL(this).toString();
 	}
-	
+
 	protected final String getUpdateSQL() {
 		return getStaticLocal().generator.generateUpdateSQL(this).toString();
 	}
@@ -260,37 +260,37 @@ public abstract class Table extends Part
 	protected final String getFindSQL() {
 		return getStaticLocal().generator.generateFindSQL(this).toString();
 	}
-	
+
 	protected final String getDeleteSQL() {
 		return getStaticLocal().generator.generateDeleteSQL(this).toString();
 	}
-	
+
 	protected final void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
 		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
 	}
-	
-	public final int store() throws Exception 
+
+	public int store() throws Exception
 	{
 		if(isFound())
 			return update();
 
 		insert();
-		
+
 		setFound(true);
 
 		return 1;
 	}
-	
-	public final int store(Connection conn) throws Exception 
+
+	public int store(Connection conn) throws Exception
 	{
 		if(isFound())
 			return update(conn);
-		
+
 		insert(conn);
 		return 1;
 	}
-	
-	public void insert() throws SQLException 
+
+	public void insert() throws SQLException
 	{
 		Connection conn = null;
 		try {
@@ -301,17 +301,17 @@ public abstract class Table extends Part
 		}
 	}
 
-	
-	public void insert (Connection conn) throws SQLException 
+
+	public void insert (Connection conn) throws SQLException
 	{
 		String sql = getQuery(SQL_INSERT);
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_INSERT);
-		
+
 		fillPreparedStatement(stmt, true);
-		
+
 		stmt.execute();
-		
+
 		try {
 			// versuche to generierte ID zu ermitteln und im Object abzulegen
 			if(getIdgenerator() != null)
@@ -320,15 +320,15 @@ public abstract class Table extends Part
 			log.error("insert Record", e);
 		}
 	}
-	
-	public void queryToStream(Connection conn, String where, OutputStream out) throws Exception 
+
+	public void queryToStream(Connection conn, String where, OutputStream out) throws Exception
 	{
 		String sql = getQuery(SQL_SELECT);
 
 		PreparedStatement stmt = conn.prepareStatement(sql + " " + where);
-		 
+
 		ResultSet rset = stmt.executeQuery();
-			
+
 		byte endline = '\n';
 
 		while (rset.next())
@@ -336,7 +336,7 @@ public abstract class Table extends Part
 			Table table = (Table) this.getClass().newInstance();
 
 			getStaticLocal().generator.fillPart(rset, table);
-			
+
 			//out.write(Formatter.getStringC(300, table.toString()).getBytes());
 			out.write(table.toString().getBytes());
 			out.write('\r');
@@ -345,38 +345,38 @@ public abstract class Table extends Part
 		DB.doClose(stmt);
 	}
 
-	public String getID() throws Exception 
+	public String getID() throws Exception
 	{
 		getCachedDesc();
 		Desc[] descids = getDescIDs();
 
-		return descids[0].getValue(this); 
+		return descids[0].getValue(this);
 	}
-	
-	public void setID(String id) throws Exception 
+
+	public void setID(String id) throws Exception
 	{
 		getCachedDesc();
 		Desc[] descids = getDescIDs();
 
-		descids[0].setValue(this, id); 
+		descids[0].setValue(this, id);
 	}
-	
-	public void find() throws Exception 
+
+	public void find() throws Exception
 	{
 		find(getID());
 	}
-	
-	public void find(long id) throws Exception 
+
+	public void find(long id) throws Exception
 	{
 		find(new Long(id));
 	}
 
-	public void find(Connection conn, long id) throws Exception 
+	public void find(Connection conn, long id) throws Exception
 	{
 		find(conn, new Long(id));
 	}
-	
-	public void find(Object id) throws Exception 
+
+	public void find(Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -386,13 +386,13 @@ public abstract class Table extends Part
 			DB.doClose(conn);
 		}
 	}
-	
-	public void find(Connection conn, Object id) throws Exception 
+
+	public void find(Connection conn, Object id) throws Exception
 	{
 		find(conn, new Object[] {id});
 	}
 
-	public void find(Object ids[]) throws Exception 
+	public void find(Object ids[]) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -403,18 +403,18 @@ public abstract class Table extends Part
 		}
 	}
 
-	public void find(Connection conn, Object[] ids) throws Exception 
+	public void find(Connection conn, Object[] ids) throws Exception
 	{
 		String sql = getQuery(SQL_FIND);
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
-		
+
 		// Find by IDs
 		for(int i=0; i < ids.length; i++)
 			stmt.setObject(i+1, ids[i]);
 
 		ResultSet rset = stmt.executeQuery();
-		
+
 		found = rset.next();
 		if (found) {
 			getStaticLocal().generator.fillPart(rset, this);
@@ -423,8 +423,8 @@ public abstract class Table extends Part
 		}
 	}
 
-	
-	public void find(String where, Object[] params) throws Exception 
+
+	public void find(String where, Object[] params) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -434,40 +434,40 @@ public abstract class Table extends Part
 			DB.doClose(conn);
 		}
 	}
-	
-	public void find(Connection conn, String where, Object[] params) throws Exception 
+
+	public void find(Connection conn, String where, Object[] params) throws Exception
 	{
 		String sql = getQuery(SQL_SELECT);
 
 		sql += " " + where;
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
-		
+
 		for(int i = 1; params != null && i <= params.length; i++)
 			stmt.setObject(i, params[i-1]);
-		
+
 		ResultSet rset = stmt.executeQuery();
-		
+
 		found = rset.next();
 		if (found) {
 			getStaticLocal().generator.fillPart(rset, this);
 		} else {
 			log.error("no result (" + sql + ")");
 		}
-		
+
 		DB.doClose(stmt);
 	}
-	
+
 	/*
 	 * static Find Methods
 	 */
-	
-	public static Table find(Class clazz, long id) throws Exception 
+
+	public static Table find(Class clazz, long id) throws Exception
 	{
 		return find(clazz, new Long(id));
 	}
 
-	public static Table find(Class clazz, Object id) throws Exception 
+	public static Table find(Class clazz, Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -478,17 +478,17 @@ public abstract class Table extends Part
 		}
 	}
 
-	
-	public static Table find(Class clazz, Connection conn, Object id) throws Exception 
+
+	public static Table find(Class clazz, Connection conn, Object id) throws Exception
 	{
 		Table inst = (Table)clazz.newInstance();
-		
+
 		inst.find(conn, id);
-		
+
 		return inst;
 	}
-	
-	public static List find(Class clazz, String where, Object[] params) throws Exception 
+
+	public static List find(Class clazz, String where, Object[] params) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -498,8 +498,8 @@ public abstract class Table extends Part
 			DB.doClose(conn);
 		}
 	}
-	
-	public static List find(Class clazz, Connection conn, String where, Object[] params) throws Exception 
+
+	public static List find(Class clazz, Connection conn, String where, Object[] params) throws Exception
 	{
 		Table inst = (Table)clazz.newInstance();
 
@@ -508,34 +508,34 @@ public abstract class Table extends Part
 		sql += " " + where;
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
-		
+
 		for(int i=0; params != null && i < params.length; i++)
 			stmt.setObject(i+1, params[i]);
-			
+
 		ResultSet rset = stmt.executeQuery();
-		
+
 		ArrayList list = new ArrayList();
 
 		while (rset.next())
 		{
 			getStaticLocal(inst).generator.fillPart(rset, inst);
-			
+
 			list.add(inst);
-			
+
 			inst = (Table)clazz.newInstance();
-		} 
-		
+		}
+
 		DB.doClose(stmt);
-		
+
 		return list;
 	}
-	
-	public static int delete(Class clazz, long id) throws Exception 
+
+	public static int delete(Class clazz, long id) throws Exception
 	{
 		return delete(clazz, new Long(id));
 	}
-	
-	public static int delete(Class clazz, Object id) throws Exception 
+
+	public static int delete(Class clazz, Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -545,33 +545,33 @@ public abstract class Table extends Part
 			DB.doClose(conn);
 		}
 	}
-	
-	public static int delete(Class clazz, Connection conn, long id) throws Exception 
+
+	public static int delete(Class clazz, Connection conn, long id) throws Exception
 	{
 		return delete(clazz, conn, new Long(id));
 	}
-	
-	public static int delete(Class clazz, Connection conn, Object id) throws Exception 
+
+	public static int delete(Class clazz, Connection conn, Object id) throws Exception
 	{
 		return delete(clazz, conn, new Object[] { id } );
 	}
-	
-	public static int delete(Class clazz, Connection conn, Object[] ids) throws Exception 
+
+	public static int delete(Class clazz, Connection conn, Object[] ids) throws Exception
 	{
 		Table inst = (Table)clazz.newInstance();
 
 		String sql = inst.getQuery(SQL_DELETE);
 
 		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
-		
+
 		// Delete by ID
 		for(int i=0; i < ids.length; i++)
 			stmt.setObject(i+1, ids[i]);
-		
+
 		return stmt.executeUpdate();
 	}
-	
-	public int delete() throws Exception 
+
+	public int delete() throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -582,44 +582,44 @@ public abstract class Table extends Part
 		}
 	}
 
-	
-	public int delete(Connection conn) throws Exception 
+
+	public int delete(Connection conn) throws Exception
 	{
 		String sql = getQuery(SQL_DELETE);
-		
+
 		PreparedStatement stmt = getStmt(conn, sql, SQL_DELETE);
-		
+
 		// Delete by combined ID
 		Desc[] descs = getDescIDs();
-		
+
 		for(int i=0; i < descs.length; i++)
 			stmt.setObject(i+1, descs[i].getValue(this));
-		
+
 		return stmt.executeUpdate();
 	}
-	
-	public int update() throws Exception 
+
+	public int update() throws Exception
 	{
 		Connection conn = null;
 		try {
 			conn = DB.getConnection(getStaticLocal().defaultconnection);
-			return update(conn); 
+			return update(conn);
 		} finally {
 			DB.doClose(conn);
 		}
 	}
-	
-	public int update (Connection conn) throws SQLException 
+
+	public int update (Connection conn) throws SQLException
 	{
 		String sql = getQuery(SQL_UPDATE);
 
-		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);		
+		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);
 
 		fillPreparedStatement(stmt, false);
-		
+
 		return stmt.executeUpdate();
 	}
-	
+
 	public IDGenerator getIdgenerator() {
 		return getStaticLocal().idgenerator;
 	}
