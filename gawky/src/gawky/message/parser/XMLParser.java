@@ -20,26 +20,26 @@ public class XMLParser extends Parser
 {
 	private static Log log = LogFactory.getLog(XMLParser.class);
 
-	public void parse(String xml, Object bean) throws ParserException
+	public Object parse(String xml, Object bean) throws ParserException
 	{
 		SAXBuilder parser = new SAXBuilder();
-		
+
 		Document doc = null;
-		
+
 		try {
 			doc = parser.build(new StringReader(xml));
 		} catch (Exception e) {
 			throw new ParserException(ParserException.ERROR_PARSING, null, xml);
 		}
 
-		parse(doc.getRootElement(), bean);
+		return parse(doc.getRootElement(), bean);
 	}
-	
-	public void parse(Element xml, Object bean) throws ParserException
+
+	public Object parse(Element xml, Object bean) throws ParserException
 	{
 		// Get Description Object
 		descs = ((Part)bean).getCachedDesc();
-		
+
 		Desc   desc;
 		String value = "";
 
@@ -47,21 +47,21 @@ public class XMLParser extends Parser
 		for(int i = 0; i < descs.length; i++)
 		{
 			desc = descs[i];
-			
+
 			// DISCUSS example - ID not in Importfile but later in DB
-			if(desc.skipparsing) 
+			if(desc.skipparsing)
 				continue;
-		
-			try { 
+
+			try {
 				value = ((Element)XPath.selectSingleNode(xml, desc.xmlpath)).getValue();
 			} catch (Exception e) {
 			}
-			
+
 			if(value == null)
 				throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, "");
-				
+
 			storeValue(bean, i, desc, value);
-	
+
 			// Required Field
 			if(desc.code == Desc.CODE_R && value.length() == 0)
 				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
@@ -70,14 +70,14 @@ public class XMLParser extends Parser
 			{
 				storeValue(bean, i, desc, value);
 				continue;
-			}		
-			
-			// Inhaltlich prüfung						
+			}
+
+			// Inhaltlich prüfung
 			typeCheck(desc, value);
-			
+
 		    storeValue(bean, i, desc, value);
-		}		
-		
-		return;
+		}
+
+		return bean;
 	}
 }

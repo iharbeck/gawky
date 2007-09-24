@@ -27,7 +27,7 @@ public abstract class Part implements Cloneable
     private static Generator generator;
 
     private Object clone;
-    
+
 	/**
 	 * used by matcher
 	 * @param name
@@ -35,34 +35,34 @@ public abstract class Part implements Cloneable
 	 */
 	public Desc getDescByName(String name) {
 		Desc[] descs = getCachedDesc();
-		
+
 		for(int i=0; i < descs.length; i++) {
 			if(descs[i].name.equals(name))
 				return descs[i];
 		}
 		return null;
 	}
-	
+
 	abstract public Desc[] getDesc();
-	
-	public void descAfterInterceptor(Desc[] descs) { 
-		
+
+	public void descAfterInterceptor(Desc[] descs) {
+
 	}
-	
+
 	protected final Desc[] getOptDesc() {
-		
+
 		Desc[] descs = getDesc();
 
 		ClassPool pool = null;
 		String classname = getClass().getName();;
-		
+
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
-		
+
 		String folder = "file://" + Locator.findBinROOT() + "worker/";
-		
+
 		log.info("JavaAssist folder: " + folder);
 		ClassLoader urlCl = null;
-		
+
 		try {
 			urlCl  = URLClassLoader.newInstance(
 					    new URL[]{new URL( folder )});
@@ -73,63 +73,63 @@ public abstract class Part implements Cloneable
 
 		if(hasJavaAssist)
 			pool = ClassPool.getDefault();
-		
+
 		// Prepare Attribute Access
 		for(int i=0; i < descs.length; i++)
 		{
 			// Constanten do not have an attribute
-			if(descs[i].format == Desc.FMT_CONSTANT) 
+			if(descs[i].format == Desc.FMT_CONSTANT)
 				continue;
 
 			try {
 				String mname = Character.toUpperCase(descs[i].name.charAt(0)) +  descs[i].name.substring(1);
-				
+
 				if(hasJavaAssist)
 				{
 					log.info("Attribute access: using JavaAssist");
-					
+
 					// Native case - Generate Native Bytecode for ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
 
 					if(!Option.isClassInClassloader(urlCl, proxycname, ""))
 					{
 						log.info("Generating Proxyclass: " + proxycname);
-						CtClass cc = pool.makeClass(classname + "Accessor" + mname);  
-			
+						CtClass cc = pool.makeClass(classname + "Accessor" + mname);
+
 						cc.addInterface( pool.get(Accessor.class.getName()) );
-						
+
 						// Create setter
 						CtMethod ms = CtNewMethod.make(
 								" public final void setValue(Object bean, String value) throws Exception {" +
 								"  ((" + classname + ")bean).set" + mname + "(value); " +
 								" } "
 								, cc);
-						cc.addMethod(ms); 
+						cc.addMethod(ms);
 
-						// Create getter 
+						// Create getter
 						CtMethod mg = CtNewMethod.make(
 								" public final String getValue(Object bean) throws Exception {" +
 								"  return ((" + classname + ")bean).get" + mname + "(); " +
 								" } "
 								, cc);
-						cc.addMethod(mg); 
-						
+						cc.addMethod(mg);
+
 						// Generate Class files
 						cc.writeFile(Locator.findBinROOT() + "worker");
 						cc.detach();
-						
+
 						// Alternative if not written to local disk (no detach!!)
 						//desc[i].accessor = (Accessor)cc.toClass().newInstance();
 					}
-					
+
 					// load class from Classpath
 					descs[i].accessor = (Accessor)Class.forName(proxycname, false, urlCl).newInstance();
-					
+
 					if(descs[i].accessor == null)
 						throw new Exception("Can't generate GetterSetterclass for [" + mname + "]");
 				} else {
 					log.info("Attribute access: using Reflection");
-					
+
 					// Reflection case - Prepare Method details
 					descs[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
 					descs[i].gmethod = getClass().getMethod( "get" + mname, null);
@@ -143,40 +143,40 @@ public abstract class Part implements Cloneable
 				log.error("Generating Getter/Setter", e);
 			}
 		}
-		
+
 		descAfterInterceptor(descs);
-		
+
 		return descs;
 	}
-	
-	private static HashMap hmDesc = new HashMap(); 
-	
+
+	private static HashMap hmDesc = new HashMap();
+
 	Desc[] cacheddesc = null;
-	
-	public final Desc[] getCachedDesc() 
+
+	public final Desc[] getCachedDesc()
 	{
 		if(cacheddesc != null)
 			return cacheddesc;
-		
-		cacheddesc = (Desc[])hmDesc.get(getClass()); 
+
+		cacheddesc = (Desc[])hmDesc.get(getClass());
 		if(cacheddesc == null) {
 			cacheddesc = getOptDesc();
 			hmDesc.put(getClass(), cacheddesc);
 		}
-		
+
 		return cacheddesc;
 	}
-		
+
 	public final String toString()
 	{
 		return getGenerator().generateString(this);
 	}
-	
+
 	public final String toDebugString()
 	{
 		return getGenerator().generateDebugString(this);
 	}
-	
+
 	/**
 	 * for spezialized Generators
 	 */
@@ -184,12 +184,12 @@ public abstract class Part implements Cloneable
 	{
 		return extgenerator.generateString(this);
 	}
-	
+
 	public final byte[] getBytes(String charset) throws UnsupportedEncodingException
 	{
 		return toString().getBytes(charset);
 	}
-	
+
 	public final Generator getGenerator() {
 		if(generator == null)
 			generator = Generator.getInstance();
@@ -202,32 +202,32 @@ public abstract class Part implements Cloneable
 		return parser;
 	}
 
-	public final void parse(String str) throws ParserException
+	public final Object parse(String str) throws ParserException
 	{
-		getParser().parse(str, this);
+		return getParser().parse(str, this);
 	}
-	
+
 	/**
 	 * for specialized parsers
 	 */
-	public final void parse(Parser extparser, String str) throws ParserException
+	public final Object parse(Parser extparser, String str) throws ParserException
 	{
-		extparser.parse(str, this);
+		return extparser.parse(str, this);
 	}
-	
-	public final void parse(Parser extparser, byte[] bytes) throws ParserException, UnsupportedEncodingException
+
+	public final Object parse(Parser extparser, byte[] bytes) throws ParserException, UnsupportedEncodingException
 	{
-		extparser.parsebytes(bytes, this);
+		return extparser.parsebytes(bytes, this);
 	}
-	
+
 	public void afterFill() {
-		
+
 	}
-	
+
 	public void beforeStore() {
-		
+
 	}
-	
+
 	public Object clone() {
 		try {
 			Object clone = (Object) super.clone();
@@ -236,11 +236,11 @@ public abstract class Part implements Cloneable
 	       return null;
 	     }
 	}
-	
+
 	public void doclone() {
 		clone = clone();
 	}
-	
+
 	public Object getBackup() {
 		return clone;
 	}
