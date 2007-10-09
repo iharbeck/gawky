@@ -2,8 +2,6 @@ package gawky.message;
 
 import gawky.global.Matcher;
 
-import java.util.regex.Pattern;
-
 /*
   Generate Char and Number Format
 */

@@ -24,23 +24,28 @@ import org.apache.commons.logging.LogFactory;
  *
  */
 
-public class DB 
+public class DB
 {
 	private static Log log = LogFactory.getLog(DB.class);
-	
-	public static void init() 
+
+	public static void init()
 	{
-		int dbc = Option.getProperties("db.driver").length;
-		
+		String staging = Option.getProperty("staging", "");
+
+		if(staging.length() > 0)
+			staging = "_" + staging;
+
+		int dbc = Option.getProperties("db" + staging + ".driver").length;
+
 		log.info("Datenbanken: " + dbc);
-		
-    	for(int i=0; i < dbc; i++) 
+
+		for(int i=0; i < dbc; i++)
     	{
-    		String dburl    = Option.getProperty("db(" + i + ").url");
-			String dbpass   = Option.getProperty("db(" + i + ").password");
-			String dbuser   = Option.getProperty("db(" + i + ").user");
-			String dbdriver = Option.getProperty("db(" + i + ").driver");
-			String dbalias  = Option.getProperty("db(" + i + ").alias", null);
+    		String dburl    = Option.getProperty("db" + staging + "(" + i + ").url");
+			String dbpass   = Option.getProperty("db" + staging + "(" + i + ").password");
+			String dbuser   = Option.getProperty("db" + staging + "(" + i + ").user");
+			String dbdriver = Option.getProperty("db" + staging + "(" + i + ").driver");
+			String dbalias  = Option.getProperty("db" + staging + "(" + i + ").alias", null);
 
 	        log.info("Register: " + dburl);
 	        try {
@@ -53,12 +58,12 @@ public class DB
 			}
     	}
 	}
-	
+
     // Verbindung aus Connectionpool holen
     static public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
     }
-    
+
     static public Connection getConnection(int number) throws SQLException {
     	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
     }
@@ -71,7 +76,7 @@ public class DB
     {
     	return isDBAvailable(0);
     }
-    
+
     public static boolean isDBAvailable(int number)
     {
     	Connection conn = null;
@@ -85,26 +90,26 @@ public class DB
 		}
 		return true;
     }
-    
+
     private static final String secString(Object val)
 	{
-		if(val != null) 
+		if(val != null)
 			val = ((String)val).trim();
-		else 
+		else
 			val = "";
 		return (String)val;
 	}
-	
-    
+
+
     /**
      * get Long
      */
-    
+
     public static String getString(String sql)
 	{
 		Connection conn = null;
-		
-		try 
+
+		try
 		{
 			conn = DB.getConnection(0);
 			return getString(conn, sql);
@@ -113,15 +118,15 @@ public class DB
 		} finally {
 			doClose(conn);
 		}
-		
+
 		return null;
 	}
-    
+
 	public static String getString(Connection conn, String sql) throws Exception
 	{
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
-		
+
 		try {
 			stmt_select = conn.prepareStatement(sql);
 			rset 	    = stmt_select.executeQuery();
@@ -129,21 +134,21 @@ public class DB
 			rset.next();
 			return rset.getString(1);
 		} finally {
-			doClose(stmt_select); 
+			doClose(stmt_select);
 			doClose(rset);
 		}
 	}
-	
+
 	  public static int execute(String sql)
 		{
 		  return execute(0, sql);
 		}
-	
+
 	  public static int execute(int pool, String sql)
 		{
 			Connection conn = null;
-			
-			try 
+
+			try
 			{
 				conn = DB.getConnection(pool);
 				return execute(conn, sql, null);
@@ -154,30 +159,30 @@ public class DB
 			}
 			return 0;
 		}
-	  
+
 	public static int execute(Connection conn, String sql, Object[] params) throws Exception
 	{
 		PreparedStatement stmt_select = null;
-		
+
 		try {
-			
+
 			stmt_select = conn.prepareStatement(sql);
 			return stmt_select.executeUpdate();
 		} finally {
-			doClose(stmt_select); 
+			doClose(stmt_select);
 		}
 	}
-	
+
     /**
      * Row als Map
      */
-	
-	
+
+
 	public static Map getRow(String sql, String[] params)
 	{
 		Connection conn = null;
-		
-		try 
+
+		try
 		{
 			conn = DB.getConnection(0);
 			return getRow(conn, sql, params);
@@ -186,23 +191,23 @@ public class DB
 		} finally {
 			doClose(conn);
 		}
-		
+
 		return null;
 	}
-    
+
 	public static Map getRow(Connection conn, String sql, String[] params)
 	{
 		Map hs = null;
-		
+
 		ResultSet rset = null;
 
 		PreparedStatement stmt_select = null;
-		
+
 		try {
 			stmt_select = conn.prepareStatement(sql);
-			
+
 			int a = 1;
-			
+
 			for (int i=0; params != null && i < params.length; i++) {
 				String param = params[i];
 				stmt_select.setString(a++, param);
@@ -214,7 +219,7 @@ public class DB
 			{
 				hs = new Hashtable();
 				ResultSetMetaData md = rset.getMetaData();
-				
+
 				for (int i = md.getColumnCount(); i > 0; i --) {
 					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
 					hs.put(md.getColumnName(i), secString(rset.getString(i)));
@@ -225,22 +230,22 @@ public class DB
 		} catch (Exception e) {
 			log.error(e);
 		} finally {
-			doClose(stmt_select); 
+			doClose(stmt_select);
 			doClose(rset);
 		}
-		
+
 		return hs;
 	}
-	
+
 	/**
 	 * Eine ArrayList von Map
 	 */
-	
+
 	public static ArrayList getRowList(String sql, String[] params)
 	{
 		Connection conn = null;
-		
-		try 
+
+		try
 		{
 			conn = DB.getConnection(0);
 			return getRowList(conn, sql, params);
@@ -249,20 +254,20 @@ public class DB
 		} finally {
 			doClose(conn);
 		}
-		
+
 		return null;
 	}
-	
+
 	public static ArrayList getRowList(Connection conn, String sql, String[] params)
 	{
 		ArrayList al = new ArrayList();
-		
+
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
-		
+
 		try {
 			stmt_select = conn.prepareStatement(sql);
-			
+
 			int a = 1;
 			for (int i=0; params != null && i < params.length; i++) {
 				String param = params[i];
@@ -276,31 +281,31 @@ public class DB
 			while (rset.next())
 			{
 				Map hs = new Hashtable();
-				
+
 				for (int i = md.getColumnCount(); i > 0; i --) {
 					if(info)
 						log.info(md.getColumnName(i) + " -- " + rset.getString(i));
 					hs.put(md.getColumnName(i), secString(rset.getString(i)));
 				}
-				
+
 				al.add(hs);
-			} 
+			}
 		} catch (Exception e) {
 			log.error(e);
 		} finally {
-			doClose(stmt_select); 
+			doClose(stmt_select);
 			doClose(rset);
 		}
-		
+
 		return al;
 	}
 
-	
+
 	public static HashMap getHash(String sql, String[] params)
 	{
 		Connection conn = null;
-		
-		try 
+
+		try
 		{
 			conn = DB.getConnection(0);
 			return getHash(conn, sql, params);
@@ -309,20 +314,20 @@ public class DB
 		} finally {
 			doClose(conn);
 		}
-		
+
 		return null;
 	}
-	
+
 	public static HashMap getHash(Connection conn, String sql, String[] params)
 	{
 		HashMap hs = new HashMap();
-		
+
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
-		
+
 		try {
 			stmt_select = conn.prepareStatement(sql);
-			
+
 			int a = 1;
 			for (int i=0; params != null && i < params.length; i++) {
 				String param = params[i];
@@ -331,31 +336,31 @@ public class DB
 
 			rset = stmt_select.executeQuery();
 
-			
+
 			while (rset.next())
 			{
 				hs.put(rset.getString(1), rset.getString(2));
-			} 
+			}
 		} catch (Exception e) {
 			log.error(e);
 		} finally {
-			doClose(stmt_select); 
+			doClose(stmt_select);
 			doClose(rset);
 		}
-		
+
 		return hs;
 	}
-	
+
 	/**
 	 * Firstvalue des SELECT als ArrayList
-	 * 
+	 *
 	 */
-	
+
 	public static ArrayList getList(String sql, String[] params)
 	{
 		Connection conn = null;
-		
-		try 
+
+		try
 		{
 			conn = DB.getConnection(0);
 			return getList(conn, sql, params);
@@ -364,22 +369,22 @@ public class DB
 		} finally {
 			doClose(conn);
 		}
-		
+
 		return null;
 	}
-	
+
 	public static ArrayList getList(Connection conn, String sql, String[] params)
 	{
 		ArrayList al = new ArrayList();
-		
-		
+
+
 		ResultSet rset = null;
 
 		PreparedStatement stmt_select = null;
-		
+
 		try {
 			stmt_select = conn.prepareStatement(sql);
-			
+
 			int a = 1;
 			for (int i=0; params != null && i < params.length; i++) {
 				String param = params[i];
@@ -390,34 +395,34 @@ public class DB
 
 			while (rset.next()) {
 				al.add(secString(rset.getString(1)));
-			} 
+			}
 		} catch (Exception e) {
 			log.error(e);
 		} finally {
-			doClose(stmt_select); 
+			doClose(stmt_select);
 			doClose(rset);
 		}
-		
+
 		return al;
 	}
-	
+
 	public static final void doClose(ResultSet o) {
-		try { 
-			if (o != null) 
+		try {
+			if (o != null)
 				o.close();
 		} catch (Exception e) { }
 	 }
 
 	 public static final void doClose(Statement o) {
-		try { 
-			if (o != null) 
+		try {
+			if (o != null)
 				o.close();
 		} catch (Exception e) { }
 	 }
 
 	 public static final void doClose(Connection o) {
-		try { 
-			if (o != null) 
+		try {
+			if (o != null)
 				o.close();
 		} catch (Exception e) { }
 	 }
@@ -425,30 +430,30 @@ public class DB
 
 
 /*
- 
+
     static final public Connection getConnection() throws Exception {
     	//return DriverManager.getConnection("jdbc:bms:pool0");
     	return getDBSession(0).connection();
     }
-    
+
     static final public Connection getConnection(int number) throws Exception {
     	//return DriverManager.getConnection("jdbc:bms:pool" + number);
     	return getDBSession(number).connection();
     }
-    
-    private static SessionFactory[] sessionFactory; 
-	
+
+    private static SessionFactory[] sessionFactory;
+
 	static {
 	      try {
 	    	sessionFactory  = new SessionFactory[dbc];
-	    	
-	    	for(int i=0; i < dbc; i++) 
+
+	    	for(int i=0; i < dbc; i++)
 	    	{
 	    		String dburl = Option.getProperty("db(" + i + ").url");
 	    		String dbconfig = Option.getProperty("db(" + i + ").config", "hibernate.cfg.xml");
 
 	    		Configuration cfg = new Configuration().configure(dbconfig);
-		        
+
 		        cfg
 		        //.addClass(org.hibernate.auction.Item.class)
 		        //.addClass(org.hibernate.auction.Bid.class)
@@ -471,7 +476,7 @@ public class DB
 	 {
 	      return sessionFactory[number].openSession();
 	 }
-    
+
 	 public static void initObject(Object obj) {
 		Hibernate.initialize(obj);
 	 }

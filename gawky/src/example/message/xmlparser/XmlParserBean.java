@@ -1,6 +1,5 @@
 package example.message.xmlparser;
 
-import gawky.message.parser.PatternParser;
 import gawky.message.parser.XMLParser;
 import gawky.message.part.Desc;
 import gawky.message.part.DescXML;

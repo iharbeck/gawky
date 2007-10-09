@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- encoding="ISO-8859-1"  -->
 
 <config>
-
   	<p>31680</p>
   	<host>localhost</host>
   	<!--  <v>9</v> -->
@@ -10,29 +11,31 @@
   	<keystore>/work/gawky/etc/keystore</keystore>
   	<storepass>password</storepass>
   	<keypass>password</keypass>
-  
+
   	<base>
    		<hello>world</hello>
   	</base>
-  
-	<db>
+
+    <staging>production</staging>
+
+	<db_production>
 		<driver>com.mysql.jdbc.Driver</driver>
 		<url>jdbc:mysql://localhost/test</url>
-		<user>root</user> 
+		<user>root</user>
 		<password>root</password>
-	</db>
-    <db>
+	</db_production>
+    <db_production>
 		<driver>oracle.jdbc.driver.OracleDriver</driver>
 		<url>jdbc:oracle:thin:@hostname:port:sid</url>
-		<user>root</user> 
+		<user>root</user>
 		<password>root</password>
-	</db>
-	<db>
+	</db_production>
+	<db_production>
 		<driver>net.sourceforge.jtds.jdbc.Driver</driver>
 		<url>jdbc:jtds:sqlserver://127.0.0.1:1433/SCHEMA;charset=UTF-8</url>
-		<user>root</user> 
+		<user>root</user>
 		<password>root</password>
-	</db>
+	</db_production>
 
 	<mail>
 		<user>mailuser</user>
@@ -47,5 +50,5 @@
 	<freemarker>
 		<templates>/example/template</templates>
 	</freemarker>
-	
+
 </config>
