@@ -15,6 +15,8 @@ import org.apache.commons.net.ftp.FTPReply;
 
 public class Ftp extends BaseFtp
 {
+	//FtpHandler.send("ftp://user768:_@ftp.brillenmacher.com:/", "c:/damdam/*.ddd");
+
 	private static Log log = LogFactory.getLog(Ftp.class);
 
 	FTPClient ftp;

@@ -15,6 +15,8 @@ import com.jcraft.jsch.ChannelSftp.LsEntry;
 
 public class Sftp extends BaseFtp {
 
+	// 	SftpHandler.retrieve("ftp://user768:__@ftp.brillenmacher.com:/INBOX.*", "c:/damdam/");
+
 	ChannelSftp sftpclient;
 
 	public Sftp() throws Exception 

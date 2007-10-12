@@ -22,6 +22,9 @@ public class Scp implements URLInterface
 {
 	private static Log log = LogFactory.getLog(Scp.class);
 	
+	// 		ScpHandler.send("scp://ggcrm01:_@debmu464.server.arvato-systems.de:~", "c:/damdam/in*.txt");
+
+	
 	public void send(String url, String sourcepath) throws Exception
 	{
 		URLParser uparser = new URLParser(url);
