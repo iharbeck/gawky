@@ -42,32 +42,19 @@ public class Tool {
 		return buf.toString();
 	}
 
-//	static boolean isRegularexpression(String exp) {
-//		return  exp.contains("?") || 
-//        		exp.contains("*") || 
-//        		exp.contains("[") || 
-//        		exp.contains("]") || 
-//        		exp.contains("+");
-//	}
-	
 	public static ArrayList getFiles(String path) 
 	{
 		ArrayList filelist = new ArrayList();
 		
 		path = regbuilder(path);
 		
-//		if(isRegularexpression(path))
-//		{
-			File[] files = new File( getFolder(path) ).listFiles();
-			String map = getFilename(path);
-			
-			for (int i = 0; i < files.length; i++) {
-				if(files[i].getName().matches(map))
-					filelist.add(files[i].getPath().replaceAll("\\\\","/"));
-			}
-//		} else {
-//			filelist.add(path);
-//		}
+		File[] files = new File( getFolder(path) ).listFiles();
+		String map = getFilename(path);
+		
+		for (int i = 0; i < files.length; i++) {
+			if(files[i].getName().matches(map))
+				filelist.add(files[i].getPath().replaceAll("\\\\","/"));
+		}
 
 		return filelist;
 	}
