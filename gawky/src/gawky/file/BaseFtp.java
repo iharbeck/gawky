@@ -2,7 +2,7 @@ package gawky.file;
 
 import java.io.File;
 
-public abstract class BaseFtp 
+public abstract class BaseFtp implements URLInterface 
 {
 	public BaseFtp me;
 	int port;

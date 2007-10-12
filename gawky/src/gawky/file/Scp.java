@@ -18,9 +18,23 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
-public class Scp
+public class Scp implements URLInterface
 {
 	private static Log log = LogFactory.getLog(Scp.class);
+	
+	public void send(String url, String sourcepath) throws Exception
+	{
+		URLParser uparser = new URLParser(url);
+		
+		Scp.copytohost(uparser.getServer(), uparser.getUser(), uparser.getPass(), sourcepath, uparser.getServerpath());
+	}
+	
+	public void retrieve(String url, String targetpath) throws Exception
+	{
+		URLParser uparser = new URLParser(url);
+
+		Scp.copyfromhost(uparser.getServer(), uparser.getUser(), uparser.getPass(), targetpath, uparser.getServerpath());
+	}
 	
 	public static void copytohost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{
