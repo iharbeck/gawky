@@ -8,7 +8,7 @@ import gawky.message.part.DescL;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
-public class Satz61 extends Part 
+public class Satz61 extends Part implements MTRecord
 {
 	public Desc[] getDesc() {
 		return new Desc[] {
@@ -55,6 +55,8 @@ public class Satz61 extends Part
 	    System.out.println("Further Information = " + furtherinfo);
 	}
 	
+	private String type=":61:";
+
 	private String valuedate;
 	private String entrydate;
 	private String dc;
@@ -147,6 +149,14 @@ public class Satz61 extends Part
 
 	public void setFurtherinfo(String furtherinfo) {
 		this.furtherinfo = furtherinfo;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

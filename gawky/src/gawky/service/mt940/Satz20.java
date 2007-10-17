@@ -6,7 +6,7 @@ import gawky.message.part.DescC;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
-public class Satz20 extends Part 
+public class Satz20 extends Part implements MTRecord
 {
 	public Desc[] getDesc() {
 		return new Desc[] {
@@ -33,6 +33,7 @@ public class Satz20 extends Part
 		System.out.println("Transrefnr = " + this.transrefnr);
 	}
 	
+	private String type=":20:";
 	private String transrefnr;
 
 	public String getTransrefnr() {
@@ -41,6 +42,14 @@ public class Satz20 extends Part
 
 	public void setTransrefnr(String transrefnr) {
 		this.transrefnr = transrefnr;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	

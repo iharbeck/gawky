@@ -2,17 +2,18 @@ package gawky.service.mt940;
 
 import gawky.message.parser.PatternParser;
 import gawky.message.part.Desc;
-import gawky.message.part.DescC;
+import gawky.message.part.DescL;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
-public class Satz28 extends Part 
+public class Satz28 extends Part implements MTRecord
 {
 	public Desc[] getDesc() {
 		return new Desc[] {
-			new DescC(":28:"),
+			new DescL("type", new String[] {":28:", ":28C:"}),
+			
 			new DescV(5,  "statementnr", "/"),
-			new DescV(3,  "pagenr", Desc.LF)
+			new DescV(5,  "pagenr", Desc.LF)
 		};
 	}
 	
@@ -35,6 +36,7 @@ public class Satz28 extends Part
 		System.out.println("Pagenr = " + this.pagenr);
 	}
 	
+	private String type;
 	private String statementnr;
 	private String pagenr;
 	
@@ -53,6 +55,14 @@ public class Satz28 extends Part
 
 	public void setStatementnr(String statementnr) {
 		this.statementnr = statementnr;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	

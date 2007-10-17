@@ -1,6 +1,5 @@
 package gawky.service.mt940;
 
-import gawky.file.Locator;
 import gawky.message.parser.PatternParser;
 import gawky.message.part.Part;
 
@@ -26,41 +25,46 @@ public class Mt940Reader
     
 	static PatternParser parser = new PatternParser();
 	
-	private static void handler(String line, Part part) throws Exception
+	
+	
+	private void handler(String line, Part part) throws Exception
 	{
+		// Parser
 		part.parse(parser, line);
 	
-		System.out.println("<b><pre style='margin-top:0px;margin-bottom:0px;'>" + line + "</pre></b>");
-		System.out.println("<pre  style='margin-top:0px;margin-bottom:7px;'>");
-		System.out.print("</pre>");
-		
+		// Listener informieren
+		handler.process(line, part);
 	}
-    private static void processLine(String line) throws Exception
+	
+    private void processLine(String line) throws Exception
     {
     	if(line.startsWith(":20:"))
     		handler(line, new Satz20());
-    	if(line.startsWith(":21:"))
+    	else if(line.startsWith(":21:"))
     		handler(line, new Satz21());
-    	if(line.startsWith(":25:"))
+    	else if(line.startsWith(":25:"))
     		handler(line, new Satz25());
-    	if(line.startsWith(":28:"))
+    	else if(line.startsWith(":28:"))
     		handler(line, new Satz28());
-    	if(line.startsWith(":60"))
-    		handler(line, new Satz60_62_64());
-    	if(line.startsWith(":62"))
-    		handler(line, new Satz60_62_64());
-    	if(line.startsWith(":64"))
-    		handler(line, new Satz60_62_64());
-    	if(line.startsWith(":61:"))
+    	else if(line.startsWith(":28C:"))
+    		handler(line, new Satz28());
+    	else if(line.startsWith(":60"))
+    		handler(line, new Satz60_62_64_65());
+    	else if(line.startsWith(":62"))
+    		handler(line, new Satz60_62_64_65());
+    	else if(line.startsWith(":64"))
+    		handler(line, new Satz60_62_64_65());
+    	else if(line.startsWith(":65"))
+    		handler(line, new Satz60_62_64_65());
+    	else if(line.startsWith(":61:"))
     		handler(line, new Satz61());
-    	if(line.startsWith(":86")) 
+    	else if(line.startsWith(":86")) 
     		handler(line, new Satz86());
-    	
-    	if(line.equals("-"))
+    	else if(line.equals("-"))
     		System.out.println("--------------------------------------------------------<br>");
     }
     
-    private final static void matchLines(CharBuffer cb) throws Exception
+    public final void matchLines(CharBuffer cb) throws Exception
     {
 		Matcher lm = linePattern.matcher(cb);	// Line matcher
 
@@ -79,11 +83,15 @@ public class Mt940Reader
 			break;
 		}
     }
+    
+    MTListener handler;
+    
+    public void registerHandler(MTListener handler) {
+    	this.handler = handler;
+    }
 
-    public static void main(String[] args) throws Exception
+    public void read(File f) throws Exception
     {
-		File f = new File(Locator.findBinROOT()+"../format/mt940google");
-	    
 		// Open the file and then get a channel from the stream
 		FileInputStream fis = new FileInputStream(f);
 		FileChannel fc = fis.getChannel();
@@ -98,7 +106,20 @@ public class Mt940Reader
 		matchLines(cb);
 	
 		// Close the channel and the stream
-		fc.close();
+		fc.close();    	
+    }
+    
+    public static void main(String[] args) throws Exception
+    {
+    	Mt940Reader reader = new Mt940Reader();
+    
+    	reader.registerHandler(new Handler());
+    	
+    	//File f = new File(Locator.findBinROOT()+"../format/mt940google");
+    	File f = new File("c:/db.txt");
+    	
+    	reader.read(f);
+	    
     }
 }
 

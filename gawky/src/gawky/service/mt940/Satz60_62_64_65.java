@@ -7,12 +7,12 @@ import gawky.message.part.DescL;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
-public class Satz60_62_64 extends Part 
+public class Satz60_62_64_65 extends Part implements MTRecord
 {
 	public Desc[] getDesc() {
 		return new Desc[] {
 			//new DescV(5,  "type", "%:[0-9]{0,2}.?:"),    // 60M&F 62F&M 64
-			new DescL("type", new String[] {":60M:", ":60F:", ":62F:", ":62M", ":64:"}),
+			new DescL("type", new String[] {":60M:", ":60F:", ":62F:", ":62M", ":64:", ":65:"}),
 			new DescF(1,  "dc"),
 			new DescF(6,  "bookingdate"),
 			new DescF(3,  "currencycode"),
@@ -24,7 +24,7 @@ public class Satz60_62_64 extends Part
 	{
 		PatternParser parser = new PatternParser();
 		
-		Satz60_62_64 bean = new Satz60_62_64();
+		Satz60_62_64_65 bean = new Satz60_62_64_65();
 		
 		String str = ":28:61006/23768";
 			   
