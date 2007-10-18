@@ -49,13 +49,13 @@ public class Mt940Reader
     	else if(line.startsWith(":28C:"))
     		handler(line, new Satz28());
     	else if(line.startsWith(":60"))
-    		handler(line, new Satz60_62_64_65());
+    		handler(line, new Satz60());
     	else if(line.startsWith(":62"))
-    		handler(line, new Satz60_62_64_65());
+    		handler(line, new Satz62());
     	else if(line.startsWith(":64"))
-    		handler(line, new Satz60_62_64_65());
+    		handler(line, new Satz64());
     	else if(line.startsWith(":65"))
-    		handler(line, new Satz60_62_64_65());
+    		handler(line, new Satz65());
     	else if(line.startsWith(":61:"))
     		handler(line, new Satz61());
     	else if(line.startsWith(":86")) 
