@@ -14,13 +14,23 @@ public class Replacer {
 		pattern = Pattern.compile( regex, Pattern.CASE_INSENSITIVE);
 	}
 	
-	public void replaceFirst(String val) 
+	public String replaceFirst(String val, String rep) 
 	{
-		pattern.matcher(val).replaceFirst(val);
+		return pattern.matcher(val).replaceFirst(rep);
 	}
 
-	public void replaceAll(String val) 
+	public String replaceAll(String val, String rep) 
 	{
-		pattern.matcher(val).replaceAll(val);
+		return pattern.matcher(val).replaceAll(rep);
+	}
+	
+	public static void main(String[] args) {
+		Replacer replacer = new Replacer("(\\d*),(\\d{2})");
+		
+		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
+		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
+		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
+		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
+		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
 	}
 }
