@@ -19,7 +19,7 @@ public class PatternParser extends Parser
 {
 	private static Log log = LogFactory.getLog(PatternParser.class);
 
-	public final static String DELIMITER_LETTER    = "#[A-Z]";
+	public final static String DELIMITER_LETTER    = "#[a-zA-Z]";
 	public final static String DELIMITER_NUMBER    = "#[0-9]";
 	public final static String DELIMITER_NOTNUMBER = "#[^0-9]";
 	public final static String PATTERN_CURRENCY    = "%[0-9]*,[0-9]{0,2}"; // ####,##

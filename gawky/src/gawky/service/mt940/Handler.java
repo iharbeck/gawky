@@ -4,7 +4,7 @@ import gawky.message.part.Part;
 
 public class Handler implements MTListener {
 
-	public void process(String line, Part part) 
+	public void process(String line, Part part) throws Exception 
 	{
 //		System.out.println("<b><pre style='margin-top:0px;margin-bottom:0px;'>" + line + "</pre></b>");
 //		System.out.println("<pre  style='margin-top:0px;margin-bottom:7px;'>");

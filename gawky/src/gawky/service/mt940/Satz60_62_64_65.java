@@ -1,6 +1,5 @@
 package gawky.service.mt940;
 
-import gawky.message.parser.PatternParser;
 import gawky.message.part.Desc;
 import gawky.message.part.DescF;
 import gawky.message.part.DescL;
@@ -11,26 +10,13 @@ public class Satz60_62_64_65 extends Part implements MTRecord
 {
 	public Desc[] getDesc() {
 		return new Desc[] {
-			//new DescV(5,  "type", "%:[0-9]{0,2}.?:"),    // 60M&F 62F&M 64
+			//new DescV(5,  "type", "%:[0-9]{0,2}.?:"),    // 60M&F 62F&M 64 65
 			new DescL("type", new String[] {":60M:", ":60F:", ":62F:", ":62M", ":64:", ":65:"}),
 			new DescF(1,  "dc"),
 			new DescF(6,  "bookingdate"),
 			new DescF(3,  "currencycode"),
 			new DescV(15, "amount", Desc.LF)
 		};
-	}
-	
-	public static void main(String[] args) throws Exception 
-	{
-		PatternParser parser = new PatternParser();
-		
-		Satz60_62_64_65 bean = new Satz60_62_64_65();
-		
-		String str = ":28:61006/23768";
-			   
-		bean.parse(parser, str);
-		bean.echo();
-		
 	}
 	
 	public void echo()
