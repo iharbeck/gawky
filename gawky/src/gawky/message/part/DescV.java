@@ -16,12 +16,12 @@ public class DescV extends Desc
 	
 	public DescV(char format, char code, int len, String name)
 	{	
-		super(format, code, len, name, Desc.END01);
+		super(format, code, len, name, Desc.ENDCOLON);
 	}
 	
 	public DescV(String name)
 	{	
-		super(Desc.FMT_A, Desc.CODE_O, 0, name, Desc.END01);
+		super(Desc.FMT_A, Desc.CODE_O, 0, name, Desc.ENDCOLON);
 	}
 	public DescV(String name, String delimiter)
 	{	
