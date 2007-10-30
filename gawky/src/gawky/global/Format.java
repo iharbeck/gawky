@@ -116,27 +116,34 @@ public class Format {
 		int len = cent.length();
 		int pos = len;
 		
-		if(len > 2)
+		if(len <= 2)
+			pos = 4;
+		else
 			pos++;
 		
 		char[] target = new char[pos];
 		
 		int a = 0;
-		for(int i = len-1; i >= 0; i--, pos--, a++)
+		for(int i = len-1; i >= 0 || pos > 0; i--, pos--, a++)
 		{
 			if(a == nachkomma) {
 				target[pos-1] = '.';
 				i++;
 				continue;
 			}
-			target[pos-1] = cent.charAt(i);
-		}
+			if(i >= 0)
+				target[pos-1] = cent.charAt(i);
+			else
+				target[pos-1] = '0';
+		}	
+		
+		
 		
 		return new String(target);
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(decimalformat("1235"));
+		System.out.println(decimalformat("123456789"));
 	}
 	
 	
