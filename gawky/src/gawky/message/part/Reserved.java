@@ -8,8 +8,13 @@ package gawky.message.part;
  */
 public class Reserved extends Desc
 {
-	public Reserved(int val)
+	public Reserved(int len)
 	{
-		super(val);
+		super(len);
+	}
+	
+	public Reserved(String delimiter)
+	{
+		super(FMT_CONSTANT, CODE_O, 0, "", delimiter);
 	}
 }
