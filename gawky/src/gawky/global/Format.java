@@ -80,7 +80,7 @@ public class Format {
 		int len = cent.length();
 		int pos = len + (len-nachkomma) / 3;
 		
-		if((len-nachkomma) % 3 == 0)
+		if((len-nachkomma) % 3 == 0 || len == 1)
 			pos--;
 		
 		char[] target = new char[pos+1];
@@ -104,6 +104,42 @@ public class Format {
 		
 		return new String(target);
 	}
+	
+	public static String decimalformat(long cent) 
+	{
+		return decimalformat(Long.toString(cent));
+	}
+	
+	public static String decimalformat(String cent) 
+	{
+		int nachkomma = 2;
+		int len = cent.length();
+		int pos = len;
+		
+		if(len > 2)
+			pos++;
+		
+		char[] target = new char[pos];
+		
+		int a = 0;
+		for(int i = len-1; i >= 0; i--, pos--, a++)
+		{
+			if(a == nachkomma) {
+				target[pos-1] = '.';
+				i++;
+				continue;
+			}
+			target[pos-1] = cent.charAt(i);
+		}
+		
+		return new String(target);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(decimalformat("1235"));
+	}
+	
+	
 	
 	public static String substr(String val, int begin, int end) {
 		try {
