@@ -45,7 +45,7 @@ public class Sftp extends BaseFtp {
 
         
         session = jsch.getSession(user, server, port);
-        System.out.println("Session created.");    
+        //System.out.println("Session created.");    
         session.setPassword(pass);
 
         UserInfo ui = new StaticUserInfo(pass);
@@ -57,12 +57,13 @@ public class Sftp extends BaseFtp {
         session.setConfig(config);
 
         session.connect();
-        System.out.println("Session connected.");
+        //System.out.println("Session connected.");
 
         //
         //Open the SFTP channel
         //
-        System.out.println("Opening Channel.");
+        
+        //System.out.println("Opening Channel.");
         channel = session.openChannel("sftp");
         channel.connect();
         sftpclient = (ChannelSftp)channel;
