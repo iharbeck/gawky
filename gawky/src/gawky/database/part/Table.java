@@ -5,6 +5,7 @@ import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
+import gawky.global.Constant;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -323,6 +324,11 @@ public abstract class Table extends Part
 
 	public void queryToStream(Connection conn, String where, OutputStream out) throws Exception
 	{
+		queryToStream(conn, where, out, Constant.ENCODE_UTF8);
+	}
+	
+	public void queryToStream(Connection conn, String where, OutputStream out, String encoding) throws Exception
+	{
 		String sql = getQuery(SQL_SELECT);
 
 		PreparedStatement stmt = conn.prepareStatement(sql + " " + where);
@@ -338,7 +344,7 @@ public abstract class Table extends Part
 			getStaticLocal().generator.fillPart(rset, table);
 
 			//out.write(Formatter.getStringC(300, table.toString()).getBytes());
-			out.write(table.toString().getBytes());
+			out.write(table.toString().getBytes(encoding));
 			out.write('\r');
 			out.write(endline);
 		}
