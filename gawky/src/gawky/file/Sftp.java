@@ -11,6 +11,8 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.UIKeyboardInteractive;
+import com.jcraft.jsch.UserInfo;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
 
 public class Sftp extends BaseFtp {
@@ -46,6 +48,9 @@ public class Sftp extends BaseFtp {
         System.out.println("Session created.");    
         session.setPassword(pass);
 
+        UserInfo ui = new StaticUserInfo(pass);
+		session.setUserInfo(ui);
+		
         // alle Hosts akzeptierens
         java.util.Properties config = new java.util.Properties();
         config.put("StrictHostKeyChecking", "no");
@@ -133,6 +138,43 @@ public class Sftp extends BaseFtp {
 			is.close();
 	
 			renameRemoteFile(f.getName() + tmp_prefix, f.getName());
+		}
+	}
+	
+	public static class StaticUserInfo implements UserInfo, UIKeyboardInteractive  {
+
+		public String[] promptKeyboardInteractive(String destination,
+				String name, String instruction, String[] prompt, boolean[] echo) {
+			return new String [] { password };
+		}
+
+		String password;
+		
+		public StaticUserInfo(String password) {
+			this.password = password;
+		}
+		
+		public String getPassphrase() {
+			return password;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+		public boolean promptPassphrase(String arg0) {
+			return true;
+		}
+
+		public boolean promptPassword(String arg0) {
+			return true;
+		}
+
+		public boolean promptYesNo(String arg0) {
+			return true;  // accept all
+		}
+
+		public void showMessage(String arg0) {
 		}
 	}
 }

@@ -16,6 +16,7 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
 
 public class Scp implements URLInterface
@@ -282,7 +283,12 @@ public class Scp implements URLInterface
 		return b;
 	}
 
-	public static class StaticUserInfo implements UserInfo  {
+	public static class StaticUserInfo implements UserInfo  , UIKeyboardInteractive  {
+
+		public String[] promptKeyboardInteractive(String destination,
+				String name, String instruction, String[] prompt, boolean[] echo) {
+			return new String [] { password };
+		}
 
 		String password;
 		
@@ -291,7 +297,7 @@ public class Scp implements URLInterface
 		}
 		
 		public String getPassphrase() {
-			return null;
+			return password;
 		}
 
 		public String getPassword() {
