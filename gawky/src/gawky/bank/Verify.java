@@ -1,6 +1,6 @@
 package gawky.bank;
 
-public class Banko {
+public class Verify {
 
 	public static boolean method00(String konto)
 	{
