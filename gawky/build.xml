@@ -79,12 +79,12 @@
          		<include name="gawky/service/oliva/**"/>
      		</fileset>
          </jar>
-		<jar destfile="bin/${name}-servicefias${version}.jar">
+		<jar destfile="bin/${name}-servicemt940${version}.jar">
          	<fileset dir="${bin}" >
-         		<include name="gawky/service/fias/**"/>
+         		<include name="gawky/service/mt940/**"/>
          	</fileset>
          	<fileset dir="${src}" >
-         		<include name="gawky/service/fias/**"/>
+         		<include name="gawky/service/mt940/**"/>
          	</fileset>
         </jar>
 		<jar destfile="bin/${name}-message${version}.jar">
