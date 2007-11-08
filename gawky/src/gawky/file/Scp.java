@@ -25,6 +25,12 @@ public class Scp implements URLInterface
 	
 	// 		ScpHandler.send("scp://ggcrm01:_@debmu464.server.arvato-systems.de:~", "c:/damdam/in*.txt");
 
+	public static void main(String[] args) throws Exception {
+	
+		Scp scp = new Scp();
+		scp.send("scp://harb05:login96@127.0.0.1:~", "c:/damdam/in*.txt");
+
+	}
 	
 	public void send(String url, String sourcepath) throws Exception
 	{
@@ -287,7 +293,7 @@ public class Scp implements URLInterface
 
 		public String[] promptKeyboardInteractive(String destination,
 				String name, String instruction, String[] prompt, boolean[] echo) {
-			return new String [] { password };
+			return password.split("\n");
 		}
 
 		String password;

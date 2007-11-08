@@ -146,7 +146,7 @@ public class Sftp extends BaseFtp {
 
 		public String[] promptKeyboardInteractive(String destination,
 				String name, String instruction, String[] prompt, boolean[] echo) {
-			return new String [] { password };
+			return password.split("\n");
 		}
 
 		String password;

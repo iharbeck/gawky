@@ -7,6 +7,10 @@ public class Filetransfer {
 
 	static Log log = LogFactory.getLog(Filetransfer.class);
 	
+	public static void main(String[] args) throws Exception {
+		send("sftp://content_reebok_arvato_test:azer2bist@ftp.minick.net:/import/", "c:/20070606KK.txt");
+	}
+	
 	static URLInterface getInstance(String url) throws Exception
 	{
 		if(url.startsWith("scp://"))

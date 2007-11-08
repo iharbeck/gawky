@@ -1,4 +1,4 @@
-package gawky.incubator;
+package gawky.bank;
 
 public class Banko {
 
@@ -209,9 +209,13 @@ public class Banko {
 	static String ENROUTE          = "6";
 	static String JCB              = "7";
 
-	static String[] vlabel = {"MASTER", "VISA", "AMEX", 
+	static String[] vlabel = {"MASTER", 
+		                      "VISA", 
+		                      "AMEX", 
 		   					  "DINERSCARDBLANCH",
-		   					  "DISCOVER", "ENROUTE", "JCB" };
+		   					  "DISCOVER", 
+		   					  "ENROUTE", 
+		   					  "JCB"};
 		
 	static String [][] type = 
 	{
@@ -261,6 +265,17 @@ public class Banko {
 		}
 		
 		return tmp%10 == 0;
+	}
+	
+	public static String getType(String cardnumber) 
+	{
+		for(int i=0; i < type.length; i++) {
+			if(cardnumber.startsWith(type[i][0]))
+			{
+				return(vlabel[Integer.parseInt(type[i][1])-1]);
+			}
+		}		
+		return "UNKNOWN";
 	}
 	
 	

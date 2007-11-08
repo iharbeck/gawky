@@ -37,6 +37,6 @@
 	<classpathentry kind="lib" path="lib/hash/trove.jar" sourcepath="lib/hash/trove.jar"/>
 	<classpathentry kind="lib" path="lib/xml/vtd-xml.jar"/>
 	<classpathentry kind="lib" path="lib/crypto/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.36.jar" sourcepath="C:/BITwin/jsch-0.1.36/src"/>
+	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.33.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

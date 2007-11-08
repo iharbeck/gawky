@@ -1,8 +1,8 @@
 package gawky.xml.vtd;
 
-import gawky.bcos.BaseObject;
-import gawky.bcos.BaseObjectI;
-import gawky.bcos.XMLGenerator;
+import gawky.processor.BaseObject;
+import gawky.processor.BaseObjectI;
+import gawky.processor.XMLGenerator;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -26,11 +26,16 @@ public class Replacer {
 	
 	public static void main(String[] args) {
 		Replacer replacer = new Replacer("(\\d*),(\\d{2})");
+		Replacer replacer2 = new Replacer("(\\d*),");
 		
 		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
 		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
 		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
 		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
 		System.out.println(replacer.replaceFirst("12345,78", "$1$2"));
+		System.out.println(replacer.replaceFirst("12345,", "$1$2"));
+		
+		System.out.println(replacer2.replaceFirst("12345,", "$100"));
+		
 	}
 }

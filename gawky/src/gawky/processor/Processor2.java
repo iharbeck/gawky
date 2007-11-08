@@ -1,4 +1,4 @@
-package gawky.bcos;
+package gawky.processor;
 
 import java.io.File;
 import java.io.FileInputStream;

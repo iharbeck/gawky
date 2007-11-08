@@ -1,7 +1,7 @@
 package gawky.xml.simple;
 
-import gawky.bcos.BaseObject;
-import gawky.bcos.BaseObjectI;
+import gawky.processor.BaseObject;
+import gawky.processor.BaseObjectI;
 
 import java.io.File;
 import java.io.FileInputStream;

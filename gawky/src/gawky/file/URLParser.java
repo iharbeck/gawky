@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class URLParser {
 
-	static String regExpr = "(.+)://(.+):(.+)@(.+):(.+)";
+	static String regExpr = "(.*)://(.*):(.*)@(.*):(.*)";
 	
 	// Pattern Matching will be case insensitive.
 	static Pattern pat = Pattern.compile(regExpr,Pattern.CASE_INSENSITIVE);
