@@ -22,12 +22,12 @@ public class RequestPosition extends Part
 			new DescF(Desc.FMT_9, Desc.CODE_R, 4,   "vat_rate"),
 			new DescF(Desc.FMT_9, Desc.CODE_R, 14,  "vat_amount"),
 			new DescF(Desc.FMT_9, Desc.CODE_O, 4,   "number_units"),
-			new DescV(Desc.FMT_A, Desc.CODE_O, 12,  "product_group"),    
-			new DescV(Desc.FMT_A, Desc.CODE_O, 16,  "product_id"),    
-			new DescV(Desc.FMT_A, Desc.CODE_O, 5,   "type_of_service"),    
-			new DescV(Desc.FMT_A, Desc.CODE_O, 20,  "campaign_id"),   
-			new DescV(Desc.FMT_A, Desc.CODE_O, 3,   "title_id"),    
-			new DescV(Desc.FMT_A, Desc.CODE_O, 196, "description"),
+			new DescV(Desc.FMT_A, Desc.CODE_O, 12,  "product_group", Desc.END01),    
+			new DescV(Desc.FMT_A, Desc.CODE_O, 16,  "product_id", Desc.END01),    
+			new DescV(Desc.FMT_A, Desc.CODE_O, 5,   "type_of_service", Desc.END01),    
+			new DescV(Desc.FMT_A, Desc.CODE_O, 20,  "campaign_id", Desc.END01),   
+			new DescV(Desc.FMT_A, Desc.CODE_O, 3,   "title_id", Desc.END01),    
+			new DescV(Desc.FMT_A, Desc.CODE_O, 196, "description", Desc.END01),
 			new DescC(Desc.END02)
 		}; 
 	}

@@ -185,6 +185,8 @@ public class RequestPayment extends Part
 	public void setType_of_handling(String type_of_handling) {
 		this.type_of_handling = type_of_handling;
 	}
-  
+    
+	public void setPaymentdetails(String paymentdetails) {
+	}
   
 }

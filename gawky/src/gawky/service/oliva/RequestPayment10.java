@@ -32,7 +32,7 @@ public class RequestPayment10 extends RequestPayment {
 		    new DescF(Desc.FMT_A, Desc.CODE_R, 3, "currency_code"),
 		    new DescF(Desc.FMT_9, Desc.CODE_R, 18, "amount"),
 		    
-		    new DescV(Desc.FMT_A, Desc.CODE_R, 64, "holdername"),
+		    new DescV(Desc.FMT_A, Desc.CODE_R, 64, "holdername", Desc.END01),
 		    
 		    new DescF(Desc.FMT_9, Desc.CODE_R, 2,  "type_of_handling"),
 		    

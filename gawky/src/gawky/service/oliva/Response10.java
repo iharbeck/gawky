@@ -45,7 +45,7 @@ public class Response10 extends Part
 			new Reserved(2),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 16, "return_text1"),
 			new DescF(Desc.FMT_A, Desc.CODE_O, 16, "return_text2"),
-			new DescV(Desc.FMT_A, Desc.CODE_O, 64, "message")
+			new DescV(Desc.FMT_A, Desc.CODE_O, 64, "message", Desc.END01)
 		}; 
 	}
 
