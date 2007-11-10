@@ -6,7 +6,10 @@ import gawky.global.Constant;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -90,9 +93,7 @@ public class IO
     
     public static String readLineAll(Socket s, String encode) throws SocketTimeoutException, Exception
     {
-	   BufferedReader is = null;
-	
-       is = new BufferedReader(new InputStreamReader(s.getInputStream(), encode));
+	   BufferedReader is = new BufferedReader(new InputStreamReader(s.getInputStream(), encode));
       
        String inputLine;
       
@@ -130,11 +131,8 @@ public class IO
     
     public static void write(Socket s, String val, String encode) 
     {
-	    PrintWriter ps = null;
-    	
-	    try 
-		{
-           ps = new PrintWriter((new OutputStreamWriter(s.getOutputStream(), encode)));
+	    try {
+	    	PrintWriter ps = new PrintWriter((new OutputStreamWriter(s.getOutputStream(), encode)));
            
            // sendResponse
            log.debug("sending: " + val);
@@ -146,5 +144,21 @@ public class IO
 		} catch(Exception e) {
 			log.error(e);
 		}
+    }
+    
+    public static byte[] readBytes(InputStream in) throws Exception 
+    {
+    	BufferedInputStream is = new BufferedInputStream(in);
+    	
+    	ByteArrayOutputStream boas = new ByteArrayOutputStream();
+    	DataOutputStream out = new DataOutputStream( boas ); 
+    
+    	int c;
+    	while((c = is.read()) != -1)
+    		out.write(c);
+
+    	out.close(); 
+    	
+    	return boas.toByteArray();	
     }
 }
