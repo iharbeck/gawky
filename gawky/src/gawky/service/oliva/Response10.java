@@ -49,6 +49,9 @@ public class Response10 extends Part
 		}; 
 	}
 
+	public Response10() 
+    {
+    }
 	
 	public Response10(String str) throws Exception
     {

@@ -22,7 +22,14 @@ public class Request
 
 	public String toRequestString() throws UnsupportedEncodingException
     {
-        String parts = paym.toString() + addr.toString(); 
+        String parts = "";
+        
+        if(paym != null)
+        	parts += paym.toString();
+        
+        if(addr != null)
+        	parts += addr.toString();
+        
         
         int ilen = head.getBytes(Constant.ENCODE_US_ASCII).length + parts.getBytes().length;
         head.setMessage_length(ilen);

@@ -23,7 +23,7 @@ public class TestOlivaObject {
     
     public static void main(String[] args) throws Exception
     {
-//    	 REQUEST Object 
+    	// REQUEST Object 
         Request req = new Request();
         
         // HEAD Information
@@ -50,28 +50,26 @@ public class TestOlivaObject {
         
         
         //Init Comm
-        //Client.initServer("olivatest.bertelsmann.de", 32666);
-        //Client.initServer("olivatest.bertelsmann.de", 32555, "D:/work/olivalib/gawky/bin/keystore", "password", "password");
-        Client client = new Client("olivatest.bertelsmann.de", 32555, "D:/work/olivalib/gawky/etc/java.test.keystore", "hfg683jdf", "thgrz67d");
+        //Client client = new Client("olivatest.bertelsmann.de", 32555, "D:/work/olivalib/gawky/etc/java.test.keystore", "hfg683jdf", "thgrz67d");
+        Client client = new Client("olivatest.bertelsmann.de", 32666);
         
         System.out.println(req.toRequestString());
 
-      
-        // System.exit(0);
-
-        
-        //String response_str = Client.sendRequestPlain(req.toRequestString());
-        String response_str = client.sendRequestSSL(req.toRequestString()); 
-        
-        System.out.println("response: " + response_str);
-        
-        //Response response = new Response();
-        Response10 response = new Response10(response_str);
-        
-    	
-        System.out.println("transaction: " + response.getTransaction_id());
-        System.out.println("returncode:  " + response.getReturn_code());
-        System.out.println("reasoncode:  " + response.getReason_code());
+        for(int i=0; i < 1; i++)
+        {
+	        String response_str = client.sendRequestPlain(req.toRequestString());
+	        //String response_str = client.sendRequestSSL(req.toRequestString()); 
+	        
+	        System.out.println("response: " + response_str);
+	        
+	        //Response response = new Response();
+	        Response10 response = new Response10(response_str);
+	        
+	    	
+	        System.out.println("transaction: " + response.getTransaction_id());
+	        System.out.println("returncode:  " + response.getReturn_code());
+	        System.out.println("reasoncode:  " + response.getReason_code());
+        }
     }
     
 }

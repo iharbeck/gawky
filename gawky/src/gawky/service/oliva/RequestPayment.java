@@ -40,9 +40,9 @@ public class RequestPayment extends Part
 	private String version           = "00";    // default
 	private String date;                        // default is system date
 	private String time;                        // default is system time
-	private String country_code;
-	private String currency_code;
-	private String amount;
+	private String country_code		 = "DE";
+	private String currency_code     = "EUR";
+	private String amount            = "1";
   
   //Payment type/details is wrapped by setFunction
    String type_of_handling;
