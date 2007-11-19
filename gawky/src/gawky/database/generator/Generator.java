@@ -6,6 +6,7 @@ import gawky.global.Option;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -60,7 +61,7 @@ public class Generator
 
 	public double parseNumber(String val) throws Exception
 	{
-		return fmt.parse(val).doubleValue();
+		return new BigDecimal(val).doubleValue();
 	}
 	public String formatNumber(double val) throws Exception
 	{
