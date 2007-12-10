@@ -1,20 +1,26 @@
 package gawky.message.part;
 
+import example.message.SatzSimple;
 import gawky.file.Locator;
 import gawky.global.Option;
 import gawky.message.generator.Generator;
 import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
+import gawky.service.dtaus.dtaus_band.SatzA;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import javassist.Modifier;
+import javassist.bytecode.DuplicateMemberException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,6 +53,110 @@ public abstract class Part implements Cloneable
 
 	public void descAfterInterceptor(Desc[] descs) {
 
+	}
+
+	/**
+	 * Access properties by NAME
+	 * @param name
+	 * @return
+	 */
+	public final String getValue(String name) {
+		try {
+			return getDescByName(name).getValue(this);
+		} catch (Exception e) {
+			System.out.println("name invalid in " + this);
+			return null;
+		}
+	}
+	
+	public final void setValue(String name, String value) {
+		try {
+			getDescByName(name).setValue(this, value); 
+		} catch (Exception e) {
+			System.out.println("name invalid in " + this);
+		}
+	}
+	
+	/**
+	 * TEST dynamic getter/setter
+	 * @param args
+	 * @throws Exception
+	 */
+	/*
+	public static void main(String[] args) 
+	{
+		Part part = Part.factory(SatzSimple.class);
+		
+		part.setValue("kennzeichen", "minimi");
+
+		System.out.println( part.getValue("kennzeichen") );	
+	}*/
+	
+	/**
+	 * automatic generate fields and getter / setter as defined in 
+	 * Desc-Structure!
+	 * @param c
+	 * @return
+	 * @throws Exception
+	 */
+	
+	static HashMap parts = new HashMap();
+	static Part factory(Class c) 
+	{
+		Part p = (Part)parts.get(c);
+		
+		if(p != null)
+			return p;
+		
+		try {
+			ClassPool cp = ClassPool.getDefault();
+			
+			cp.appendClassPath(new ClassClassPath(Part.class.getClass()));
+	
+			CtClass cc = cp.get(c.getName());
+	
+			Desc descs[] = ((Part)c.newInstance()).getDesc();
+			
+			for(int i=0; i < descs.length; i++) 
+			{
+				String fieldName = descs[i].name;
+				
+				if(fieldName.equals(""))
+					continue;
+			
+				CtField f = CtField.make("private String " + fieldName + ";", cc);
+				try {
+					cc.addField(f);
+				} catch(DuplicateMemberException e) {
+				}
+
+				String accessName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+				try {
+					cc.addMethod(CtNewMethod.make(
+						"public void set" + accessName + "(String _){" +
+						fieldName + " = _;" +
+						"}", cc));
+				} catch (DuplicateMemberException e) {
+				}
+				
+				try {
+					cc.addMethod(CtNewMethod.make(
+						"public String get" + accessName + "(){" +
+						"  return " + fieldName + ";" +
+						"}", cc));
+				} catch (DuplicateMemberException e) {
+				}
+			}
+			
+			cc.setName(c.getName() + "Ext");
+			
+			p = (Part)cc.toClass().newInstance();
+		
+			parts.put(c, p);
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		return p;
 	}
 
 	protected final Desc[] getOptDesc() {
@@ -114,16 +224,16 @@ public abstract class Part implements Cloneable
 								, cc);
 						cc.addMethod(mg);
 
-						// Generate Class files
-						cc.writeFile(Locator.findBinROOT() + "worker");
-						cc.detach();
+						// Generate Class files ** CACHING
+						//cc.writeFile(Locator.findBinROOT() + "worker");
+						//cc.detach();
 
 						// Alternative if not written to local disk (no detach!!)
-						//desc[i].accessor = (Accessor)cc.toClass().newInstance();
+						descs[i].accessor = (Accessor)cc.toClass().newInstance();
 					}
 
-					// load class from Classpath
-					descs[i].accessor = (Accessor)Class.forName(proxycname, false, urlCl).newInstance();
+					// load class from Classpath ** CACHING
+					//descs[i].accessor = (Accessor)Class.forName(proxycname, false, urlCl).newInstance();
 
 					if(descs[i].accessor == null)
 						throw new Exception("Can't generate GetterSetterclass for [" + mname + "]");
