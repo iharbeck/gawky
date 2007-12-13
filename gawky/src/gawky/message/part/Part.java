@@ -1,12 +1,10 @@
 package gawky.message.part;
 
-import example.message.SatzSimple;
 import gawky.file.Locator;
 import gawky.global.Option;
 import gawky.message.generator.Generator;
 import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
-import gawky.service.dtaus.dtaus_band.SatzA;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -19,8 +17,6 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
-import javassist.Modifier;
-import javassist.bytecode.DuplicateMemberException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -127,7 +123,7 @@ public abstract class Part implements Cloneable
 				CtField f = CtField.make("private String " + fieldName + ";", cc);
 				try {
 					cc.addField(f);
-				} catch(DuplicateMemberException e) {
+				} catch(Exception e) {
 				}
 
 				String accessName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
@@ -136,7 +132,7 @@ public abstract class Part implements Cloneable
 						"public void set" + accessName + "(String _){" +
 						fieldName + " = _;" +
 						"}", cc));
-				} catch (DuplicateMemberException e) {
+				} catch (Exception e) {
 				}
 				
 				try {
@@ -144,7 +140,7 @@ public abstract class Part implements Cloneable
 						"public String get" + accessName + "(){" +
 						"  return " + fieldName + ";" +
 						"}", cc));
-				} catch (DuplicateMemberException e) {
+				} catch (Exception e) {
 				}
 			}
 			

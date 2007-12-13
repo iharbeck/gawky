@@ -128,9 +128,11 @@ public class Client extends Parameter
     	   kmf = KeyManagerFactory.getInstance("SunX509");
     	   ks  = KeyStore.getInstance("JKS");
     	   
-    	   ks.load(new FileInputStream(keystore), storepass.toCharArray());
-    	   kmf.init(ks, keypass.toCharArray());
-    	   
+    	   if(keystore != null)
+    	   {
+    		   ks.load(new FileInputStream(keystore), storepass.toCharArray());
+    		   kmf.init(ks, keypass.toCharArray());
+    	   }
     	   TrustManagerFactory tmf;
     	   TrustManager[] tm;
     	    

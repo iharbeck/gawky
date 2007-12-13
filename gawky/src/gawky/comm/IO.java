@@ -99,7 +99,7 @@ public class IO
       
        StringBuilder buf = new StringBuilder();
         
-       if ((inputLine = is.readLine()) != null)
+       while ((inputLine = is.readLine()) != null)
        {
          buf.append(inputLine);
      	 buf.append("\n");
