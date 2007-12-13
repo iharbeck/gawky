@@ -178,8 +178,11 @@ public abstract class Part implements Cloneable
 		}
 
 		if(hasJavaAssist)
+		{
 			pool = ClassPool.getDefault();
-
+			pool.insertClassPath(new ClassClassPath(this.getClass()));
+		}
+		
 		// Prepare Attribute Access
 		for(int i=0; i < descs.length; i++)
 		{
@@ -197,7 +200,8 @@ public abstract class Part implements Cloneable
 					// Native case - Generate Native Bytecode for ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
 
-					if(!Option.isClassInClassloader(urlCl, proxycname, ""))
+					// **CACHING
+					//if(!Option.isClassInClassloader(urlCl, proxycname, ""))
 					{
 						log.info("Generating Proxyclass: " + proxycname);
 						CtClass cc = pool.makeClass(classname + "Accessor" + mname);
