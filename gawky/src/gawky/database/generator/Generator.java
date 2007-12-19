@@ -30,8 +30,8 @@ public class Generator
 	private static boolean dotrim = false;
 	private static boolean doclone = false;
 
-	SimpleDateFormat df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
-	SimpleDateFormat df_HHMMSS = new SimpleDateFormat("HHmmss");
+	SimpleDateFormat df_YYYYMMDD       = new SimpleDateFormat("yyyyMMdd");
+	SimpleDateFormat df_YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	Locale locale = new Locale("de", "DE");
 
@@ -50,7 +50,7 @@ public class Generator
 	}
 
 	public void setTimeFormat(String format) {
-		df_HHMMSS   = new SimpleDateFormat(format);
+		df_YYYYMMDDHHMMSS   = new SimpleDateFormat(format);
 	}
 
 	public void setLocale(Locale locale)
@@ -102,7 +102,7 @@ public class Generator
 						val =  df_YYYYMMDD.format( rset.getDate(x+1) );
 						break;
 					case Desc.FMT_TIME :
-						val =  df_HHMMSS.format( rset.getTimestamp(x+1) );
+						val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(x+1) );
 						break;
 				}
 
@@ -528,7 +528,7 @@ public class Generator
 						stmt.setDate(setter, new Date( df_YYYYMMDD.parse(val).getTime()));
 						break;
 					case Desc.FMT_TIME :
-						stmt.setTimestamp(setter, new Timestamp(df_HHMMSS.parse(val).getTime()));
+						stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse(val).getTime()));
 						break;
 				}
 			} catch(Exception e) {
