@@ -1,5 +1,6 @@
 package gawky.file;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
@@ -25,7 +27,7 @@ public class Scp implements URLInterface
 	
 	// 		ScpHandler.send("scp://ggcrm01:_@debmu464.server.arvato-systems.de:~", "c:/damdam/in*.txt");
 
-	public static void main(String[] args) throws Exception {
+	public static void main__(String[] args) throws Exception {
 	
 		Scp scp = new Scp();
 		scp.send("scp://harb05:login96@127.0.0.1:~", "c:/damdam/in*.txt");
@@ -45,6 +47,72 @@ public class Scp implements URLInterface
 
 		Scp.copyfromhost(uparser.getServer(), uparser.getUser(), uparser.getPass(), targetpath, uparser.getServerpath());
 	}
+	
+	public static void mkdirhost(String url) throws Exception
+	{
+		URLParser uparser = new URLParser(url);
+		
+		Scp.execute(uparser.getServer(), uparser.getUser(), uparser.getPass(), "mkdir -p " + uparser.getServerpath());
+	}
+	
+	static Thread thread;
+	
+	public static void execute(String host, String user, String pass, String command) throws Exception
+	{
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        JSch jsch = new JSch();
+        
+        // execute the command
+        Session session = jsch.getSession(user, host, 22);
+        
+        // username and password will be given via UserInfo interface.
+		UserInfo ui = new StaticUserInfo(pass);
+		session.setUserInfo(ui);
+
+		// disable Hostkey checking 
+		java.util.Hashtable config=new java.util.Hashtable();
+	    config.put("StrictHostKeyChecking", "no");
+        session.setConfig(config);
+      
+		session.connect();
+        
+        final ChannelExec channel = (ChannelExec) session.openChannel("exec");
+        channel.setCommand(command);
+        channel.setOutputStream(System.out);
+        channel.setExtOutputStream(System.out);
+        channel.connect();
+
+        // wait for it to finish
+        thread =
+            new Thread() {
+                public void run() {
+                    while (!channel.isEOF()) {
+                        if (thread == null) {
+                            return;
+                        }
+                        try {
+                            sleep(500);
+                        } catch (Exception e) {
+                            // ignored
+                        }
+                    }
+                }
+            };
+
+        thread.start();
+        //thread.join(6000);
+
+        if (thread.isAlive()) {
+            // ran out of time
+            thread = null;
+        } else {
+            // completed successfully
+        }
+    }
+
+	
+	
 	
 	public static void copytohost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{

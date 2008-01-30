@@ -28,6 +28,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -151,10 +152,14 @@ public class Mail
     	 
         try {
         	// encoding
-            String nmessage   = message;
-            String nsubject   = subject; //MimeUtility.encodeText(subject, charset, encoding);
-            String ntoalias   = toalias; //MimeUtility.encodeText(toalias, charset, encoding);
-            String nfromalias = fromalias; //MimeUtility.encodeText(fromalias, charset, encoding);
+        	String nmessage;   
+        	if(html)
+        		nmessage   = MimeUtility.encodeText(subject, charset, encoding);
+        	else
+        		nmessage   = message;
+            String nsubject   = MimeUtility.encodeText(subject, charset, encoding);
+            String ntoalias   = MimeUtility.encodeText(toalias, charset, encoding);
+            String nfromalias = MimeUtility.encodeText(fromalias, charset, encoding);
             
             // Get system properties
             java.util.Properties prop = System.getProperties();

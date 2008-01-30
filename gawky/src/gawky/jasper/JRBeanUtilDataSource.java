@@ -1,5 +1,7 @@
 package gawky.jasper;
 
+import java.util.HashMap;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -28,6 +30,12 @@ public class JRBeanUtilDataSource implements JRDataSource
 			// Indexed parameters described as [x] in Report 
 			path = path.replaceAll("\\[x\\]", "[" + (row) + "]");
 			
+			if (bean instanceof HashMap) {
+				if(!((HashMap)bean).containsKey(path))
+					return "$$" + path + "$$";
+				else
+					return ((HashMap)bean).get(path);
+			}
 			// TODO: implement cached version
 			return PropertyUtils.getProperty(bean, path);  //return BeanUtils.getProperty(bean, path);
 		} catch (Exception e) {

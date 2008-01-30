@@ -3,6 +3,7 @@ package gawky.jasper;
 
 import gawky.file.Locator;
 
+import java.io.OutputStream;
 import java.util.HashMap;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -24,6 +25,7 @@ public class PDFGenerator {
 	{
 		generateFile(reportdata, rows, jasperFileName, outputFileName, new HashMap());
 	}
+	
 	public static void generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName, HashMap map) throws Exception
 	{
 		JasperPrint jasperPrint = null;
@@ -49,6 +51,33 @@ public class PDFGenerator {
 		}
 		  
 		JasperExportManager.exportReportToPdfFile(jasperPrint, outputFileName);
+	}
+	
+	public static void generateStream(Object reportdata, int rows, String jasperFileName, OutputStream outputStream, HashMap map) throws Exception
+	{
+		JasperPrint jasperPrint = null;
+		
+		if(jasperFileName.endsWith("jrxml")) 
+		{
+			JasperReport jasperReport = (JasperReport)compiledreportcache.get(jasperFileName);
+			
+			if(jasperReport  == null)
+			{
+				jasperReport = JasperCompileManager.compileReport(jasperFileName);    
+				compiledreportcache.put(jasperFileName, jasperReport);
+			}
+			jasperPrint = JasperFillManager.fillReport(jasperReport, map, 
+				new JRBeanUtilDataSource(reportdata, rows)
+			);
+		} 
+		else 
+		{
+			jasperPrint = JasperFillManager.fillReport(jasperFileName, map, 
+					new JRBeanUtilDataSource(reportdata, rows)
+			);
+		}
+		  
+		JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 	}
 
 	

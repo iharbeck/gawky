@@ -3,6 +3,8 @@ package gawky.jasper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -119,6 +121,39 @@ public class Concat
     }
 
 
+	public static void addBackground(InputStream instream, String bgfile, OutputStream outstream)
+	{
+		
+        try
+        {
+            PdfReader reader = new PdfReader(instream);
+
+            int n = reader.getNumberOfPages();
+
+            // create a stamper that will copy the document to a new file
+            PdfStamper stamp = new PdfStamper(reader, outstream);
+
+            // adding content to each page
+            int i = 0;
+            PdfContentByte under;
+
+            Image img = getPDF(stamp.getWriter(), bgfile);
+
+            img.setAbsolutePosition(0, 0);
+
+            while (i < n) {
+                i++;
+
+                under = stamp.getUnderContent(i);
+                under.addImage(img);
+            }
+
+            stamp.close();
+        }
+        catch (Exception de) {
+            de.printStackTrace();
+        }
+    }
 
 
 }

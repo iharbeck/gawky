@@ -46,10 +46,12 @@ public class Tool {
 	{
 		ArrayList filelist = new ArrayList();
 		
-		path = regbuilder(path);
+		//path = regbuilder(path);
 		
 		File[] files = new File( getFolder(path) ).listFiles();
 		String map = getFilename(path);
+		
+		map = regbuilder(map);
 		
 		for (int i = 0; i < files.length; i++) {
 			if(files[i].getName().matches(map))
