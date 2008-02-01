@@ -3,6 +3,7 @@ package gawky.mail;
 
 import gawky.global.Constant;
 import gawky.global.Option;
+import gawky.jasper.Concat;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -154,12 +155,21 @@ public class Mail
         	// encoding
         	String nmessage;   
         	if(html)
-        		nmessage   = MimeUtility.encodeText(subject, charset, encoding);
+        		//nmessage   = MimeUtility.encodeText(subject, charset, encoding);
+        		//nmessage   = MimeUtility.encodeText(message, charset, "Q");
+        		nmessage   = message;
         	else
         		nmessage   = message;
-            String nsubject   = MimeUtility.encodeText(subject, charset, encoding);
-            String ntoalias   = MimeUtility.encodeText(toalias, charset, encoding);
-            String nfromalias = MimeUtility.encodeText(fromalias, charset, encoding);
+        	
+        	//nmessage   = MimeUtility.encodeText(subject, Constant.ENCODE_ISO, Constant.ENCODE_UTF8);
+        	
+        	//System.setProperty("mail.mime.charset", "UTF-8");
+        	
+            String nsubject   = MimeUtility.encodeText(subject, "UTF-8", "Q"); //MimeUtility.encodeText(subject, charset, encoding);
+            String ntoalias   = toalias; //MimeUtility.encodeText(toalias, charset, encoding);
+            String nfromalias = fromalias; //MimeUtility.encodeText(fromalias, charset, encoding);
+            
+            System.out.println(nsubject);
             
             // Get system properties
             java.util.Properties prop = System.getProperties();
@@ -170,7 +180,16 @@ public class Mail
 
     	    // Define message
             MimeMessage msg = new MimeMessage(ses1);
-            msg.setHeader("Content-Transfer-Encoding", "8Bit");
+            msg.setHeader("Content-Transfer-Encoding", "8bit");
+           
+            
+
+            //msg.setSubject(MimeUtility.encodeText(pd.getSubjec t(), this.charset, subjectEncoding), this.charset);
+            // set Type and Charset in Headerfield 'Content-Type'
+            msg.setHeader("Content-Type", "text/plain; charset=UTF-8");
+
+            
+            
             
             //TO
             msg.setFrom(new InternetAddress(from, nfromalias));
@@ -185,20 +204,25 @@ public class Mail
             	log.error(e);
             }
     	    //FROM
-    	    msg.setSubject(nsubject);
+            
+            
+            msg.setSubject(subject.trim(), "UTF-8"); //nsubject);  // , "UTF-8"; //; //
+     	   
+            
+    	    //msg.setSubject("\u02DA", "UTF-8"); //nsubject);  // , "UTF-8"; //; //
     	    
     	    if(reply != null)
     	    	msg.setReplyTo((Address[]) reply.toArray(new Address[reply.size()]) );
     	    
     	    //BODY
     	    MimeBodyPart messageBodyPart = new MimeBodyPart();
-    	    messageBodyPart.setHeader("Content-Transfer-Encoding", "8Bit");
+    	    messageBodyPart.setHeader("Content-Transfer-Encoding", "8bit");
             
     	    
             // SET HTML MAIL
             if(html)
             {
-            	messageBodyPart.setContent(nmessage, "text/html");
+            	messageBodyPart.setContent(nmessage, "text/html; charset=utf-8");
             }
             else 
             {
