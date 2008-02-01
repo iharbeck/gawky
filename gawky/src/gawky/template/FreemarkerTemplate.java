@@ -10,6 +10,7 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import gawky.file.Locator;
+import gawky.global.Constant;
 import gawky.global.Option;
 
 public class FreemarkerTemplate implements gawky.template.Template
@@ -26,10 +27,15 @@ public class FreemarkerTemplate implements gawky.template.Template
 	
 	public String processToString(Object obj, String templatefile) throws Exception 
 	{
+		return processToString(obj, templatefile, Constant.ENCODE_UTF8);
+	}
+	
+	public String processToString(Object obj, String templatefile, String encoding) throws Exception 
+	{
 		ByteArrayOutputStream barray = new ByteArrayOutputStream();
 		process(obj, templatefile, barray);
 		
-		return barray.toString();
+		return barray.toString(encoding);
 	}
 	
 	
