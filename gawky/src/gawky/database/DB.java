@@ -143,15 +143,25 @@ public class DB
 		{
 		  return execute(0, sql);
 		}
+	  
+	  public static int execute(String sql, Object[] params)
+		{
+		  return execute(0, sql, params);
+		}
 
 	  public static int execute(int pool, String sql)
+		{
+		  return execute(pool, sql, null);
+		}
+
+	  public static int execute(int pool, String sql, Object[] params)
 		{
 			Connection conn = null;
 
 			try
 			{
 				conn = DB.getConnection(pool);
-				return execute(conn, sql, null);
+				return execute(conn, sql, params);
 			} catch (Exception e) {
 				log.error(e);
 			} finally {
