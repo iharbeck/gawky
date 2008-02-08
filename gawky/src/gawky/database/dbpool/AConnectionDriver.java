@@ -43,7 +43,7 @@ public class AConnectionDriver implements Driver
      *
      */
 
-    public AConnectionDriver(Properties prop)
+    public AConnectionDriver(Properties prop, Properties props)
            throws Exception
     {
     	drivers_url =  URL_PREFIX + prop.getProperty("id", "");
@@ -52,23 +52,23 @@ public class AConnectionDriver implements Driver
              prop.getProperty("url", ""),
              prop.getProperty("user", ""),
              prop.getProperty("pass", ""),
-             Long.parseLong(prop.getProperty("timeout", Long.toString(timeout))));
+             Long.parseLong(prop.getProperty("timeout", Long.toString(timeout))), props);
     }
 
-    public AConnectionDriver(String driver, String url, String user, String password, String id, long timeout)
+    public AConnectionDriver(String driver, String url, String user, String password, String id, long timeout, Properties props)
            throws Exception
     {
     	drivers_url = URL_PREFIX + id;
-        init(driver, url, user, password, timeout);
+        init(driver, url, user, password, timeout, props);
     }
 
-    public AConnectionDriver(String driver, String url, String user, String password)
+    public AConnectionDriver(String driver, String url, String user, String password, Properties props)
            throws Exception
     {
-        init(driver, url, user, password, timeout);
+        init(driver, url, user, password, timeout, props);
     }
 
-    public void init(String driver, String url, String user, String password, long timeout)
+    public void init(String driver, String url, String user, String password, long timeout, Properties props)
            throws Exception
     {
         DriverManager.registerDriver(this);
@@ -77,7 +77,7 @@ public class AConnectionDriver implements Driver
         } catch (Exception e) {
         	throw new Exception("MISSING(" + driver + ")");
         }
-        pool = new AConnectionPool(drivers_url, url, user, password, timeout);
+        pool = new AConnectionPool(drivers_url, url, user, password, timeout, props);
         
         AShutdownHook shutdownHook = new AShutdownHook(pool);
         Runtime.getRuntime().addShutdownHook(shutdownHook);

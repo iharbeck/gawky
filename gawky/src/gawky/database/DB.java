@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,13 +47,25 @@ public class DB
 			String dbuser   = Option.getProperty("db" + staging + "(" + i + ").user");
 			String dbdriver = Option.getProperty("db" + staging + "(" + i + ").driver");
 			String dbalias  = Option.getProperty("db" + staging + "(" + i + ").alias", null);
+			String[] dbproperties  = Option.getProperties("db" + staging + "(" + i + ").property");
 
+			Properties props = new Properties();
+			
+			if(dbproperties != null) {
+				
+				for(int x=0; i < dbproperties.length; x++) {
+					String[] val = dbproperties[x].split("=");
+					props.put(val[0], val[1]);
+				}
+			}
+			
 	        log.info("Register: " + dburl);
+	        
 	        try {
 	        	if(dbalias == null)
-	        		new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000);
+	        		new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000, props);
 	        	else
-	        		new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, dbalias, 5000000);
+	        		new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, dbalias, 5000000, props);
 	    	} catch (Exception e) {
 		        log.error("Pooleinrichtung: " + e.getMessage());
 			}
@@ -177,6 +190,12 @@ public class DB
 		try {
 
 			stmt_select = conn.prepareStatement(sql);
+			
+			for (int i=0; params != null && i < params.length; i++) {
+				String param = (String)params[i];
+				stmt_select.setString(i+1, param);
+			}
+			
 			return stmt_select.executeUpdate();
 		} finally {
 			doClose(stmt_select);

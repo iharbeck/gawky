@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Properties;
 import java.util.Vector;
 
 import org.apache.commons.logging.Log;
@@ -43,22 +45,29 @@ public class AConnectionPool
    private static Log log = LogFactory.getLog(AConnectionPool.class);
 	
    private Vector connections;
-   private String url, user, password;
+   private String url;
    public String id;
    private long timeout;
    private ConnectionReaper reaper;
    final private int poolsize=100;
-
+   
+   Properties info = new java.util.Properties();
+   
    public int getConnectionCount()
    {
      return connections.size();
    }
 
-   public AConnectionPool(String id, String url, String user, String password, long timeout)
+   public AConnectionPool(String id, String url, String user, String password, long timeout, Properties props)
    {
-      this.url = url;
-      this.user = user;
-      this.password = password;
+	  info.put ("user", user);
+	  info.put ("password", password);
+	  info.put ("defaultRowPrefetch", "15");
+
+	  if(props != null)
+		  info.putAll(props);
+	  
+	  this.url = url;
       this.id = id;
       this.timeout = timeout;
       connections = new Vector(poolsize);
@@ -127,7 +136,7 @@ public class AConnectionPool
            }
        }
 
-       Connection conn = DriverManager.getConnection(url, user, password);
+       Connection conn = DriverManager.getConnection(url, info);
 
        c = new AConnection(conn, this);
        c.lease();
