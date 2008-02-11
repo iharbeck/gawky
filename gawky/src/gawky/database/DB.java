@@ -53,7 +53,7 @@ public class DB
 			
 			if(dbproperties != null) {
 				
-				for(int x=0; i < dbproperties.length; x++) {
+				for(int x=0; x < dbproperties.length; x++) {
 					String[] val = dbproperties[x].split("=");
 					props.put(val[0], val[1]);
 				}
