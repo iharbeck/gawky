@@ -3,15 +3,20 @@
 <!-- encoding="ISO-8859-1"  -->
 
 <config>
-  	<p>31680</p>
-  	<host>localhost</host>
-  	<!--  <v>9</v> -->
+
+	<server>
+	  	<port>31680</port>
+	  	<host>localhost</host>
+	  	<keystore>/work/gawky/etc/keystore</keystore>
+	  	<storepass>password</storepass>
+	  	<keypass>password</keypass>
+	  	<type>plain</type>
+	</server>
+
   	<l>/work/gawky/log/logfile</l>
   	<M>10</M>
-  	<keystore>/work/gawky/etc/keystore</keystore>
-  	<storepass>password</storepass>
-  	<keypass>password</keypass>
-
+  	<!--  <v>9</v> -->
+	
   	<base>
    		<hello>world</hello>
   	</base>

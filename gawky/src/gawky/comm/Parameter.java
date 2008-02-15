@@ -23,31 +23,31 @@ public class Parameter
  
     boolean ssl = false;
     
-    public void initServer(String _host, int _port)
+    public void initServer(String host, int port)
     {
-    	host   = _host;
-        port   = _port;
-        ssl    = false;
+    	this.host   = host;
+    	this.port   = port;
+    	this.ssl    = false;
 
         Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
     }
     
-    public void initServer(String _host, int _port, String _keystore, String _storepass, String _keypass)
+    public void initServer(String host, int port, String keystore, String storepass, String keypass)
     {
-    	initServer(_host, _port);
-    	keystore  = _keystore;
-    	keypass   = _keypass;
-    	storepass = _storepass;
-    	ssl       = true;
+    	initServer(host, port);
+    	this.keystore  = keystore;
+    	this.keypass   = keypass;
+    	this.storepass = storepass;
+    	this.ssl       = true;
     }
     
     public void initServer()
     {
-    	initServer(Option.getHost(), Option.getPort());
-    	keystore  = Option.getProperty("keystore");
-    	keypass   = Option.getProperty("keypass");
-    	storepass = Option.getProperty("storepass");
-    	ssl       = Option.hasProperty("s");
+    	initServer(Option.getProperty("server.host"), Integer.parseInt(Option.getProperty("server.port")));
+    	keystore  = Option.getProperty("server.keystore");
+    	keypass   = Option.getProperty("server.keypass");
+    	storepass = Option.getProperty("server.storepass");
+    	ssl       = Option.getProperty("server.type","plain").equals("ssl");
     
     	log.info( "Starting " + (ssl ? "SSL" : "Plain") + " on Port " + port);
     }
