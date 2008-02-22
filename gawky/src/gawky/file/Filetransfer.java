@@ -19,6 +19,8 @@ public class Filetransfer {
 			return new Ftp();
 		else if(url.startsWith("sftp://"))
 			return new Sftp();
+		else if(url.startsWith("ftps://"))
+			return new Ftps();
 		else 
 			throw new Exception("invalid protocoll: " + url);
 	}
