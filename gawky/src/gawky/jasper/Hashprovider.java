@@ -1,7 +1,5 @@
 package gawky.jasper;
 
-import java.util.HashMap;
-
 public interface Hashprovider {
-	public HashMap getHash();
+	public String getHashValue(String alias);
 }

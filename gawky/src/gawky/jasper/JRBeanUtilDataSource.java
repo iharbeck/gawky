@@ -39,13 +39,13 @@ public class JRBeanUtilDataSource implements JRDataSource
 			
 			if(path.startsWith("#") && bean instanceof Hashprovider)
 			{
-				HashMap hash =  ((Hashprovider)bean).getHash();
-				
 				path = path.substring(1);
-				if(!(hash).containsKey(path))
+				String value =  ((Hashprovider)bean).getHashValue(path);
+				
+				if(value == null)
 					return "$$" + path + "$$";
 				else
-					return ((HashMap)hash).get(path);
+					return value;
 			}
 				
 			// TODO: implement cached version
