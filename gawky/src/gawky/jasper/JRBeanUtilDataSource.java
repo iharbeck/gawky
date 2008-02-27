@@ -36,6 +36,18 @@ public class JRBeanUtilDataSource implements JRDataSource
 				else
 					return ((HashMap)bean).get(path);
 			}
+			
+			if(path.startsWith("$") && bean instanceof Hashprovider)
+			{
+				HashMap hash =  ((Hashprovider)bean).getHash();
+				
+				path = path.substring(1);
+				if(!(hash).containsKey(path))
+					return "$$" + path + "$$";
+				else
+					return ((HashMap)hash).get(path);
+			}
+				
 			// TODO: implement cached version
 			return PropertyUtils.getProperty(bean, path);  //return BeanUtils.getProperty(bean, path);
 		} catch (Exception e) {
