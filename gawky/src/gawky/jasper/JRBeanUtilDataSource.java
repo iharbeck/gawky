@@ -37,7 +37,7 @@ public class JRBeanUtilDataSource implements JRDataSource
 					return ((HashMap)bean).get(path);
 			}
 			
-			if(path.startsWith("$") && bean instanceof Hashprovider)
+			if(path.startsWith("#") && bean instanceof Hashprovider)
 			{
 				HashMap hash =  ((Hashprovider)bean).getHash();
 				
