@@ -136,6 +136,9 @@ public class Formatter
 	   if (value == null)
           value = "";
     
+	   if(value.length() > size)
+		   value = value.substring(0, size);
+	   
 	   return (value + delim);
    }
 
