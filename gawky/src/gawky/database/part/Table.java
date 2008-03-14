@@ -1,6 +1,7 @@
 package gawky.database.part;
 
 import gawky.database.DB;
+import gawky.database.dbpool.AConnection;
 import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
@@ -20,6 +21,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.sun.corba.se.pept.transport.Acceptor;
 
 /**
  * Persistence Layer for Part based Objects
@@ -236,7 +239,13 @@ public abstract class Table extends Part
 	{
 		PreparedStatement stmt = getStmts()[type];
 
-		if(stmt == null || stmt.getConnection() != conn)
+		Connection c = null;
+		if(conn instanceof AConnection)
+			c = ((AConnection)conn).getConnection();
+		else
+			c = conn;
+		
+		if(stmt == null || stmt.getConnection() != c)
 		{
 			try { stmt.close(); } catch (Exception e) {}
 			stmt = conn.prepareStatement(sql);
@@ -625,6 +634,24 @@ public abstract class Table extends Part
 
 		return stmt.executeUpdate();
 	}
+	
+	public void update_batch (Connection conn) throws SQLException
+	{
+		String sql = getQuery(SQL_UPDATE);
+
+		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);
+
+		fillPreparedStatement(stmt, false);
+
+		stmt.addBatch();
+	}
+	
+	public void execute_updatebatch (Connection conn) throws SQLException
+	{
+		PreparedStatement stmt = getStmt(conn, "", SQL_UPDATE);
+		stmt.executeBatch();
+	}
+	
 
 	public IDGenerator getIdgenerator() {
 		return getStaticLocal().idgenerator;

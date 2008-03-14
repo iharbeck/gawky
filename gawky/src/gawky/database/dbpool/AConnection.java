@@ -96,7 +96,7 @@ public class AConnection implements Connection
     	inuse=false;
     }
 
-    protected Connection getConnection() {
+    public Connection getConnection() {
         return conn;
     }
 
