@@ -354,4 +354,9 @@ public abstract class Part implements Cloneable
 	public Object getBackup() {
 		return clone;
 	}
+	
+	public boolean isDirty() 
+	{
+		return !((Part)this.getBackup()).toString().equals(this.toString());
+	}
 }

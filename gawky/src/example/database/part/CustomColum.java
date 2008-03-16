@@ -27,7 +27,7 @@ public class CustomColum {
 		gen.setCustomparams("proud_ikaros_seq.nextval,");
 		
 		String sql = gen.generateInsertSQL(new DaoObject()).toString(); 
-		// insert only DAO shouldent have an ID!!!
+		// insert only DAO shouldn't have an ID!!!
 		System.out.println(sql);
 		
 		

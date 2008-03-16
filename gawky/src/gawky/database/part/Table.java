@@ -22,8 +22,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.sun.corba.se.pept.transport.Acceptor;
-
 /**
  * Persistence Layer for Part based Objects
  * Insert / Update / Delete / Find
@@ -626,6 +624,9 @@ public abstract class Table extends Part
 
 	public int update (Connection conn) throws SQLException
 	{
+		if(!isDirty())
+			return 0;
+		
 		String sql = getQuery(SQL_UPDATE);
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);
@@ -637,6 +638,9 @@ public abstract class Table extends Part
 	
 	public void update_batch (Connection conn) throws SQLException
 	{
+		if(!isDirty())
+			return;
+
 		String sql = getQuery(SQL_UPDATE);
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);
