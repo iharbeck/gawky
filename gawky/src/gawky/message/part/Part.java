@@ -347,8 +347,11 @@ public abstract class Part implements Cloneable
 	     }
 	}
 
+	boolean cloned = false;
+	
 	public void doclone() {
 		clone = clone();
+		cloned = true;
 	}
 
 	public Object getBackup() {
@@ -357,6 +360,10 @@ public abstract class Part implements Cloneable
 	
 	public boolean isDirty() 
 	{
-		return !((Part)this.getBackup()).toString().equals(this.toString());
+		if(cloned)
+			return !((Part)this.getBackup()).toString().equals(this.toString());
+		else
+			return true;
 	}
+	
 }
