@@ -58,6 +58,9 @@ public abstract class BaseFtp implements URLInterface
 		String sourcefolder   = Tool.getFolder(sourcepath);
 		String sourcefilename = Tool.getFilename(sourcepath);
 
+		if(uparser.getPort() != null)
+			port = Integer.parseInt(uparser.getPort());
+		
 		me.open(uparser.getServer(), uparser.getUser(), uparser.getPass(), port);
 		
 		me.changeRemoteDir(targetfolder);

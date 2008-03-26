@@ -19,6 +19,12 @@ public class Sftp extends BaseFtp {
 
 	// 	SftpHandler.retrieve("ftp://user768:__@ftp.brillenmacher.com:/INBOX.*", "c:/damdam/");
 
+	public static void main(String[] args) throws Exception {
+		
+		Filetransfer.retrieve("sftp://payon:pass@test.ctpe.net:22222:/INBOX.*", "c:/");
+
+	}
+	
 	ChannelSftp sftpclient;
 
 	public Sftp() throws Exception 

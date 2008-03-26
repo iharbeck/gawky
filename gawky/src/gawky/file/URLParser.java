@@ -23,6 +23,7 @@ public class URLParser {
 	private String user;	
 	private String pass;
 	private String server;
+	private String port;
 
 	private String serverpath;
 	private String option;
@@ -39,6 +40,18 @@ public class URLParser {
 		pass       = matcher.group(3);
 		server     = matcher.group(4);
 
+		String[] s = server.split(":");
+		if(s.length > 1)
+		{	
+			server = s[0];
+			port   = s[1];
+		}
+		else
+		{
+			port = null;
+		}
+		
+		
 		serverpath = matcher.group(5);
 		
 		String[] opt = serverpath.split("#");
@@ -90,8 +103,11 @@ public class URLParser {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		URLParser url = new URLParser("ftp://ingo:geheim@server:/path/to/file#option");
+		URLParser url = new URLParser("ftp://ingo:geheim@server:999:/path/to/file#option");
+		System.out.println(url.getProtocoll());
 		System.out.println(url.getUser());
+		System.out.println(url.getPass());
+		System.out.println(url.getServer());
 		System.out.println(url.getServerpath());
 		System.out.println(url.getOption());
 	}
@@ -102,5 +118,13 @@ public class URLParser {
 
 	public void setOption(String option) {
 		this.option = option;
+	}
+
+	public String getPort() {
+		return port;
+	}
+
+	public void setPort(String port) {
+		this.port = port;
 	}
 }
