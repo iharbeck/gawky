@@ -21,7 +21,9 @@ public class Sftp extends BaseFtp {
 
 	public static void main(String[] args) throws Exception {
 		
-		Filetransfer.retrieve("sftp://payon:pass@test.ctpe.net:22222:/INBOX.*", "c:/");
+		
+		
+		//Filetransfer.retrieve("sftp://8a90818a14a769670114abe9959400eb:@test.ctpe.net:2222:/INBOX.*#c]/paykey.ppk", "c:/");
 
 	}
 	
@@ -39,16 +41,18 @@ public class Sftp extends BaseFtp {
 	
 	public Sftp(String server, String user, String pass, int port) throws Exception 
 	{
-		open(server, user, pass, port);
+		open(server, user, pass, port, null);
 	}
 	
-	public void open(String server, String user, String pass, int port) throws Exception 
+	public void open(String server, String user, String pass, int port, String option) throws Exception 
 	{
 		this.port = port;
 		JSch jsch = new JSch();
         Session session = null;
         Channel channel = null;
 
+        if(pass.equals("") || option != null)
+        	jsch.addIdentity(option.replaceFirst("]", ":"));
         
         session = jsch.getSession(user, server, port);
         //System.out.println("Session created.");    

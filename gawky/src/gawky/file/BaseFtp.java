@@ -8,7 +8,7 @@ public abstract class BaseFtp implements URLInterface
 	int port;
 	String localdir;
 
-	public abstract void open(String server, String user, String pass, int port) throws Exception;
+	public abstract void open(String server, String user, String pass, int port, String option) throws Exception;
 
 	public void retrieveFiles() throws Exception
 	{
@@ -61,7 +61,7 @@ public abstract class BaseFtp implements URLInterface
 		if(uparser.getPort() != null)
 			port = Integer.parseInt(uparser.getPort());
 		
-		me.open(uparser.getServer(), uparser.getUser(), uparser.getPass(), port);
+		me.open(uparser.getServer(), uparser.getUser(), uparser.getPass(), port, uparser.getOption());
 		
 		me.changeRemoteDir(targetfolder);
 		me.changeLocalDir(sourcefolder);
@@ -88,8 +88,11 @@ public abstract class BaseFtp implements URLInterface
 		
         String targetfolder   = Tool.getFolder(targetpath);
 		String targetfilename = Tool.getFilename(targetpath);
+		
+		if(uparser.getPort() != null)
+			port = Integer.parseInt(uparser.getPort());
 
-		me.open(uparser.getServer(), uparser.getUser(), uparser.getPass(), port);
+		me.open(uparser.getServer(), uparser.getUser(), uparser.getPass(), port, uparser.getOption());
 		
 		me.changeRemoteDir(sourcefolder);
 		me.changeLocalDir(targetfolder);

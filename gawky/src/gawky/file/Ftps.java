@@ -138,7 +138,7 @@ public class Ftps extends BaseFtp {
 	
 	public Ftps(String server, String user, String pass, int port) throws Exception 
 	{
-		open(server, user, pass, port);
+		open(server, user, pass, port, null);
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -150,7 +150,7 @@ public class Ftps extends BaseFtp {
 		ff.retrieveFiles("*");
 		ff.close();
 	}
-	public void open(String server, String user, String pass, int port) throws Exception 
+	public void open(String server, String user, String pass, int port, String option) throws Exception 
 	{
 		this.port = port;
         this.me = this;

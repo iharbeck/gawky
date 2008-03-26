@@ -35,10 +35,10 @@ public class Ftp extends BaseFtp
 	
 	public Ftp(String server, String user, String pass, int port) throws Exception 
 	{
-		open(server, user, pass, port);
+		open(server, user, pass, port, null);
 	}
 
-	public void open(String server, String user, String pass, int port) throws Exception 
+	public void open(String server, String user, String pass, int port, String option) throws Exception 
 	{
 		log.info("Login to FTP: " + server);
 	
