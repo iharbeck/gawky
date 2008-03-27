@@ -149,6 +149,8 @@ public class Option
 	{
 		if(initdone)
 			return;
+		
+		System.setProperty("file.encoding", Constant.ENCODE_UTF8);
 	
 
 		// Properties parsen
