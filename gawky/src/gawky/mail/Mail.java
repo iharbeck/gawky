@@ -132,10 +132,36 @@ public class Mail
                            false, null, null, false, null, null);
     }
 
+    
     public static int sendMailGeneric(
             String username, String password, String host, 
             String from, String fromalias, String to, String toalias,
             ArrayList reply,
+            String subject, String message,
+            boolean html,
+            InputStream stream, 
+            String attachName,
+            boolean dozip,
+            Hashtable templateparameter, Hashtable cids
+            ) 
+    {
+    	return sendMailGenericBounce(
+                username, password, host, 
+                from, fromalias, to, toalias,
+                reply, null,
+                subject, message,
+                html,
+                stream, 
+                attachName,
+                dozip,
+                templateparameter, cids
+                ); 
+    }
+    
+    public static int sendMailGenericBounce(
+            String username, String password, String host, 
+            String from, String fromalias, String to, String toalias,
+            ArrayList reply, String bounceaddress,
             String subject, String message,
             boolean html,
             InputStream stream, 
@@ -175,6 +201,9 @@ public class Mail
             java.util.Properties prop = System.getProperties();
     	    prop.put("mail.smtp.host", host);
 
+    	    if(bounceaddress != null)
+    	    	prop.put("mail.smtp.from", bounceaddress);
+    	    
             // Get session
     	    Session ses1 = Session.getDefaultInstance(prop, null);
 
