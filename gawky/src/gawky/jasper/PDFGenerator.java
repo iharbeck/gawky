@@ -21,12 +21,12 @@ public class PDFGenerator {
 	
 	static HashMap compiledreportcache = new HashMap();
 	
-	public static void generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName) throws Exception
+	public static JasperPrint generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName) throws Exception
 	{
-		generateFile(reportdata, rows, jasperFileName, outputFileName, new HashMap());
+		return generateFile(reportdata, rows, jasperFileName, outputFileName, new HashMap());
 	}
 	
-	public static void generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName, HashMap map) throws Exception
+	public static JasperPrint generateFile(Object reportdata, int rows, String jasperFileName, String outputFileName, HashMap map) throws Exception
 	{
 		JasperPrint jasperPrint = null;
 		
@@ -51,9 +51,11 @@ public class PDFGenerator {
 		}
 		  
 		JasperExportManager.exportReportToPdfFile(jasperPrint, outputFileName);
+		
+		return jasperPrint;
 	}
 	
-	public static void generateStream(Object reportdata, int rows, String jasperFileName, OutputStream outputStream, HashMap map) throws Exception
+	public static JasperPrint generateStream(Object reportdata, int rows, String jasperFileName, OutputStream outputStream, HashMap map) throws Exception
 	{
 		JasperPrint jasperPrint = null;
 		
@@ -78,6 +80,8 @@ public class PDFGenerator {
 		}
 		  
 		JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+		
+		return jasperPrint;
 	}
 
 	
