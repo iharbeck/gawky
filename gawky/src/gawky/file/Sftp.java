@@ -133,7 +133,7 @@ public class Sftp extends BaseFtp {
 	
 	public void sendLocalFiles(String filename) throws Exception
 	{
-		String tmp_prefix = ".temp";
+		String tmp_prefix = ""; //".temp";
 		
 		ArrayList filesources = Tool.getFiles(localdir + filename);
 		
@@ -148,7 +148,8 @@ public class Sftp extends BaseFtp {
 			sftpclient.put(is, f.getName() + tmp_prefix);
 			is.close();
 	
-			renameRemoteFile(f.getName() + tmp_prefix, f.getName());
+			if(!tmp_prefix.equals(""))
+				renameRemoteFile(f.getName() + tmp_prefix, f.getName());
 		}
 	}
 	
