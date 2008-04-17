@@ -360,9 +360,9 @@ public abstract class Part implements Cloneable
 	
 	public boolean isDirty() 
 	{
-		if(cloned)
+		if(cloned) {
 			return !((Part)this.getBackup()).toString().equals(this.toString());
-		else
+		}else
 			return true;
 	}
 	
