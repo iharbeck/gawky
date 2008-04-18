@@ -435,6 +435,14 @@ public abstract class Table extends Part
 			log.error("no result (" + sql + ")");
 		}
 	}
+	
+	public void fillByResultSet(ResultSet rset) { 
+		try {
+			getStaticLocal().generator.fillPartPartial(rset, this);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 
 
 	public void find(String where, Object[] params) throws Exception

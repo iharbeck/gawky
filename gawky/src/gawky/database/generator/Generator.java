@@ -1,6 +1,7 @@
 package gawky.database.generator;
 
 import gawky.database.DB;
+import gawky.database.part.Column;
 import gawky.database.part.Table;
 import gawky.global.Option;
 import gawky.message.Formatter;
@@ -122,6 +123,58 @@ public class Generator
 		if(doclone)
 			part.doclone();
 	}
+	
+	
+	public final void fillPartPartial(ResultSet rset, Table part) throws Exception
+	{
+		//Desc[] descs = part.getCachedDesc();
+		Desc   desc;
+		
+		ResultSetMetaData meta = rset.getMetaData();
+		
+		int c = meta.getColumnCount();
+		
+		for(int i = 1; i <= c; i++)
+		{
+			String name = meta.getColumnName(i).toLowerCase();
+			desc = part.getDescByName(name);
+		
+			String val = null;
+
+			try
+			{
+			    switch (desc.format) {
+					case Desc.FMT_ASCII :
+					case Desc.FMT_BLANK :
+					case Desc.FMT_BLANK_ZERO :
+					case Desc.FMT_BINARY :
+					case Desc.FMT_UPPER :
+					case Desc.FMT_LOWER :
+					case Desc.FMT_BLANK_LETTER :
+						val = rset.getString(name);
+						break;
+					case Desc.FMT_DIGIT :
+						val = formatNumber(rset.getDouble(name));
+						break;
+					case Desc.FMT_DATE :
+						val =  df_YYYYMMDD.format( rset.getDate(name) );
+						break;
+					case Desc.FMT_TIME :
+						val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(name) );
+						break;
+				}
+
+			    if(dotrim)
+			    	val = Formatter.rtrim(val);
+
+			    desc.setValue(part, val);
+
+			} catch(Exception e) {
+				try  { desc.setValue(part, ""); } catch(Exception ee) {}
+			}
+		}
+	}
+	
 
 	public StringBuilder generateInsertSQL(Table bean)
 	{

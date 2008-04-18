@@ -45,7 +45,8 @@
 	<mail>
 		<user>mailuser</user>
 		<password>mailpass</password>
-		<server>amx1.bertelsmann.de</server>
+		<_server>amx1.bertelsmann.de</_server>
+		<server>127.0.0.1</server>
   		<from></from>
   		<fromalias></fromalias>
   		<subject></subject>

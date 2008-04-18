@@ -5,8 +5,8 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
  
 	  <appender name="file" class="org.apache.log4j.FileAppender">
-	    <param name="File" value="/work/gawky/log/test.log"/>
-	    <param name="Append" value="true"/>
+	    <param name="File" value="d:/work/gawky/log/test.log"/>
+	    <param name="Append" value="false"/>
 	    <layout class="org.apache.log4j.PatternLayout">
 	      <param name="ConversionPattern" value="%d %p [%t %c] - %m%n"/>
 	    </layout>
@@ -30,6 +30,7 @@
 	  <root>
 	    <level value="error"/>
 	    <appender-ref ref="console"/>
+	    <appender-ref ref="file"/>
 	  </root>
  	
 </log4j:configuration>
