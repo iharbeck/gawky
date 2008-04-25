@@ -60,6 +60,23 @@ public abstract class Table extends Part
 	public void descAfterInterceptor(Desc[] descs) {
 
 		StaticLocal local = getStaticLocal();
+		
+		//**  über primary attribute ermittlen 
+		if(getStaticLocal().descIds[0] == null) 
+		{
+			int c=0;
+			for(int i=0; i < descs.length; i++)
+				if(descs[i].isPrimary())
+					c++;
+			
+			getStaticLocal().descidindex = new int[c];
+			for(int i=0; i < descs.length; i++)
+				if(descs[i].isPrimary())
+					getStaticLocal().descidindex[i] = i;
+			
+		}
+		//**
+		
 		local.descIds = new Desc[local.descidindex.length];
 
 		for(int i=0; i < local.descidindex.length; i++)
@@ -149,6 +166,9 @@ public abstract class Table extends Part
 		getStaticLocal().descidindex[3] = idindex4;
 	}
 
+	/**
+	 * @deprecated use setPrimary in Desc
+	 */
 	public void setDescID(int[] index) {
 		getStaticLocal().descidindex = index;
 	}
@@ -376,7 +396,18 @@ public abstract class Table extends Part
 
 	public void find() throws Exception
 	{
-		find(getID());
+		getCachedDesc();
+		Desc[] descids = getDescIDs();
+
+		if(descids.length == 1)
+			find(getID());
+		else {
+			Object[] val = new Object[descids.length];
+			for(int i=0; i < descids.length; i++) {
+				val[i] = descids[i].getValue(this);
+			}
+			find(val);
+		}
 	}
 
 	public void find(long id) throws Exception

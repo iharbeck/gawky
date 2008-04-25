@@ -145,6 +145,17 @@ public class Desc
 		return this;
 	}
 
+	public Desc setPrimary() 
+	{
+		this.primary = true;
+		return this;
+	}
+
+	public boolean isPrimary() {
+		return primary;
+	}
+
+	
 	public boolean isPacked() {
 		return packed;
 	}
@@ -170,6 +181,7 @@ public class Desc
 	public String  name;
 	public boolean mask = false;
 	public String  dbname;
+	public boolean primary;
 	public boolean skipparsing = false;
 
 	public boolean packed = false;
