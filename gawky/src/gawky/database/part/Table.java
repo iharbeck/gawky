@@ -63,7 +63,7 @@ public abstract class Table extends Part
 		
 		//**  über primary attribute ermittlen 
 		//if(getStaticLocal().descIds[0] == null) 
-		if(getStaticLocal().descidindex[0] == -1) 
+		if(local.descidindex[0] == NO_ID) 
 		{
 			int c=0;
 			for(int i=0; i < descs.length; i++)
@@ -77,7 +77,8 @@ public abstract class Table extends Part
 			
 		}
 		//**
-		
+
+		// Array mit ids erstellen
 		local.descIds = new Desc[local.descidindex.length];
 
 		for(int i=0; i < local.descidindex.length; i++)
@@ -87,7 +88,6 @@ public abstract class Table extends Part
 			else
 				local.descIds[i] = descs[local.descidindex[i]];
 		}
-		//getStaticLocal().descId = descs[getStaticLocal().descidindex];
 	}
 
 	private static Log log = LogFactory.getLog(Table.class);
