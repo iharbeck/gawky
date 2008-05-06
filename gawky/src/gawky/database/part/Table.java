@@ -62,7 +62,8 @@ public abstract class Table extends Part
 		StaticLocal local = getStaticLocal();
 		
 		//**  über primary attribute ermittlen 
-		if(getStaticLocal().descIds[0] == null) 
+		//if(getStaticLocal().descIds[0] == null) 
+		if(getStaticLocal().descidindex[0] == -1) 
 		{
 			int c=0;
 			for(int i=0; i < descs.length; i++)
@@ -135,60 +136,9 @@ public abstract class Table extends Part
 	abstract public Desc[] getDesc();
 	abstract public String getTableName();
 
-
-	// Start Multikey
-
-	/**
-	 * @deprecated use setDescID(new int[] {i1, i2...})
-	 */
-	public void setDescID(int idindex1, int idindex2) {
-		getStaticLocal().descidindex = new int[2];
-		getStaticLocal().descidindex[0] = idindex1;
-		getStaticLocal().descidindex[1] = idindex2;
-	}
-	/**
-	 * @deprecated use setDescID(new int[] {i1, i2...})
-	 */
-	public void setDescID(int idindex1, int idindex2, int idindex3) {
-		getStaticLocal().descidindex = new int[3];
-		getStaticLocal().descidindex[0] = idindex1;
-		getStaticLocal().descidindex[1] = idindex2;
-		getStaticLocal().descidindex[2] = idindex3;
-	}
-	/**
-	 * @deprecated use setDescID(new int[] {i1, i2...})
-	 */
-	public void setDescID(int idindex1, int idindex2, int idindex3, int idindex4) {
-		getStaticLocal().descidindex = new int[4];
-		getStaticLocal().descidindex[0] = idindex1;
-		getStaticLocal().descidindex[1] = idindex2;
-		getStaticLocal().descidindex[2] = idindex3;
-		getStaticLocal().descidindex[3] = idindex4;
-	}
-
-	/**
-	 * @deprecated use setPrimary in Desc
-	 */
-	public void setDescID(int[] index) {
-		getStaticLocal().descidindex = index;
-	}
-
-	// Ende Multikey
-
-	public void setDescID(int idindex) {
-		setDescID(idindex, null);
-	}
-
-	public void setDescID(IDGenerator idgenerator) {
-		setDescID(0, idgenerator);
-	}
-
-	public void setDescID(int idindex, IDGenerator idgenerator)
-	{
+	
+	public void setIDGenerator(IDGenerator idgenerator) {
 		StaticLocal local = getStaticLocal();
-
-		local.descidindex = new int[1];
-		local.descidindex[0] = idindex;
 		local.idgenerator = idgenerator;
 	}
 

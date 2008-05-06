@@ -21,11 +21,10 @@ public class DaoObject extends Table {
       //setDescID(Table.NO_ID); // no ID
 	  //setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
 		
-		setDescID(0);
 		
 		return new Desc[]  {
 		
-			new Column("kunde_id"),
+			new Column("kunde_id").setPrimary(),
 			new Column("name")
 		};
 	}
