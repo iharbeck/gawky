@@ -38,12 +38,8 @@ public abstract class Table extends Part
 		public String[]            sql  = new String[5];
 		public PreparedStatement[] stmt = new PreparedStatement[4];
 		public boolean             parameter = false;
-		public int[]               descidindex;
 
 		public StaticLocal() {
-			descidindex = new int[1];
-			descidindex[0] = NO_ID;
-
 			descIds = new Desc[1];
 			descIds[0] = null;
 		}
@@ -60,21 +56,23 @@ public abstract class Table extends Part
 	public void descAfterInterceptor(Desc[] descs) {
 
 		StaticLocal local = getStaticLocal();
-		
+	/*	
 		//**  über primary attribute ermittlen 
 		//if(getStaticLocal().descIds[0] == null) 
-		if(local.descidindex[0] == NO_ID) 
+		//if(local.descidindex[0] == NO_ID) 
 		{
 			int c=0;
 			for(int i=0; i < descs.length; i++)
 				if(descs[i].isPrimary())
 					c++;
 			
-			getStaticLocal().descidindex = new int[c];
-			for(int i=0; i < descs.length; i++)
-				if(descs[i].isPrimary())
-					getStaticLocal().descidindex[i] = i;
-			
+			local.descidindex = new int[c];
+			for(int i=0, a=0; i < descs.length; i++) {
+				if(descs[i].isPrimary()) {
+					local.descidindex[a] = i;
+					a++;
+				}
+			}
 		}
 		//**
 
@@ -88,6 +86,26 @@ public abstract class Table extends Part
 			else
 				local.descIds[i] = descs[local.descidindex[i]];
 		}
+	*/	
+		
+
+		// Anzahl Primärfelder
+		int c=0;
+		for(int i=0; i < descs.length; i++) {
+			if(descs[i].isPrimary())
+				c++;
+		}
+		
+		// Array mit ids erstellen
+		local.descIds = new Desc[c];
+	
+		for(int i=0, a=0; i < descs.length; i++) {
+			if(descs[i].isPrimary()) {
+				local.descIds[a] = descs[i];
+				a++;
+			}
+		}
+		
 	}
 
 	private static Log log = LogFactory.getLog(Table.class);
