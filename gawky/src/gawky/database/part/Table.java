@@ -214,7 +214,7 @@ public abstract class Table extends Part
 			c = conn;
 		
 		
-		if(stmt == null || stmt.isClosed() || stmt.getConnection() != c)
+		//if(stmt == null || stmt.isClosed() || stmt.getConnection() != c)
 		{
 			try { stmt.close(); } catch (Exception e) {}
 			stmt = conn.prepareStatement(sql);
@@ -287,16 +287,21 @@ public abstract class Table extends Part
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_INSERT);
 
-		fillPreparedStatement(stmt, true);
-
-		stmt.execute();
-
-		try {
-			// versuche to generierte ID zu ermitteln und im Object abzulegen
-			if(getIdgenerator() != null)
-				getDescIDs()[0].setValue(this, getIdgenerator().getGeneratedID(conn, this));
-		} catch (Exception e) {
-			log.error("insert Record", e);
+		try 
+		{
+			fillPreparedStatement(stmt, true);
+	
+			stmt.execute();
+	
+			try {
+				// versuche to generierte ID zu ermitteln und im Object abzulegen
+				if(getIdgenerator() != null)
+					getDescIDs()[0].setValue(this, getIdgenerator().getGeneratedID(conn, this));
+			} catch (Exception e) {
+				log.error("insert Record", e);
+			}
+		} finally {
+			DB.doClose(stmt);
 		}
 	}
 
@@ -403,18 +408,24 @@ public abstract class Table extends Part
 		String sql = getQuery(SQL_FIND);
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
-
-		// Find by IDs
-		for(int i=0; i < ids.length; i++)
-			stmt.setObject(i+1, ids[i]);
-
-		ResultSet rset = stmt.executeQuery();
-
-		found = rset.next();
-		if (found) {
-			getStaticLocal().generator.fillPart(rset, this);
-		} else {
-			log.error("no result (" + sql + ")");
+		ResultSet rset = null;
+		try 
+		{
+			// Find by IDs
+			for(int i=0; i < ids.length; i++)
+				stmt.setObject(i+1, ids[i]);
+	
+			rset = stmt.executeQuery();
+	
+			found = rset.next();
+			if (found) {
+				getStaticLocal().generator.fillPart(rset, this);
+			} else {
+				log.error("no result (" + sql + ")");
+			}
+		} finally {
+			DB.doClose(rset);
+			DB.doClose(stmt);
 		}
 	}
 	
@@ -458,6 +469,7 @@ public abstract class Table extends Part
 			log.error("no result (" + sql + ")");
 		}
 
+		DB.doClose(rset);
 		DB.doClose(stmt);
 	}
 
@@ -528,6 +540,7 @@ public abstract class Table extends Part
 			inst = (Table)clazz.newInstance();
 		}
 
+		DB.doClose(rset);
 		DB.doClose(stmt);
 
 		return list;
@@ -567,11 +580,16 @@ public abstract class Table extends Part
 
 		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
 
-		// Delete by ID
-		for(int i=0; i < ids.length; i++)
-			stmt.setObject(i+1, ids[i]);
-
-		return stmt.executeUpdate();
+		try 
+		{
+			// Delete by ID
+			for(int i=0; i < ids.length; i++)
+				stmt.setObject(i+1, ids[i]);
+	
+			return stmt.executeUpdate();
+		} finally {
+			DB.doClose(stmt);
+		}
 	}
 
 	public int delete() throws Exception
@@ -592,13 +610,18 @@ public abstract class Table extends Part
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_DELETE);
 
-		// Delete by combined ID
-		Desc[] descs = getDescIDs();
-
-		for(int i=0; i < descs.length; i++)
-			stmt.setObject(i+1, descs[i].getValue(this));
-
-		return stmt.executeUpdate();
+		try 
+		{
+			// Delete by combined ID
+			Desc[] descs = getDescIDs();
+	
+			for(int i=0; i < descs.length; i++)
+				stmt.setObject(i+1, descs[i].getValue(this));
+	
+			return stmt.executeUpdate();
+		} finally {
+			DB.doClose(stmt);
+		}
 	}
 
 	public int update() throws Exception
@@ -621,12 +644,17 @@ public abstract class Table extends Part
 
 		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);
 
-		fillPreparedStatement(stmt, false);
-
-		return stmt.executeUpdate();
+		try 
+		{
+			fillPreparedStatement(stmt, false);
+	
+			return stmt.executeUpdate();
+		} finally {
+			DB.doClose(stmt);
+		}
 	}
 	
-	public void update_batch (Connection conn) throws SQLException
+	/*public void update_batch (Connection conn) throws SQLException
 	{
 		if(!isDirty())
 			return;
@@ -638,13 +666,13 @@ public abstract class Table extends Part
 		fillPreparedStatement(stmt, false);
 
 		stmt.addBatch();
-	}
+	}*/
 	
-	public void execute_updatebatch (Connection conn) throws SQLException
+	/*public void execute_updatebatch (Connection conn) throws SQLException
 	{
 		PreparedStatement stmt = getStmt(conn, "", SQL_UPDATE);
 		stmt.executeBatch();
-	}
+	}*/
 	
 
 	public IDGenerator getIdgenerator() {
