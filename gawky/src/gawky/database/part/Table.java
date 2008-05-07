@@ -213,7 +213,8 @@ public abstract class Table extends Part
 		else
 			c = conn;
 		
-		if(stmt == null || stmt.getConnection() != c)
+		
+		if(stmt == null || stmt.isClosed() || stmt.getConnection() != c)
 		{
 			try { stmt.close(); } catch (Exception e) {}
 			stmt = conn.prepareStatement(sql);
