@@ -310,23 +310,29 @@ public abstract class Table extends Part
 		String sql = getQuery(SQL_SELECT);
 
 		PreparedStatement stmt = conn.prepareStatement(sql + " " + where);
-
-		ResultSet rset = stmt.executeQuery();
-
-		byte endline = '\n';
-
-		while (rset.next())
+		ResultSet rset = null;
+		
+		try 
 		{
-			Table table = (Table) this.getClass().newInstance();
-
-			getStaticLocal().generator.fillPart(rset, table);
-
-			//out.write(Formatter.getStringC(300, table.toString()).getBytes());
-			out.write(table.toString().getBytes(encoding));
-			out.write('\r');
-			out.write(endline);
+			rset = stmt.executeQuery();
+	
+			byte endline = '\n';
+	
+			while (rset.next())
+			{
+				Table table = (Table) this.getClass().newInstance();
+	
+				getStaticLocal().generator.fillPart(rset, table);
+	
+				//out.write(Formatter.getStringC(300, table.toString()).getBytes());
+				out.write(table.toString().getBytes(encoding));
+				out.write('\r');
+				out.write(endline);
+			}
+		} finally {
+			DB.doClose(rset);
+			DB.doClose(stmt);
 		}
-		DB.doClose(stmt);
 	}
 
 	public String getID() throws Exception
@@ -455,17 +461,21 @@ public abstract class Table extends Part
 		for(int i = 1; params != null && i <= params.length; i++)
 			stmt.setObject(i, params[i-1]);
 
-		ResultSet rset = stmt.executeQuery();
-
-		found = rset.next();
-		if (found) {
-			getStaticLocal().generator.fillPart(rset, this);
-		} else {
-			log.error("no result (" + sql + ")");
+		ResultSet rset = null;
+		
+		try {
+			rset = stmt.executeQuery();
+	
+			found = rset.next();
+			if (found) {
+				getStaticLocal().generator.fillPart(rset, this);
+			} else {
+				log.error("no result (" + sql + ")");
+			}
+		} finally {
+			DB.doClose(rset);
+			DB.doClose(stmt);
 		}
-
-		DB.doClose(rset);
-		DB.doClose(stmt);
 	}
 
 	/*
@@ -522,22 +532,27 @@ public abstract class Table extends Part
 		for(int i=0; params != null && i < params.length; i++)
 			stmt.setObject(i+1, params[i]);
 
-		ResultSet rset = stmt.executeQuery();
-
+		ResultSet rset = null;
+		
 		ArrayList list = new ArrayList();
 
-		while (rset.next())
+		try 
 		{
-			getStaticLocal(inst).generator.fillPart(rset, inst);
-
-			list.add(inst);
-
-			inst = (Table)clazz.newInstance();
+			rset = stmt.executeQuery();
+	
+			while (rset.next())
+			{
+				getStaticLocal(inst).generator.fillPart(rset, inst);
+	
+				list.add(inst);
+	
+				inst = (Table)clazz.newInstance();
+			}
+		} finally {
+			DB.doClose(rset);
+			DB.doClose(stmt);
 		}
-
-		DB.doClose(rset);
-		DB.doClose(stmt);
-
+		
 		return list;
 	}
 
