@@ -190,11 +190,6 @@ public abstract class Table extends Part
 		return sql;
 	}
 
-	public final PreparedStatement[] getStmts()
-	{
-		return getStaticLocal().stmt;
-	}
-
 	/**
 	 * Read from or fill Cache
 	 * @param conn
@@ -205,23 +200,23 @@ public abstract class Table extends Part
 	 */
 	public final PreparedStatement getStmt(Connection conn, String sql, int type) throws SQLException
 	{
-		PreparedStatement stmt = getStmts()[type];
-
-		Connection c = null;
-		if(conn instanceof AConnection)
-			c = ((AConnection)conn).getConnection();
-		else
-			c = conn;
+//		PreparedStatement stmt = getStaticLocal().stmt[type];
+//
+//		Connection c = null;
+//		if(conn instanceof AConnection)
+//			c = ((AConnection)conn).getConnection();
+//		else
+//			c = conn;
 		
 		
 		//if(stmt == null || stmt.isClosed() || stmt.getConnection() != c)
-		{
-			try { stmt.close(); } catch (Exception e) {}
-			stmt = conn.prepareStatement(sql);
-			getStmts()[type] = stmt;
-		}
+//		{
+//			try { stmt.close(); } catch (Exception e) {}
+//			stmt = conn.prepareStatement(sql);
+//			getStmts()[type] = stmt;
+//		}
 
-		return stmt;
+		return conn.prepareStatement(sql);
 	}
 
 	protected final String getInsertSQL() {
