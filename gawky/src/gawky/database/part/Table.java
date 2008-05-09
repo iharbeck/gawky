@@ -36,7 +36,7 @@ public abstract class Table extends Part
 	private final class StaticLocal
 	{
 		public String[]            sql  = new String[5];
-		public PreparedStatement[] stmt = new PreparedStatement[4];
+		//public PreparedStatement[] stmt = new PreparedStatement[4];
 		public boolean             parameter = false;
 
 		public StaticLocal() {
@@ -233,7 +233,6 @@ public abstract class Table extends Part
 //			stmt = conn.prepareStatement(sql);
 //			getStmts()[type] = stmt;
 //		}
-
 		return conn.prepareStatement(sql);
 	}
 
@@ -435,7 +434,8 @@ public abstract class Table extends Part
 				stmt.setObject(i+1, ids[i]);
 	
 			rset = stmt.executeQuery();
-	
+			rset.setFetchSize(1);
+			
 			found = rset.next();
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
@@ -547,6 +547,8 @@ public abstract class Table extends Part
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 
+		
+		
 		for(int i=0; params != null && i < params.length; i++)
 			stmt.setObject(i+1, params[i]);
 
@@ -557,7 +559,8 @@ public abstract class Table extends Part
 		try 
 		{
 			rset = stmt.executeQuery();
-	
+			rset.setFetchSize(30);
+			
 			while (rset.next())
 			{
 				getStaticLocal(inst).generator.fillPart(rset, inst);
