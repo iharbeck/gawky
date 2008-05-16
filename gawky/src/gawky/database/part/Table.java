@@ -1,7 +1,6 @@
 package gawky.database.part;
 
 import gawky.database.DB;
-import gawky.database.dbpool.AConnection;
 import gawky.database.dialect.Dialect;
 import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
@@ -56,38 +55,6 @@ public abstract class Table extends Part
 	public void descAfterInterceptor(Desc[] descs) {
 
 		StaticLocal local = getStaticLocal();
-	/*	
-		//**  über primary attribute ermittlen 
-		//if(getStaticLocal().descIds[0] == null) 
-		//if(local.descidindex[0] == NO_ID) 
-		{
-			int c=0;
-			for(int i=0; i < descs.length; i++)
-				if(descs[i].isPrimary())
-					c++;
-			
-			local.descidindex = new int[c];
-			for(int i=0, a=0; i < descs.length; i++) {
-				if(descs[i].isPrimary()) {
-					local.descidindex[a] = i;
-					a++;
-				}
-			}
-		}
-		//**
-
-		// Array mit ids erstellen
-		local.descIds = new Desc[local.descidindex.length];
-
-		for(int i=0; i < local.descidindex.length; i++)
-		{
-			if(local.descidindex[i] == NO_ID)
-				local.descIds[i] = null;
-			else
-				local.descIds[i] = descs[local.descidindex[i]];
-		}
-	*/	
-		
 
 		// Anzahl Primärfelder
 		int c=0;
