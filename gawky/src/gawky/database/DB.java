@@ -74,14 +74,19 @@ public class DB
 
     // Verbindung aus Connectionpool holen
     static public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
+    	Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
+    	log.info("get connection [" + conn + "]");
+    	return conn;
     }
 
     static public Connection getConnection(int number) throws SQLException {
-    	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
+    	Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
+    	log.info("get connection [" + conn + "]");
+    	return conn;
     }
 
     static public Connection getConnection(String alias) throws SQLException {
+    	log.info("get connection");
     	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
     }
 

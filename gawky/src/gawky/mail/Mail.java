@@ -306,10 +306,12 @@ public class Mail
 			    if(!dozip)
 			    {
 			    	// ohne zip
-			    	source =  new ByteArrayDataSource(stream, "plain/text");
+			    	//source =  new ByteArrayDataSource(stream, "plain/text");
+			    	source =  new ByteArrayDataSource(stream, "application/octet-stream");
 			    } else {
 				    // gzip
-				    source = new ByteArrayDataSource(zipStream(stream), "plain/text");
+				    //source = new ByteArrayDataSource(zipStream(stream), "plain/text");
+				    source = new ByteArrayDataSource(zipStream(stream), "application/octet-stream");
 			    }
 			    
 			    

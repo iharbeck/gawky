@@ -73,7 +73,7 @@ public class Grouper {
 
 		Grouper grouper = new Grouper("FREMD(.....)EIGEN(.....)EU");
 		
-		String[] values = grouper.match("FREMD00012EIGEN00000EU");
+		String[] values = grouper.match("xxx\\nFREMD00012EIGEN00000EUcc\n\nsss<");
 		
 		System.out.println(values[1]); // -> 00012
 		System.out.println(values[2]); // -> 00000

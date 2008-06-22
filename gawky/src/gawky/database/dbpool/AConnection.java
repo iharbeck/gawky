@@ -21,9 +21,14 @@ import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 public class AConnection implements Connection 
 {
+	private static Log log = LogFactory.getLog(AConnection.class);
+	
     private AConnectionPool pool;
     private Connection conn;
     private boolean inuse;
@@ -84,6 +89,7 @@ public class AConnection implements Connection
     }
 
     public void close() throws SQLException {
+    	log.info("closed [" + this + "]");
         pool.returnConnection(this);
     }
 
