@@ -37,6 +37,11 @@ public class Ftp extends BaseFtp
 	{
 		open(server, user, pass, port, null);
 	}
+	
+	public void mkdir(String pathname) throws Exception
+	{
+		ftp.mkd(pathname);
+	}
 
 	public void open(String server, String user, String pass, int port, String option) throws Exception 
 	{
