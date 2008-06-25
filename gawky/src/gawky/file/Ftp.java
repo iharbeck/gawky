@@ -38,9 +38,21 @@ public class Ftp extends BaseFtp
 		open(server, user, pass, port, null);
 	}
 	
-	public void mkdir(String pathname) throws Exception
-	{
+	public void mkdir(String pathname) throws Exception {
 		ftp.mkd(pathname);
+	}
+	
+	public static void mkdirhost(String url) throws Exception
+	{
+		URLParser uparser = new URLParser(url);
+		
+		Ftp ftp = new Ftp(uparser.getServer(), uparser.getUser(), uparser.getPass(), Integer.parseInt(uparser.getPort()));
+
+		try {
+			ftp.mkdir(uparser.getServerpath());
+		} finally {
+			ftp.close();
+		}
 	}
 
 	public void open(String server, String user, String pass, int port, String option) throws Exception 
