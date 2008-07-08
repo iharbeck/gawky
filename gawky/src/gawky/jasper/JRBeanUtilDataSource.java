@@ -30,13 +30,6 @@ public class JRBeanUtilDataSource implements JRDataSource
 			// Indexed parameters described as [x] in Report 
 			path = path.replaceAll("\\[x\\]", "[" + (row) + "]");
 			
-			if (bean instanceof HashMap) {
-				if(!((HashMap)bean).containsKey(path))
-					return "$$" + path + "$$";
-				else
-					return ((HashMap)bean).get(path);
-			}
-			
 			if(path.startsWith("#") && bean instanceof Hashprovider)
 			{
 				path = path.substring(1);
@@ -47,6 +40,15 @@ public class JRBeanUtilDataSource implements JRDataSource
 				else
 					return value;
 			}
+			
+			if (bean instanceof HashMap) {
+				if(!((HashMap)bean).containsKey(path))
+					return "$$" + path + "$$";
+				else
+					return ((HashMap)bean).get(path);
+			}
+			
+		
 				
 			// TODO: implement cached version
 			return PropertyUtils.getProperty(bean, path);  //return BeanUtils.getProperty(bean, path);
