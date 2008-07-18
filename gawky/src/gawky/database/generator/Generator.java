@@ -211,7 +211,7 @@ public class Generator
 			params.deleteCharAt(params.length()-1);
 		}
 
-		if(bean.getDescIDs()[0] != null) // descid != null)
+		if(bean.getDescIDs().length > 0) // descid != null)
 		{
 			if(bean.getIdgenerator() != null && bean.getIdgenerator().getSequence() != null) {
 				// ID definiert
@@ -460,20 +460,25 @@ public class Generator
 		}
 	}
 
-	public final StringBuilder generatePsWHERE(Table bean) {
+	public final StringBuilder generatePsWHERE(Table bean) 
+	{
+		Desc[] descids = bean.getDescIDs();
 
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(" WHERE ");
+		if(descids.length == 0) 
+			return sql;
 
-		Desc[] descids = bean.getDescIDs();
-		sql.append("a.").append(descids[0].dbname).append("=?");
+		sql.append(" WHERE ");
+		sql.append("a.")
+		   .append(descids[0].dbname)
+		   .append("=?");
 
 		for(int i=1; i < descids.length; i++)
 	    {
 			sql.append(" AND a.").append(descids[i].dbname).append("=?");
 	    }
-
+		
 		return sql;
 	}
 

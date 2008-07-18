@@ -22,9 +22,16 @@ public class WBXMLConverter
 	public static void main(String[] args) {
 		try {
 	
-		if (args[0].equalsIgnoreCase("-encode")) {
-			String xml_filename = args[1];
-			String wbxml_filename = args[2];
+		//if (args[0].equalsIgnoreCase("-encode")) 
+		
+		{
+//			String xml_filename = args[1];
+//			String wbxml_filename = args[2];
+
+			String xml_filename = "c:/Series_40_v72_VoIP_Settings_Example.xml";
+			String wbxml_filename = "c:/Series_40_v72_VoIP_Settings_Example.xml.prov";
+
+			
 			System.out.println("Encoding XML file " + xml_filename + "...");
 
 			try {
@@ -49,30 +56,30 @@ public class WBXMLConverter
 			}
 			return;
 		}
-		if (args[0].equalsIgnoreCase("-decode")) {
-			String wbxml_filename = args[1];
-			String xml_filename = args[2];
-			System.out.println("Decoding WBXML file " + wbxml_filename + "...");
-			try {
-				FileInputStream tokenStream = new FileInputStream(wbxml_filename);
-				FileOutputStream xmlStream = new FileOutputStream(xml_filename);
-				Document document = WBXMLDecoder.getInstance().decode(tokenStream);
-				OutputFormat of = new OutputFormat(document);
-				XMLSerializer serial = new XMLSerializer(xmlStream,of);
-				serial.setOutputByteStream(xmlStream);
-				serial.setOutputFormat(of);
-				serial.asDOMSerializer();
-				serial.serialize(document);
-				xmlStream.close();  
-				tokenStream.close();
-			} catch (Exception exp) {
-				System.out.println(
-					"Error while decoding WBXML file " + wbxml_filename + "!\n\n");
-				exp.printStackTrace();
-				printUsage();
-			}
-			return;
-		}
+//		if (args[0].equalsIgnoreCase("-decode")) {
+//			String wbxml_filename = args[1];
+//			String xml_filename = args[2];
+//			System.out.println("Decoding WBXML file " + wbxml_filename + "...");
+//			try {
+//				FileInputStream tokenStream = new FileInputStream(wbxml_filename);
+//				FileOutputStream xmlStream = new FileOutputStream(xml_filename);
+//				Document document = WBXMLDecoder.getInstance().decode(tokenStream);
+//				OutputFormat of = new OutputFormat(document);
+//				XMLSerializer serial = new XMLSerializer(xmlStream,of);
+//				serial.setOutputByteStream(xmlStream);
+//				serial.setOutputFormat(of);
+//				serial.asDOMSerializer();
+//				serial.serialize(document);
+//				xmlStream.close();  
+//				tokenStream.close();
+//			} catch (Exception exp) {
+//				System.out.println(
+//					"Error while decoding WBXML file " + wbxml_filename + "!\n\n");
+//				exp.printStackTrace();
+//				printUsage();
+//			}
+//			return;
+//		}
 		} catch (Exception exp) {
 					System.out.println(
 						"Error!You haven't entered the required arguments for using WBXML Parser");

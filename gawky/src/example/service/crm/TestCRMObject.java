@@ -123,7 +123,7 @@ public class TestCRMObject {
        //Comm.setServer("debmu720", 31999);
        //Comm.setServer("lnxcrm01", 31680);
        //Client client = new Client("crmtest.bertelsmann.de", 31680);
-       Client client = new Client("debmu720", 31680);
+       Client client = new Client("degtlun2056.server.arvato-systems.de", 31680);
        
        // SSL
        //Comm.setServer("crm.bertelsmann.de", 31682, "storepath", "passphrase");

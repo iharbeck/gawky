@@ -143,7 +143,7 @@ public class Format {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(decimalformat("1234567,89"));
+		System.out.println(decimalformat("123456789"));
 	}
 	
 	

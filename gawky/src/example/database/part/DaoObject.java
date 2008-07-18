@@ -24,7 +24,7 @@ public class DaoObject extends Table {
 		
 		return new Desc[]  {
 		
-			new Column("kunde_id").setPrimary(),
+			new Column("kunde_id"), //.setPrimary(),
 			new Column("name")
 		};
 	}
@@ -43,9 +43,9 @@ public class DaoObject extends Table {
 		
 		DaoObject daoobject = new DaoObject();
 		
-	//	daoobject.setName("HELO");
-	//	daoobject.setKunde_id("45");
-	//	daoobject.insert(conn);
+		daoobject.setName("HELO");
+		daoobject.setKunde_id("1");
+		daoobject.insert(conn);
 		
 		daoobject.find(conn, "45");
 		

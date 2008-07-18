@@ -17,10 +17,10 @@ public class TestMail {
 //							"Test subject", "Hello");
 		
 		Mail.sendMailAttachStream("ingo.harbeck@bertelsmann.de", "ingo harbeck", 
-				//"andreas.thiessen@bertelsmann.de", "Andreas Thiesen", 
+				//"oliver.glowa@bertelsmann.de", "Andreas Thiesen", 
 				"ingo.harbeck@bertelsmann.de", "ingo harbeck",
 				"Mobile Rechnung", "Schon bezahlt?",
-				  new FileInputStream("D:/work/badc/output/rechnung002.pdf"), "rechnung.pdf");
+				  new FileInputStream("d:/ticket.pdf"), "rechnung.pdf");
 		
 	}
 }
