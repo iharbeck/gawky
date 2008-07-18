@@ -3,6 +3,7 @@ package gawky.global;
 import gawky.database.DB;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
@@ -137,6 +138,13 @@ public class Option
 		}
 	}
 	
+	static void printHelp(String processname) {
+		// automatically generate the help statement
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp( processname, options );
+
+		System.exit(0);
+	}
 	/**
 	 * Initialze Global properties with custom properties file name
 	 * 
@@ -158,7 +166,8 @@ public class Option
 			// XML Configfile
 			config = new XMLConfiguration();
 			config.setEncoding("UTF8");
-			config.load(propfile);
+			if(propfile != null && propfile.length() > 0)
+				config.load(propfile);
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
 		} catch(Exception e) {
@@ -168,25 +177,20 @@ public class Option
 		
 		boolean hascmd = isClassInPath("org.apache.commons.cli.CommandLineParser", 
 				                       "Commandline parser disabled Lib is missing!");
-		if(hascmd)
+		if(hascmd && options != null)
 		{
-			initOption();
+			// keine default options mehr
+			// initDefaultOptions(); 
 			
 			try {			
-				cmd = new PosixParser().parse(options, args);
+				//cmd = new PosixParser().parse(options, args);
+				cmd = new GnuParser().parse(options, args);
 			} catch (Exception e) {
-				log.error(e);
-				throw e;
+				printHelp(processname);
 			}
 		
 			if(cmd.hasOption(HELP))
-			{
-				// automatically generate the help statement
-				HelpFormatter formatter = new HelpFormatter();
-				formatter.printHelp( processname, options );
-				
-				System.exit(0);
-			}
+				printHelp(processname);
 		}
 		
 		// DB initialisieren
@@ -236,59 +240,50 @@ public class Option
 		
 		return options;
 	}
+
+	public static void addOption(String opt, boolean args, String description) {
+		addOption(opt, args, description, false);
+	}
 	
-	private static void initOption() 
+	public static void addOption(String opt, boolean args, String description, boolean required) {
+		options = getOptions();
+
+		if(!options.hasOption(opt)) {
+			
+			org.apache.commons.cli.Option option = new org.apache.commons.cli.Option(opt, args, description);
+			option.setRequired(required);
+			
+			options.addOption(option);
+		}
+	}
+	
+	public static void initDefaultOptions() 
 	{
 		// check if options already registered
 		// add default options (shorty, value, description)
 
-		if(options == null)
-			options = new Options();
-		
-		if(!options.hasOption(PORT)) 
-			options.addOption(PORT, PORT, true,  "set listener port number (5001-49151)");
-		if(!options.hasOption("a")) 
-			options.addOption("a", "a", true,  "set interface address for listener (NONE = INADDR_ANY)");
-		if(!options.hasOption("b")) 
-			options.addOption("b", "b", true,  "set backlog values for listen function");
-		if(!options.hasOption("r")) 
-			options.addOption("r", "r", false, "log requests into separate files");
-		if(!options.hasOption("k")) 
-			options.addOption("k", "k", false, "kill and replace old server process (for release upgrades with minimized downtime)");
-		if(!options.hasOption(VALIDIP)) 
-			options.addOption(VALIDIP, VALIDIP, true,  "set a list of request IP addresses (HEX-form) to ignore (for load balancer checks)");
-		if(!options.hasOption("n")) 
-			options.addOption("n", "n", false, "do NOT perform active close of socket connection on server side (avoid TCP_WAIT states)");
-		if(!options.hasOption("N")) 
-			options.addOption("N", "N", false, "do NOT fork (for debugging purposes)");
-		if(!options.hasOption("W")) 
-			options.addOption("W", "W", false, "wait for SIGTERM or debugger after fork (for debugging purposes)");
-		if(!options.hasOption(TIMEOUT)) 
-			options.addOption(TIMEOUT, TIMEOUT, true,  "Maximum number of seconds a childs waits for data (timeout)");
-		if(!options.hasOption("m")) 
-			options.addOption("m", "m", true,  "Maximum number of seconds for application to process before terminating the process");
-		if(!options.hasOption("R")) 
-			options.addOption("R", "R", false, "Try to reconnect in batch mode, if DB connection lost (production stability)");
-		if(!options.hasOption("d")) 
-			options.addOption("d", "d", true,  "set database connect string");
-		if(!options.hasOption("B")) 
-			options.addOption("B", "B", true,  "set backup server ID (empty for primary) for processes supporting replication");
-		if(!options.hasOption("I")) 
-			options.addOption("I", "I", false, "ignore (date) plausibility checks for requests (for testing)");
-		if(!options.hasOption(LOGFILE)) 
-			options.addOption(LOGFILE, LOGFILE, true,  "set log output target file (NONE = stderr)");
-		if(!options.hasOption("v")) 
-			options.addOption("v", "v", true,  "set verbose level (0-9)");
-		if(!options.hasOption("T")) 
-			options.addOption("T", "T", false, "turn on SQL-Trace for all transactions (whatever database supports)");
-		if(!options.hasOption("U")) 
-			options.addOption("U", "U", false, "set default encoding for parsed requests to UTF8");
-		if(!options.hasOption("1")) 
-			options.addOption("1", "1", false, "set default encoding for parsed requests to iso8859-1");
-		if(!options.hasOption(HELP)) 
-			options.addOption(HELP, HELP, true,  "show Arguments");
-		if(!options.hasOption(SSLMODE)) 
-			options.addOption(SSLMODE, SSLMODE, true,  "run in SSL mode");
+		addOption(PORT,    true,  "set listener port number (5001-49151)");
+		addOption("a",     true,  "set interface address for listener (NONE = INADDR_ANY)");
+		addOption("b",     true,  "set backlog values for listen function");
+		addOption("r",     false, "log requests into separate files");
+		addOption("k",     false, "kill and replace old server process (for release upgrades with minimized downtime)");
+		addOption(VALIDIP, true,  "set a list of request IP addresses (HEX-form) to ignore (for load balancer checks)");
+		addOption("n",     false, "do NOT perform active close of socket connection on server side (avoid TCP_WAIT states)");
+		addOption("N",     false, "do NOT fork (for debugging purposes)");
+		addOption("W",     false, "wait for SIGTERM or debugger after fork (for debugging purposes)");
+		addOption(TIMEOUT, true,  "Maximum number of seconds a childs waits for data (timeout)");
+		addOption("m",     true,  "Maximum number of seconds for application to process before terminating the process");
+		addOption("R",     false, "Try to reconnect in batch mode, if DB connection lost (production stability)");
+		addOption("d",     true,  "set database connect string");
+		addOption("B",     true,  "set backup server ID (empty for primary) for processes supporting replication");
+		addOption("I",     false, "ignore (date) plausibility checks for requests (for testing)");
+		addOption(LOGFILE, true,  "set log output target file (NONE = stderr)");
+		addOption("v",     true,  "set verbose level (0-9)");
+		addOption("T",     false, "turn on SQL-Trace for all transactions (whatever database supports)");
+		addOption("U",     false, "set default encoding for parsed requests to UTF8");
+		addOption("1",     false, "set default encoding for parsed requests to iso8859-1");
+		addOption(HELP,    true,  "show Arguments");
+		addOption(SSLMODE, true,  "run in SSL mode");
 	}
 	
 	
