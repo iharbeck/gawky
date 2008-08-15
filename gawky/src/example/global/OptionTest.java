@@ -7,11 +7,11 @@ public class OptionTest {
 	public static void main(String[] args) throws Exception
 	{
 		//Option.initDefaultOptions();
-		Option.addOption("xxxx", true, "TESTOPTION");
+		Option.addOption("fest", "fe.st", true, "TESTOPTION");
 		
-		Option.init(null, "OptionTest", args);
+		Option.init(null, "OptionTest", new String [] {"--fe.st=dd"} );
 		
-		System.out.println(":" + Option.getProperty("xxxx", "default"));
+		System.out.println(":" + Option.getProperty("fest", "default"));
 		
 	}
 	

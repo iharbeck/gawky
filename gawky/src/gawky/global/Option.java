@@ -2,6 +2,7 @@ package gawky.global;
 
 import gawky.database.DB;
 
+import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -183,9 +184,11 @@ public class Option
 			// initDefaultOptions(); 
 			
 			try {			
-				//cmd = new PosixParser().parse(options, args);
-				cmd = new GnuParser().parse(options, args);
+				cmd = new PosixParser().parse(options, args);
+				//cmd = new GnuParser().parse(options, args);
+				//cmd = new BasicParser().parse(options, args);
 			} catch (Exception e) {
+				System.out.println(e);
 				printHelp(processname);
 			}
 		
@@ -242,15 +245,23 @@ public class Option
 	}
 
 	public static void addOption(String opt, boolean args, String description) {
-		addOption(opt, args, description, false);
+		addOption(opt, opt, args, description, false);
+	}
+
+	public static void addOption(String opt, boolean args, String description, boolean required) {
+		addOption(opt, opt, args, description, required);
 	}
 	
-	public static void addOption(String opt, boolean args, String description, boolean required) {
+	public static void addOption(String opt, String optLong, boolean args, String description) {
+		addOption(opt, optLong, args, description, false);
+	}
+	
+	public static void addOption(String opt, String optLong, boolean args, String description, boolean required) {
 		options = getOptions();
 
 		if(!options.hasOption(opt)) {
 			
-			org.apache.commons.cli.Option option = new org.apache.commons.cli.Option(opt, args, description);
+			org.apache.commons.cli.Option option = new org.apache.commons.cli.Option(opt, optLong, args, description);
 			option.setRequired(required);
 			
 			options.addOption(option);
