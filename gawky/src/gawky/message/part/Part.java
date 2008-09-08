@@ -167,6 +167,7 @@ public abstract class Part implements Cloneable
 		String folder = "file://" + Locator.findBinROOT() + "worker/";
 
 		log.info("JavaAssist folder: " + folder);
+
 		ClassLoader urlCl = null;
 
 		try {
@@ -362,6 +363,14 @@ public abstract class Part implements Cloneable
 	{
 		if(cloned) {
 			return !((Part)this.getBackup()).toString().equals(this.toString());
+		}else
+			return true;
+	}
+	
+	public boolean isDirty(String field) 
+	{
+		if(cloned) {
+			return !((Part)this.getBackup()).getValue(field).equals(this.getValue(field));
 		}else
 			return true;
 	}
