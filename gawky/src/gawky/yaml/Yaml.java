@@ -21,9 +21,9 @@ public class Yaml
 		return this;
 	}
 	
-	public String getString(String path) throws Exception 
+	public String getString(String path) 
 	{
-		return (String)PropertyUtils.getProperty(object, path);
+		return (String)getString(path, null);
 	}
 	
 	public String getString(String path, String def) 
@@ -35,9 +35,9 @@ public class Yaml
 		}
 	}
 	
-	public Object getObject(String path) throws Exception 
+	public Object getObject(String path) 
 	{
-		return PropertyUtils.getProperty(object, path);
+		return getObject(path, null);
 	}
 	
 	public Object getObject(String path, String def) 
@@ -54,21 +54,32 @@ public class Yaml
 		String file = Locator.findPath("contact.yml", Yaml.class);
 
 		Yaml yaml = new Yaml();
-		yaml.read(new FileReader(file));
-	
-		System.out.println("==== Benutzer ====");
-		System.out.println(yaml.getString("(name)"));
-		System.out.println(yaml.getString("(age)"));
-		System.out.println(yaml.getString("(address)"));
-
-		System.out.println("==== Telefon export ====");
-		System.out.println(yaml.getString("(phone numbers)[0](name)"));
-		System.out.println(yaml.getString("(phone numbers)[0](number)"));
 		
-		System.out.println("==== Telefonnummer ====");
-		Object obj = yaml.getObject("(phone numbers)");
+		yaml.read(new FileReader(file));
+		
+		Object obj = yaml.getObject("(members)[0]");
+
+		System.out.println("==== BNZ ====");
+		System.out.println(yaml.getString("(members)[0](name)"));
+		System.out.println(yaml.getString("(members)[0](age)"));
+		System.out.println(yaml.getString("(members)[0](address)"));
+
+		System.out.println("");
+		System.out.println("==== TEL ====");
+		System.out.println(yaml.getString("(members)[0](phone numbers)[0](name)"));
+		System.out.println(yaml.getString("(members)[0](phone numbers)[0](number)"));
+		
+		System.out.println("");
+		System.out.println("==== ARY ====");
 		System.out.println(obj);
 
+		System.out.println(""); 
+		System.out.println("====");
 		System.out.println(yaml.getString("(bar)[0]"));
+		
+		System.out.println(yaml.getObject("(texte)(anrede)(de)"));
+		System.out.println(yaml.getObject("(texte)(anrede)(en)"));
+		System.out.println(yaml.getObject("(texte)(anschreiben)(de)"));
+		System.out.println(yaml.getObject("(texte)(anschreiben)(en)"));
 	}
 }
