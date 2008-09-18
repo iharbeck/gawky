@@ -1,7 +1,6 @@
 package gawky.database.generator;
 
 import gawky.database.DB;
-import gawky.database.part.Column;
 import gawky.database.part.Table;
 import gawky.global.Option;
 import gawky.message.Formatter;
@@ -31,8 +30,8 @@ public class Generator
 	private static boolean dotrim = false;
 	private static boolean doclone = false;
 
-	SimpleDateFormat df_YYYYMMDD       = new SimpleDateFormat("yyyyMMdd");
-	SimpleDateFormat df_YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
+	public static SimpleDateFormat df_YYYYMMDD       = new SimpleDateFormat("yyyyMMdd");
+	public static SimpleDateFormat df_YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	Locale locale = new Locale("de", "DE");
 
