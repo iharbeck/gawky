@@ -204,10 +204,10 @@ public abstract class Part implements Cloneable
 					// **CACHING
 					//if(!Option.isClassInClassloader(urlCl, proxycname, ""))
 					{
-						CtClass cc = pool.getCtClass(proxycname);
-						
-						if(cc == null) // Class already in pool
-						{
+						CtClass cc = null;
+						try {
+							cc = pool.getCtClass(proxycname);
+						} catch (Exception e) {  // Class not already in pool
 							log.info("Generating Proxyclass: " + proxycname);
 							
 							cc = pool.makeClass(proxycname);
