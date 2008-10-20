@@ -40,6 +40,9 @@ public class Generator
 
 	NumberFormat fmt;
 
+	
+	boolean debug = true;
+	
 	public Generator() {
 		fmt = NumberFormat.getInstance(Locale.ENGLISH);
 		fmt.setGroupingUsed(false);
@@ -75,10 +78,24 @@ public class Generator
 
 		String val = null;
 
+
+		if(debug)
+			System.out.println(" -------------------- ");
+		
 		int x = 0;
 		for(int i=0; i < descs.length; i++)
 		{
 			desc = descs[i];
+			
+			
+			if(debug) {
+				try {
+					System.out.println(desc.dbname + " : " + rset.getString(x+1));
+				} catch (Exception e) {
+					System.out.println(desc.dbname + " : " + e);
+				}
+			}
+
 
 			if(desc.dbname == null || desc.nostore)
 				continue;
@@ -552,10 +569,21 @@ public class Generator
 
 		int setter = 0;
 
+		if(debug)
+			System.out.println(" ------------------------------ ");
+		
 		for(int i = 0; i < descs.length; i++)
 		{
 			desc = descs[i];
 
+			if(debug) {
+				try {
+					System.out.println(desc.dbname + " : " + desc.getValue(bean));
+				} catch (Exception e) {
+					System.out.println(desc.dbname + " : " + e);
+				}
+			}
+			
 			if(desc.dbname == null || desc.nostore)
 				continue;
 

@@ -357,7 +357,7 @@ public class Scp implements URLInterface
 		return b;
 	}
 
-	public static class StaticUserInfo implements UserInfo  , UIKeyboardInteractive  {
+	public static class StaticUserInfo implements UserInfo, UIKeyboardInteractive  {
 
 		public String[] promptKeyboardInteractive(String destination,
 				String name, String instruction, String[] prompt, boolean[] echo) {

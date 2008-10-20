@@ -168,15 +168,15 @@ public abstract class Part implements Cloneable
 
 		log.info("JavaAssist folder: " + folder);
 
-		ClassLoader urlCl = null;
-
-		try {
-			urlCl  = URLClassLoader.newInstance(
-					    new URL[]{new URL( folder )});
-		} catch(Exception e) {
-			log.error("Missing temp folder: " + folder);
-			hasJavaAssist = false;
-		}
+//		ClassLoader urlCl = null;
+//
+//		try {
+//			urlCl  = URLClassLoader.newInstance(
+//					    new URL[]{new URL( folder )});
+//		} catch(Exception e) {
+//			log.error("Missing temp folder: " + folder);
+//			hasJavaAssist = false;
+//		}
 
 		if(hasJavaAssist)
 		{
@@ -204,31 +204,37 @@ public abstract class Part implements Cloneable
 					// **CACHING
 					//if(!Option.isClassInClassloader(urlCl, proxycname, ""))
 					{
-						log.info("Generating Proxyclass: " + proxycname);
-						CtClass cc = pool.makeClass(classname + "Accessor" + mname);
-
-						cc.addInterface( pool.get(Accessor.class.getName()) );
-
-						// Create setter
-						CtMethod ms = CtNewMethod.make(
-								" public final void setValue(Object bean, String value) throws Exception {" +
-								"  ((" + classname + ")bean).set" + mname + "(value); " +
-								" } "
-								, cc);
-						cc.addMethod(ms);
-
-						// Create getter
-						CtMethod mg = CtNewMethod.make(
-								" public final String getValue(Object bean) throws Exception {" +
-								"  return ((" + classname + ")bean).get" + mname + "(); " +
-								" } "
-								, cc);
-						cc.addMethod(mg);
-
-						// Generate Class files ** CACHING
-						//cc.writeFile(Locator.findBinROOT() + "worker");
-						//cc.detach();
-
+						CtClass cc = pool.getCtClass(proxycname);
+						
+						if(cc == null) // Class already in pool
+						{
+							log.info("Generating Proxyclass: " + proxycname);
+							
+							cc = pool.makeClass(proxycname);
+	
+							cc.addInterface( pool.get(Accessor.class.getName()) );
+	
+							// Create setter
+							CtMethod ms = CtNewMethod.make(
+									" public final void setValue(Object bean, String value) throws Exception {" +
+									"  ((" + classname + ")bean).set" + mname + "(value); " +
+									" } "
+									, cc);
+							cc.addMethod(ms);
+	
+							// Create getter
+							CtMethod mg = CtNewMethod.make(
+									" public final String getValue(Object bean) throws Exception {" +
+									"  return ((" + classname + ")bean).get" + mname + "(); " +
+									" } "
+									, cc);
+							cc.addMethod(mg);
+	
+							// Generate Class files ** CACHING
+							//cc.writeFile(Locator.findBinROOT() + "worker");
+							//cc.detach();
+						}
+						
 						// Alternative if not written to local disk (no detach!!)
 						descs[i].accessor = (Accessor)cc.toClass().newInstance();
 					}
