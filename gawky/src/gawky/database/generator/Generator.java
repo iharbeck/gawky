@@ -41,7 +41,7 @@ public class Generator
 	NumberFormat fmt;
 
 	
-	boolean debug = true;
+	boolean debug = false;
 	
 	public Generator() {
 		fmt = NumberFormat.getInstance(Locale.ENGLISH);

@@ -21,6 +21,8 @@ import javassist.CtNewMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
+
 public abstract class Part implements Cloneable
 {
 	Log log = LogFactory.getLog(Part.class);
@@ -155,7 +157,7 @@ public abstract class Part implements Cloneable
 		return p;
 	}
 
-	protected final synchronized Desc[] getOptDesc() {
+	protected final Desc[] getOptDesc() {
 
 		Desc[] descs = getDesc();
 
@@ -263,6 +265,8 @@ public abstract class Part implements Cloneable
 
 		descAfterInterceptor(descs);
 
+		cacheddesc = descs;
+		
 		return descs;
 	}
 
@@ -270,15 +274,19 @@ public abstract class Part implements Cloneable
 
 	Desc[] cacheddesc = null;
 
-	public final Desc[] getCachedDesc()
+	public Desc[] getCachedDesc()
 	{
 		if(cacheddesc != null)
 			return cacheddesc;
 
-		cacheddesc = (Desc[])hmDesc.get(getClass());
-		if(cacheddesc == null) {
-			cacheddesc = getOptDesc();
-			hmDesc.put(getClass(), cacheddesc);
+		synchronized (hmDesc) 
+		{
+			cacheddesc = (Desc[])hmDesc.get(getClass());
+			
+			if(cacheddesc == null) {
+				cacheddesc = getOptDesc();
+				hmDesc.put(getClass(), cacheddesc);
+			}
 		}
 
 		return cacheddesc;
