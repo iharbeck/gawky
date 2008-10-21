@@ -155,7 +155,7 @@ public abstract class Part implements Cloneable
 		return p;
 	}
 
-	protected final Desc[] getOptDesc() {
+	protected final synchronized Desc[] getOptDesc() {
 
 		Desc[] descs = getDesc();
 
