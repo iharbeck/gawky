@@ -206,12 +206,12 @@ public abstract class Part implements Cloneable
 					{
 						CtClass cc = null;
 						try {
-							cc = pool.getCtClass(proxycname);
+							cc = pool.get(proxycname);
 						} catch (Exception e) {  // Class not already in pool
 							log.info("Generating Proxyclass: " + proxycname);
 							
 							cc = pool.makeClass(proxycname);
-	
+
 							cc.addInterface( pool.get(Accessor.class.getName()) );
 	
 							// Create setter
