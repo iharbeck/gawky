@@ -7,8 +7,6 @@ import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.HashMap;
 
 import javassist.ClassClassPath;
@@ -20,8 +18,6 @@ import javassist.CtNewMethod;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
 public abstract class Part implements Cloneable
 {
@@ -293,12 +289,14 @@ public abstract class Part implements Cloneable
 		return cacheddesc;
 	}
 
-	public final String toString()
+	@Deprecated
+	public String toString()
 	{
 		return getGenerator().generateString(this);
 	}
 
-	public final String toDebugString()
+	@Deprecated
+	public String toDebugString()
 	{
 		return getGenerator().generateDebugString(this);
 	}
@@ -306,12 +304,33 @@ public abstract class Part implements Cloneable
 	/**
 	 * for spezialized Generators
 	 */
-	public final String toString(Generator extgenerator)
+	@Deprecated
+	public String toString(Generator extgenerator)
 	{
 		return extgenerator.generateString(this);
 	}
 
-	public final byte[] getBytes(String charset) throws UnsupportedEncodingException
+	public String generateString()
+	{
+		return getGenerator().generateString(this);
+	}
+
+	public String generateDebugString()
+	{
+		return getGenerator().generateDebugString(this);
+	}
+
+	/**
+	 * for spezialized Generators
+	 */
+	public String generateString(Generator extgenerator)
+	{
+		return extgenerator.generateString(this);
+	}
+
+	
+
+	public byte[] getBytes(String charset) throws UnsupportedEncodingException
 	{
 		return toString().getBytes(charset);
 	}
@@ -389,5 +408,4 @@ public abstract class Part implements Cloneable
 		}else
 			return true;
 	}
-	
 }
