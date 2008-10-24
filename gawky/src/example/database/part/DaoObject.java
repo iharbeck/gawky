@@ -22,6 +22,7 @@ public class DaoObject extends Table {
 	  //setDescID(0, IDGenerator.ID_SEQUENCE("mymy.nextval"));  // ORACLE
 		
 		
+		
 		return new Desc[]  {
 		
 			new Column("kunde_id"), //.setPrimary(),

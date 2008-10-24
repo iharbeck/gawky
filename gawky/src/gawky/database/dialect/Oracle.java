@@ -6,6 +6,10 @@ public class Oracle implements Dialect
 		return "SELECT " + param + ".currval FROM DUALS";
 	}
 	
+	public String getSequence(String param) {
+		return param + ".nextval";
+	}
+	
 	public String getTypeString() {
 		return "";
 	}

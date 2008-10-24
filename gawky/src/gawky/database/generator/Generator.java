@@ -229,7 +229,7 @@ public class Generator
 
 		if(bean.getDescIDs().length > 0) // descid != null)
 		{
-			if(bean.getIdgenerator() != null && bean.getIdgenerator().getSequence() != null) {
+			if(bean.getIdgenerator() != null && bean.getIdgenerator().getSequence(bean) != null) {
 				// ID definiert
 
 				// ## bean.getIdgenerator() == null 			 --> manual id
@@ -241,7 +241,7 @@ public class Generator
 					params.append(",");
 				}
 			    sql.append(bean.getDescIDs()[0].dbname);
-			    params.append(bean.getIdgenerator().getSequence()); // generate Methode einfügen
+			    params.append(bean.getIdgenerator().getSequence(bean)); // generate Methode einfügen
 
 			    bean.setParameter(false);
 			} else { // if(descid != null) /* && bean.getIdgenerator().getSequence() != null) */ {

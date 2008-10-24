@@ -16,8 +16,8 @@ public class IDGenerator {
 	public IDGenerator(String seq) {
 		this.seq = seq;
 	}
-	public String getSequence() {
-		return seq;
+	public String getSequence(Table table) {
+		return table.getDialect().getSequence(seq);
 	}
 	
 	public String getGeneratedID(Connection conn, Table table) throws Exception{

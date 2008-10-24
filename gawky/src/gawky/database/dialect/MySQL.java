@@ -13,4 +13,9 @@ public class MySQL implements Dialect
 	public String getTypeID() {
 		return "";
 	}
+
+	public String getSequence(String param)
+	{
+		return null;
+	}
 }
