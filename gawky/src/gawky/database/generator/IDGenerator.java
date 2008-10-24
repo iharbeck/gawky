@@ -16,10 +16,23 @@ public class IDGenerator {
 	public IDGenerator(String seq) {
 		this.seq = seq;
 	}
+	
+	/**
+	 * Get Expression for sequence generation
+	 * @param table
+	 * @return
+	 */
 	public String getSequence(Table table) {
 		return table.getDialect().getSequence(seq);
 	}
 	
+	/**
+	 * 
+	 * @param conn
+	 * @param table
+	 * @return Last generated ID
+	 * @throws Exception
+	 */
 	public String getGeneratedID(Connection conn, Table table) throws Exception{
 			
 		//manuel -> referenz
@@ -41,5 +54,10 @@ public class IDGenerator {
 	public final static IDGenerator ID_AUTO()
 	{
 		return new IDGenerator(null);
+	}
+	
+	public final static IDGenerator ID_MAX(String sql)
+	{
+		return new IDGeneratorSQL(sql);
 	}
 }
