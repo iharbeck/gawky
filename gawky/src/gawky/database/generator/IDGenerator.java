@@ -56,8 +56,13 @@ public class IDGenerator {
 		return new IDGenerator(null);
 	}
 	
-	public final static IDGenerator ID_MAX(String sql)
+	public final static IDGenerator ID_SQL(String sql)
 	{
 		return new IDGeneratorSQL(sql);
+	}
+	
+	public final static IDGenerator ID_MAX()
+	{
+		return new IDGeneratorMAX();
 	}
 }
