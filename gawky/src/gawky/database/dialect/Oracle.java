@@ -3,7 +3,7 @@ package gawky.database.dialect;
 public class Oracle implements Dialect 
 {
 	public String getLastIDQuery(String param) {
-		return "SELECT " + param + ".currval FROM DUALS";
+		return "SELECT " + param + ".currval FROM dual";
 	}
 	
 	public String getSequence(String param) {
