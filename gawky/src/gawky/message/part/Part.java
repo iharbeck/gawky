@@ -43,7 +43,7 @@ public abstract class Part implements Cloneable
 		return null;
 	}
 
-	abstract public Desc[] getDesc();
+	abstract protected Desc[] getDesc();
 
 	public void descAfterInterceptor(Desc[] descs) {
 

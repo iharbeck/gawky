@@ -20,7 +20,7 @@ public class IDGeneratorMAX extends IDGenerator
 	public String getSequence(Table table) {
 		
 		if(sql == null) {
-			sql = "SELECT max(" + table.getDescIDs()[0].dbname + ") FROM " + table.getTableName();
+			sql = "SELECT max(" + table.getDescIDs()[0].dbname + ")+1  FROM " + table.getTableName();
 		}
 		
 		try {

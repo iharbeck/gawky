@@ -7,7 +7,7 @@ public class UtilGenerator
 {
 	public static void generateVars(Part part) 
 	{
-		Desc[] descs = part.getDesc();
+		Desc[] descs = part.getCachedDesc();
 		
 		for(int i=0; i < descs.length; i++){
 			if(descs[i].format != Desc.FMT_CONSTANT)

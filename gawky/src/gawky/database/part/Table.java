@@ -118,7 +118,7 @@ public abstract class Table extends Part
 		return getStaticLocal().parameter;
 	}
 
-	abstract public Desc[] getDesc();
+	abstract protected Desc[] getDesc();
 	abstract public String getTableName();
 
 	

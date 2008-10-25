@@ -22,7 +22,7 @@ public class Dispatcher {
 		try {
 			// Store clazz
 			// Get Desc Object
-			((Part)clazz.newInstance()).getDesc();
+			((Part)clazz.newInstance()).getCachedDesc();
 			
 		} catch (Exception e) {
 			
