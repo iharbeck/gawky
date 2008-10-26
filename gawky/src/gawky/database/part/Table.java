@@ -45,7 +45,7 @@ public abstract class Table extends Part
 
 		public Desc[] descIds = null;
 
-		IDGenerator idgenerator   = null;
+		//IDGenerator idgenerator   = null;
 
 		Generator generator       = new Generator();
 		Dialect dialect           = new MySQL();
@@ -122,10 +122,10 @@ public abstract class Table extends Part
 	abstract public String getTableName();
 
 	
-	public void setIDGenerator(IDGenerator idgenerator) {
-		StaticLocal local = getStaticLocal();
-		local.idgenerator = idgenerator;
-	}
+//	public void _setIDGenerator(IDGenerator idgenerator) {
+//		StaticLocal local = getStaticLocal();
+//		local.idgenerator = idgenerator;
+//	}
 
 	public final boolean isPrimary(Desc desc) {
 		Desc[] descs = getStaticLocal().descIds;
@@ -274,8 +274,8 @@ public abstract class Table extends Part
 	
 			try {
 				// versuche to generierte ID zu ermitteln und im Object abzulegen
-				if(getIdgenerator() != null)
-					getDescIDs()[0].setValue(this, getIdgenerator().getGeneratedID(conn, this));
+				if(getPrimdesc().getIDGenerator() != null)
+					getPrimdesc().setValue(this, getPrimdesc().getIDGenerator().getGeneratedID(conn, this));
 			} catch (Exception e) {
 				log.error("insert Record", e);
 			}
@@ -319,29 +319,23 @@ public abstract class Table extends Part
 		}
 	}
 
-	public String getID() throws Exception
+	Desc primdesc = null;
+	
+	public Desc getPrimdesc() 
 	{
-		getCachedDesc();
-		Desc[] descids = getDescIDs();
+		if(primdesc == null)
+			primdesc = getDescIDs()[0];
 
-		return descids[0].getValue(this);
+		return primdesc;	
 	}
-
-	public void setID(String id) throws Exception
-	{
-		getCachedDesc();
-		Desc[] descids = getDescIDs();
-
-		descids[0].setValue(this, id);
-	}
-
+	
 	public void find() throws Exception
 	{
 		getCachedDesc();
 		Desc[] descids = getDescIDs();
 
 		if(descids.length == 1)
-			find(getID());
+			find(getPrimdesc().getValue(this));
 		else {
 			Object[] val = new Object[descids.length];
 			for(int i=0; i < descids.length; i++) {
@@ -673,9 +667,10 @@ public abstract class Table extends Part
 	}*/
 	
 
-	public IDGenerator getIdgenerator() {
-		return getStaticLocal().idgenerator;
-	}
+//	public IDGenerator _getIdgenerator() {
+//		return getStaticLocal().idgenerator;
+//	}
+
 	public Dialect getDialect() {
 		return getStaticLocal().dialect;
 	}

@@ -1,5 +1,7 @@
 package gawky.message.part;
 
+import gawky.database.generator.IDGenerator;
+
 import java.lang.reflect.Method;
 
 /**
@@ -67,6 +69,7 @@ public class Desc
 	public static final char  CODE_F = 'f';  //fixed content (constant)
 	public static final char  CODE_L = 'l';  //list of values
 	
+	IDGenerator idgenerator;
 	
 	// Optimize relection
 	// store Method Definition
@@ -145,12 +148,24 @@ public class Desc
 		return this;
 	}
 
+	public Desc setPrimary(IDGenerator idgenerator) 
+	{
+		this.idgenerator = idgenerator;
+		return setPrimary();
+	}
+	
+	public IDGenerator getIDGenerator() {
+		return this.idgenerator;
+	}
+	
+
 	public Desc setPrimary() 
 	{
 		this.primary = true;
 		return this;
 	}
 
+	
 	public boolean isPrimary() {
 		return primary;
 	}
