@@ -229,6 +229,7 @@ public class Generator
 
 		if(bean.getDescIDs().length > 0) // descid != null)
 		{
+/*
 			//if(bean.getIdgenerator() != null && bean.getIdgenerator().getSequence(bean) != null) {
 			if(bean.getPrimdesc().getIDGenerator() != null && bean.getPrimdesc().getIDGenerator().getSequence(bean) != null) {
 				// ID definiert
@@ -245,7 +246,9 @@ public class Generator
 			    params.append(bean.getPrimdesc().getIDGenerator().getSequence(bean)); // generate Methode einfügen
 
 			    bean.setParameter(false);
-			} else { // if(descid != null) /* && bean.getIdgenerator().getSequence() != null) */ {
+			} else 
+*/			
+			{ // if(descid != null) /* && bean.getIdgenerator().getSequence() != null) */ {
 				// manual parameter
 				Desc[] descids = bean.getDescIDs();
 				for(int i=0; i < descids.length; i++)

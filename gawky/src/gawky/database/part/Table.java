@@ -1,10 +1,9 @@
 package gawky.database.part;
 
 import gawky.database.DB;
-import gawky.database.dialect.Dialect;
-import gawky.database.dialect.MySQL;
 import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
+import gawky.database.generator.IDGeneratorAUTO;
 import gawky.global.Constant;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
@@ -48,7 +47,6 @@ public abstract class Table extends Part
 		//IDGenerator idgenerator   = null;
 
 		Generator generator       = new Generator();
-		Dialect dialect           = new MySQL();
 		int defaultconnection     = 0;
 	}
 
@@ -268,10 +266,26 @@ public abstract class Table extends Part
 
 		try 
 		{
+			IDGenerator gen = getPrimdesc().getIDGenerator();
+			if(gen != null) {
+				try { 
+					getPrimdesc().setValue(this, gen.nextVal(conn, this)); 
+				} catch (Exception e) {
+				}
+			}
+			
 			fillPreparedStatement(stmt, true);
-	
+			
 			stmt.execute();
 	
+			if(gen instanceof IDGeneratorAUTO) {
+				try { 
+					getPrimdesc().setValue(this, gen.lastVal(conn, this)); 
+				} catch (Exception e) {
+				}
+			}
+			
+/*
 			try {
 				// versuche to generierte ID zu ermitteln und im Object abzulegen
 				if(getPrimdesc().getIDGenerator() != null)
@@ -279,6 +293,7 @@ public abstract class Table extends Part
 			} catch (Exception e) {
 				log.error("insert Record", e);
 			}
+*/
 		} finally {
 			DB.doClose(stmt);
 		}
@@ -670,13 +685,6 @@ public abstract class Table extends Part
 //	public IDGenerator _getIdgenerator() {
 //		return getStaticLocal().idgenerator;
 //	}
-
-	public Dialect getDialect() {
-		return getStaticLocal().dialect;
-	}
-	public void setDialect(Dialect dialect) {
-		getStaticLocal().dialect = dialect;
-	}
 
 	public int getDefaultconnection() {
 		return getStaticLocal().defaultconnection;
