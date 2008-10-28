@@ -5,6 +5,7 @@ import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
 import gawky.database.generator.IDGeneratorAUTO;
 import gawky.global.Constant;
+import gawky.global.Validation;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -294,6 +295,8 @@ public abstract class Table extends Part
 				log.error("insert Record", e);
 			}
 */
+			
+			setFound(true);
 		} finally {
 			DB.doClose(stmt);
 		}
@@ -695,7 +698,16 @@ public abstract class Table extends Part
 	}
 
 	public boolean isFound() {
-		return found;
+		if(found)
+			return true;
+		
+		try {
+			String val = getPrimdesc().getValue(this);
+			return val == null || val.length() == 0;
+		} catch (Exception e) {
+		}
+		
+		return false;
 	}
 
 	public void setFound(boolean found) {
