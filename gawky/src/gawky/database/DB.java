@@ -95,11 +95,11 @@ public class DB
     	return isDBAvailable(0);
     }
 
-    public static boolean isDBAvailable(int number)
+    public static boolean isDBAvailable(int pool)
     {
     	Connection conn = null;
     	try {
-			conn = DB.getConnection(number);
+			conn = DB.getConnection(pool);
 			conn.getMetaData();
 		} catch (Exception e) {
 			return false;
@@ -123,32 +123,44 @@ public class DB
      * get Long
      */
 
-    public static String getString(String sql)
+    public static String getString(String sql) throws Exception
+	{
+    	return getString(0, sql);
+	}
+    
+    public static String getString(int pool, String sql) throws Exception
+    {
+    	return getString(pool, sql, null);
+    }
+    
+    public static String getString(int pool, String sql, Object[] params) throws Exception
 	{
 		Connection conn = null;
 
-		try
-		{
-			conn = DB.getConnection(0);
-			return getString(conn, sql);
-		} catch (Exception e) {
-			log.error(e);
+		try {
+			conn = DB.getConnection(pool);
+			return getString(conn, sql, params);
 		} finally {
 			doClose(conn);
 		}
-
-		return null;
 	}
 
-	public static String getString(Connection conn, String sql) throws Exception
+    public static String getString(Connection conn, String sql) throws Exception
+    {
+    	return getString(0, sql, null);
+    }
+    
+    public static String getString(Connection conn, String sql, Object[] params) throws Exception
 	{
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
 
 		try {
 			stmt_select = conn.prepareStatement(sql);
-			rset 	    = stmt_select.executeQuery();
 
+			fillParams(stmt_select, (String[])params);
+			
+			rset 	    = stmt_select.executeQuery();
 			rset.next();
 			return rset.getString(1);
 		} finally {
@@ -157,49 +169,44 @@ public class DB
 		}
 	}
 
-	  public static int execute(String sql)
-		{
-		  return execute(0, sql);
-		}
+	
+	public static int execute(String sql) throws Exception
+	{
+		return execute(0, sql);
+	}
 	  
-	  public static int execute(String sql, Object[] params)
-		{
-		  return execute(0, sql, params);
-		}
+	public static int execute(String sql, Object[] params) throws Exception
+	{
+		return execute(0, sql, params);
+	}
 
-	  public static int execute(int pool, String sql)
-		{
-		  return execute(pool, sql, null);
-		}
+	public static int execute(int pool, String sql) throws Exception
+	{
+		return execute(pool, sql, null);
+	}
 
-	  public static int execute(int pool, String sql, Object[] params)
-		{
-			Connection conn = null;
+	public static int execute(int pool, String sql, Object[] params) throws Exception
+	{
+		Connection conn = null;
 
-			try
-			{
-				conn = DB.getConnection(pool);
-				return execute(conn, sql, params);
-			} catch (Exception e) {
-				log.error(e);
-			} finally {
-				doClose(conn);
-			}
-			return 0;
+		try
+		{
+			conn = DB.getConnection(pool);
+			return execute(conn, sql, params);
+		} finally {
+			doClose(conn);
 		}
+	}
 
 	public static int execute(Connection conn, String sql, Object[] params) throws Exception
 	{
 		PreparedStatement stmt_select = null;
 
-		try {
-
+		try 
+		{
 			stmt_select = conn.prepareStatement(sql);
 			
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = (String)params[i];
-				stmt_select.setString(i+1, param);
-			}
+			fillParams(stmt_select, (String[])params);
 			
 			return stmt_select.executeUpdate();
 		} finally {
@@ -212,24 +219,25 @@ public class DB
      */
 
 
-	public static Map getRow(String sql, String[] params)
+	public static Map getRow(String sql, String[] params) throws Exception
+	{
+		return getRow(0, sql, params);
+	}
+	
+	public static Map getRow(int pool, String sql, String[] params) throws Exception
 	{
 		Connection conn = null;
 
 		try
 		{
-			conn = DB.getConnection(0);
+			conn = DB.getConnection(pool);
 			return getRow(conn, sql, params);
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(conn);
 		}
-
-		return null;
 	}
 
-	public static Map getRow(Connection conn, String sql, String[] params)
+	public static Map getRow(Connection conn, String sql, String[] params) throws Exception
 	{
 		Map hs = null;
 
@@ -240,13 +248,8 @@ public class DB
 		try {
 			stmt_select = conn.prepareStatement(sql);
 
-			int a = 1;
-
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = params[i];
-				stmt_select.setString(a++, param);
-			}
-
+			fillParams(stmt_select, params);
+			
 			rset = stmt_select.executeQuery();
 
 			if (rset.next())
@@ -261,8 +264,6 @@ public class DB
 			} else {
 				log.error("no result (" + sql + ")");
 			}
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(stmt_select);
 			doClose(rset);
@@ -275,24 +276,25 @@ public class DB
 	 * Eine ArrayList von Map
 	 */
 
-	public static ArrayList getRowList(String sql, String[] params)
+	public static ArrayList getRowList(String sql, String[] params) throws Exception
+	{
+		return getRowList(0, sql, params);
+	}
+
+	public static ArrayList getRowList(int pool, String sql, String[] params) throws Exception
 	{
 		Connection conn = null;
 
 		try
 		{
-			conn = DB.getConnection(0);
+			conn = DB.getConnection(pool);
 			return getRowList(conn, sql, params);
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(conn);
 		}
-
-		return null;
 	}
 
-	public static ArrayList getRowList(Connection conn, String sql, String[] params)
+	public static ArrayList getRowList(Connection conn, String sql, String[] params) throws Exception
 	{
 		ArrayList al = new ArrayList();
 
@@ -302,12 +304,8 @@ public class DB
 		try {
 			stmt_select = conn.prepareStatement(sql);
 
-			int a = 1;
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = params[i];
-				stmt_select.setString(a++, param);
-			}
-
+			fillParams(stmt_select, params);
+			
 			rset = stmt_select.executeQuery();
 
 			ResultSetMetaData md = rset.getMetaData();
@@ -324,8 +322,6 @@ public class DB
 
 				al.add(hs);
 			}
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(stmt_select);
 			doClose(rset);
@@ -334,25 +330,25 @@ public class DB
 		return al;
 	}
 
-
-	public static HashMap getHash(String sql, String[] params)
+	public static HashMap getHash(String sql, String[] params) throws Exception
+	{
+		return getHash(0, sql, params);
+	}
+	
+	public static HashMap getHash(int pool, String sql, String[] params) throws Exception
 	{
 		Connection conn = null;
 
 		try
 		{
-			conn = DB.getConnection(0);
+			conn = DB.getConnection(pool);
 			return getHash(conn, sql, params);
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(conn);
 		}
-
-		return null;
 	}
 
-	public static HashMap getHash(Connection conn, String sql, String[] params)
+	public static HashMap getHash(Connection conn, String sql, String[] params) throws Exception
 	{
 		HashMap hs = new HashMap();
 
@@ -362,21 +358,13 @@ public class DB
 		try {
 			stmt_select = conn.prepareStatement(sql);
 
-			int a = 1;
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = params[i];
-				stmt_select.setString(a++, param);
-			}
-
+			fillParams(stmt_select, params);
+			
 			rset = stmt_select.executeQuery();
 
-
-			while (rset.next())
-			{
+			while (rset.next()) {
 				hs.put(rset.getString(1), rset.getString(2));
 			}
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(stmt_select);
 			doClose(rset);
@@ -390,27 +378,27 @@ public class DB
 	 *
 	 */
 
-	public static ArrayList getList(String sql, String[] params)
+	public static ArrayList getList(String sql, String[] params) throws Exception
+	{
+		return getList(0, sql, params);
+	}
+	
+	public static ArrayList getList(int pool, String sql, String[] params) throws Exception
 	{
 		Connection conn = null;
 
 		try
 		{
-			conn = DB.getConnection(0);
+			conn = DB.getConnection(pool);
 			return getList(conn, sql, params);
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(conn);
 		}
-
-		return null;
 	}
 
-	public static ArrayList getList(Connection conn, String sql, String[] params)
+	public static ArrayList getList(Connection conn, String sql, String[] params) throws Exception
 	{
 		ArrayList al = new ArrayList();
-
 
 		ResultSet rset = null;
 
@@ -419,19 +407,13 @@ public class DB
 		try {
 			stmt_select = conn.prepareStatement(sql);
 
-			int a = 1;
-			for (int i=0; params != null && i < params.length; i++) {
-				String param = params[i];
-				stmt_select.setString(a++, param);
-			}
+			fillParams(stmt_select, params);
 
 			rset = stmt_select.executeQuery();
 
 			while (rset.next()) {
 				al.add(secString(rset.getString(1)));
 			}
-		} catch (Exception e) {
-			log.error(e);
 		} finally {
 			doClose(stmt_select);
 			doClose(rset);
@@ -440,31 +422,45 @@ public class DB
 		return al;
 	}
 
+	private static void fillParams(PreparedStatement stmt, String[] params) throws SQLException
+	{
+		if(params == null)
+			return;
+		
+		int a = 1;
+		for (int i=0; i < params.length; i++) {
+			String param = params[i];
+			stmt.setString(a++, param);
+		}		
+	}
+	
 	public static final void doClose(ResultSet o) {
+		if(o == null)
+			return;
 		try {
-			if (o != null)
-				o.close();
+			o.close();
 		} catch (Exception e) { }
 	 }
 
 	 public static final void doClose(Statement o) {
+		if(o == null)
+			return;
 		try {
-			if (o != null)
-				o.close();
+			o.close();
 		} catch (Exception e) { }
 	 }
 
 	 public static final void doClose(Connection o) {
+		if(o == null)
+			return;
 		try {
-			if (o != null)
-				o.close();
+			o.close();
 		} catch (Exception e) { }
 	 }
 }
 
 
 /*
-
     static final public Connection getConnection() throws Exception {
     	//return DriverManager.getConnection("jdbc:bms:pool0");
     	return getDBSession(0).connection();
