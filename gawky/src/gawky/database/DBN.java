@@ -3,46 +3,20 @@ package gawky.database;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
-public class DBN {
-
-	
-    // Verbindung aus Connectionpool holen
-    static public Connection getConnection() {
-    	try { 
-    		return DB.getConnection();
-    	} catch (Exception e) {
-    		return null;
-    	}
-    }
-
-    static public Connection getConnection(int number) {
-    	try { 
-    		return DB.getConnection(number);
-    	} catch (Exception e) {
-    		return null;
-    	}
-    }
-
-    static public Connection getConnection(String alias){
-    	try { 
-    		return DB.getConnection(alias);
-    	} catch (Exception e) {
-    		return null;
-    	}
-    }
-
-
+public class DBN 
+{
     /**
-     * get Long
+     * get String
      */
 
     public static String getString(String sql) {
 	    try { 
 			return DB.getString(sql);
 		} catch (Exception e) {
-			return null;
+			return "";
 		}
 	}
     
@@ -50,7 +24,7 @@ public class DBN {
     	try { 
     		return DB.getString(pool, sql);
     	} catch (Exception e) {
-    		return null;
+    		return "";
     	}
     }
     
@@ -58,7 +32,7 @@ public class DBN {
     	try { 
     		return DB.getString(pool, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return "";
     	}
 	}
 
@@ -66,7 +40,7 @@ public class DBN {
     	try { 
     		return DB.getString(conn, sql);
     	} catch (Exception e) {
-    		return null;
+    		return "";
     	}
     }
     
@@ -74,7 +48,7 @@ public class DBN {
     	try { 
     		return DB.getString(conn, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return "";
     	}
 	}
 
@@ -129,7 +103,7 @@ public class DBN {
 		try { 
     		return DB.getRow(sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new Hashtable();
     	}
 	}
 	
@@ -137,7 +111,7 @@ public class DBN {
 		try { 
     		return DB.getRow(pool, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new Hashtable();
     	}
 	}
 
@@ -145,7 +119,7 @@ public class DBN {
 		try { 
     		return DB.getHash(conn, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new Hashtable();
     	}
 	}
 
@@ -157,7 +131,7 @@ public class DBN {
 		try { 
     		return DB.getRowList(sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new ArrayList();
     	}
 	}
 
@@ -165,7 +139,7 @@ public class DBN {
 		try { 
     		return DB.getList(pool, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new ArrayList();
     	}
 	}
 
@@ -173,7 +147,7 @@ public class DBN {
 		try { 
     		return DB.getList(conn, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new ArrayList();
     	}
 	}
 
@@ -181,7 +155,7 @@ public class DBN {
 		try { 
     		return DB.getHash(sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new HashMap();
     	}
 	}
 	
@@ -189,7 +163,7 @@ public class DBN {
 		try { 
     		return DB.getHash(pool, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new HashMap();
     	}
 	}
 
@@ -198,7 +172,7 @@ public class DBN {
 		try { 
     		return DB.getHash(conn, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new HashMap();
     	}
 	}
 
@@ -212,7 +186,7 @@ public class DBN {
 		try { 
     		return DB.getList(sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new ArrayList();
     	}
 	}
 
@@ -221,7 +195,7 @@ public class DBN {
 		try { 
     		return DB.getList(pool, sql, params);
     	} catch (Exception e) {
-    		return null;
+    		return new ArrayList();
     	}
 	}
 
@@ -230,7 +204,7 @@ public class DBN {
 		try {
 			return DB.getList(sql, params);
 		} catch (Exception e) {
-			return null;
+			return new ArrayList();
 		}
 	}
 	
