@@ -23,6 +23,8 @@ public abstract class Part implements Cloneable
 {
 	Log log = LogFactory.getLog(Part.class);
 
+	private static boolean dotostring = true;
+	
 	private static Parser    parser;
     private static Generator generator;
 
@@ -292,7 +294,10 @@ public abstract class Part implements Cloneable
 	@Deprecated
 	public String toString()
 	{
-		return getGenerator().generateString(this);
+		if(dotostring)
+			return getGenerator().generateString(this);
+		else
+			return super.toString();
 	}
 
 	@Deprecated
@@ -307,7 +312,10 @@ public abstract class Part implements Cloneable
 	@Deprecated
 	public String toString(Generator extgenerator)
 	{
-		return extgenerator.generateString(this);
+		if(dotostring)
+			return extgenerator.generateString(this);
+		else
+			return super.toString();
 	}
 
 	public String generateString()
@@ -407,5 +415,9 @@ public abstract class Part implements Cloneable
 			return !((Part)this.getBackup()).getValue(field).equals(this.getValue(field));
 		}else
 			return true;
+	}
+	
+	public static void setDotostring(boolean dotostring) {
+		Part.dotostring = dotostring;
 	}
 }
