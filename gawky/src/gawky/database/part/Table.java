@@ -703,7 +703,7 @@ public abstract class Table extends Part
 		
 		try {
 			String val = getPrimdesc().getValue(this);
-			return val == null || val.length() == 0;
+			return val != null && val.length() > 0;
 		} catch (Exception e) {
 		}
 		
