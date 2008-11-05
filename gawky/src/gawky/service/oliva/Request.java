@@ -25,16 +25,16 @@ public class Request
         String parts = "";
         
         if(paym != null)
-        	parts += paym.toString();
+        	parts += paym.buildString();
         
         if(addr != null)
-        	parts += addr.toString();
+        	parts += addr.buildString();
         
         
-        int ilen = head.getBytes(Constant.ENCODE_US_ASCII).length + parts.getBytes().length;
+        int ilen = head.buildBytes(Constant.ENCODE_US_ASCII).length + parts.getBytes().length;
         head.setMessage_length(ilen);
             
-        return head.toString() + parts;
+        return head.buildString() + parts;
     }
 	
     public RequestAddress getAddr() {

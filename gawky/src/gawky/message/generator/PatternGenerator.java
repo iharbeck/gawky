@@ -13,7 +13,7 @@ public class PatternGenerator extends Generator
 {
 	private static Log log = LogFactory.getLog(PatternGenerator.class);
 	
-	public String generateString(Part bean)
+	public String buildString(Part bean)
 	{
 		if(bean == null)
 			return "";

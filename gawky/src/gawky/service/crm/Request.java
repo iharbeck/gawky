@@ -92,22 +92,22 @@ public class Request {
     {
         String ret = "";
         
-        ret = ((paym == null) ? "" : paym.toString())
+        ret = ((paym == null) ? "" : paym.buildString())
             + getPositions()
-            + ((urlr == null) ? "" : urlr.toString()) 
-            + ((addr == null) ? "" : addr.toString() )
+            + ((urlr == null) ? "" : urlr.buildString()) 
+            + ((addr == null) ? "" : addr.buildString() )
 			+ getBooks(); 
         
         try 
         {
             String encoding = getEncoding();
             
-            int ilen = head.getBytes(encoding).length + ret.getBytes(encoding).length;
+            int ilen = head.buildBytes(encoding).length + ret.getBytes(encoding).length;
             head.setMessage_length(new Integer(ilen).toString());
         } catch (Exception e) {
             
         }
-        return head.toString() + ret;
+        return head.buildString() + ret;
     }
 }
 

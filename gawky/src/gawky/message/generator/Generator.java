@@ -9,7 +9,6 @@ import gawky.message.part.Part;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 public class Generator 
 {
 	static Generator instance;
@@ -22,7 +21,7 @@ public class Generator
 	
 	private static Log log = LogFactory.getLog(Generator.class);
 
-	public String generateString(Part bean)
+	public String buildString(Part bean)
 	{
 		if(bean == null)
 			return "";
@@ -88,7 +87,7 @@ public class Generator
 		return str.toString();
 	}
 	
-	public String generateDebugString(Part bean)
+	public String buildDebugString(Part bean)
 	{
 		if(bean == null)
 			return "";

@@ -326,8 +326,8 @@ public abstract class Table extends Part
 	
 				getStaticLocal().generator.fillPart(rset, table);
 	
-				//out.write(Formatter.getStringC(300, table.toString()).getBytes());
-				out.write(table.toString().getBytes(encoding));
+				//out.write(Formatter.getStringC(300, table.buildBytes());
+				out.write(table.buildBytes(encoding));
 				out.write('\r');
 				out.write(endline);
 			}

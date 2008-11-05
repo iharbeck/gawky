@@ -291,11 +291,14 @@ public abstract class Part implements Cloneable
 		return cacheddesc;
 	}
 
-	@Deprecated
+	/**
+	 * use buildString
+	 */
+	@Deprecated 
 	public String toString()
 	{
 		if(dotostring)
-			return getGenerator().generateString(this);
+			return getGenerator().buildString(this);
 		else
 			return super.toString();
 	}
@@ -303,7 +306,7 @@ public abstract class Part implements Cloneable
 	@Deprecated
 	public String toDebugString()
 	{
-		return getGenerator().generateDebugString(this);
+		return getGenerator().buildDebugString(this);
 	}
 
 	/**
@@ -313,34 +316,34 @@ public abstract class Part implements Cloneable
 	public String toString(Generator extgenerator)
 	{
 		if(dotostring)
-			return extgenerator.generateString(this);
+			return extgenerator.buildString(this);
 		else
 			return super.toString();
 	}
 
-	public String generateString()
+	public String buildString()
 	{
-		return getGenerator().generateString(this);
+		return getGenerator().buildString(this);
 	}
 
-	public String generateDebugString()
+	public String buildDebugString()
 	{
-		return getGenerator().generateDebugString(this);
+		return getGenerator().buildDebugString(this);
 	}
 
 	/**
 	 * for spezialized Generators
 	 */
-	public String generateString(Generator extgenerator)
+	public String buildString(Generator extgenerator)
 	{
-		return extgenerator.generateString(this);
+		return extgenerator.buildString(this);
 	}
 
 	
 
-	public byte[] getBytes(String charset) throws UnsupportedEncodingException
+	public byte[] buildBytes(String charset) throws UnsupportedEncodingException
 	{
-		return generateString().getBytes(charset);
+		return buildString().getBytes(charset);
 	}
 
 	public final Generator getGenerator() {
@@ -404,7 +407,7 @@ public abstract class Part implements Cloneable
 	public boolean isDirty() 
 	{
 		if(cloned) {
-			return !((Part)this.getBackup()).generateString().equals(this.generateString());
+			return !((Part)this.getBackup()).buildString().equals(this.buildString());
 		}else
 			return true;
 	}

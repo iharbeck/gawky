@@ -62,7 +62,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 		
 		setLen("0" + (187 + len * 29 ));
 
-		String tmp = this.toString();
+		String tmp = this.buildString();
 		
 		
 		// Erweiterungsätze
@@ -74,7 +74,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 			for(int i=1; it2.hasNext() && i <= 2; i++)
 			{
 				SatzCe el = (SatzCe)it2.next();
-				tmp += el.toString();
+				tmp += el.buildString();
 			}
 		}
 		
@@ -88,7 +88,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 			while(it2.hasNext())
 			{
 				SatzCe el = (SatzCe)it2.next();
-				exttmp.append(el.toString());
+				exttmp.append(el.buildString());
 			}
 			
 			

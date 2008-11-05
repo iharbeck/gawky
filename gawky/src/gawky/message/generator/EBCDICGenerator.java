@@ -106,7 +106,7 @@ public class EBCDICGenerator extends Generator
 	
 	
 	
-	public String generateDebugString(Part bean)
+	public String buildDebugString(Part bean)
 	{
 		if(bean == null)
 			return "";

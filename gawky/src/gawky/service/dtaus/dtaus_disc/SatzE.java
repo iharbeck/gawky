@@ -31,7 +31,7 @@ public class SatzE extends gawky.service.dtaus.dtaus_band.SatzE
 
     public byte[] getSatzE() throws UnsupportedEncodingException
     {
-    	return this.getBytes(Constant.ENCODE_LATIN1);
+    	return this.buildBytes(Constant.ENCODE_LATIN1);
     }
     
 

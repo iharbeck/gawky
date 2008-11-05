@@ -41,7 +41,6 @@ public class LineReader {
 	
 	public static void processUTF8File(String filename, LineHandler handler) throws Exception
 	{
-		//String uline = new String(line.getBytes(),"UTF-8");
 		Reader in = new InputStreamReader(new FileInputStream(filename), "UTF-8");
 		
 		BufferedReader is = new BufferedReader(in);
@@ -66,7 +65,6 @@ public class LineReader {
 	
 	public static void processFile(String filename, LineHandler handler, String encoding, String[] records) throws Exception
 	{
-		//String uline = new String(line.getBytes(),"UTF-8");
 		Reader in = new InputStreamReader(new FileInputStream(filename), encoding);
 		
 		BufferedReader is = new BufferedReader(in);
