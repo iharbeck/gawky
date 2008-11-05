@@ -340,7 +340,7 @@ public abstract class Part implements Cloneable
 
 	public byte[] getBytes(String charset) throws UnsupportedEncodingException
 	{
-		return toString().getBytes(charset);
+		return generateString().getBytes(charset);
 	}
 
 	public final Generator getGenerator() {
@@ -404,7 +404,7 @@ public abstract class Part implements Cloneable
 	public boolean isDirty() 
 	{
 		if(cloned) {
-			return !((Part)this.getBackup()).toString().equals(this.toString());
+			return !((Part)this.getBackup()).generateString().equals(this.generateString());
 		}else
 			return true;
 	}
