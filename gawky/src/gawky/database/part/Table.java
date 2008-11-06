@@ -701,11 +701,11 @@ public abstract class Table extends Part
 		if(found)
 			return true;
 		
-		try {
-			String val = getPrimdesc().getValue(this);
-			return val != null && val.length() > 0;
-		} catch (Exception e) {
-		}
+//		try {
+//			String val = getPrimdesc().getValue(this);
+//			return val != null && val.length() > 0;
+//		} catch (Exception e) {
+//		}
 		
 		return false;
 	}
