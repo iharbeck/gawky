@@ -488,7 +488,8 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			Table inst = (Table)clazz.newInstance();
+			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
 			return find(clazz, conn, id);
 		} finally {
 			DB.doClose(conn);
@@ -509,7 +510,8 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			Table inst = (Table)clazz.newInstance();
+			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
 			return find(clazz, conn, where, params);
 		} finally {
 			DB.doClose(conn);
@@ -565,7 +567,8 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection();
+			Table inst = (Table)clazz.newInstance();
+			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
 			return delete(clazz, conn, id);
 		} finally {
 			DB.doClose(conn);
