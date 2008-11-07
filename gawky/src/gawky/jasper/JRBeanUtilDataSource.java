@@ -26,6 +26,13 @@ public class JRBeanUtilDataSource implements JRDataSource
 	
 	public Object getValue(Object bean, String path, int row) 
 	{
+		if(path.equals("%LASTPAGE")) {
+			if(row == rows-1)
+				return Boolean.TRUE;
+			else
+				return Boolean.FALSE;
+		}
+		
 		try {
 			// Indexed parameters described as [x] in Report 
 			path = path.replaceAll("\\[x\\]", "[" + (row) + "]");
