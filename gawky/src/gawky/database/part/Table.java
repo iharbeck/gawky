@@ -267,11 +267,17 @@ public abstract class Table extends Part
 
 		try 
 		{
-			IDGenerator gen = getPrimdesc().getIDGenerator();
-			if(gen != null) {
-				try { 
-					getPrimdesc().setValue(this, gen.nextVal(conn, this)); 
-				} catch (Exception e) {
+			Desc prim = getPrimdesc();
+			IDGenerator gen = null;
+			
+			if(prim != null)
+			{
+				gen = prim.getIDGenerator();
+				if(gen != null) {
+					try { 
+						getPrimdesc().setValue(this, gen.nextVal(conn, this)); 
+					} catch (Exception e) {
+					}
 				}
 			}
 			
@@ -341,7 +347,7 @@ public abstract class Table extends Part
 	
 	public Desc getPrimdesc() 
 	{
-		if(primdesc == null)
+		if(primdesc == null && getDescIDs().length > 0)
 			primdesc = getDescIDs()[0];
 
 		return primdesc;	
