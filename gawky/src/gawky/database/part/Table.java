@@ -120,11 +120,6 @@ public abstract class Table extends Part
 	abstract protected Desc[] getDesc();
 	abstract public String getTableName();
 
-	
-//	public void _setIDGenerator(IDGenerator idgenerator) {
-//		StaticLocal local = getStaticLocal();
-//		local.idgenerator = idgenerator;
-//	}
 
 	public final boolean isPrimary(Desc desc) {
 		Desc[] descs = getStaticLocal().descIds;
@@ -142,7 +137,7 @@ public abstract class Table extends Part
 
 	private static HashMap hmStaticLocal    = new HashMap();
 
-	public final String[] getQueries()
+	protected final String[] getQueries()
 	{
 		return getStaticLocal().sql;
 	}
