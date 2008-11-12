@@ -31,37 +31,34 @@ public class Locator {
 		return stream;
 	}
 	
+	public static void main(String[] args) throws Exception {
+		initLib();
+	}
 	
 	 public static void initLib() throws Exception {
 		 Locator.initLib(Locator.findBinROOT() + "../lib");
 	 }
 	
-	 public static void initLib(String path) throws Exception {
-		
+	 public static void initLib(String path) throws Exception 
+	 {
 		File[] list = new File(path).listFiles();
 
-		for(File file : list) {
-			if(file.getName().toLowerCase().endsWith(".jar"))
-				addURL(file.toURI().toURL());
+		URLClassLoader sysloader = (URLClassLoader)ClassLoader.getSystemClassLoader();
+		Class sysclass = URLClassLoader.class;
+		
+		Method method = sysclass.getDeclaredMethod("addURL", new Class[]{URL.class});
+		method.setAccessible(true);
+		
+		System.out.println("CLASSPATH: " + path);
+		
+		for(File file : list) 
+		{
+			if(file.getName().toLowerCase().endsWith(".jar")) 
+			{
+				System.out.println(" + " + file.getName());
+				method.invoke(sysloader, new Object[]{ file.toURI().toURL() });
+			}
 		}
 	}
 	
-	private static final Class[] parameters = new Class[]{URL.class};
-	 
-	public static void addURL(URL u) throws IOException 
-	{
-		System.out.println("CP: " + u);
-		
-		URLClassLoader sysloader = (URLClassLoader)ClassLoader.getSystemClassLoader();
-		Class sysclass = URLClassLoader.class;
-	 
-		try {
-			Method method = sysclass.getDeclaredMethod("addURL",parameters);
-			method.setAccessible(true);
-			method.invoke(sysloader,new Object[]{ u });
-		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new IOException("Error, could not add URL to system classloader" + u);
-		}
-	}
 }
