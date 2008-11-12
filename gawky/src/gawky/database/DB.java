@@ -147,7 +147,7 @@ public class DB
 
     public static String getString(Connection conn, String sql) throws Exception
     {
-    	return getString(0, sql, null);
+    	return getString(conn, sql, null);
     }
     
     public static String getString(Connection conn, String sql, Object[] params) throws Exception
