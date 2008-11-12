@@ -1,10 +1,17 @@
 package gawky.global;
 
 import gawky.database.DB;
+import gawky.file.Locator;
 
-import org.apache.commons.cli.BasicParser;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
@@ -14,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.helpers.FileWatchdog;
 
 public class Option 
 {
@@ -340,4 +348,37 @@ public class Option
 	{
 		return getProperty(HOST);
 	}
+	
+	 public static void initLib() throws Exception {
+		 Option.initLib(Locator.findBinROOT() + "../lib");
+	 }
+	
+	 public static void initLib(String path) throws Exception {
+		
+		File[] list = new File(path).listFiles();
+
+		for(File file : list) {
+			if(file.getName().toLowerCase().endsWith(".jar"))
+				addURL(file.toURI().toURL());
+		}
+	}
+	
+	private static final Class[] parameters = new Class[]{URL.class};
+	 
+	public static void addURL(URL u) throws IOException 
+	{
+		URLClassLoader sysloader = (URLClassLoader)ClassLoader.getSystemClassLoader();
+		Class sysclass = URLClassLoader.class;
+	 
+		try {
+			Method method = sysclass.getDeclaredMethod("addURL",parameters);
+			method.setAccessible(true);
+			method.invoke(sysloader,new Object[]{ u });
+		} catch (Throwable t) {
+			t.printStackTrace();
+			throw new IOException("Error, could not add URL to system classloader" + u);
+		}
+	}
+	 
+
 }
