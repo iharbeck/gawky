@@ -1,6 +1,12 @@
 package gawky.global;
 
 import gawky.database.DB;
+import gawky.file.Locator;
+
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -9,24 +15,14 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 public class Option 
 {
-	private static Log log = LogFactory.getLog(Option.class);
+	private static Log log;
 	
 	static boolean initdone = false;
 	
-	private static String HOST    = "host";
-	private static String PORT    = "p";
-	private static String TIMEOUT = "M";
-	private static String VERBOSE = "v";
 	private static String HELP    = "h";
-	private static String LOGFILE = "l";
-	private static String VALIDIP = "i";
-	private static String SSLMODE = "s";
 	
 	static XMLConfiguration config = null;
 	private static String PROPERTY_FILE = "properties.xml";
@@ -68,23 +64,6 @@ public class Option
 	{
 		return (cmd != null && cmd.hasOption(alias)) ||
 			   (config != null && (config.getString(alias) != null || "1".equals(config.getString(alias))));
-	}
-	
-	private static Level getLoglevel()
-	{
-		if(!Option.hasProperty(VERBOSE))
-			return null; 
-		
-		switch (Option.getProperty(VERBOSE).charAt(0)) 
-		{
-			case '0' : return Level.OFF;
-			case '1' : return Level.FATAL;
-			case '2' : return Level.ERROR;
-			case '3' : return Level.WARN;
-			case '4' : return Level.INFO;
-			case '5' : return Level.DEBUG;
-			default: return Level.ALL;
-		}
 	}
 	
 	/**
@@ -144,6 +123,12 @@ public class Option
 
 		System.exit(0);
 	}
+	
+	public static void main(String[] args) throws Exception {
+		initLib();
+		init();
+	}
+	
 	/**
 	 * Initialze Global properties with custom properties file name
 	 * 
@@ -156,8 +141,15 @@ public class Option
 	{
 		if(initdone)
 			return;
-		
+	
+		// Standard file encoding
 		System.setProperty("file.encoding", Constant.ENCODE_UTF8);
+		 
+		// Application BINROOT for LOG4J
+		System.setProperty("BINROOT", Locator.findBinROOT());
+
+		log = LogFactory.getLog(Option.class);
+		log.info("BINROOT " + Locator.findBinROOT());
 	
 
 		// Properties parsen
@@ -202,34 +194,6 @@ public class Option
 			DB.init();
 		}
 		
-		
-		// overwrite logfile default 
-		// Rootlogger / loglevel
-		// Suche nach LOG4J Klassen
-		if(isClassInPath("org.apache.log4j.Logger", 
-						 "LOG4J wurde nicht gefunden Parameter werden ignoriert!"))
-		{
-			// logfile setzen
-			String logfile = Option.getProperty(LOGFILE);
-		
-			if(logfile != null)
-			{
-				FileAppender fa = (FileAppender) Logger.getRootLogger().getAppender("file");
-				if(fa != null)
-				{
-					fa.setFile(logfile);
-					fa.activateOptions();
-				}
-			}
-			
-			// set loglevel
-			Level level = Option.getLoglevel();
-			if(level != null)
-			{
-				Logger.getRootLogger().setLevel( level );
-			}
-		}
-		
 		initdone = true;
 		
 		return; 
@@ -271,71 +235,40 @@ public class Option
 		// check if options already registered
 		// add default options (shorty, value, description)
 
-		addOption(PORT,    true,  "set listener port number (5001-49151)");
-		addOption("a",     true,  "set interface address for listener (NONE = INADDR_ANY)");
-		addOption("b",     true,  "set backlog values for listen function");
-		addOption("r",     false, "log requests into separate files");
-		addOption("k",     false, "kill and replace old server process (for release upgrades with minimized downtime)");
-		addOption(VALIDIP, true,  "set a list of request IP addresses (HEX-form) to ignore (for load balancer checks)");
-		addOption("n",     false, "do NOT perform active close of socket connection on server side (avoid TCP_WAIT states)");
-		addOption("N",     false, "do NOT fork (for debugging purposes)");
-		addOption("W",     false, "wait for SIGTERM or debugger after fork (for debugging purposes)");
-		addOption(TIMEOUT, true,  "Maximum number of seconds a childs waits for data (timeout)");
-		addOption("m",     true,  "Maximum number of seconds for application to process before terminating the process");
-		addOption("R",     false, "Try to reconnect in batch mode, if DB connection lost (production stability)");
-		addOption("d",     true,  "set database connect string");
-		addOption("B",     true,  "set backup server ID (empty for primary) for processes supporting replication");
-		addOption("I",     false, "ignore (date) plausibility checks for requests (for testing)");
-		addOption(LOGFILE, true,  "set log output target file (NONE = stderr)");
-		addOption("v",     true,  "set verbose level (0-9)");
-		addOption("T",     false, "turn on SQL-Trace for all transactions (whatever database supports)");
-		addOption("U",     false, "set default encoding for parsed requests to UTF8");
-		addOption("1",     false, "set default encoding for parsed requests to iso8859-1");
 		addOption(HELP,    true,  "show Arguments");
-		addOption(SSLMODE, true,  "run in SSL mode");
 	}
 	
 	
+	 public static void initLib() throws Exception 
+	 {
+		 // Libraries laden
+		 Option.initLib(Locator.findBinROOT() + "../lib/");
+	 }
 	
-	/**
-	 * Check for allowed Address
-	 * @param addr
-	 * @return
-	 */
-	public static boolean isValidIP(String addr) 
-	{
-		String val[] = getProperties(VALIDIP);
+	 public static void initLib(String path) throws Exception 
+	 {
+		File[] list = new File(path).listFiles();
+
+		URLClassLoader sysloader = (URLClassLoader)ClassLoader.getSystemClassLoader();
+		Class sysclass = URLClassLoader.class;
 		
-		if(val == null)
-			return true;
-
-		for(int i=0 ; i< val.length; i++)
-		{
-			if(val[i].equals(addr))
-				return false;
+		Method method = sysclass.getDeclaredMethod("addURL", new Class[]{URL.class});
+		method.setAccessible(true);
+		
+		System.out.println("CLASSPATH: " + path);
+		
+		if(list == null) {
+			System.out.println("CLASSPATH: invalid no lib path");
+			return;
 		}
-
-		return true;
-	}
-	
-	public static int getTimeout()
-	{
-		if(hasProperty(TIMEOUT))
-			return Integer.parseInt(getProperty(TIMEOUT)) * 100;
-		else 
-			return 10000;
-	}
-	
-	public static int getPort()
-	{
-		if(hasProperty(PORT))
-			return Integer.parseInt(getProperty(PORT));
-		else 
-			return 3000;
-	}
-	
-	public static String getHost()
-	{
-		return getProperty(HOST);
+		
+		for(File file : list) 
+		{
+			if(file.getName().toLowerCase().endsWith(".jar")) 
+			{
+				System.out.println(" + " + file.getName());
+				method.invoke(sysloader, new Object[]{ file.toURI().toURL() });
+			}
+		}
 	}
 }

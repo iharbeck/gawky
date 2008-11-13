@@ -29,6 +29,12 @@ public class Server extends Parameter
 {
 	private static Log log = LogFactory.getLog(Server.class);
 
+	private static String HOST     = "server.host";
+	private static String PORT     = "server.port";
+	private static String TIMEOUT  = "server.timeout";
+	private static String IGNOREIP = "server.ignoreip";
+
+	private static String SSLMODE = "s";
 	
 	protected static ThreadGroup threads = new ThreadGroup("Worker");
     
@@ -122,6 +128,39 @@ public class Server extends Parameter
 		ssl_clientauth = _ssl_clientauth;
 	}
 
+	public static boolean isValidIP(String addr) 
+	{
+		String val[] = Option.getProperties(IGNOREIP);
+		
+		if(val == null)
+			return true;
+
+		for(int i=0 ; i< val.length; i++)
+		{
+			if(val[i].equals(addr))
+				return false;
+		}
+
+		return true;
+	}
+	
+	public static int getTimeout()
+	{
+		return Integer.parseInt(Option.getProperty(TIMEOUT, "10000")) * 100;
+	}
+	
+	public static int getPort()
+	{
+		return Integer.parseInt(Option.getProperty(PORT, "3000"));
+	}
+	
+	public static String getHost()
+	{
+		return Option.getProperty(HOST);
+	}
+
+
+	
     public class Worker extends Thread
     {
         private Socket socket = null;
@@ -147,8 +186,8 @@ public class Server extends Parameter
             	// Default timeout setzen
             	//socket.setSoTimeout(Option.getTimeout());
             	//socket.setKeepAlive(false);
-            	
-            	if(!Option.isValidIP(socket.getInetAddress().getHostAddress())) 
+            	 
+            	if(!Server.isValidIP(socket.getInetAddress().getHostAddress())) 
             		return;
             	
             	do {
@@ -166,6 +205,7 @@ public class Server extends Parameter
                 } catch (Exception e) { }
             }
         }
+
 
 
 		public boolean isBatchmode() {
