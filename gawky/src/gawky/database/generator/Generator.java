@@ -138,6 +138,8 @@ public class Generator
 
 		if(doclone)
 			part.doclone();
+		
+		part.setFound(true);
 	}
 	
 	
