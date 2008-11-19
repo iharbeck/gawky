@@ -4,13 +4,28 @@ import gawky.database.DB;
 
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class Validation 
 {
+	public static boolean notEmpty(String value) {
+		return !isEmtpy(value);
+	}
+	
 	public static boolean isEmtpy(String value) {
 		return value == null || value.trim().equals("");
 	}
+	
+	public static boolean notEmpty(ArrayList value) {
+		return !isEmtpy(value);
+	}
+	
+	public static boolean isEmtpy(ArrayList value) {
+		return value == null || value.size() > 0;
+	}
+	
+	
 	
 	/**
 	 * Check string length to be between min and max
@@ -20,6 +35,11 @@ public class Validation
 	 * @param max
 	 * @return
 	 */
+	
+	public static boolean notLength(String value, int min, int max) 
+	{
+		return !notLength(value, min, max);
+	}
 	
 	public static boolean isLength(String value, int min, int max) 
 	{
@@ -37,6 +57,11 @@ public class Validation
 	 * @param pattern
 	 * @return
 	 */
+	
+	public static boolean notDate(String value, String pattern) 
+	{
+		return !isDate(value, pattern);
+	}
 	
 	public static boolean isDate(String value, String pattern) 
 	{
@@ -62,6 +87,12 @@ public class Validation
 	 * @param list
 	 * @return
 	 */
+	
+	public static boolean notListvalue(String value, String list) 
+	{
+		return !isListvalue(value, list);
+	}
+	
 	public static boolean isListvalue(String value, String list) 
 	{
 		if(value == null)
@@ -84,6 +115,12 @@ public class Validation
 	 * @param max
 	 * @return
 	 */
+	
+	public static boolean notBetween(String value, double min, double max) 
+	{
+		return !isBetween(value, min, max);
+	}
+	
 	public static boolean isBetween(String value, double min, double max) 
 	{
 		if(value == null)
@@ -97,6 +134,11 @@ public class Validation
 		return false;
 	}
 	
+	public static boolean notBetween(String value, String min, String max) 
+	{
+		return !isBetween(value, min, max);
+	}
+	
 	public static boolean isBetween(String value, String min, String max) 
 	{
 		try {
@@ -106,9 +148,19 @@ public class Validation
 		}
 	}
 	
+	public static boolean notBigger(String value, String ref) 
+	{
+		return !isBigger(value, ref);
+	}
+	
 	public static boolean isBigger(String value, String ref) 
 	{
 		return isBigger(value, Format.getDouble(Locale.GERMAN, ref));
+	}
+	
+	public static boolean notBigger(String value, double ref) 
+	{
+		return !isBigger(value, ref);
 	}
 	
 	public static boolean isBigger(String value, double ref) 
@@ -124,9 +176,19 @@ public class Validation
 		return false;
 	}
 	
+	public static boolean notSmaller(String value, String ref) 
+	{	
+		return !isSmaller(value, ref);
+	}
+	
 	public static boolean isSmaller(String value, String ref) 
 	{
 		return isSmaller(value, Format.getDouble(Locale.GERMAN, ref));
+	}
+	
+	public static boolean notSmaller(String value, double ref) 
+	{	
+		return !isSmaller(value, ref);
 	}
 	
 	public static boolean isSmaller(String value, double ref) 
@@ -151,11 +213,22 @@ public class Validation
 	 * @param column	Name of column that should contain lookup value
 	 * @return
 	 */
+	
+	public static boolean notInDBLookup(String value, int connid, String table, String column) 
+	{
+		return !isInDBLookup(value, connid, table, column);
+	}
+	
 	public static boolean isInDBLookup(String value, int connid, String table, String column) 
 	{
 		String sql = "SELECT " + column + " FROM " + table + " WHERE " + column + " = ? ";
 
 		return isInDBLookup(value, connid, sql);
+	}
+	
+	public static boolean notInDBLookup(String value, int connid, String sql) 
+	{
+		return !isInDBLookup(value, connid, sql);
 	}
 	
 	public static boolean isInDBLookup(String value, int connid, String sql) 
