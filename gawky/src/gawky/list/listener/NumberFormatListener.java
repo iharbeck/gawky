@@ -17,6 +17,8 @@ public class NumberFormatListener implements CellListener
 		}
 	}
 	public String getAttribute(String name) {
+		if(name.equals("class"))
+			return "rightalign";
 		return ""; 
 	}
 	
