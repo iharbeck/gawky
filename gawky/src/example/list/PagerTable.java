@@ -91,7 +91,7 @@ public class PagerTable {
 		
 		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();
-		hwalker.setTablestyle("width:100%");
+		hwalker.setStyle("width:100%");
 		PagedDatasource ds2 = new PagedDatasource(rs, numberOfRows, page);
 		
 		

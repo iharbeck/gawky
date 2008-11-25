@@ -7,8 +7,8 @@ import gawky.list.listener.RowListener;
 
 public class HtmlTable extends AbstractTable
 {
-	private String tableclass = null;
-	private String tablestyle = null;
+	private String cssclass = "gawky";
+	private String style = "";
 
 	public String generate(Datasource ds)
 	{
@@ -16,10 +16,8 @@ public class HtmlTable extends AbstractTable
 
 		buffer.append("<TABLE");
 
-		if(getTableclass() != null)
-			buffer.append(" class='" + getTableclass() + "'");
-		if(getTablestyle() != null)
-			buffer.append(" style='" + getTablestyle() + "'");
+		buffer.append(" class='" + cssclass + "'");
+		buffer.append(" style='" + style + "'");
 
 		buffer.append(">\n");
 
@@ -70,19 +68,11 @@ public class HtmlTable extends AbstractTable
 	}
 
 
-	public String getTableclass() {
-		return tableclass;
+	public void setClass(String cssclass) {
+		this.cssclass = cssclass;
 	}
 
-	public void setTableclass(String tableclass) {
-		this.tableclass = tableclass;
-	}
-
-	public String getTablestyle() {
-		return tablestyle;
-	}
-
-	public void setTablestyle(String tablestyle) {
-		this.tablestyle = tablestyle;
+	public void setStyle(String style) {
+		this.style = style;
 	}
 }

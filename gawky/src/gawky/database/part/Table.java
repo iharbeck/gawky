@@ -76,9 +76,9 @@ public abstract class Table extends Part
 
 	private static Log log = LogFactory.getLog(Table.class);
 
-	private static final int SQL_INSERT = 0;
+	public  static final int SQL_INSERT = 0;
 	private static final int SQL_FIND   = 1;
-	private static final int SQL_UPDATE = 2;
+	public  static final int SQL_UPDATE = 2;
 	private static final int SQL_DELETE = 3;
 	private static final int SQL_SELECT = 4;
 
@@ -169,31 +169,9 @@ public abstract class Table extends Part
 		return sql;
 	}
 
-	/**
-	 * Read from or fill Cache
-	 * @param conn
-	 * @param sql
-	 * @param type
-	 * @return
-	 * @throws SQLException
-	 */
-	public final PreparedStatement getStmt(Connection conn, String sql, int type) throws SQLException
+	public final PreparedStatement getStmt(Connection conn, int type) throws SQLException
 	{
-//		PreparedStatement stmt = getStaticLocal().stmt[type];
-//
-//		Connection c = null;
-//		if(conn instanceof AConnection)
-//			c = ((AConnection)conn).getConnection();
-//		else
-//			c = conn;
-		
-		
-		//if(stmt == null || stmt.isClosed() || stmt.getConnection() != c)
-//		{
-//			try { stmt.close(); } catch (Exception e) {}
-//			stmt = conn.prepareStatement(sql);
-//			getStmts()[type] = stmt;
-//		}
+		String sql = getQuery(type);
 		return conn.prepareStatement(sql);
 	}
 
@@ -256,9 +234,7 @@ public abstract class Table extends Part
 
 	public void insert (Connection conn) throws SQLException
 	{
-		String sql = getQuery(SQL_INSERT);
-
-		PreparedStatement stmt = getStmt(conn, sql, SQL_INSERT);
+		PreparedStatement stmt = getStmt(conn, SQL_INSERT);
 
 		try 
 		{
@@ -403,9 +379,7 @@ public abstract class Table extends Part
 
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
-		String sql = getQuery(SQL_FIND);
-
-		PreparedStatement stmt = getStmt(conn, sql, SQL_FIND);
+		PreparedStatement stmt = getStmt(conn, SQL_FIND);
 		ResultSet rset = null;
 		try 
 		{
@@ -420,7 +394,7 @@ public abstract class Table extends Part
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
 			} else {
-				log.error("no result (" + sql + ")");
+				log.error("no result (" + getQuery(SQL_FIND) + ")");
 			}
 		} finally {
 			DB.doClose(rset);
@@ -590,9 +564,7 @@ public abstract class Table extends Part
 	{
 		Table inst = (Table)clazz.newInstance();
 
-		String sql = inst.getQuery(SQL_DELETE);
-
-		PreparedStatement stmt = inst.getStmt(conn, sql, SQL_DELETE);
+		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
 
 		try 
 		{
@@ -620,9 +592,7 @@ public abstract class Table extends Part
 
 	public int delete(Connection conn) throws Exception
 	{
-		String sql = getQuery(SQL_DELETE);
-
-		PreparedStatement stmt = getStmt(conn, sql, SQL_DELETE);
+		PreparedStatement stmt = getStmt(conn, SQL_DELETE);
 
 		try 
 		{
@@ -654,9 +624,7 @@ public abstract class Table extends Part
 		if(!isDirty())
 			return 0;
 		
-		String sql = getQuery(SQL_UPDATE);
-
-		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);
+		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
 
 		try 
 		{
@@ -668,30 +636,29 @@ public abstract class Table extends Part
 		}
 	}
 	
-	/*public void update_batch (Connection conn) throws SQLException
-	{
-		if(!isDirty())
-			return;
-
-		String sql = getQuery(SQL_UPDATE);
-
-		PreparedStatement stmt = getStmt(conn, sql, SQL_UPDATE);
-
-		fillPreparedStatement(stmt, false);
-
-		stmt.addBatch();
-	}*/
+	PreparedStatement batch_stmt;
+	int batch_type;
 	
-	/*public void execute_updatebatch (Connection conn) throws SQLException
-	{
-		PreparedStatement stmt = getStmt(conn, "", SQL_UPDATE);
-		stmt.executeBatch();
-	}*/
-	
+	public void batch_init(Connection conn, int type) throws Exception {
+		batch_type = type;
+		batch_stmt = getStmt(conn, type);
+	}
 
-//	public IDGenerator _getIdgenerator() {
-//		return getStaticLocal().idgenerator;
-//	}
+	public void batch_add() throws Exception {
+		fillPreparedStatement(batch_stmt, batch_type == SQL_INSERT);
+		batch_stmt.addBatch();
+	}
+	
+	public void batch_add(String sql) throws Exception {
+		batch_stmt.addBatch(sql);
+	}
+	
+	public void batch_execute() throws Exception {
+		batch_stmt.executeBatch();
+		DB.doClose(batch_stmt);
+	}
+	
+	
 
 	public int getDefaultconnection() {
 		return getStaticLocal().defaultconnection;

@@ -42,29 +42,32 @@ public class TestTable {
 		//Database Source
 		Connection conn = DB.getConnection();
 		Statement  stmt = conn.createStatement();
-		ResultSet  rset = stmt.executeQuery("select * from kunde");
+		//ResultSet  rset = stmt.executeQuery("select * from kunde");
 		
-		ResultSetDatasource rs = new ResultSetDatasource(rset);
-		rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
-		rs.addColumn("name",     new Column("DER NAME"));
+		//ResultSetDatasource rs = new ResultSetDatasource(rset);
+		//rs.addColumn("kunde_id", new Column("ERSTER").setHidden());
+		//rs.addColumn("name",     new Column("DER NAME"));
 		
 		
 		//PDFgenerator
 		PdfTable pwalker = new PdfTable();
 		pwalker.generate(ds, "PdfARTable.pdf");
-		pwalker.generate(rs, "PdfDBTable.pdf");
+		//pwalker.generate(rs, "PdfDBTable.pdf");
 		ds.reset();
 		
 		//HTMLgenerator
 		HtmlTable hwalker = new HtmlTable();
+		hwalker.setClass("class");
+		hwalker.setStyle("style");
+		
 		System.out.println( hwalker.generate(ds) );
-		System.out.println( hwalker.generate(rs) );
+		//System.out.println( hwalker.generate(rs) );
 		ds.reset();
 
 		//XLSgenerator
 		XlsTable xwalker = new XlsTable();
 		xwalker.generate(ds, "XlsARTable.xls");
-		xwalker.generate(rs, "XlsDBTable.xls");
+		//xwalker.generate(rs, "XlsDBTable.xls");
 
 		System.exit(0);
 	}

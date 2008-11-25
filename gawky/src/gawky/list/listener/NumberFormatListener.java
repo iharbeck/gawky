@@ -7,10 +7,10 @@ import java.text.DecimalFormat;
 public class NumberFormatListener implements CellListener
 {
 	DecimalFormat df = new DecimalFormat  ( ",##0.00" );
-	String clazz = "rightalign";
+	String cssclass = "rightalign";
 	
-	public void setClass(String clazz) {
-		this.clazz = clazz;
+	public void setClass(String cssclass) {
+		this.cssclass = cssclass;
 	}
 	
 	public void setPattern(String pattern) {
@@ -27,7 +27,7 @@ public class NumberFormatListener implements CellListener
 	}
 	public String getAttribute(String name) {
 		if(name.equals("class"))
-			return clazz;
+			return cssclass;
 		return ""; 
 	}
 	

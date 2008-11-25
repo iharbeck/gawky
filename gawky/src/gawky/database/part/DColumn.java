@@ -7,6 +7,10 @@ import gawky.message.part.Desc;
 
 public class DColumn extends Desc {
 	
+	public static String fill() {
+		return fill(new Date());
+	}
+	
 	public static String fill(Date date) {
 		return Generator.df_YYYYMMDD.format(date);
 	}
