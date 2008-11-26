@@ -216,21 +216,6 @@ public class Parser
 		if(Parser.dotrim)
 			value = Formatter.rtrim(value);
 
-//		switch(pos) {
-//		case 0:
-//			((Address)bean).setVorname(value);
-//		break;
-//		case 1:
-//			((Address)bean).setNachname(value);
-//			break;
-//		case 2:
-//			((Address)bean).setInfo1(value);
-//			break;
-//		case 3:
-//			((Address)bean).setInfo2(value);
-//			break;
-//		}
-
 		try {
 			desc.setValue(bean, value);
 		} catch (Exception e) {
