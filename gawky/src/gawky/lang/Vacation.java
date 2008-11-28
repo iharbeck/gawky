@@ -53,10 +53,8 @@ public class Vacation
 	
 	public static void main(String[] args) {
 		
-		Vacation vacation = new Vacation(2007, Vacation.COUNTRY_NRW);
+		Vacation vacation = new Vacation(2009, Vacation.COUNTRY_NRW);
 		
-		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-
 		vacation.list();
 	}
 	
@@ -115,7 +113,7 @@ public class Vacation
 	
 	public void list() 
 	{
-		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+		SimpleDateFormat df = new SimpleDateFormat("E dd.MM.yyyy");
 		
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
@@ -123,6 +121,7 @@ public class Vacation
 		for (int i = 0; i < feiercount; i++) {
 			cal.set(Calendar.DAY_OF_YEAR, feiertage[i]);
 			System.out.println(df.format(cal.getTime()));
+			
 		}
 	}
 	

@@ -157,8 +157,9 @@ public class Option
 			// XML Configfile
 			config = new XMLConfiguration();
 			config.setEncoding("UTF8");
-			if(propfile != null && propfile.length() > 0)
+			if(Validation.notEmpty(propfile))
 				config.load(propfile);
+			
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
 		} catch(Exception e) {

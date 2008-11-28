@@ -158,8 +158,8 @@ public class Ftp extends BaseFtp
 	
 	public void changeRemoteDir(String path) throws Exception {
 	
-//		if(path.endsWith("/") && path.length() > 1)
-//			path = path.substring(0, path.length()-1);
+		if(path.endsWith("/") && path.length() > 1)
+			path = path.substring(0, path.length()-1);
 		
 		ftp.changeWorkingDirectory(path);
 		
