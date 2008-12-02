@@ -16,6 +16,8 @@ public class ParserException extends Exception
 	private static Log log = LogFactory.getLog(ParserException.class);
 	
 	private int retcode;
+	private Desc desc;
+	private String value;
 
 	static HashMap errors = new HashMap();
 	
@@ -66,19 +68,24 @@ public class ParserException extends Exception
 		errors.put(Integer.toString(val), text);
 	}
 	
-	public ParserException(int code, String value){
-		super(errors.get(Integer.toString(code)) + "(" + Integer.toString(code) + ") VAL<" + value + ">");
-		retcode = code;
+	public ParserException(int retcode, String value){
+		super(errors.get(Integer.toString(retcode)) + "(" + Integer.toString(retcode) + ") VAL<" + value + ">");
 		
-		log.error(errors.get(Integer.toString(code)) + "(" + Integer.toString(code) + ") VAL<" + value + ">");
+		this.retcode = retcode;
+		this.value = value;
+		
+		log.error(errors.get(Integer.toString(retcode)) + "(" + Integer.toString(retcode) + ") VAL<" + value + ">");
 	}
 	
-	public ParserException(int code, Desc desc, String value) {
+	public ParserException(int retcode, Desc desc, String value) {
 		
-		super(errors.get(Integer.toString(code)) + "(" + Integer.toString(code) + ") ATT " + desc.name + "[" + desc.len + "] VAL<" + value + ">");
-		retcode = code;
+		super(errors.get(Integer.toString(retcode)) + "(" + Integer.toString(retcode) + ") ATT " + desc.name + "[" + desc.len + "] VAL<" + value + ">");
+	
+		this.retcode = retcode;
+		this.value = value;
+		this.desc = desc;
 		
-		log.error(errors.get(Integer.toString(code)) + "(" + Integer.toString(code) + ") ATT " + desc.name + "[" + desc.len + "] VAL<" + value + ">");
+		log.error(errors.get(Integer.toString(retcode)) + "(" + Integer.toString(retcode) + ") ATT " + desc.name + "[" + desc.len + "] VAL<" + value + ">");
 	}
 
 	public int getRetcode() {
@@ -88,4 +95,25 @@ public class ParserException extends Exception
 	public void setRetcode(int retcode) {
 		this.retcode = retcode;
 	}
+	
+	public Desc getDesc()
+	{
+		return desc;
+	}
+
+	public void setDesc(Desc desc)
+	{
+		this.desc = desc;
+	}
+
+	public String getValue()
+	{
+		return value;
+	}
+
+	public void setValue(String value)
+	{
+		this.value = value;
+	}
+	
 }
