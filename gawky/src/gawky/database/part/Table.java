@@ -499,7 +499,8 @@ public abstract class Table extends Part
 
 		String sql = inst.getQuery(SQL_SELECT);
 
-		sql += " " + where;
+		if(where != null)
+			sql += " " + where;
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 
