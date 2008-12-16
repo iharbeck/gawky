@@ -84,6 +84,7 @@ public class JRBeanUtilDataSource implements JRDataSource
 
 	
 	public boolean next() throws JRException {
-		return rows - currow++ > 0;
+		currow++;
+		return rows - currow > 0;
 	}
 }
