@@ -24,6 +24,11 @@ public class JRBeanUtilDataSource implements JRDataSource
 		this.rows = rows;
 	}
 	
+	public JRBeanUtilDataSource(DataSource data) {
+		this.data = data;
+		this.rows = data.getSize();
+	}
+	
 	public Object getValue(Object bean, String path, int row) 
 	{
 		if(path.equals("%LASTPAGE")) {
