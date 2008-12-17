@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * Packed Decimal Part
+ * LIST Part
  * 
  * @author Ingo Harbeck
  *

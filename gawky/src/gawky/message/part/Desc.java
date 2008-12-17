@@ -210,7 +210,11 @@ public class Desc
 	
 	public boolean nostring = false;
 
+	public String pattern = null;
 	
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
+	}
 
 	public boolean isNostring() {
 		return nostring;

@@ -37,8 +37,9 @@ public class ParserException extends Exception
 	public final static int ERROR_TYPE_BLANK_LETTER = 2508;
 	public final static int ERROR_TYPE_DATE         = 2509;
 	public final static int ERROR_TYPE_TIME         = 2510;
+	public final static int ERROR_TYPE_PATTERN      = 2511;
 	
-	public final static int ERROR_EXTRA_DATA        = 2511;
+	public final static int ERROR_EXTRA_DATA        = 2601;
 
 	public final static int ERROR_PARSING           = 2600;
 
@@ -59,6 +60,7 @@ public class ParserException extends Exception
 		addError(ERROR_TYPE_BLANK_LETTER,"BANK/LETTER");
 		addError(ERROR_TYPE_DATE,        "DATE");
 		addError(ERROR_TYPE_TIME,        "TIME");
+		addError(ERROR_TYPE_PATTERN,     "LIST");
 		
 		addError(ERROR_EXTRA_DATA,       "EXTRA DATA");
 	}

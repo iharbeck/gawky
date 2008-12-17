@@ -2,6 +2,7 @@ package gawky.message.parser;
 
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
+import gawky.message.part.DescL;
 import gawky.message.part.Part;
 
 import java.text.SimpleDateFormat;
@@ -199,6 +200,12 @@ public class Parser
 				if(!fmt_TIME(value))
 					throw new ParserException(ParserException.ERROR_TYPE_TIME, desc, value);
 				break;
+		}
+	    
+		if(desc.pattern != null)
+		{
+			if(!value.matches(desc.pattern))
+				throw new ParserException(ParserException.ERROR_TYPE_PATTERN, desc, value);
 		}
 
 	}
