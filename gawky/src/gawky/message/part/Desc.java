@@ -212,8 +212,9 @@ public class Desc
 
 	public String pattern = null;
 	
-	public void setPattern(String pattern) {
+	public Desc setPattern(String pattern) {
 		this.pattern = pattern;
+		return this;
 	}
 
 	public boolean isNostring() {
