@@ -113,6 +113,8 @@ public class ArrayListDatasource implements Datasource
 
 	public void setCurrRow(int pos) {
 		this.pos = pos;
+		if(columns != null)
+			this.pos--;
 	}
 	
 	public boolean nextRow() {

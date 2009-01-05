@@ -84,7 +84,14 @@ public class PagedDatasource implements Datasource {
 			return notdone;
 		
 		notdone = ds.nextRow();
-		return (currow++ < maxrow && notdone);
+
+		if(currow+1 <= maxrow && notdone)
+		{
+			currow++;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public boolean hasnext() {
