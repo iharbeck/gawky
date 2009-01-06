@@ -110,6 +110,8 @@ public class Ftp extends BaseFtp
 			FileOutputStream fos = new FileOutputStream(localdir + file); 
 			
 			ftp.retrieveFile(file, fos);
+			
+			fos.close();
 		}
 		
 		return (String[])files.toArray(new String[files.size()]);
