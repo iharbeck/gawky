@@ -151,7 +151,8 @@ public class Parser
 				}
 
 				// Inhaltlich prüfung
-				if(desc.code != Desc.CODE_O && Parser.docheck)
+				//if(desc.code != Desc.CODE_O && Parser.docheck)
+				if(Parser.docheck)
 					typeCheck(desc, value);
 
 			    storeValue(bean, i, desc, value);
