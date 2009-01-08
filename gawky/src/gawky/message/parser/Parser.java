@@ -121,9 +121,6 @@ public class Parser
 							// enventuell fehlt einfach nur der Delimiter am Zeilenende
 							value = str.substring(start);
 							
-							if(Parser.dotrim)
-								value = Formatter.rtrim(value);
-							
 							storeValue(bean, i, desc, value);
 						}
 						// am Ende der Zeile angekommen und weiteres nicht optionales feld
@@ -135,9 +132,6 @@ public class Parser
 
 					value = str.substring(start, end);
 					
-					if(Parser.dotrim)
-						value = Formatter.rtrim(value);
-
 					start = end + desc.delimiter.length();  // Multicharacter delimiter
 
 					position = start;
@@ -235,7 +229,8 @@ public class Parser
 		if(desc.nostore)
 			return;
 
-		
+		if(Parser.dotrim)
+			value = Formatter.rtrim(value);
 
 		try {
 			desc.setValue(bean, value);
