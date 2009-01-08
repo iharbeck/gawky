@@ -90,10 +90,18 @@ public class Parser
 						//log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
 
 						value = str.substring(start);
+						
+						if(Parser.dotrim)
+							value = Formatter.rtrim(value);
+						
 						storeValue(bean, i, desc, value);
 						return bean;
 					}
 					value = str.substring(start, start+desc.len);
+					
+					if(Parser.dotrim)
+						value = Formatter.rtrim(value);
+					
 					start += desc.len;
 
 					position = start;
@@ -112,6 +120,10 @@ public class Parser
 						if(end == -1) {
 							// enventuell fehlt einfach nur der Delimiter am Zeilenende
 							value = str.substring(start);
+							
+							if(Parser.dotrim)
+								value = Formatter.rtrim(value);
+							
 							storeValue(bean, i, desc, value);
 						}
 						// am Ende der Zeile angekommen und weiteres nicht optionales feld
@@ -122,6 +134,9 @@ public class Parser
 					}
 
 					value = str.substring(start, end);
+					
+					if(Parser.dotrim)
+						value = Formatter.rtrim(value);
 
 					start = end + desc.delimiter.length();  // Multicharacter delimiter
 
@@ -220,8 +235,7 @@ public class Parser
 		if(desc.nostore)
 			return;
 
-		if(Parser.dotrim)
-			value = Formatter.rtrim(value);
+		
 
 		try {
 			desc.setValue(bean, value);
