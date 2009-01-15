@@ -11,6 +11,10 @@ public class TColumn extends Desc {
 		return Generator.df_YYYYMMDDHHMMSS.format(date);
 	}
 	
+	public static String fill() {
+		return fill(new Date());
+	}
+	
 	public TColumn(String name) {
 		super(Desc.FMT_TIME, Desc.CODE_O, 0, name, Desc.ENDCOLON);
 	}
