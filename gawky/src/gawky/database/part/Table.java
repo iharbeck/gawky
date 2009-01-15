@@ -402,6 +402,40 @@ public abstract class Table extends Part
 		}
 	}
 	
+
+	public void findRow(int row) throws Exception
+	{
+		Connection conn = null;
+		try {
+			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			findRow(conn, row);
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+	
+	public void findRow(Connection conn, int row) throws Exception
+	{
+		PreparedStatement stmt = getStmt(conn, SQL_FIND);
+		ResultSet rset = null;
+		try 
+		{
+			rset = stmt.executeQuery();
+			rset.setFetchSize(1);
+			
+			found = rset.absolute(row);
+			if (found) {
+				getStaticLocal().generator.fillPart(rset, this);
+			} else {
+				log.error("no result (" + getQuery(SQL_FIND) + ")");
+			}
+		} finally {
+			DB.doClose(rset);
+			DB.doClose(stmt);
+		}
+	}
+	
+	
 	public void fillByResultSet(ResultSet rset) { 
 		try {
 			getStaticLocal().generator.fillPartPartial(rset, this);
