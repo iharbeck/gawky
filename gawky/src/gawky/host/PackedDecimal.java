@@ -100,13 +100,14 @@ public class PackedDecimal
 //		System.out.println("aa" + PackedDecimal.readNumberPacked(b, 6, true));
 		
 		
-		byte[] b = PackedDecimal.writeNumberPacked(6, 1366L, true);
 		
-		System.out.println("bb" + new String(b));
+		byte[] b = PackedDecimal.writeNumberPacked(10, 0, false);
+		
+		System.out.println("bb" + new String(b) + "cc");
 		
 		//System.out.println("bb" + pack.unpack(b));
 		
-		System.out.println("aa" + PackedDecimal.readNumberPacked(b, 6, true));
+		//System.out.println("aa" + PackedDecimal.readNumberPacked(b, 6, true));
 		
 	}
 	
@@ -330,7 +331,7 @@ public class PackedDecimal
     }
 	
 	
-	static int MAX_DIGITS = 17;
+	static int MAX_DIGITS = 17 + 10;
 	static long[] EXP10 = new long[MAX_DIGITS + 1];    
 
 	static {

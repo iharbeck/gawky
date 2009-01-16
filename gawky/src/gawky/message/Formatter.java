@@ -46,6 +46,11 @@ public class Formatter
    
    public final static String lpad(int size, String value, char filler)
    {
+	   return lpad(size, value, filler, false);
+   }
+   
+   public final static String lpad(int size, String value, char filler, boolean binary)
+   {
      if(value == null)
          value = "";
 
@@ -62,13 +67,15 @@ public class Formatter
      for(int i=0; i < size-spos; i++)
    	    target[i] = filler;
    	
-     
-     for(int i=0; i < size; i++) {
-   	  for(int a=0; a < 4; a++)
-   		  if(target[i] == iv[a]) {
-   			  target[i] = ' ';
-   			  continue;
-   		  }
+     if(!binary) 
+     {
+	     for(int i=0; i < size; i++) {
+	   	  for(int a=0; a < 4; a++)
+	   		  if(target[i] == iv[a]) {
+	   			  target[i] = ' ';
+	   			  continue;
+	   		  }
+	     }
      }
      return new String(target);
    }

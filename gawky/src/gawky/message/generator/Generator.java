@@ -55,8 +55,8 @@ public class Generator
 						str.append(desc.delimiter);
 				}
 				else if(desc.format == Desc.FMT_BINARY)
-				{	// von rechts mit null füllen
-					str.append( Formatter.getStringNL(desc.len, val) );
+				{	// von links mit null füllen
+					str.append( Formatter.lpad(desc.len, val, (char)0, true) );
 					if(desc.delimiter != null)
 						str.append( desc.delimiter );					
 				}

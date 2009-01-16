@@ -69,8 +69,8 @@ public class ByteGenerator extends Generator
 					pos += desc.len;
 				}
 				else if(desc.format == Desc.FMT_BINARY)
-				{	// von rechts mit null füllen
-					System.arraycopy(Formatter.getStringNL(desc.len, val).getBytes(encoding), 0, str, pos, desc.len);
+				{	// von links mit null füllen
+					System.arraycopy(Formatter.lpad(desc.len, val, (char)0, true).getBytes(encoding), 0, str, pos, desc.len);
 					pos += desc.len;
 				}
 				else
