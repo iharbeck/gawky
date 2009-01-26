@@ -416,7 +416,10 @@ public abstract class Table extends Part
 	
 	public void findRow(Connection conn, int row) throws Exception
 	{
+		conn.setHoldability(ResultSet.TYPE_SCROLL_INSENSITIVE);
+
 		PreparedStatement stmt = getStmt(conn, SQL_FIND);
+		
 		ResultSet rset = null;
 		try 
 		{
@@ -432,6 +435,8 @@ public abstract class Table extends Part
 		} finally {
 			DB.doClose(rset);
 			DB.doClose(stmt);
+			
+			conn.setHoldability(ResultSet.TYPE_FORWARD_ONLY);
 		}
 	}
 	
