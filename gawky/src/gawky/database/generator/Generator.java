@@ -103,10 +103,10 @@ public class Generator
 			try
 			{
 			    switch (desc.format) {
+			    
 					case Desc.FMT_ASCII :
 					case Desc.FMT_BLANK :
 					case Desc.FMT_BLANK_ZERO :
-					case Desc.FMT_BINARY :
 					case Desc.FMT_UPPER :
 					case Desc.FMT_LOWER :
 					case Desc.FMT_BLANK_LETTER :
@@ -120,6 +120,9 @@ public class Generator
 						break;
 					case Desc.FMT_TIME :
 						val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(x+1) );
+						break;
+					case Desc.FMT_BINARY :
+						val = new String(rset.getBytes(x+1));
 						break;
 				}
 

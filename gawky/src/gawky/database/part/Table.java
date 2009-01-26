@@ -431,6 +431,7 @@ public abstract class Table extends Part
 			rset = stmt.executeQuery();
 			rset.setFetchSize(1);
 			
+			rset.next();
 			found = rset.absolute(row);
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
