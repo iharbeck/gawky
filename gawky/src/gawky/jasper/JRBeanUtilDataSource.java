@@ -38,6 +38,13 @@ public class JRBeanUtilDataSource implements JRDataSource
 				return Boolean.FALSE;
 		}
 		
+		if(path.equals("%FIRSTPAGE")) {
+			if(row == 1)
+				return Boolean.TRUE;
+			else
+				return Boolean.FALSE;
+		}
+		
 		try {
 			// Indexed parameters described as [x] in Report 
 			path = path.replaceAll("\\[x\\]", "[" + (row) + "]");
