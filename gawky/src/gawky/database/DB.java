@@ -4,6 +4,7 @@ import gawky.database.dbpool.AConnectionDriver;
 import gawky.global.Option;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -90,6 +91,19 @@ public class DB
     	return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
     }
 
+    
+    static public Driver getDriver() throws SQLException {
+    	return DriverManager.getDriver(AConnectionDriver.URL_PREFIX + "pool0");
+    }
+
+    static public Driver getDriver(int number) throws SQLException {
+    	return DriverManager.getDriver(AConnectionDriver.URL_PREFIX + "pool" + number);
+    }
+
+    static public Driver getDriver(String alias) throws SQLException {
+    	return DriverManager.getDriver(AConnectionDriver.URL_PREFIX + alias);
+    }
+    
     public static boolean isDBAvailable()
     {
     	return isDBAvailable(0);
