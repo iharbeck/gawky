@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -50,6 +49,8 @@ public class AConnectionPool
    private long timeout;
    private ConnectionReaper reaper;
    final private int poolsize=100;
+   
+   private boolean lock = false;
    
    Properties info = new java.util.Properties();
    
@@ -111,15 +112,18 @@ public class AConnectionPool
 
    public synchronized Connection getConnection() throws SQLException
    {
-     AConnection c = null;
+	  if(lock)
+		  throw new SQLException("Connectionpool is locked");
+	  
+      AConnection c = null;
 
-     do {
-       if(c != null)
-         removeConnection(c);
+      do {
+         if(c != null)
+           removeConnection(c);
 
-       c = (AConnection)getSubConnection();
-     }
-     while(!c.validate());
+         c = (AConnection)getSubConnection();
+      }
+      while(!c.validate());
 
      return c;
    }
@@ -145,9 +149,19 @@ public class AConnectionPool
        return c;
    }
 
-   public synchronized void returnConnection(AConnection conn)
-   {
+    public synchronized void returnConnection(AConnection conn)
+    {
       conn.expireLease();
-   }
+    }
+
+	public boolean isLock()
+	{
+		return lock;
+	}
+	
+	public void setLock(boolean lock)
+	{
+		this.lock = lock;
+	}
 
 }

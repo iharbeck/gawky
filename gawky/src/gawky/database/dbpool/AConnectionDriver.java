@@ -115,4 +115,19 @@ public class AConnectionDriver implements Driver
     {
         return false;
     }
+    
+    public void emptyPool()
+    {
+    	pool.closeConnections();
+    }
+    
+    public void lockPool()
+    {
+    	pool.setLock(true);
+    }
+     
+    public void unlockPool()
+    {
+    	pool.setLock(false);
+    }
 }
