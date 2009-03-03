@@ -3,7 +3,9 @@ package gawky.xml.dom;
 import gawky.file.Locator;
 import gawky.xml.sax.SaxSample;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.jdom.Document;
@@ -19,13 +21,14 @@ public class Jdom {
 	public static void main(String[] args) throws Exception {
 		 
 		SAXBuilder parser = new SAXBuilder();
-		Document doc = parser.build(new File(Locator.findPath("", SaxSample.class) + "../data/example.xml"));
+		Document doc = parser.build( new File(Locator.findPath("", SaxSample.class) + "../data/example.xml"));
 
 		System.out.println( doc.getRootElement().getChildren("record").size() );
 		
 		//xpath
 		List nodeList = XPath.selectNodes(doc, "/fias2/record/address");
 	
+		
 		Element el = (Element)nodeList.get(0);
 		System.out.println( el.getParentElement().getParentElement().getAttributeValue("uniqueid") );
 		System.out.println( nodeList.size() );

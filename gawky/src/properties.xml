@@ -56,5 +56,8 @@
 	<freemarker>
 		<templates>/example/template</templates>
 	</freemarker>
+	
+	
+	<import file="properties_sub.xml" />
 
 </config>

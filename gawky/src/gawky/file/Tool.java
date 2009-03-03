@@ -1,5 +1,7 @@
 package gawky.file;
 
+import gawky.global.Constant;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
@@ -15,6 +19,9 @@ import java.util.zip.ZipOutputStream;
 
 public class Tool {
 
+	public static final boolean MODE_OVERWRITE = false;
+	public static final boolean MODE_ATTACH    = true;
+	
 	public static String regbuilder(String dummy) 
 	{
 		if(dummy == null)
@@ -164,4 +171,70 @@ public class Tool {
 			return null;
 		}
 	 }
+	 
+	 
+	 public static byte[] readbytearray(String filename) throws Exception
+	 {
+		File f = new File( filename ); 
+    	byte[] buffer = new byte[ (int) f.length() ]; 
+    	InputStream in = new FileInputStream( f ); 
+    	in.read( buffer ); 
+    	in.close();
+    	
+    	return buffer;
+	 }
+	 
+	 public static char[] readchararray(String filename) throws Exception
+	 {
+		File f = new File( filename ); 
+    	char[] buffer = new char[ (int) f.length() ]; 
+    	InputStreamReader in = new InputStreamReader(new FileInputStream( f ), "UTF8"); 
+    	in.read( buffer ); 
+    	in.close();
+    	
+    	return buffer;
+	 }
+	 
+	 /**
+		 * xml in Datei schreiben (Overwrite mode)
+		 * @param filename
+		 * @param xml
+		 * @throws Exception
+		 */
+		public static void write(String filename, StringBuilder xml) throws Exception 
+		{
+			write(filename, xml, MODE_OVERWRITE);
+		}
+		
+		/**
+		 * xml in Datei schreiben
+		 * @param filename
+		 * @param xml
+		 * @param attach
+		 * @throws Exception
+		 */
+		public static void write(String filename, StringBuilder xml, boolean attach) throws Exception 
+		{
+			write(filename, xml.toString(), attach);
+		}
+		public static void write(String filename, String xml, boolean attach) throws Exception 
+		{
+			write(filename, xml, attach, Constant.ENCODE_UTF8);
+		}
+		
+		public static void write(String filename, StringBuilder xml, boolean attach, String encoding) throws Exception 
+		{
+			write(filename, xml.toString(), attach, encoding);
+		}
+		public static void write(String filename, String xml, boolean attach, String encoding) throws Exception 
+		{
+			// create target folder
+			createFolder(filename);
+			
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(filename, attach), encoding);
+			
+			out.write( xml );
+
+			out.close();
+		}
 }

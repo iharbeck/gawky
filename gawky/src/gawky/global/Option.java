@@ -2,11 +2,15 @@ package gawky.global;
 
 import gawky.database.DB;
 import gawky.file.Locator;
+import gawky.file.Tool;
+import gawky.regex.Grouper;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -157,8 +161,32 @@ public class Option
 			// XML Configfile
 			config = new XMLConfiguration();
 			config.setEncoding("UTF8");
+			
+			
 			if(Validation.notEmpty(propfile))
-				config.load(propfile);
+			{
+				// Include von externen Configfiles: <import file="ALIAS" /> 
+				Grouper includer = new Grouper("<import file=\"(.*?)\".?/>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+	
+				String org = new String(Tool.readbytearray(Locator.findBinROOT() + propfile));
+	
+				String[] includefile = includer.matchall(org);
+				
+				for(int i=0; i < includefile.length; i = i + 2)
+				{
+					try {
+						// read include file
+						String include = new String(Tool.readbytearray(Locator.findBinROOT() + includefile[i+1]));
+					
+						org = org.replace(includefile[i], include);
+					} catch (Exception e) {
+						log.error("Configfile missing", e);
+					}
+				}
+			
+				config.load(new ByteArrayInputStream(org.getBytes()));
+			}
+			
 			
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
