@@ -35,7 +35,8 @@ public class FreemarkerTemplate implements gawky.template.Template
 		ByteArrayOutputStream barray = new ByteArrayOutputStream();
 		process(obj, templatefile, barray);
 		
-		return barray.toString(encoding);
+		return barray.toString();
+		//return barray.toString(encoding);
 	}
 	
 	
