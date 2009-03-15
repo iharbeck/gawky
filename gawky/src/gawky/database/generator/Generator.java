@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
@@ -76,7 +77,7 @@ public class Generator
 		Desc[] descs = part.getCachedDesc();
 		Desc   desc;
 
-		String val = null;
+		Object val = null;
 
 
 		if(debug)
@@ -101,33 +102,11 @@ public class Generator
 				continue;
 
 			try
-			{
-			    switch (desc.format) {
-			    
-					case Desc.FMT_ASCII :
-					case Desc.FMT_BLANK :
-					case Desc.FMT_BLANK_ZERO :
-					case Desc.FMT_UPPER :
-					case Desc.FMT_LOWER :
-					case Desc.FMT_BLANK_LETTER :
-						val = rset.getString(x+1);
-						break;
-					case Desc.FMT_DIGIT :
-						val = formatNumber(rset.getDouble(x+1));
-						break;
-					case Desc.FMT_DATE :
-						val =  df_YYYYMMDD.format( rset.getDate(x+1) );
-						break;
-					case Desc.FMT_TIME :
-						val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(x+1) );
-						break;
-					case Desc.FMT_BINARY :
-						val = new String(rset.getBytes(x+1));
-						break;
-				}
+			{   
+			    val = mapGetDBToObjectType(desc, rset, x+1);
 
-			    if(dotrim)
-			    	val = Formatter.rtrim(val);
+			    if(dotrim && val instanceof String)
+			    	val = Formatter.rtrim((String)val);
 
 			    descs[i].setValue(part, val);
 
@@ -146,6 +125,69 @@ public class Generator
 	}
 	
 	
+	private final Object mapGetDBToObjectType(Desc desc, ResultSet rset, int x) throws Exception 
+	{
+		Object val = null;
+		
+	    switch (desc.format) 
+	    {
+			case Desc.FMT_ASCII :
+			case Desc.FMT_BLANK :
+			case Desc.FMT_BLANK_ZERO :
+			case Desc.FMT_UPPER :
+			case Desc.FMT_LOWER :
+			case Desc.FMT_BLANK_LETTER :
+				val = rset.getString(x+1);
+				break;
+			case Desc.FMT_DIGIT :
+				val = formatNumber(rset.getDouble(x+1));
+				break;
+			case Desc.FMT_DATE :
+				val =  df_YYYYMMDD.format( rset.getDate(x+1) );
+				break;
+			case Desc.FMT_TIME :
+				val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(x+1) );
+				break;
+			case Desc.FMT_BINARY :
+				val = rset.getBytes(x+1);
+				break;
+		}
+
+	    return val;
+	}
+
+	private final Object mapGetDBToObjectType(Desc desc, ResultSet rset, String name) throws Exception 
+	{
+		Object val = null;
+		
+	    switch (desc.format) 
+	    {
+			case Desc.FMT_ASCII :
+			case Desc.FMT_BLANK :
+			case Desc.FMT_BLANK_ZERO :
+			case Desc.FMT_UPPER :
+			case Desc.FMT_LOWER :
+			case Desc.FMT_BLANK_LETTER :
+				val = rset.getString(name);
+				break;
+			case Desc.FMT_DIGIT :
+				val = formatNumber(rset.getDouble(name));
+				break;
+			case Desc.FMT_DATE :
+				val =  df_YYYYMMDD.format( rset.getDate(name) );
+				break;
+			case Desc.FMT_TIME :
+				val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(name) );
+				break;
+			case Desc.FMT_BINARY :
+				val = rset.getBytes(name);
+				break;
+		}
+
+	    return val;
+	}
+
+	
 	public final void fillPartPartial(ResultSet rset, Table part) throws Exception
 	{
 		//Desc[] descs = part.getCachedDesc();
@@ -160,33 +202,14 @@ public class Generator
 			String name = meta.getColumnName(i).toLowerCase();
 			desc = part.getDescByName(name);
 		
-			String val = null;
+			Object val = null;
 
 			try
 			{
-			    switch (desc.format) {
-					case Desc.FMT_ASCII :
-					case Desc.FMT_BLANK :
-					case Desc.FMT_BLANK_ZERO :
-					case Desc.FMT_BINARY :
-					case Desc.FMT_UPPER :
-					case Desc.FMT_LOWER :
-					case Desc.FMT_BLANK_LETTER :
-						val = rset.getString(name);
-						break;
-					case Desc.FMT_DIGIT :
-						val = formatNumber(rset.getDouble(name));
-						break;
-					case Desc.FMT_DATE :
-						val =  df_YYYYMMDD.format( rset.getDate(name) );
-						break;
-					case Desc.FMT_TIME :
-						val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(name) );
-						break;
-				}
-
-			    if(dotrim)
-			    	val = Formatter.rtrim(val);
+				val = mapGetDBToObjectType(desc, rset, name);
+				
+			    if(dotrim && val instanceof String)
+			    	val = Formatter.rtrim((String)val);
 
 			    desc.setValue(part, val);
 
@@ -501,28 +524,10 @@ public class Generator
 
 				setter++;
 
-				String val = desc.getValue(bean);
+				Object val = desc.getValue(bean);
 
-			    switch (desc.format) {
-					case Desc.FMT_ASCII :
-					case Desc.FMT_BLANK :
-					case Desc.FMT_BLANK_ZERO :
-					case Desc.FMT_BINARY :
-					case Desc.FMT_UPPER :
-					case Desc.FMT_LOWER :
-					case Desc.FMT_BLANK_LETTER :
-						stmt.setString(setter, val);
-						break;
-					case Desc.FMT_DIGIT :
-						stmt.setDouble(setter,  parseNumber(val));
-						break;
-					case Desc.FMT_DATE :
-						stmt.setDate(setter, new Date( df_YYYYMMDD.parse(val).getTime()));
-						break;
-					case Desc.FMT_TIME :
-						stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse(val).getTime()));
-						break;
-				}
+				mapSetObjectToDBType(desc, stmt, setter, val);
+				
 			} catch(Exception e) {
 
 				try {
@@ -543,11 +548,39 @@ public class Generator
 
 				for(int i=0; i < descids.length; i++)
 			    {
-					stmt.setString(setter + i +1, descids[i].getValue(bean));
+					//stmt.setOString(setter + i +1, descids[i].getValue(bean));
+					mapSetObjectToDBType(descids[i], stmt, setter + i +1, descids[i].getValue(bean));
 			    }
 			}
 		} catch(Exception e) {
 			log.error(e);
+		}
+	}
+	
+	private final void mapSetObjectToDBType(Desc desc, PreparedStatement stmt, int setter, Object val) throws Exception 
+	{
+		switch (desc.format) 
+		{
+			case Desc.FMT_ASCII :
+			case Desc.FMT_BLANK :
+			case Desc.FMT_BLANK_ZERO :
+			case Desc.FMT_UPPER :
+			case Desc.FMT_LOWER :
+			case Desc.FMT_BLANK_LETTER :
+				stmt.setString(setter, (String)val);
+				break;
+			case Desc.FMT_DIGIT :
+				stmt.setDouble(setter,  parseNumber((String)val));
+				break;
+			case Desc.FMT_DATE :
+				stmt.setDate(setter, new Date( df_YYYYMMDD.parse((String)val).getTime()));
+				break;
+			case Desc.FMT_TIME :
+				stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse((String)val).getTime()));
+				break;
+			case Desc.FMT_BINARY :
+				stmt.setBytes(setter, (byte[])val);
+				break;
 		}
 	}
 

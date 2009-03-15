@@ -39,7 +39,7 @@ public class JRBeanUtilDataSource implements JRDataSource
 		}
 		
 		if(path.equals("%FIRSTPAGE")) {
-			if(row == 1)
+			if(row == 0)
 				return Boolean.TRUE;
 			else
 				return Boolean.FALSE;

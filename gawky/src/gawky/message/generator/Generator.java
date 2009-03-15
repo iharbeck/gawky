@@ -41,7 +41,7 @@ public class Generator
 				if(desc.nostring)
 					continue;
 				
-				String val = null;
+				Object val = null;
 				
 				try {
 					val = desc.getValue(bean);
@@ -50,26 +50,26 @@ public class Generator
 				
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					str.append( Formatter.getStringN(desc.len, val) );
+					str.append( Formatter.getStringN(desc.len, (String)val) );
 					if(desc.delimiter != null)
 						str.append(desc.delimiter);
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von links mit null füllen
-					str.append( Formatter.lpad(desc.len, val, (char)0, true) );
+					str.append( Formatter.bpad(desc.len, (byte[])val) );
 					if(desc.delimiter != null)
 						str.append( desc.delimiter );					
 				}
 				else
 				{
 					if(desc.delimiter  != null)
-						str.append( Formatter.getStringV(desc.len, val, desc.delimiter) );
+						str.append( Formatter.getStringV(desc.len, (String)val, desc.delimiter) );
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0 && !(desc instanceof DescV))
-								str.append( Formatter.getStringC(desc.len, val) );
+								str.append( Formatter.getStringC(desc.len, (String)val) );
 							else
 								str.append( val );
 						}
@@ -107,7 +107,7 @@ public class Generator
 				String val = null;
 				
 				try {
-					val = desc.getValue(bean);
+					val = (String)desc.getValue(bean);
 				} catch(Exception e) {
 				}
 				

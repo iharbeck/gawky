@@ -1,5 +1,7 @@
 package gawky.message;
 
+import java.math.BigInteger;
+
 import gawky.global.Matcher;
 
 /*
@@ -8,6 +10,49 @@ import gawky.global.Matcher;
 
 public class Formatter
 {
+   public final static byte[] bpad(int size, byte[] value)
+   {
+	   byte[] target = new byte[size];
+	   
+	   for(int i=size, x=value.length; i > 0; i--, x--) 
+	   {
+		   if(x <= 0)
+			   target[i-1] = (char)0;
+		   else
+			   target[i-1] = value[x-1];
+	   }
+	   
+	   //System.arraycopy(value, 0, target, pos, desc.len);
+	   
+	   return target;
+   }
+   
+   public static void main(String[] args) 
+   {
+	   byte[] pass = new byte[] {}; //'1', '2', '3', '1', '2', '3'};
+	 
+	   byte[] fin = bpad(6, pass);
+	   
+	   long t = 37000;
+	   
+	   byte[] v1 = convertNum2Bytes(t);
+	   byte[] v2 = new String(convertNum2Bytes(t)).getBytes();
+	   
+	   
+	   System.out.println(convertBytes2Num(v1));
+	   System.out.println(convertBytes2Num(v2));
+	   
+	   
+	   System.out.println(fin);
+   }
+   
+   public final static long convertBytes2Num(byte[] val) {
+	   return new BigInteger(val).longValue();
+   }
+   public final static byte[] convertNum2Bytes(long val) {
+	   return new BigInteger(""+val).toByteArray();
+   }
+	
    public final static String getStringN(int size, long value) {
 	   return getStringN(size, Long.toString(value));
    }
@@ -44,12 +89,12 @@ public class Formatter
 
    static char[] iv = "\n\r\0\t".toCharArray();
    
-   public final static String lpad(int size, String value, char filler)
-   {
-	   return lpad(size, value, filler, false);
-   }
+//   public final static String lpad(int size, String value, char filler)
+//   {
+//	   return lpad(size, value, filler, false);
+//   }
    
-   public final static String lpad(int size, String value, char filler, boolean binary)
+   public final static String lpad(int size, String value, char filler) //, boolean binary)
    {
      if(value == null)
          value = "";
@@ -67,10 +112,10 @@ public class Formatter
      for(int i=0; i < size-spos; i++)
    	    target[i] = filler;
    	
-     if(!binary) 
+     //if(!binary) 
      {
 	     for(int i=0; i < size; i++) {
-	   	  for(int a=0; a < 4; a++)
+	   	   for(int a=0; a < 4; a++) 
 	   		  if(target[i] == iv[a]) {
 	   			  target[i] = ' ';
 	   			  continue;

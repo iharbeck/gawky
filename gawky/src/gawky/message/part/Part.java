@@ -56,7 +56,7 @@ public abstract class Part implements Cloneable
 	 * @param name
 	 * @return
 	 */
-	public final String getValue(String name) {
+	public final Object getValue(String name) {
 		try {
 			return getDescByName(name).getValue(this);
 		} catch (Exception e) {
@@ -217,7 +217,7 @@ public abstract class Part implements Cloneable
 	
 							// Create setter
 							CtMethod ms = CtNewMethod.make(
-									" public final void setValue(Object bean, String value) throws Exception {" +
+									" public final void setValue(Object bean, Object value) throws Exception {" +
 									"  ((" + classname + ")bean).set" + mname + "(value); " +
 									" } "
 									, cc);
@@ -225,7 +225,7 @@ public abstract class Part implements Cloneable
 	
 							// Create getter
 							CtMethod mg = CtNewMethod.make(
-									" public final String getValue(Object bean) throws Exception {" +
+									" public final Object getValue(Object bean) throws Exception {" +
 									"  return ((" + classname + ")bean).get" + mname + "(); " +
 									" } "
 									, cc);
