@@ -56,7 +56,7 @@ public class Generator
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von links mit null füllen
-					str.append( Formatter.bpad(desc.len, (byte[])val) );
+					str.append(new String(Formatter.bpad(desc.len, (byte[])val)));
 					if(desc.delimiter != null)
 						str.append( desc.delimiter );					
 				}
@@ -104,7 +104,7 @@ public class Generator
 			{
 				desc = descs[i];
 				
-				String val = null;
+				Object val = null;
 				
 				try {
 					val = (String)desc.getValue(bean);
@@ -114,26 +114,26 @@ public class Generator
 				str.append( desc.name).append( " <" ); 
 				if(desc.format == Desc.FMT_DIGIT)
 				{
-					str.append( Formatter.getStringN(desc.len, val) );
+					str.append( Formatter.getStringN(desc.len, (String)val) );
 					if(desc.delimiter != null)
 						str.append( desc.delimiter );
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{	// von rechts mit null füllen
-					str.append( Formatter.getStringNL(desc.len, val) );
+					str.append( new String(Formatter.bpad(desc.len, (byte[])val)) );
 					if(desc.delimiter != null)
 						str.append( desc.delimiter );					
 				}
 				else
 				{
 					if(desc.delimiter != null)
-						str.append( Formatter.getStringV(desc.len, val, desc.delimiter) );
+						str.append( Formatter.getStringV(desc.len, (String)val, desc.delimiter) );
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0)
-								str.append( Formatter.getStringC(desc.len, val) );
+								str.append( Formatter.getStringC(desc.len, (String)val) );
 							else
 								str.append( val );
 						}

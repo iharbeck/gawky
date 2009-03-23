@@ -215,10 +215,12 @@ public abstract class Part implements Cloneable
 
 							cc.addInterface( pool.get(Accessor.class.getName()) );
 	
+							String type = descs[i].format == Desc.FMT_BINARY ? "byte[]" : "String";
+							
 							// Create setter
 							CtMethod ms = CtNewMethod.make(
 									" public final void setValue(Object bean, Object value) throws Exception {" +
-									"  ((" + classname + ")bean).set" + mname + "(value); " +
+									"  ((" + classname + ")bean).set" + mname + "((" + type + ")value); " +
 									" } "
 									, cc);
 							cc.addMethod(ms);

@@ -3,7 +3,6 @@ package gawky.mail;
 
 import gawky.global.Constant;
 import gawky.global.Option;
-import gawky.jasper.Concat;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,7 +33,6 @@ import javax.mail.internet.MimeUtility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 /**
  * @author Ingo Harbeck
  *  
@@ -48,9 +46,7 @@ public class Mail
     public static int ERROR_IO = 3;
     public static int STATUS_OK = 0;
     
-    private static String charset     = Constant.ENCODE_ISO;
-    private static String charsettext = Constant.ENCODE_ISO; 
-    private static String encoding    = Constant.ENCODE_ISO;
+    private static String charsettext = Constant.ENCODE_UTF8; 
     
     // dependency on Option Class. Alias in XML config file:
     // call sendMailGeneric if Option Class is not used
@@ -58,9 +54,6 @@ public class Mail
     private static String DEFAULT_PASSWORD = "mail.password";
     private static String DEFAULT_SERVER   = "mail.server";
 
-    private static String DEFAULT_FROM      = "mail.from";
-    private static String DEFAULT_FROMALIAS = "mail.fromalias";
-    private static String DEFAULT_SUBJECT   = "mail.subject";
  
     public static int sendParameterMail(
             String from,    String fromalias,

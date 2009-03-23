@@ -137,19 +137,19 @@ public class Generator
 			case Desc.FMT_UPPER :
 			case Desc.FMT_LOWER :
 			case Desc.FMT_BLANK_LETTER :
-				val = rset.getString(x+1);
+				val = rset.getString(x);
 				break;
 			case Desc.FMT_DIGIT :
-				val = formatNumber(rset.getDouble(x+1));
+				val = formatNumber(rset.getDouble(x));
 				break;
 			case Desc.FMT_DATE :
-				val =  df_YYYYMMDD.format( rset.getDate(x+1) );
+				val =  df_YYYYMMDD.format( rset.getDate(x) );
 				break;
 			case Desc.FMT_TIME :
-				val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(x+1) );
+				val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(x) );
 				break;
 			case Desc.FMT_BINARY :
-				val = rset.getBytes(x+1);
+				val = rset.getBytes(x);
 				break;
 		}
 
@@ -579,7 +579,7 @@ public class Generator
 				stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse((String)val).getTime()));
 				break;
 			case Desc.FMT_BINARY :
-				stmt.setBytes(setter, (byte[])val);
+				stmt.setBytes(setter, Formatter.bpad(desc.len, (byte[])val));
 				break;
 		}
 	}

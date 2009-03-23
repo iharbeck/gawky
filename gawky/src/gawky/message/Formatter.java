@@ -14,12 +14,15 @@ public class Formatter
    {
 	   byte[] target = new byte[size];
 	   
-	   for(int i=size, x=value.length; i > 0; i--, x--) 
+	   if(value != null) 
 	   {
-		   if(x <= 0)
-			   target[i-1] = (char)0;
-		   else
-			   target[i-1] = value[x-1];
+		   for(int i=size, x=value.length; i > 0; i--, x--) 
+		   {
+			   if(x <= 0)
+				   target[i-1] = (char)0;
+			   else
+				   target[i-1] = value[x-1];
+		   }
 	   }
 	   
 	   //System.arraycopy(value, 0, target, pos, desc.len);
@@ -47,10 +50,14 @@ public class Formatter
    }
    
    public final static long convertBytes2Num(byte[] val) {
-	   return new BigInteger(val).longValue();
+	   try {
+		   return new BigInteger(val).longValue();
+	   } catch (Exception e) {
+		   return 0L;
+	   }
    }
    public final static byte[] convertNum2Bytes(long val) {
-	   return new BigInteger(""+val).toByteArray();
+	   return new BigInteger(Long.toString(val)).toByteArray();
    }
 	
    public final static String getStringN(int size, long value) {
