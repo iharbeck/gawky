@@ -220,7 +220,7 @@ public class DB
 		{
 			stmt_select = conn.prepareStatement(sql);
 			
-			fillParams(stmt_select, (String[])params);
+			fillParams(stmt_select, (Object[])params);
 			
 			return stmt_select.executeUpdate();
 		} finally {
@@ -436,15 +436,14 @@ public class DB
 		return al;
 	}
 
-	private static void fillParams(PreparedStatement stmt, String[] params) throws SQLException
+	private static void fillParams(PreparedStatement stmt, Object[] params) throws SQLException
 	{
 		if(params == null)
 			return;
 		
 		int a = 1;
 		for (int i=0; i < params.length; i++) {
-			String param = params[i];
-			stmt.setString(a++, param);
+			stmt.setObject(a++, params[i]);
 		}		
 	}
 	
