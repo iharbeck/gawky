@@ -174,15 +174,6 @@ public class Mail
         	// encoding
         	System.setProperty("mail.mime.charset", charsettext);
 
-        	//nmessage   = MimeUtility.encodeText(message, charsettext, "Q");
-        	//nmessage   = MimeUtility.encodeText(subject, Constant.ENCODE_ISO, Constant.ENCODE_UTF8);
-        	
-            //String nsubject   = MimeUtility.encodeText(subject, charsettext, "Q"); //MimeUtility.encodeText(subject, charset, encoding);
-//            String ntoalias   = toalias; //MimeUtility.encodeText(toalias, charset, encoding);
-//            String nfromalias = fromalias; //MimeUtility.encodeText(fromalias, charset, encoding);
-            
-            //System.out.println(nsubject);
-            
             // Get system properties
             java.util.Properties prop = System.getProperties();
     	    prop.put("mail.smtp.host", host);
@@ -197,7 +188,6 @@ public class Mail
             MimeMessage msg = new MimeMessage(ses1);
             msg.setHeader("Content-Transfer-Encoding", "8bit");
            
-            //msg.setSubject(MimeUtility.encodeText(pd.getSubjec t(), this.charset, subjectEncoding), this.charset);
             // set Type and Charset in Headerfield 'Content-Type'
             msg.setHeader("Content-Type", "text/plain; charset=UTF-8");
 
