@@ -172,23 +172,16 @@ public class Mail
     	 
         try {
         	// encoding
-        	String nmessage;   
-        	if(html)
-        		//nmessage   = MimeUtility.encodeText(subject, charset, encoding);
-        		//nmessage   = MimeUtility.encodeText(message, charset, "Q");
-        		nmessage   = message;
-        	else
-        		nmessage   = message;
-        	
+        	System.setProperty("mail.mime.charset", charsettext);
+
+        	//nmessage   = MimeUtility.encodeText(message, charsettext, "Q");
         	//nmessage   = MimeUtility.encodeText(subject, Constant.ENCODE_ISO, Constant.ENCODE_UTF8);
         	
-        	//System.setProperty("mail.mime.charset", "UTF-8");
-        	
-            String nsubject   = MimeUtility.encodeText(subject, "UTF-8", "Q"); //MimeUtility.encodeText(subject, charset, encoding);
-            String ntoalias   = toalias; //MimeUtility.encodeText(toalias, charset, encoding);
-            String nfromalias = fromalias; //MimeUtility.encodeText(fromalias, charset, encoding);
+            //String nsubject   = MimeUtility.encodeText(subject, charsettext, "Q"); //MimeUtility.encodeText(subject, charset, encoding);
+//            String ntoalias   = toalias; //MimeUtility.encodeText(toalias, charset, encoding);
+//            String nfromalias = fromalias; //MimeUtility.encodeText(fromalias, charset, encoding);
             
-            System.out.println(nsubject);
+            //System.out.println(nsubject);
             
             // Get system properties
             java.util.Properties prop = System.getProperties();
@@ -204,20 +197,16 @@ public class Mail
             MimeMessage msg = new MimeMessage(ses1);
             msg.setHeader("Content-Transfer-Encoding", "8bit");
            
-            
-
             //msg.setSubject(MimeUtility.encodeText(pd.getSubjec t(), this.charset, subjectEncoding), this.charset);
             // set Type and Charset in Headerfield 'Content-Type'
             msg.setHeader("Content-Type", "text/plain; charset=UTF-8");
 
             
-            
-            
             //TO
-            msg.setFrom(new InternetAddress(from, nfromalias));
+            msg.setFrom(new InternetAddress(from, fromalias));
             
             String[] tos = to.split("\\s*;\\s*");
-            String[] ntoaliass = ntoalias.split("\\s*;\\s*");
+            String[] ntoaliass = toalias.split("\\s*;\\s*");
             
             try {
             	for(int i=0; i < tos.length; i++)
@@ -228,10 +217,8 @@ public class Mail
     	    //FROM
             
             
-            msg.setSubject(subject.trim(), "UTF-8"); //nsubject);  // , "UTF-8"; //; //
-     	   
+            msg.setSubject(subject.trim(), charsettext); 
             
-    	    //msg.setSubject("\u02DA", "UTF-8"); //nsubject);  // , "UTF-8"; //; //
     	    
     	    if(reply != null)
     	    	msg.setReplyTo((Address[]) reply.toArray(new Address[reply.size()]) );
@@ -244,12 +231,12 @@ public class Mail
             // SET HTML MAIL
             if(html)
             {
-            	messageBodyPart.setContent(nmessage, "text/html; charset=utf-8");
+            	messageBodyPart.setContent(message, "text/html; charset=utf-8");
             }
             else 
             {
-            	messageBodyPart.setContent(nmessage, "text/plain");            	
-            	messageBodyPart.setText(nmessage, charsettext);
+            	messageBodyPart.setContent(message, "text/plain; charset=utf-8");            	
+            	messageBodyPart.setText(message, charsettext);
             }
             
             // Multipart Email

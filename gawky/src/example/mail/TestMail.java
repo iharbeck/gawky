@@ -19,7 +19,7 @@ public class TestMail {
 		Mail.sendMailAttachStream("ingo.harbeck@bertelsmann.de", "ingo harbeck", 
 				//"oliver.glowa@bertelsmann.de", "Andreas Thiesen", 
 				"ingo.harbeck@bertelsmann.de", "ingo harbeck",
-				"Mobile Rechnung", "Schon bezahlt?",
+				"Mobile Rechnung צהü", "Schon צהp bezahlt?",
 				  new FileInputStream("d:/ticket.pdf"), "rechnung.pdf");
 		
 	}
