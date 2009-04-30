@@ -168,7 +168,7 @@ public class Option
 				// Include von externen Configfiles: <import file="ALIAS" /> 
 				Grouper includer = new Grouper("<import file=\"(.*?)\".?/>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 	
-				String org = new String(Tool.readbytearray(Locator.findBinROOT() + propfile));
+				String org = new String(Tool.readchararray(Locator.findBinROOT() + propfile));
 	
 				String[] includefile = includer.matchall(org);
 				
@@ -176,15 +176,15 @@ public class Option
 				{
 					try {
 						// read include file
-						String include = new String(Tool.readbytearray(Locator.findBinROOT() + includefile[i+1]));
+						String include = new String(Tool.readchararray(Locator.findBinROOT() + includefile[i+1]));
 					
-						org = org.replace(includefile[i], include);
+						org = org.replace(includefile[i], include.trim());
 					} catch (Exception e) {
 						log.error("Configfile missing", e);
 					}
 				}
 			
-				config.load(new ByteArrayInputStream(org.getBytes()));
+				config.load(new ByteArrayInputStream(org.trim().getBytes()));
 			}
 			
 			

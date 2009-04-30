@@ -191,7 +191,6 @@ public class Tool {
     	InputStreamReader in = new InputStreamReader(new FileInputStream( f ), "UTF8"); 
     	in.read( buffer ); 
     	in.close();
-    	
     	return buffer;
 	 }
 	 
