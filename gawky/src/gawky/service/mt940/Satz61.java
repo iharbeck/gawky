@@ -8,6 +8,11 @@ import gawky.message.part.DescL;
 import gawky.message.part.DescV;
 import gawky.message.part.Part;
 
+/**
+ * Statement
+ * @author harb05
+ *
+ */
 public class Satz61 extends Part implements MTRecord
 {
 	public Desc[] getDesc() {

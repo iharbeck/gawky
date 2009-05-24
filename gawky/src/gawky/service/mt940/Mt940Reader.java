@@ -116,7 +116,8 @@ public class Mt940Reader
     	reader.registerHandler(new Handler());
     	
     	//File f = new File(Locator.findBinROOT()+"../format/mt940google");
-    	File f = new File("c:/db.txt");
+    	//File f = new File("c:/db.txt");
+    	File f = new File("C:/banking/ggExport.sta");
     	
     	reader.read(f);
 	    
