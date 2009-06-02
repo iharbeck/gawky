@@ -137,7 +137,7 @@ public class DBN
 
 	public static ArrayList getRowList(int pool, String sql, String[] params) {
 		try { 
-    		return DB.getList(pool, sql, params);
+    		return DB.getRowList(pool, sql, params);
     	} catch (Exception e) {
     		return new ArrayList();
     	}
@@ -145,7 +145,7 @@ public class DBN
 
 	public static ArrayList getRowList(Connection conn, String sql, String[] params) {
 		try { 
-    		return DB.getList(conn, sql, params);
+    		return DB.getRowList(conn, sql, params);
     	} catch (Exception e) {
     		return new ArrayList();
     	}

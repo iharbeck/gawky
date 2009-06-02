@@ -497,12 +497,15 @@ public abstract class Table extends Part
 	 * static Find Methods
 	 */
 
-	public static Table find(Class clazz, long id) throws Exception
+	
+	public static <T extends Table> T find(Class<T> clazz, long id) throws Exception 
+//	public static Table find(Class clazz, long id) throws Exception
 	{
 		return find(clazz, new Long(id));
 	}
 
-	public static Table find(Class clazz, Object id) throws Exception
+	public static <T extends Table> T find(Class<T> clazz, Object id) throws Exception 
+//	public static Table find(Class clazz, Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -514,10 +517,10 @@ public abstract class Table extends Part
 		}
 	}
 
-
-	public static Table find(Class clazz, Connection conn, Object id) throws Exception
+	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object id) throws Exception 
+//	public static Table find(Class clazz, Connection conn, Object id) throws Exception
 	{
-		Table inst = (Table)clazz.newInstance();
+		T inst = clazz.newInstance();
 
 		inst.find(conn, id);
 
