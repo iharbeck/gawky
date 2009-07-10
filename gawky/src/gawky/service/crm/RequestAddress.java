@@ -19,7 +19,7 @@ public class RequestAddress extends Part
 			new DescC("ADDR"),	
 			new DescC("00"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "character_set"),
-			new DescF(Desc.FMT_BINARY, Desc.CODE_R, 15,  "score_type"),
+			new DescF(Desc.FMT_A, Desc.CODE_R, 15,  "score_type"),
 			new DescF(Desc.FMT_A, Desc.CODE_R, 36,  "fe_customer_id"),
 	        new DescF(Desc.FMT_9, Desc.CODE_R, 3,   "address_number"),
 	        new Reserved(44),
