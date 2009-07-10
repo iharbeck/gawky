@@ -35,11 +35,18 @@ public class Option
 	static CommandLine cmd     = null;
 	static Options     options = null;
 
-	Replacer replace = new Replacer("\\$\\{staging\\}");
+	static Replacer replace = null;
 	
-	String stage = getProperty("staging", "test");
+	static String stage = null;
 	
-	private String processalias(String alias) {
+	private static String processalias(String alias) 
+	{
+		if(replace == null) {
+			replace = new Replacer("\\$\\{staging\\}");
+			stage = getProperty("staging", "test");
+		}
+		if(stage == null)
+			return alias;
 		return replace.replaceFirst(alias, stage); 
 	}
 	
@@ -54,6 +61,8 @@ public class Option
 	 */
 	public static String getProperty(String alias, String def)
 	{
+		alias = processalias(alias);
+	
 		if(cmd != null && cmd.hasOption(alias))
 			return cmd.getOptionValue(alias);
 		else if(config != null)
@@ -69,6 +78,8 @@ public class Option
 	
 	public static String[] getProperties(String alias)
 	{
+		alias = processalias(alias);
+		
 		if(cmd != null && cmd.hasOption(alias))
 			return cmd.getOptionValues(alias);
 		else if(config != null)
@@ -80,6 +91,8 @@ public class Option
 	
 	public static boolean hasProperty(String alias)
 	{
+		alias = processalias(alias);
+		
 		return (cmd != null && cmd.hasOption(alias)) ||
 			   (config != null && (config.getString(alias) != null || "1".equals(config.getString(alias))));
 	}
