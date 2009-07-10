@@ -1,5 +1,7 @@
 package gawky.jasper;
 
+import gawky.regex.Replacer;
+
 import java.util.HashMap;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -18,6 +20,9 @@ public class JRBeanUtilDataSource implements JRDataSource
 
 	int rows   = 0;
 	int currow = 0;
+	 
+	//Replacer for Rowindicator 
+	Replacer replacer = new Replacer("\\[x\\]");
 	
 	public JRBeanUtilDataSource(Object data, int rows) {
 		this.data = data;
@@ -31,6 +36,10 @@ public class JRBeanUtilDataSource implements JRDataSource
 	
 	public Object getValue(Object bean, String path, int row) 
 	{
+		if(log.isDebugEnabled())
+			log.debug("PATH: " + path + " ROW: " + (row+1) + "/" + rows);
+		
+		// Expression handler
 		if(path.equals("%LASTPAGE")) {
 			if(row == rows-1)
 				return Boolean.TRUE;
@@ -47,7 +56,7 @@ public class JRBeanUtilDataSource implements JRDataSource
 		
 		try {
 			// Indexed parameters described as [x] in Report 
-			path = path.replaceAll("\\[x\\]", "[" + (row) + "]");
+			path = replacer.replaceFirst(path, "[" + (row) + "]");
 			
 			if(path.startsWith("#") && bean instanceof Hashprovider)
 			{
@@ -67,8 +76,6 @@ public class JRBeanUtilDataSource implements JRDataSource
 					return ((HashMap)bean).get(path);
 			}
 			
-		
-				
 			// TODO: implement cached version
 			return PropertyUtils.getProperty(bean, path);  //return BeanUtils.getProperty(bean, path);
 		} catch (Exception e) {
