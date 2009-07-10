@@ -43,7 +43,7 @@ public class TestCRMObject {
        // HEAD Information
        RequestHeadPaymentech head = new RequestHeadPaymentech();
        
-       head.setTransaction_type("20"); //20 NEW 21 UPDATE 22
+       head.setTransaction_type("70"); //20 NEW 21 UPDATE 22
        //head.head_client_id        = "700340202";
        //head.head_client_id        = "700343500";
       
@@ -54,7 +54,7 @@ public class TestCRMObject {
        
        head.setCustomer_id(""); //UNIFI + "445566";
        
-       head.setTransaction_id("JILA123456");
+       head.setTransaction_id("iiii123456");
        
        head.setCharacter_encoding(CHARSET);
        head.setBatch_flag("0");
@@ -123,7 +123,9 @@ public class TestCRMObject {
        //Comm.setServer("debmu720", 31999);
        //Comm.setServer("lnxcrm01", 31680);
        //Client client = new Client("crmtest.bertelsmann.de", 31680);
-       Client client = new Client("degtlun2056.server.arvato-systems.de", 31680);
+       //Client client = new Client("degtlun2056.server.arvato-systems.de", 31690);
+       //Client client = new Client("crm9.bertelsmann.de", 31690);
+       Client client = new Client("crmtest.bertelsmann.de", 31680);
        
        // SSL
        //Comm.setServer("crm.bertelsmann.de", 31682, "storepath", "passphrase");
