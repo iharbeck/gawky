@@ -4,6 +4,7 @@ import gawky.database.DB;
 import gawky.file.Locator;
 import gawky.file.Tool;
 import gawky.regex.Grouper;
+import gawky.regex.Replacer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -34,6 +35,19 @@ public class Option
 	static CommandLine cmd     = null;
 	static Options     options = null;
 
+	Replacer replace = new Replacer("\\$\\{staging\\}");
+	
+	String stage = getProperty("staging", "test");
+	
+	private String processalias(String alias) {
+		return replace.replaceFirst(alias, stage); 
+	}
+	
+	public static void main(String[] args)
+	{
+		System.out.println(new Option().processalias("db_${staging}"));
+	}
+	
 	/**
 	 * get Property from cmdline or configfile
 	 * cmdline overwrites
@@ -128,10 +142,6 @@ public class Option
 		System.exit(0);
 	}
 	
-	public static void main(String[] args) throws Exception {
-		initLib();
-		init();
-	}
 	
 	/**
 	 * Initialze Global properties with custom properties file name
