@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- encoding="ISO-8859-1"  -->
+
+<config>
+
+	<server>
+	  	<port>31680</port>
+	  	<host>localhost</host>
+	  	<keystore>/work/gawky/etc/keystore</keystore>
+	  	<storepass>password</storepass>
+	  	<keypass>password</keypass>
+	  	<type>plain</type>
+	</server>
+
+  	<l>/work/gawky/log/logfile</l>
+  	<M>10</M>
+  	<!--  <v>9</v> -->
+	
+  	<base>
+   		<hello>world</hello>
+  	</base>
+
+    <staging>production</staging>
+
+	<db_production>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<url>jdbc:mysql://localhost/test</url>
+		<user>root</user>
+		<password>root</password>
+	</db_production>
+    <db_production>
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@hostname:port:sid</url>
+		<user>root</user>
+		<password>root</password>
+	</db_production>
+	<db_production>
+		<driver>net.sourceforge.jtds.jdbc.Driver</driver>
+		<url>jdbc:jtds:sqlserver://127.0.0.1:1433/SCHEMA;charset=UTF-8</url>
+		<user>root</user>
+		<password>root</password>
+	</db_production>
+
+	<mail>
+		<user>mailuser</user>
+		<password>mailpass</password>
+		<_server>amx1.bertelsmann.de</_server>
+		<server>145.228.210.110</server>
+  		<from></from>
+  		<fromalias></fromalias>
+  		<subject></subject>
+  		<images>d:</images>
+	</mail>
+
+	<freemarker>
+		<templates>/example/template</templates>
+	</freemarker>
+	
+	
+	<import file="properties_sub.xml" />
+
+</config>
