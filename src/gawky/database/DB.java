@@ -32,23 +32,18 @@ public class DB
 
 	public static void init()
 	{
-		String staging = Option.getProperty("staging", "");
-
-		if(staging.length() > 0)
-			staging = "_" + staging;
-
-		int dbc = Option.getProperties("db" + staging + ".driver").length;
+		int dbc = Option.getProperties("db_${staging}.driver").length;
 
 		log.info("Datenbanken: " + dbc);
 
 		for(int i=0; i < dbc; i++)
     	{
-    		String dburl    = Option.getProperty("db" + staging + "(" + i + ").url");
-			String dbpass   = Option.getProperty("db" + staging + "(" + i + ").password");
-			String dbuser   = Option.getProperty("db" + staging + "(" + i + ").user");
-			String dbdriver = Option.getProperty("db" + staging + "(" + i + ").driver");
-			String dbalias  = Option.getProperty("db" + staging + "(" + i + ").alias", null);
-			String[] dbproperties  = Option.getProperties("db" + staging + "(" + i + ").property");
+    		String dburl    = Option.getProperty("db_${staging}(" + i + ").url");
+			String dbpass   = Option.getProperty("db_${staging}(" + i + ").password");
+			String dbuser   = Option.getProperty("db_${staging}(" + i + ").user");
+			String dbdriver = Option.getProperty("db_${staging}(" + i + ").driver");
+			String dbalias  = Option.getProperty("db_${staging}(" + i + ").alias", null);
+			String[] dbproperties  = Option.getProperties("db_${staging}(" + i + ").property");
 
 			Properties props = new Properties();
 			
