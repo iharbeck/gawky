@@ -181,7 +181,6 @@ public class Server extends Parameter
         
         public void run() 
         {
-            log.info("Starting Thread");
         	try {
             	// Default timeout setzen
             	//socket.setSoTimeout(Option.getTimeout());
@@ -189,6 +188,8 @@ public class Server extends Parameter
             	 
             	if(!Server.isValidIP(socket.getInetAddress().getHostAddress())) 
             		return;
+            	
+            	log.info("Starting Thread");
             	
             	do {
             		action.execute(this, socket);
