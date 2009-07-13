@@ -33,8 +33,8 @@ public class DB
 	public static void init()
 	{
 		int dbc = Option.getProperties("db_${staging}.driver").length;
-
-		log.info("Datenbanken: " + dbc);
+		
+		log.info("Datenbanken: " + dbc + " (" + Option.getProperty("staging")  + ")");
 
 		for(int i=0; i < dbc; i++)
     	{
