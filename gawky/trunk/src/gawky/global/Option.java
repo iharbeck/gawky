@@ -41,17 +41,12 @@ public class Option
 	
 	private static String processalias(String alias) 
 	{
-		if(replace == null) {
-			replace = new Replacer("\\$\\{staging\\}");
-			stage = getProperty("staging", "test");
-		}
-		if(stage == null)
-			return alias;
 		return replace.replaceFirst(alias, stage); 
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
+		Option.init();
 		System.out.println(new Option().processalias("db_${staging}"));
 	}
 	
@@ -208,8 +203,13 @@ public class Option
 				}
 			
 				config.load(new ByteArrayInputStream(org.trim().getBytes()));
+				
+				stage = config.getString("staging", "test");
+				
+				replace = new Replacer("\\$\\{staging\\}");
+				
+				System.out.println("FOUND STAGE: ["  + stage + "]");
 			}
-			
 			
 			// Property Configfile
 			// config = new PropertiesConfiguration("TestServer.properties");
