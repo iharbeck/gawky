@@ -3,6 +3,9 @@ package gawky.jasper;
 
 import gawky.file.Locator;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
@@ -14,6 +17,8 @@ import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.lowagie.text.pdf.PdfReader;
 
 public class PDFGenerator {
 
@@ -83,18 +88,52 @@ public class PDFGenerator {
 		
 		return jasperPrint;
 	}
+	
+	
+	public static int getNumberOfPages(InputStream instream)
+	{
+        try
+        {
+            PdfReader reader = new PdfReader(instream);
 
+            return reader.getNumberOfPages();
+
+        }
+        catch (Exception de) {
+            de.printStackTrace();
+        }
+        
+        return 0;
+    }
+
+	public static int generatePagenumber(Object reportdata, int rows, String jasperFileName) throws Exception
+	{
+		return generatePagenumber(reportdata, rows, jasperFileName, new HashMap());
+	}
+	
+	public static int generatePagenumber(Object reportdata, int rows, String jasperFileName, HashMap map) throws Exception
+	{
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
+		PDFGenerator.generateStream(reportdata, rows, jasperFileName, out, map);
+		
+		return getNumberOfPages(new ByteArrayInputStream(out.toByteArray()));
+	}
 	
 	public static void main(String[] args) throws Exception 
 	{
 		// Reporttemplate
 		String path = Locator.findPath("") +  "../report/";
 
-		String jasperFileName = path + "test.jasper";  // alternativ :jrxml wird automatisch von "PDFGenerator" compiliert
+		String jasperFileName = path + "text.jrxml";  // alternativ :jrxml wird automatisch von "PDFGenerator" compiliert
 		String outputFileName = path + "test.pdf"; 
 		
 		
 		PDFGenerator.generateFile(null, 10, jasperFileName, outputFileName);
+		
+		
+		
+		
 		
 		log.info("done!");
 	}

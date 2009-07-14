@@ -20,6 +20,8 @@ public class JRBeanUtilDataSource implements JRDataSource
 
 	int rows   = 0;
 	int currow = 0;
+	
+	Boolean footed = Boolean.FALSE;
 	 
 	//Replacer for Rowindicator 
 	Replacer replacer = new Replacer("\\[x\\]");
@@ -27,11 +29,13 @@ public class JRBeanUtilDataSource implements JRDataSource
 	public JRBeanUtilDataSource(Object data, int rows) {
 		this.data = data;
 		this.rows = rows;
+		footed = Boolean.FALSE;
 	}
 	
 	public JRBeanUtilDataSource(DataSource data) {
 		this.data = data;
 		this.rows = data.getSize();
+		footed = Boolean.FALSE;
 	}
 	
 	public Object getValue(Object bean, String path, int row) 
@@ -46,6 +50,19 @@ public class JRBeanUtilDataSource implements JRDataSource
 			else
 				return Boolean.FALSE;
 		}
+		
+		
+//		if(path.equals("%LASTPAGE_FOOTER")) {
+//			if(row == rows-1) {
+//				footed = Boolean.TRUE;
+//			}
+//			return "";
+//		}
+//		
+//		
+//		if(path.equals("%LASTPAGE_FOOTED")) {
+//			return footed;
+//		}
 		
 		if(path.equals("%FIRSTPAGE")) {
 			if(row == 0)
