@@ -47,7 +47,7 @@ public class Option
 	public static void main(String[] args) throws Exception
 	{
 		Option.init();
-		System.out.println(new Option().processalias("db_${staging}"));
+		System.out.println(Option.processalias("db_${staging}"));
 	}
 	
 	/**
@@ -322,5 +322,23 @@ public class Option
 				method.invoke(sysloader, new Object[]{ file.toURI().toURL() });
 			}
 		}
+	}
+	 
+	 static void addClasspath(String folder)
+	 {
+		 String fontpath = Locator.findBinROOT() + folder;
+
+		 try 
+		 {
+			URLClassLoader sysloader = (URLClassLoader)ClassLoader.getSystemClassLoader();
+			Class sysclass = URLClassLoader.class;
+			
+			Method method = sysclass.getDeclaredMethod("addURL", new Class[]{URL.class});
+			method.setAccessible(true);
+			
+			File file = new File(fontpath);
+			method.invoke(sysloader, new Object[]{ file.toURI().toURL() });
+		 } catch (Exception e) {
+		 }
 	}
 }

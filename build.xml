@@ -1,7 +1,7 @@
 <project name="strutter" default="jar" basedir=".">
 
 	<property name="name" value="gawky" />
-	<property name="version" value="-0.1.5.1" /> 
+	<property name="version" value="-0.1.5" /> 
 	
 	<property name="bin" value="bin" />     
 	<property name="src" value="src" />     
