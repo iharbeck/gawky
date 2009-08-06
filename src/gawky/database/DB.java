@@ -132,17 +132,17 @@ public class DB
      * get Long
      */
 
-    public static String getString(String sql) throws Exception
+    public static String getString(String sql, Object... params) throws Exception
 	{
-    	return getString(0, sql);
+    	return getString(0, sql, params);
 	}
     
-    public static String getString(int pool, String sql) throws Exception
-    {
-    	return getString(pool, sql, null);
-    }
+//    public static String getString(int pool, String sql) throws Exception
+//    {
+//    	return getString(pool, sql, null);
+//    }
     
-    public static String getString(int pool, String sql, Object[] params) throws Exception
+    public static String getString(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -154,12 +154,13 @@ public class DB
 		}
 	}
 
-    public static String getString(Connection conn, String sql) throws Exception
-    {
-    	return getString(conn, sql, null);
-    }
+//    public static String getString(Connection conn, String sql) throws Exception
+//    {
+//    	return getString(conn, sql, null);
+//    }
     
-    public static String getString(Connection conn, String sql, Object[] params) throws Exception
+    
+    public static String getString(Connection conn, String sql, Object... params) throws Exception
 	{
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
@@ -167,7 +168,7 @@ public class DB
 		try {
 			stmt_select = conn.prepareStatement(sql);
 
-			fillParams(stmt_select, (String[])params);
+			fillParams(stmt_select, params);
 			
 			rset 	    = stmt_select.executeQuery();
 			rset.next();
@@ -179,22 +180,16 @@ public class DB
 	}
 
 	
-	public static int execute(String sql) throws Exception
-	{
-		return execute(0, sql);
-	}
+	
 	  
-	public static int execute(String sql, Object[] params) throws Exception
+	public static int execute(String sql, Object... params) throws Exception
 	{
 		return execute(0, sql, params);
 	}
 
-	public static int execute(int pool, String sql) throws Exception
-	{
-		return execute(pool, sql, null);
-	}
 
-	public static int execute(int pool, String sql, Object[] params) throws Exception
+
+	public static int execute(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -207,7 +202,7 @@ public class DB
 		}
 	}
 
-	public static int execute(Connection conn, String sql, Object[] params) throws Exception
+	public static int execute(Connection conn, String sql, Object... params) throws Exception
 	{
 		PreparedStatement stmt_select = null;
 
@@ -215,7 +210,7 @@ public class DB
 		{
 			stmt_select = conn.prepareStatement(sql);
 			
-			fillParams(stmt_select, (Object[])params);
+			fillParams(stmt_select, params);
 			
 			return stmt_select.executeUpdate();
 		} finally {
@@ -228,12 +223,12 @@ public class DB
      */
 
 
-	public static Map getRow(String sql, String[] params) throws Exception
+	public static Map getRow(String sql, Object... params) throws Exception
 	{
 		return getRow(0, sql, params);
 	}
 	
-	public static Map getRow(int pool, String sql, String[] params) throws Exception
+	public static Map getRow(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -246,7 +241,7 @@ public class DB
 		}
 	}
 
-	public static Map getRow(Connection conn, String sql, String[] params) throws Exception
+	public static Map getRow(Connection conn, String sql, Object... params) throws Exception
 	{
 		Map hs = null;
 
@@ -285,12 +280,12 @@ public class DB
 	 * Eine ArrayList von Map
 	 */
 
-	public static ArrayList getRowList(String sql, String[] params) throws Exception
+	public static ArrayList getRowList(String sql, Object... params) throws Exception
 	{
 		return getRowList(0, sql, params);
 	}
 
-	public static ArrayList getRowList(int pool, String sql, String[] params) throws Exception
+	public static ArrayList getRowList(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -303,7 +298,7 @@ public class DB
 		}
 	}
 
-	public static ArrayList getRowList(Connection conn, String sql, String[] params) throws Exception
+	public static ArrayList getRowList(Connection conn, String sql, Object... params) throws Exception
 	{
 		ArrayList al = new ArrayList();
 
@@ -339,12 +334,12 @@ public class DB
 		return al;
 	}
 
-	public static HashMap getHash(String sql, String[] params) throws Exception
+	public static HashMap getHash(String sql, Object... params) throws Exception
 	{
 		return getHash(0, sql, params);
 	}
 	
-	public static HashMap getHash(int pool, String sql, String[] params) throws Exception
+	public static HashMap getHash(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -357,7 +352,7 @@ public class DB
 		}
 	}
 
-	public static HashMap getHash(Connection conn, String sql, String[] params) throws Exception
+	public static HashMap getHash(Connection conn, String sql, Object... params) throws Exception
 	{
 		HashMap hs = new HashMap();
 
@@ -387,12 +382,12 @@ public class DB
 	 *
 	 */
 
-	public static ArrayList getList(String sql, String[] params) throws Exception
+	public static ArrayList getList(String sql, Object... params) throws Exception
 	{
 		return getList(0, sql, params);
 	}
 	
-	public static ArrayList getList(int pool, String sql, String[] params) throws Exception
+	public static ArrayList getList(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -405,7 +400,7 @@ public class DB
 		}
 	}
 
-	public static ArrayList getList(Connection conn, String sql, String[] params) throws Exception
+	public static ArrayList getList(Connection conn, String sql, Object... params) throws Exception
 	{
 		ArrayList al = new ArrayList();
 
@@ -431,7 +426,7 @@ public class DB
 		return al;
 	}
 
-	private static void fillParams(PreparedStatement stmt, Object[] params) throws SQLException
+	private static void fillParams(PreparedStatement stmt, Object... params) throws SQLException
 	{
 		if(params == null)
 			return;
