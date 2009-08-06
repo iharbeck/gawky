@@ -5,7 +5,6 @@ import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
 import gawky.database.generator.IDGeneratorAUTO;
 import gawky.global.Constant;
-import gawky.global.Validation;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -527,11 +526,11 @@ public abstract class Table extends Part
 		return inst;
 	}
 
-	public static List find(Class clazz, String where, Object[] params) throws Exception
+	public static <T extends Table> List<T> find(Class<T> clazz, String where, Object[] params) throws Exception
 	{
 		Connection conn = null;
 		try {
-			Table inst = (Table)clazz.newInstance();
+			T inst = clazz.newInstance();
 			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
 			return find(clazz, conn, where, params);
 		} finally {
@@ -539,9 +538,9 @@ public abstract class Table extends Part
 		}
 	}
 
-	public static List find(Class clazz, Connection conn, String where, Object[] params) throws Exception
+	public static <T extends Table> List<T> find(Class<T> clazz, Connection conn, String where, Object[] params) throws Exception
 	{
-		Table inst = (Table)clazz.newInstance();
+		T inst = clazz.newInstance();
 
 		String sql = inst.getQuery(SQL_SELECT);
 
@@ -570,7 +569,7 @@ public abstract class Table extends Part
 	
 				list.add(inst);
 	
-				inst = (Table)clazz.newInstance();
+				inst = clazz.newInstance();
 			}
 		} finally {
 			DB.doClose(rset);
