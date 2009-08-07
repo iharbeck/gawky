@@ -324,7 +324,7 @@ public class Option
 		}
 	}
 	 
-	 static void addClasspath(String folder)
+	 public static void addClasspath(String folder)
 	 {
 		 String fontpath = Locator.findBinROOT() + folder;
 
