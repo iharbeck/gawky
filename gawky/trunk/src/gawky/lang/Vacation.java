@@ -11,15 +11,17 @@ public class Vacation
 
 	GregorianCalendar ostern;
 
-	int[] feiertage = new int[30];
-	int   feiercount = 0;
-	int   year;
-	int   country = COUNTRY_NRW;
+	int[]    feiertage = new int[30];
+	String[] feiertage_text = new String[365];
+	int      feiercount = 0;
+	int      year;
+	int      country = COUNTRY_NRW;
 	
 	
 	public Vacation() 
 	{
 		year = GregorianCalendar.getInstance().get(Calendar.YEAR);
+		setYear(year, country);
 	}
 
 	public Vacation(int year, int country) 
@@ -37,17 +39,17 @@ public class Vacation
 
 		// Feiertage NRW einfügen
 		if(country == COUNTRY_NRW) {
-			dayinyear(year, 0, 1);   // DAY_NEUJAHR
-			dayinyear(-2);	         // DAY_KARFREITAG
-			dayinyear(1);            // DAY_OSTERMONTAG
-			dayinyear(year, 4, 1);   // DAY_MAIFEIERTAG
-			dayinyear(39);           // DAY_CHRISTIHIMMELFAHRT
-			dayinyear(50);           // DAY_PFINGSTMONTAG
-			dayinyear(60);           // DAY_FRONLEICHNAM
-			dayinyear(year, 9, 3);   // DAY_TAGDERDEUTSCHENEINHEIT
-			dayinyear(year, 10, 1);  // DAY_ALLERHEILIGEN
-			dayinyear(year, 11, 25); // DAY_1WEIHNACHTSTAG
-			dayinyear(year, 11, 26); // DAY_2WEIHNACHTSTAG
+			dayinyear("Neujahr",                   year, 0, 1);   // DAY_NEUJAHR
+			dayinyear("Karfreitag",                -2);	         // DAY_KARFREITAG
+			dayinyear("Ostermontag",               1);            // DAY_OSTERMONTAG
+			dayinyear("Maifeiertag",               year, 4, 1);   // DAY_MAIFEIERTAG
+			dayinyear("Christihimmelfahrt",        39);           // DAY_CHRISTIHIMMELFAHRT
+			dayinyear("Pfingstmontag",             50);           // DAY_PFINGSTMONTAG
+			dayinyear("Fronleichnam",              60);           // DAY_FRONLEICHNAM
+			dayinyear("Tag der deutschen Einheit", year, 9, 3);   // DAY_TAGDERDEUTSCHENEINHEIT
+			dayinyear("Allerheiligen",             year, 10, 1);  // DAY_ALLERHEILIGEN
+			dayinyear("1.Weihnachtstag",           year, 11, 25); // DAY_1WEIHNACHTSTAG
+			dayinyear("2.Weihnachtstag",           year, 11, 26); // DAY_2WEIHNACHTSTAG
 		}
 	}
 	
@@ -111,6 +113,22 @@ public class Vacation
 		return true;
 	}
 	
+	public String holidayText(Date date) 
+	{
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(date);
+		
+		return holidayText(cal);
+	}
+	
+	public String holidayText(GregorianCalendar cal) 
+	{
+		// Tag im Jahr ermitteln
+		int dy = cal.get(Calendar.DAY_OF_YEAR);
+		
+		return feiertage_text[dy-1];
+	}
+	
 	public void list() 
 	{
 		SimpleDateFormat df = new SimpleDateFormat("E dd.MM.yyyy");
@@ -125,18 +143,22 @@ public class Vacation
 		}
 	}
 	
-	public void dayinyear(int diffostern) 
+	public void dayinyear(String text, int diffostern) 
 	{
 		GregorianCalendar acal = (GregorianCalendar)ostern.clone();
 		acal.add(Calendar.DAY_OF_MONTH, diffostern);
 		
-		feiertage[feiercount++] = acal.get(Calendar.DAY_OF_YEAR);
+		feiertage[feiercount] = acal.get(Calendar.DAY_OF_YEAR);
+		feiertage_text[acal.get(Calendar.DAY_OF_YEAR)-1] = text;
+		feiercount++;
 	}
 
-	public void dayinyear(int year, int month, int day) 
+	public void dayinyear(String text, int year, int month, int day) 
 	{
 		GregorianCalendar acal = new GregorianCalendar(year, month, day);
-		feiertage[feiercount++] = acal.get(Calendar.DAY_OF_YEAR);
+		feiertage[feiercount] = acal.get(Calendar.DAY_OF_YEAR);
+		feiertage_text[acal.get(Calendar.DAY_OF_YEAR)-1] = text;
+		feiercount++;
 	}
 	
 	/**
