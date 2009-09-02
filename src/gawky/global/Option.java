@@ -20,6 +20,10 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.spi.Configurator;
+import org.apache.log4j.xml.DOMConfigurator;
 
 public class Option 
 {
@@ -170,6 +174,10 @@ public class Option
 		// Application BINROOT for LOG4J
 		System.setProperty("BINROOT", Locator.findBinROOT());
 
+		System.out.println("LOG4J File: " + Locator.findBinROOT() + "log4j.xml");
+		
+		new DOMConfigurator().doConfigure(Locator.findBinROOT() + "log4j.xml", LogManager.getLoggerRepository());
+		
 		log = LogFactory.getLog(Option.class);
 		log.info("BINROOT " + Locator.findBinROOT());
 	
