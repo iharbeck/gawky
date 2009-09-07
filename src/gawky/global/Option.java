@@ -176,7 +176,7 @@ public class Option
 
 		System.out.println("LOG4J File: " + Locator.findBinROOT() + "log4j.xml");
 		
-		new DOMConfigurator().doConfigure(Locator.findBinROOT() + "log4j.xml", LogManager.getLoggerRepository());
+		DOMConfigurator.configure(Locator.findBinROOT() + "log4j.xml");
 		
 		log = LogFactory.getLog(Option.class);
 		log.info("BINROOT " + Locator.findBinROOT());
