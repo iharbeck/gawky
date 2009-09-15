@@ -730,4 +730,44 @@ public abstract class Table extends Part
 	public void setFound(boolean found) {
 		this.found = found;
 	}
+	
+
+	public static <T extends Table> List<T> query(Class<T> clazz, String where, Object[] params) throws Exception
+	{
+		Connection conn = null;
+		try {
+			T inst = clazz.newInstance();
+			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
+			return query(clazz, conn, where, params);
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+	
+	public static <T extends Table> List<T> query(Class<T> clazz, Connection conn, String sql, Object[] params) throws Exception
+	{
+        ArrayList<T> list = new ArrayList<T>();
+
+        PreparedStatement stmt = conn.prepareStatement(sql);
+     
+        ResultSet rset = null;
+        
+        try 
+        {
+        	rset = stmt.executeQuery(sql);
+            
+        	while(rset.next()) {
+	   			T row = clazz.newInstance();                           
+	            row.fillByResultSet(rset);
+	            list.add(row);
+            }
+        	
+        } finally {
+        	DB.doClose(rset);
+        	DB.doClose(stmt);
+        }
+              
+        return list;
+	}
+	
 }
