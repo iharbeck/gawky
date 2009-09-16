@@ -13,4 +13,8 @@ public class Matcher
     public final String process(String text, String replace) {
     	return pattern.matcher(text).replaceAll(replace);
     }
+    
+    public final boolean matches(String text) {
+    	return pattern.matcher(text).matches();
+    }
 }
