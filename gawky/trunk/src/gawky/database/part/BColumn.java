@@ -5,8 +5,8 @@ import gawky.message.part.Desc;
 
 public class BColumn extends Desc {
 	
-	public static byte[] fill(long val) {
-		return Formatter.convertNum2Bytes(val);
+	public static byte[] fill(int size, long val) {
+		return Formatter.bpad(size, Formatter.convertNum2Bytes(val));
 	}
 
 	public static long read(byte[] val) {

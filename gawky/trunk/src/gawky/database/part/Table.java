@@ -5,6 +5,7 @@ import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
 import gawky.database.generator.IDGeneratorAUTO;
 import gawky.global.Constant;
+import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -391,8 +392,13 @@ public abstract class Table extends Part
 		{
 			// Find by IDs
 			for(int i=0; i < ids.length; i++)
-				stmt.setObject(i+1, ids[i]);
-	
+			{
+				if(ids[i] instanceof byte[])
+					stmt.setBytes(i+1, (byte[])ids[i]);
+				else
+					stmt.setObject(i+1, ids[i]);
+			}
+			
 			rset = stmt.executeQuery();
 			rset.setFetchSize(1);
 			
@@ -473,8 +479,12 @@ public abstract class Table extends Part
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 
 		for(int i = 1; params != null && i <= params.length; i++)
-			stmt.setObject(i, params[i-1]);
-
+		{
+			if(params[i-1] instanceof byte[])
+				stmt.setBytes(i, (byte[])params[i-1]);
+			else
+				stmt.setObject(i, params[i-1]);
+		}
 		ResultSet rset = null;
 		
 		try {
@@ -552,8 +562,12 @@ public abstract class Table extends Part
 		
 		
 		for(int i=0; params != null && i < params.length; i++)
-			stmt.setObject(i+1, params[i]);
-
+		{
+			if(params[i] instanceof byte[])
+				stmt.setBytes(i+1, (byte[])params[i]);
+			else
+				stmt.setObject(i+1, params[i]);
+		}
 		ResultSet rset = null;
 		
 		ArrayList list = new ArrayList();
@@ -616,7 +630,12 @@ public abstract class Table extends Part
 		{
 			// Delete by ID
 			for(int i=0; i < ids.length; i++)
-				stmt.setObject(i+1, ids[i]);
+			{
+				if(ids[i] instanceof byte[])
+					stmt.setBytes(i+1, (byte[])ids[i]);
+				else
+					stmt.setObject(i+1, ids[i]);
+			}
 	
 			return stmt.executeUpdate();
 		} finally {
