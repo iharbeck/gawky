@@ -732,13 +732,13 @@ public abstract class Table extends Part
 	}
 	
 
-	public static <T extends Table> List<T> query(Class<T> clazz, String where, Object[] params) throws Exception
+	public static <T extends Table> List<T> query(Class<T> clazz, String sql, Object[] params) throws Exception
 	{
 		Connection conn = null;
 		try {
 			T inst = clazz.newInstance();
 			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
-			return query(clazz, conn, where, params);
+			return query(clazz, conn, sql, params);
 		} finally {
 			DB.doClose(conn);
 		}
