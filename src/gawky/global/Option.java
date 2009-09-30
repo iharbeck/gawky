@@ -107,6 +107,15 @@ public class Option
 	}
 	
 	/**
+	 * reset init
+	 * @throws Exception
+	 */
+	public static void reset() 
+	{
+		initdone = false;
+	}
+	
+	/**
 	 * Initialize Global properties with custom properties file name
 	 * 
 	 * @param propfile absolut or relative path to the configuration file
