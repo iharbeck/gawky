@@ -219,7 +219,7 @@ public class Option
 					}
 				}
 			
-				config.load(new ByteArrayInputStream(org.trim().getBytes()));
+				config.load(new ByteArrayInputStream(org.trim().getBytes("UTF8")));
 				
 				stage = config.getString("staging", "test");
 				

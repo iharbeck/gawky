@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.org.apache.xml.internal.security.signature.Reference;
+
 public class Grouper {
 
 	Pattern pattern;
@@ -70,7 +72,7 @@ public class Grouper {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-
+		
 		Grouper grouper = new Grouper("FREMD(.....)EIGEN(.....)EU");
 		
 		String[] values = grouper.match("xxx\\nFREMD00012EIGEN00000EUcc\n\nsss<");
