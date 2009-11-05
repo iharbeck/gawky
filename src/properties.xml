@@ -43,6 +43,7 @@
 	</db_production>
 
 	<mail>
+	    <auth>yes</auth>
 		<user>mailuser</user>
 		<password>mailpass</password>
 		<_server>amx1.bertelsmann.de</_server>
