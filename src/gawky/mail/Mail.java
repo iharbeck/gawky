@@ -177,6 +177,7 @@ public class Mail
             // Get system properties
             java.util.Properties prop = System.getProperties();
     	    prop.put("mail.smtp.host", host);
+    	    prop.put("mail.smtp.auth",  Option.getProperty("mail.auth", "false"));
 
     	    if(bounceaddress != null)
     	    	prop.put("mail.smtp.from", bounceaddress);
