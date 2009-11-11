@@ -1,5 +1,6 @@
 package gawky.message.part;
 
+import gawky.database.part.BColumn;
 import gawky.file.Locator;
 import gawky.global.Option;
 import gawky.message.generator.Generator;
@@ -187,6 +188,9 @@ public abstract class Part implements Cloneable
 		// Prepare Attribute Access
 		for(int i=0; i < descs.length; i++)
 		{
+			if(descs[i] instanceof BColumn)
+				binary = true;
+			
 			// Constanten do not have an attribute
 			if(descs[i].format == Desc.FMT_CONSTANT)
 				continue;
@@ -396,10 +400,16 @@ public abstract class Part implements Cloneable
 	}
 
 	boolean cloned = false;
+	boolean binary = false;
 	
-	public void doclone() {
+	public void doclone() 
+	{
 		clone = clone();
-		cloned = true;
+		
+		if(binary)
+			cloned = false;
+		else
+			cloned = true;
 	}
 
 	public Object getBackup() {
@@ -408,6 +418,9 @@ public abstract class Part implements Cloneable
 	
 	public boolean isDirty() 
 	{
+		if(binary)
+			return true;
+		
 		if(cloned) {
 			return !((Part)this.getBackup()).buildString().equals(this.buildString());
 		}else
