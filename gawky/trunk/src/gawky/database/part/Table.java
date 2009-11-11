@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class Table extends Part
 {
 	boolean found = false;
+	boolean primarydefined = false;
 
 	private final class StaticLocal
 	{
@@ -55,12 +56,15 @@ public abstract class Table extends Part
 
 		StaticLocal local = getStaticLocal();
 
-		// Anzahl Primärfelder
+		// Anzahl Primï¿½rfelder
 		int c=0;
 		for(int i=0; i < descs.length; i++) {
 			if(descs[i].isPrimary())
 				c++;
 		}
+		
+		if(c > 0)
+			primarydefined = true;
 		
 		// Array mit ids erstellen
 		local.descIds = new Desc[c];
@@ -121,13 +125,9 @@ public abstract class Table extends Part
 	abstract public String getTableName();
 
 
-	public final boolean isPrimary(Desc desc) {
-		Desc[] descs = getStaticLocal().descIds;
-
-		for(int i=0; i < descs.length; i++)
-			if(descs[i] == desc)
-				return true;
-		return false;
+	public final boolean isPrimary(Desc desc) 
+	{
+		return desc.isPrimary();
 	}
 
 	public Desc[] getDescIDs()
@@ -386,6 +386,9 @@ public abstract class Table extends Part
 
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
+		if(!this.hasPrimary())
+			throw new NoPrimaryColumnException(this);
+		
 		PreparedStatement stmt = getStmt(conn, SQL_FIND);
 		ResultSet rset = null;
 		try 
@@ -624,6 +627,10 @@ public abstract class Table extends Part
 	{
 		Table inst = (Table)clazz.newInstance();
 
+		if(!inst.hasPrimary())
+			throw new NoPrimaryColumnException(inst);
+
+		
 		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
 
 		try 
@@ -686,6 +693,9 @@ public abstract class Table extends Part
 
 	public int update (Connection conn) throws SQLException
 	{
+		if(!this.hasPrimary())
+			throw new NoPrimaryColumnException(this);
+
 		if(!isDirty())
 			return 0;
 		
@@ -733,17 +743,9 @@ public abstract class Table extends Part
 		getStaticLocal().defaultconnection = defaultconnection;
 	}
 
-	public boolean isFound() {
-		if(found)
-			return true;
-		
-//		try {
-//			String val = getPrimdesc().getValue(this);
-//			return val != null && val.length() > 0;
-//		} catch (Exception e) {
-//		}
-		
-		return false;
+	public boolean isFound() 
+	{
+		return found;
 	}
 
 	public void setFound(boolean found) {
@@ -787,6 +789,10 @@ public abstract class Table extends Part
         }
               
         return list;
+	}
+
+	public boolean hasPrimary() {
+		return primarydefined;
 	}
 	
 }
