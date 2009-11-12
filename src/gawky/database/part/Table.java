@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class Table extends Part
 {
 	boolean found = false;
-	boolean primarydefined = false;
+	
 
 	private final class StaticLocal
 	{
@@ -50,6 +50,8 @@ public abstract class Table extends Part
 
 		Generator generator       = new Generator();
 		int defaultconnection     = 0;
+		
+		boolean primarydefined = false;
 	}
 
 	public void descAfterInterceptor(Desc[] descs) {
@@ -64,7 +66,7 @@ public abstract class Table extends Part
 		}
 		
 		if(c > 0)
-			primarydefined = true;
+			local.primarydefined = true;
 		
 		// Array mit ids erstellen
 		local.descIds = new Desc[c];
@@ -792,7 +794,7 @@ public abstract class Table extends Part
 	}
 
 	public boolean hasPrimary() {
-		return primarydefined;
+		return getStaticLocal().primarydefined;
 	}
 	
 }
