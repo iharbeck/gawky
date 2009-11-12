@@ -388,10 +388,11 @@ public abstract class Table extends Part
 
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
+		PreparedStatement stmt = getStmt(conn, SQL_FIND);
+
 		if(!this.hasPrimary())
 			throw new NoPrimaryColumnException(this);
-		
-		PreparedStatement stmt = getStmt(conn, SQL_FIND);
+
 		ResultSet rset = null;
 		try 
 		{
@@ -628,13 +629,13 @@ public abstract class Table extends Part
 	public static int delete(Class clazz, Connection conn, Object[] ids) throws Exception
 	{
 		Table inst = (Table)clazz.newInstance();
+		
+		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
 
 		if(!inst.hasPrimary())
 			throw new NoPrimaryColumnException(inst);
 
 		
-		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
-
 		try 
 		{
 			// Delete by ID
@@ -695,13 +696,13 @@ public abstract class Table extends Part
 
 	public int update (Connection conn) throws SQLException
 	{
-		if(!this.hasPrimary())
-			throw new NoPrimaryColumnException(this);
-
 		if(!isDirty())
 			return 0;
 		
 		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
+
+		if(!this.hasPrimary())
+			throw new NoPrimaryColumnException(this);
 
 		try 
 		{
