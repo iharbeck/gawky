@@ -774,6 +774,15 @@ public abstract class Table extends Part
 
         PreparedStatement stmt = conn.prepareStatement(sql);
      
+        
+    	for(int i=0; params != null && i < params.length; i++)
+		{
+			if(params[i] instanceof byte[])
+				stmt.setBytes(i+1, (byte[])params[i]);
+			else
+				stmt.setObject(i+1, params[i]);
+		}
+        
         ResultSet rset = null;
         
         try 
