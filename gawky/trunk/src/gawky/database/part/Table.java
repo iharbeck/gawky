@@ -5,7 +5,6 @@ import gawky.database.generator.Generator;
 import gawky.database.generator.IDGenerator;
 import gawky.database.generator.IDGeneratorAUTO;
 import gawky.global.Constant;
-import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
@@ -137,7 +136,7 @@ public abstract class Table extends Part
 		return getStaticLocal().descIds;
 	}
 
-	private static HashMap hmStaticLocal    = new HashMap();
+	private static HashMap<Class<?>, StaticLocal> hmStaticLocal    = new HashMap<Class<?>, StaticLocal>();
 
 	protected final String[] getQueries()
 	{
@@ -397,13 +396,7 @@ public abstract class Table extends Part
 		try 
 		{
 			// Find by IDs
-			for(int i=0; i < ids.length; i++)
-			{
-				if(ids[i] instanceof byte[])
-					stmt.setBytes(i+1, (byte[])ids[i]);
-				else
-					stmt.setObject(i+1, ids[i]);
-			}
+			fillParameter(stmt, ids);
 			
 			rset = stmt.executeQuery();
 			rset.setFetchSize(1);
@@ -484,13 +477,8 @@ public abstract class Table extends Part
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 
-		for(int i = 1; params != null && i <= params.length; i++)
-		{
-			if(params[i-1] instanceof byte[])
-				stmt.setBytes(i, (byte[])params[i-1]);
-			else
-				stmt.setObject(i, params[i-1]);
-		}
+		fillParameter(stmt, params);
+		
 		ResultSet rset = null;
 		
 		try {
@@ -564,19 +552,12 @@ public abstract class Table extends Part
 			sql += " " + where;
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
-
 		
+		fillParameter(stmt, params);
 		
-		for(int i=0; params != null && i < params.length; i++)
-		{
-			if(params[i] instanceof byte[])
-				stmt.setBytes(i+1, (byte[])params[i]);
-			else
-				stmt.setObject(i+1, params[i]);
-		}
 		ResultSet rset = null;
 		
-		ArrayList list = new ArrayList();
+		List<T> list = new ArrayList<T>();
 
 		try 
 		{
@@ -599,12 +580,12 @@ public abstract class Table extends Part
 		return list;
 	}
 
-	public static int delete(Class clazz, long id) throws Exception
+	public static<T extends Table> int delete(Class<T> clazz, long id) throws Exception
 	{
 		return delete(clazz, new Long(id));
 	}
 
-	public static int delete(Class clazz, Object id) throws Exception
+	public static<T extends Table> int delete(Class<T> clazz, Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -616,17 +597,17 @@ public abstract class Table extends Part
 		}
 	}
 
-	public static int delete(Class clazz, Connection conn, long id) throws Exception
+	public static <T extends Table> int delete(Class<T> clazz, Connection conn, long id) throws Exception
 	{
 		return delete(clazz, conn, new Long(id));
 	}
 
-	public static int delete(Class clazz, Connection conn, Object id) throws Exception
+	public static <T extends Table> int delete(Class<T> clazz, Connection conn, Object id) throws Exception
 	{
 		return delete(clazz, conn, new Object[] { id } );
 	}
 
-	public static int delete(Class clazz, Connection conn, Object[] ids) throws Exception
+	public static <T extends Table> int delete(Class<T> clazz, Connection conn, Object[] ids) throws Exception
 	{
 		Table inst = (Table)clazz.newInstance();
 		
@@ -639,13 +620,7 @@ public abstract class Table extends Part
 		try 
 		{
 			// Delete by ID
-			for(int i=0; i < ids.length; i++)
-			{
-				if(ids[i] instanceof byte[])
-					stmt.setBytes(i+1, (byte[])ids[i]);
-				else
-					stmt.setObject(i+1, ids[i]);
-			}
+			fillParameter(stmt, ids);
 	
 			return stmt.executeUpdate();
 		} finally {
@@ -768,20 +743,24 @@ public abstract class Table extends Part
 		}
 	}
 	
-	public static <T extends Table> List<T> query(Class<T> clazz, Connection conn, String sql, Object[] params) throws Exception
+	public final static void fillParameter(PreparedStatement stmt, Object[] params) throws Exception
 	{
-        ArrayList<T> list = new ArrayList<T>();
-
-        PreparedStatement stmt = conn.prepareStatement(sql);
-     
-        
-    	for(int i=0; params != null && i < params.length; i++)
+		for(int i=0; params != null && i < params.length; i++)
 		{
 			if(params[i] instanceof byte[])
 				stmt.setBytes(i+1, (byte[])params[i]);
 			else
 				stmt.setObject(i+1, params[i]);
 		}
+	}
+	
+	public static <T extends Table> List<T> query(Class<T> clazz, Connection conn, String sql, Object[] params) throws Exception
+	{
+        ArrayList<T> list = new ArrayList<T>();
+
+        PreparedStatement stmt = conn.prepareStatement(sql);
+     
+        fillParameter(stmt, params);
         
         ResultSet rset = null;
         
