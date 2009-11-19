@@ -51,6 +51,7 @@ public abstract class Table extends Part
 		int defaultconnection     = 0;
 		
 		boolean primarydefined = false;
+		public boolean binary = false;
 	}
 
 	public void descAfterInterceptor(Desc[] descs) {
@@ -110,6 +111,14 @@ public abstract class Table extends Part
 		}
 
 		return staticlocal;
+	}
+	
+	public void setBinary(boolean val) {
+		getStaticLocal().binary = val;
+	}
+	
+	public boolean isBinary() {
+		return getStaticLocal().binary;
 	}
 
 	public void setParameter(boolean val)
@@ -671,10 +680,10 @@ public abstract class Table extends Part
 
 	public int update (Connection conn) throws SQLException
 	{
+		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
+
 		if(!isDirty())
 			return 0;
-		
-		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
 
 		if(!this.hasPrimary())
 			throw new NoPrimaryColumnException(this);

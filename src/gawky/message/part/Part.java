@@ -1,6 +1,7 @@
 package gawky.message.part;
 
 import gawky.database.part.BColumn;
+import gawky.database.part.Table;
 import gawky.file.Locator;
 import gawky.global.Option;
 import gawky.message.generator.Generator;
@@ -97,7 +98,7 @@ public abstract class Part implements Cloneable
 	 * @throws Exception
 	 */
 	
-	static HashMap parts = new HashMap();
+	static HashMap<Class<?>, Part> parts = new HashMap<Class<?>, Part>();
 	static Part factory(Class c) 
 	{
 		Part p = (Part)parts.get(c);
@@ -188,8 +189,8 @@ public abstract class Part implements Cloneable
 		// Prepare Attribute Access
 		for(int i=0; i < descs.length; i++)
 		{
-			if(descs[i] instanceof BColumn)
-				binary = true;
+			if(descs[i] instanceof BColumn && (this instanceof Table))
+				((Table)this).setBinary(true);
 			
 			// Constanten do not have an attribute
 			if(descs[i].format == Desc.FMT_CONSTANT)
@@ -275,7 +276,7 @@ public abstract class Part implements Cloneable
 		return descs;
 	}
 
-	private static HashMap hmDesc = new HashMap();
+	private static HashMap<Class<?>, Desc[]> hmDesc = new HashMap<Class<?>, Desc[]>();
 
 	Desc[] cacheddesc = null;
 
@@ -400,16 +401,12 @@ public abstract class Part implements Cloneable
 	}
 
 	boolean cloned = false;
-	boolean binary = false;
 	
 	public void doclone() 
 	{
 		clone = clone();
 		
-		if(binary)
-			cloned = false;
-		else
-			cloned = true;
+		cloned = true;
 	}
 
 	public Object getBackup() {
@@ -418,9 +415,9 @@ public abstract class Part implements Cloneable
 	
 	public boolean isDirty() 
 	{
-		if(binary)
+		if(this instanceof Table && ((Table)this).isBinary())
 			return true;
-		
+				
 		if(cloned) {
 			return !((Part)this.getBackup()).buildString().equals(this.buildString());
 		}else
