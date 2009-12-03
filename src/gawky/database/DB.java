@@ -457,6 +457,7 @@ public class DB
 		if(o == null)
 			return;
 		try {
+			o.setAutoCommit(true);
 			o.close();
 		} catch (Exception e) { }
 	 }
