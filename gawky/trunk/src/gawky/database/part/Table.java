@@ -659,8 +659,16 @@ public abstract class Table extends Part
 			Desc[] descs = getDescIDs();
 	
 			for(int i=0; i < descs.length; i++)
-				stmt.setObject(i+1, descs[i].getValue(this));
-	
+			{
+				if(descs[i].getValue(this) instanceof byte[])
+					stmt.setBytes(i+1, (byte[])descs[i].getValue(this));
+				else
+					stmt.setObject(i+1, descs[i].getValue(this));
+			}
+			
+			
+
+			
 			return stmt.executeUpdate();
 		} finally {
 			DB.doClose(stmt);
