@@ -67,7 +67,7 @@ public abstract class Part implements Cloneable
 		}
 	}
 	
-	public final void setValue(String name, String value) {
+	public final void setValue(String name, Object value) {
 		try {
 			getDescByName(name).setValue(this, value); 
 		} catch (Exception e) {
