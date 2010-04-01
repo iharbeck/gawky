@@ -32,6 +32,21 @@ public abstract class Part implements Cloneable
 
     private Object clone;
 
+    
+    public String buildVars()
+    {
+    	Desc[] descs = getCachedDesc();
+		
+    	StringBuilder buf = new StringBuilder(2000);
+    	
+		for(int i=0; i < descs.length; i++){
+			if(descs[i].format != Desc.FMT_CONSTANT)
+				buf.append("private String " + descs[i].name + ";\n");
+		}
+		
+    	return buf.toString();
+    }
+    
 	/**
 	 * used by matcher
 	 * @param name
