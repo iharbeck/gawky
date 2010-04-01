@@ -7,9 +7,8 @@ public class GenVars {
 
 	public static void main(String[] args) 
 	{
-		//Generator.generateVars(new RecordEXTI00());
 		System.out.println(new SatzC().buildVars());
-		System.out.println(new SatzCe().buildVars());
+		System.out.println(new SatzCe().buildVars()); 
 	}
 
 }
