@@ -55,14 +55,14 @@ public abstract class Table extends Part
 	}
 
 	
-	public String buildTableCreate()
+	public void buildTableCreate()
 	{
-		return Generator.generateCreateSQL(this).toString();
+		System.out.println(Generator.generateCreateSQL(this).toString());
 	}
 	
-	public String buildTableAlter()
+	public void buildTableAlter()
 	{
-		return Generator.generateAlterSQL(this).toString();
+		System.out.println(Generator.generateAlterSQL(this).toString());
 	}
 	
 	
