@@ -286,13 +286,13 @@ public class Generator
 		return sql;
 	}
 
-	public StringBuilder generateCreateSQL(Table bean)
+	public static StringBuilder generateCreateSQL(Table bean)
 	{
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 
 		StringBuilder sql = new StringBuilder();
-
+		
 		sql.append("CREATE TABLE ").append(bean.getTableName()).append(" ( ");
 
 		int par = 0;
@@ -303,8 +303,12 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
+			sql.append("\"");
 			sql.append(desc.dbname);  // column name
+			sql.append("\"");
 
+			int len = desc.len;
+			
 			switch (desc.format) {
 				case Desc.FMT_ASCII :
 				case Desc.FMT_BLANK :
@@ -313,10 +317,18 @@ public class Generator
 				case Desc.FMT_UPPER :
 				case Desc.FMT_LOWER :
 				case Desc.FMT_BLANK_LETTER :
-					sql.append(" VARCHAR2(").append(desc.len).append(")");
+					
+					if(len == 0) 
+						len = 20;
+										
+					sql.append(" VARCHAR2(").append(len).append(")");
 					break;
 				case Desc.FMT_DIGIT :
-					sql.append(" NUMBER(").append(desc.len).append(")");
+					
+					if(len > 0) 
+						sql.append(" NUMBER(").append(desc.len).append(")");
+					else
+						sql.append(" NUMBER");
 					break;
 				case Desc.FMT_DATE :
 					sql.append(" DATE ");
@@ -344,6 +356,77 @@ public class Generator
 		return sql;
 	}
 
+	public static StringBuilder generateAlterSQL(Table bean)
+	{
+		Desc   descs[] = bean.getCachedDesc();
+		Desc   desc;
+
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("ALTER TABLE ").append(bean.getTableName()).append(" ADD ( ");
+
+		int par = 0;
+		for(int i = 0; i < descs.length; i++)
+		{
+			desc = descs[i];
+
+			if(desc.dbname == null || desc.nostore)
+				continue;
+
+			sql.append("\"");
+			sql.append(desc.dbname);  // column name
+			sql.append("\"");
+
+			int len = desc.len;
+			
+			switch (desc.format) {
+				case Desc.FMT_ASCII :
+				case Desc.FMT_BLANK :
+				case Desc.FMT_BLANK_ZERO :
+				case Desc.FMT_BINARY :
+				case Desc.FMT_UPPER :
+				case Desc.FMT_LOWER :
+				case Desc.FMT_BLANK_LETTER :
+					
+					if(len == 0) 
+						len = 20;
+										
+					sql.append(" VARCHAR2(").append(len).append(")");
+					break;
+				case Desc.FMT_DIGIT :
+					
+					if(len > 0) 
+						sql.append(" NUMBER(").append(desc.len).append(")");
+					else
+						sql.append(" NUMBER");
+					break;
+				case Desc.FMT_DATE :
+					sql.append(" DATE ");
+					break;
+				case Desc.FMT_TIME :
+					sql.append(" DATE ");
+					break;
+				default:
+					sql.append(" VARCHAR2(").append(desc.len).append(")");
+			}
+
+			sql.append(",");
+			par++;
+		}
+
+		// letztes Komma loeschen
+		if(par > 0)
+			sql.deleteCharAt(sql.length()-1);
+
+		sql.append(" ) ");
+
+		if(log.isDebugEnabled())
+			log.debug(sql.toString());
+
+		return sql;
+	}
+
+	
 	public StringBuilder generateSelectSQL(Table bean)
 	{
 		Desc   descs[] = bean.getCachedDesc();

@@ -54,6 +54,18 @@ public abstract class Table extends Part
 		public boolean binary = false;
 	}
 
+	
+	public String buildTableCreate()
+	{
+		return Generator.generateCreateSQL(this).toString();
+	}
+	
+	public String buildTableAlter()
+	{
+		return Generator.generateAlterSQL(this).toString();
+	}
+	
+	
 	public void descAfterInterceptor(Desc[] descs) {
 
 		StaticLocal local = getStaticLocal();
