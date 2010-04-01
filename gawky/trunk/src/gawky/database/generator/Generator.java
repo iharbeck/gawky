@@ -288,83 +288,29 @@ public class Generator
 
 	public static StringBuilder generateCreateSQL(Table bean)
 	{
-		Desc   descs[] = bean.getCachedDesc();
-		Desc   desc;
-
 		StringBuilder sql = new StringBuilder();
 		
-		sql.append("CREATE TABLE ").append(bean.getTableName()).append(" ( ");
+		sql.append("CREATE TABLE ").append(bean.getTableName());
 
-		int par = 0;
-		for(int i = 0; i < descs.length; i++)
-		{
-			desc = descs[i];
-
-			if(desc.dbname == null || desc.nostore)
-				continue;
-
-			sql.append("\"");
-			sql.append(desc.dbname);  // column name
-			sql.append("\"");
-
-			int len = desc.len;
-			
-			switch (desc.format) {
-				case Desc.FMT_ASCII :
-				case Desc.FMT_BLANK :
-				case Desc.FMT_BLANK_ZERO :
-				case Desc.FMT_BINARY :
-				case Desc.FMT_UPPER :
-				case Desc.FMT_LOWER :
-				case Desc.FMT_BLANK_LETTER :
-					
-					if(len == 0) 
-						len = 20;
-										
-					sql.append(" VARCHAR2(").append(len).append(")");
-					break;
-				case Desc.FMT_DIGIT :
-					
-					if(len > 0) 
-						sql.append(" NUMBER(").append(desc.len).append(")");
-					else
-						sql.append(" NUMBER");
-					break;
-				case Desc.FMT_DATE :
-					sql.append(" DATE ");
-					break;
-				case Desc.FMT_TIME :
-					sql.append(" DATE ");
-					break;
-				default:
-					sql.append(" VARCHAR2(").append(desc.len).append(")");
-			}
-
-			sql.append(",");
-			par++;
-		}
-
-		// letztes Komma loeschen
-		if(par > 0)
-			sql.deleteCharAt(sql.length()-1);
-
-		sql.append(" ) ");
-
-		if(log.isDebugEnabled())
-			log.debug(sql.toString());
-
-		return sql;
+		return generateBASESQL(bean, sql);
 	}
 
 	public static StringBuilder generateAlterSQL(Table bean)
 	{
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("ALTER TABLE ").append(bean.getTableName()).append(" ADD ");
+
+		return generateBASESQL(bean, sql);
+	}
+
+	private static StringBuilder generateBASESQL(Table bean, StringBuilder sql)
+	{
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 
-		StringBuilder sql = new StringBuilder();
+		sql.append("(\n");
 		
-		sql.append("ALTER TABLE ").append(bean.getTableName()).append(" ADD ( ");
-
 		int par = 0;
 		for(int i = 0; i < descs.length; i++)
 		{
@@ -410,13 +356,13 @@ public class Generator
 					sql.append(" VARCHAR2(").append(desc.len).append(")");
 			}
 
-			sql.append(",");
+			sql.append(",\n");
 			par++;
 		}
 
 		// letztes Komma loeschen
 		if(par > 0)
-			sql.deleteCharAt(sql.length()-1);
+			sql.deleteCharAt(sql.length()-2);
 
 		sql.append(" ) ");
 
@@ -425,7 +371,6 @@ public class Generator
 
 		return sql;
 	}
-
 	
 	public StringBuilder generateSelectSQL(Table bean)
 	{
