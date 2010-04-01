@@ -31,9 +31,8 @@ public abstract class Part implements Cloneable
     private static Generator generator;
 
     private Object clone;
-
     
-    public String buildVars()
+    public void buildVars()
     {
     	Desc[] descs = getCachedDesc();
 		
@@ -44,7 +43,7 @@ public abstract class Part implements Cloneable
 				buf.append("private String " + descs[i].name + ";\n");
 		}
 		
-    	return buf.toString();
+    	System.out.println(buf.toString());
     }
     
 	/**

@@ -7,8 +7,8 @@ public class GenVars {
 
 	public static void main(String[] args) 
 	{
-		System.out.println(new SatzC().buildVars());
-		System.out.println(new SatzCe().buildVars()); 
+		new SatzC().buildVars();
+		new SatzCe().buildVars(); 
 	}
 
 }
