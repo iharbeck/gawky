@@ -523,13 +523,11 @@ public abstract class Table extends Part
 
 	
 	public static <T extends Table> T find(Class<T> clazz, long id) throws Exception 
-//	public static Table find(Class clazz, long id) throws Exception
 	{
 		return find(clazz, new Long(id));
 	}
 
 	public static <T extends Table> T find(Class<T> clazz, Object id) throws Exception 
-//	public static Table find(Class clazz, Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -541,6 +539,19 @@ public abstract class Table extends Part
 		}
 	}
 
+	public static <T extends Table> T find(Class<T> clazz, Object[] id) throws Exception 
+	{
+		Connection conn = null;
+		try {
+			Table inst = (Table)clazz.newInstance();
+			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
+			return find(clazz, conn, id);
+		} finally {
+			DB.doClose(conn);
+		}
+	}
+
+	
 	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object id) throws Exception 
 //	public static Table find(Class clazz, Connection conn, Object id) throws Exception
 	{
