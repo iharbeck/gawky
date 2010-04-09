@@ -409,7 +409,7 @@ public abstract class Table extends Part
 	Connection conn = null;
 	PreparedStatement stmt = null;
 
-	public void batchinit(Connection conn, Object[] ids) throws Exception
+	public void batchfind_init() throws Exception
 	{
 		conn = DB.getConnection(getStaticLocal().defaultconnection); 
 		stmt = getStmt(conn, SQL_FIND);
@@ -418,7 +418,7 @@ public abstract class Table extends Part
 			throw new NoPrimaryColumnException(this);
 	}
 	
-	public void batchclose()
+	public void batchfind_close()
 	{
 		DB.doClose(stmt);
 		DB.doClose(conn);
