@@ -406,6 +406,55 @@ public abstract class Table extends Part
 		}
 	}
 
+	Connection conn = null;
+	PreparedStatement stmt = null;
+
+	public void batchinit(Connection conn, Object[] ids) throws Exception
+	{
+		conn = DB.getConnection(getStaticLocal().defaultconnection); 
+		stmt = getStmt(conn, SQL_FIND);
+		
+		if(!this.hasPrimary())
+			throw new NoPrimaryColumnException(this);
+	}
+	
+	public void batchclose()
+	{
+		DB.doClose(stmt);
+		DB.doClose(conn);
+	}
+		
+	public void batchfind() throws Exception
+	{
+		getCachedDesc();
+		Desc[] descids = getDescIDs();
+
+		Object[] val = new Object[descids.length];
+		for(int i=0; i < descids.length; i++) {
+			val[i] = descids[i].getValue(this);
+		}
+		
+		ResultSet rset = null;
+		try 
+		{
+			// Find by IDs
+			fillParameter(stmt, val);
+			
+			rset = stmt.executeQuery();
+			rset.setFetchSize(1);
+			
+			found = rset.next();
+			if (found) {
+				getStaticLocal().generator.fillPart(rset, this);
+			} else {
+				log.error("no result (" + getQuery(SQL_FIND) + ")");
+			}
+		} finally {
+			DB.doClose(rset);
+		}
+	}
+
+	
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_FIND);
