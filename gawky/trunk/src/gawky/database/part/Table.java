@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
 public abstract class Table extends Part
 {
 	boolean found = false;
-	
 
 	private final class StaticLocal
 	{
@@ -53,21 +53,55 @@ public abstract class Table extends Part
 		boolean primarydefined = false;
 		public boolean binary = false;
 	}
+	
+	public Connection getConnection() throws SQLException {
+		return DB.getConnection(getStaticLocal().defaultconnection);
+	}
+
+	public static Connection getConnection(Class clazz) throws Exception {
+		Table inst = (Table)clazz.newInstance();
+		return  DB.getConnection(inst.getStaticLocal().defaultconnection);
+	}
+	
+	private final void doClose(Connection conn) {
+		if(!loop)
+			DB.doClose(conn);
+	}
+	
+	private final void doClose(ResultSet rset) {
+		DB.doClose(rset);
+	}
+	
+	private final void doClose(Statement stmt) {
+		if(!loop)
+			DB.doClose(stmt);
+	}
+
+	private final static void doSClose(Connection conn) {
+		DB.doClose(conn);
+	}
+	
+	private final static void doSClose(ResultSet rset) {
+		DB.doClose(rset);
+	}
+
+	private final static void doSClose(Statement stmt) {
+		DB.doClose(stmt);
+	}
 
 	
-	public void buildTableCreate()
-	{
+	// SQL Generator
+	public void buildTableCreate() {
 		System.out.println(Generator.generateCreateSQL(this).toString());
 	}
 	
-	public void buildTableAlter()
-	{
+	public void buildTableAlter() {
 		System.out.println(Generator.generateAlterSQL(this).toString());
 	}
 	
 	
-	public void descAfterInterceptor(Desc[] descs) {
-
+	public void descAfterInterceptor(Desc[] descs) 
+	{
 		StaticLocal local = getStaticLocal();
 
 		// Anzahl Prim�rfelder
@@ -94,22 +128,22 @@ public abstract class Table extends Part
 
 	private static Log log = LogFactory.getLog(Table.class);
 
-	public  static final int SQL_INSERT = 0;
-	private static final int SQL_FIND   = 1;
-	public  static final int SQL_UPDATE = 2;
-	private static final int SQL_DELETE = 3;
-	private static final int SQL_SELECT = 4;
+	public static final int SQL_INSERT = 0;
+	public static final int SQL_FIND   = 1;
+	public static final int SQL_UPDATE = 2;
+	public static final int SQL_DELETE = 3;
+	public static final int SQL_SELECT = 4;
 
 	public  static final int NO_ID = -1;
 
 	//Instance Cache
 	StaticLocal staticlocal;
 
-	public final static StaticLocal getStaticLocal(Table bean) {
+	private final static StaticLocal getStaticLocal(Table bean) {
 		return bean.getStaticLocal();
 	}
 
-	public final StaticLocal getStaticLocal()
+	private final StaticLocal getStaticLocal()
 	{
 		if(staticlocal != null)
 			return staticlocal;
@@ -164,7 +198,7 @@ public abstract class Table extends Part
 		return getStaticLocal().sql;
 	}
 
-	public final String getQuery(int type)
+	private final String getQuery(int type)
 	{
 		String sql = getQueries()[type];
 		if(sql == null)	{
@@ -193,8 +227,18 @@ public abstract class Table extends Part
 
 	public final PreparedStatement getStmt(Connection conn, int type) throws SQLException
 	{
+		if(loop && this.stmt[type] != null)
+			return this.stmt[type];
+		
 		String sql = getQuery(type);
-		return conn.prepareStatement(sql);
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+
+		// Store statement in loop mode
+		if(loop)
+			this.stmt[type] = stmt;
+		
+		return stmt;
 	}
 	
 	public final PreparedStatement getStmtScroll(Connection conn, int type) throws SQLException
@@ -253,10 +297,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			conn = getConnection();
 			insert(conn);
 		} finally {
-			DB.doClose(conn);
+			doClose(conn);
 		}
 	}
 
@@ -304,7 +348,7 @@ public abstract class Table extends Part
 			
 			setFound(true);
 		} finally {
-			DB.doClose(stmt);
+			doClose(stmt);
 		}
 	}
 
@@ -338,8 +382,8 @@ public abstract class Table extends Part
 				out.write(endline);
 			}
 		} finally {
-			DB.doClose(rset);
-			DB.doClose(stmt);
+			doClose(rset);
+			doClose(stmt);
 		}
 	}
 
@@ -369,24 +413,14 @@ public abstract class Table extends Part
 		}
 	}
 
-	public void find(long id) throws Exception
-	{
-		find(new Long(id));
-	}
-
-	public void find(Connection conn, long id) throws Exception
-	{
-		find(conn, new Long(id));
-	}
-
 	public void find(Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			conn = getConnection();
 			find(conn, id);
 		} finally {
-			DB.doClose(conn);
+			doClose(conn);
 		}
 	}
 
@@ -399,66 +433,40 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			conn = getConnection();
 			find(conn, ids);
 		} finally {
-			DB.doClose(conn);
+			doClose(conn);
 		}
 	}
 
+	
 	Connection conn = null;
-	PreparedStatement stmt = null;
-
-	public void batchfind_init() throws Exception
+	PreparedStatement stmt[] = null;
+	boolean loop = false;
+	
+	public void loop_init(Connection conn) throws Exception
 	{
-		conn = DB.getConnection(getStaticLocal().defaultconnection); 
-		stmt = getStmt(conn, SQL_FIND);
+		loop = true;
+		this.conn = conn; 
 		
-		if(!this.hasPrimary())
-			throw new NoPrimaryColumnException(this);
+		stmt = new PreparedStatement[5];
 	}
 	
-	public void batchfind_close()
+	public void loop_exit()
 	{
-		DB.doClose(stmt);
-		DB.doClose(conn);
+		loop = false;
+		for(int i=0; i < stmt.length; i++)
+			doClose(stmt[i]);
 	}
 		
-	public void batchfind() throws Exception
-	{
-		getCachedDesc();
-		Desc[] descids = getDescIDs();
-
-		Object[] val = new Object[descids.length];
-		for(int i=0; i < descids.length; i++) {
-			val[i] = descids[i].getValue(this);
-		}
-		
-		ResultSet rset = null;
-		try 
-		{
-			// Find by IDs
-			fillParameter(stmt, val);
-			
-			rset = stmt.executeQuery();
-			rset.setFetchSize(1);
-			
-			found = rset.next();
-			if (found) {
-				getStaticLocal().generator.fillPart(rset, this);
-			} else {
-				log.error("no result (" + getQuery(SQL_FIND) + ")");
-			}
-		} finally {
-			DB.doClose(rset);
-		}
-	}
-
 	
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
-		PreparedStatement stmt = getStmt(conn, SQL_FIND);
-
+		PreparedStatement stmt;
+		
+		stmt = getStmt(conn, SQL_FIND);
+			
 		if(!this.hasPrimary())
 			throw new NoPrimaryColumnException(this);
 
@@ -478,8 +486,8 @@ public abstract class Table extends Part
 				log.error("no result (" + getQuery(SQL_FIND) + ")");
 			}
 		} finally {
-			DB.doClose(rset);
-			DB.doClose(stmt);
+			doClose(rset);
+			doClose(stmt);
 		}
 	}
 	
@@ -488,10 +496,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			conn = getConnection();
 			findRow(conn, row);
 		} finally {
-			DB.doClose(conn);
+			doClose(conn);
 		}
 	}
 	
@@ -513,8 +521,8 @@ public abstract class Table extends Part
 				log.error("no result (" + getQuery(SQL_FIND) + ")");
 			}
 		} finally {
-			DB.doClose(rset);
-			DB.doClose(stmt);
+			doClose(rset);
+			doClose(stmt);
 		}
 	}
 	
@@ -532,10 +540,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			conn = getConnection();
 			find(conn, where, params);
 		} finally {
-			DB.doClose(conn);
+			doClose(conn);
 		}
 	}
 
@@ -561,8 +569,8 @@ public abstract class Table extends Part
 				log.error("no result (" + sql + ")");
 			}
 		} finally {
-			DB.doClose(rset);
-			DB.doClose(stmt);
+			doClose(rset);
+			doClose(stmt);
 		}
 	}
 
@@ -571,20 +579,14 @@ public abstract class Table extends Part
 	 */
 
 	
-	public static <T extends Table> T find(Class<T> clazz, long id) throws Exception 
-	{
-		return find(clazz, new Long(id));
-	}
-
 	public static <T extends Table> T find(Class<T> clazz, Object id) throws Exception 
 	{
 		Connection conn = null;
 		try {
-			Table inst = (Table)clazz.newInstance();
-			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
+			conn = getConnection(clazz);
 			return find(clazz, conn, id);
 		} finally {
-			DB.doClose(conn);
+			doSClose(conn);
 		}
 	}
 
@@ -592,11 +594,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			Table inst = (Table)clazz.newInstance();
-			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
+			conn = getConnection(clazz);
 			return find(clazz, conn, id);
 		} finally {
-			DB.doClose(conn);
+			doSClose(conn);
 		}
 	}
 
@@ -615,11 +616,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			T inst = clazz.newInstance();
-			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
+			conn = getConnection(clazz);
 			return find(clazz, conn, where, params);
 		} finally {
-			DB.doClose(conn);
+			doSClose(conn);
 		}
 	}
 
@@ -654,33 +654,22 @@ public abstract class Table extends Part
 				inst = clazz.newInstance();
 			}
 		} finally {
-			DB.doClose(rset);
-			DB.doClose(stmt);
+			doSClose(rset);
+			doSClose(stmt);
 		}
 		
 		return list;
-	}
-
-	public static<T extends Table> int delete(Class<T> clazz, long id) throws Exception
-	{
-		return delete(clazz, new Long(id));
 	}
 
 	public static<T extends Table> int delete(Class<T> clazz, Object id) throws Exception
 	{
 		Connection conn = null;
 		try {
-			Table inst = (Table)clazz.newInstance();
-			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
+			conn = getConnection(clazz);
 			return delete(clazz, conn, id);
 		} finally {
-			DB.doClose(conn);
+			doSClose(conn);
 		}
-	}
-
-	public static <T extends Table> int delete(Class<T> clazz, Connection conn, long id) throws Exception
-	{
-		return delete(clazz, conn, new Long(id));
 	}
 
 	public static <T extends Table> int delete(Class<T> clazz, Connection conn, Object id) throws Exception
@@ -705,7 +694,7 @@ public abstract class Table extends Part
 	
 			return stmt.executeUpdate();
 		} finally {
-			DB.doClose(stmt);
+			doSClose(stmt);
 		}
 	}
 
@@ -713,10 +702,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			conn = getConnection();
 			return delete(conn);
 		} finally {
-			DB.doClose(conn);
+			doClose(conn);
 		}
 	}
 
@@ -743,7 +732,7 @@ public abstract class Table extends Part
 			
 			return stmt.executeUpdate();
 		} finally {
-			DB.doClose(stmt);
+			doClose(stmt);
 		}
 	}
 
@@ -751,10 +740,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			conn = DB.getConnection(getStaticLocal().defaultconnection);
+			conn = getConnection();
 			return update(conn);
 		} finally {
-			DB.doClose(conn);
+			doClose(conn);
 		}
 	}
 
@@ -774,9 +763,11 @@ public abstract class Table extends Part
 	
 			return stmt.executeUpdate();
 		} finally {
-			DB.doClose(stmt);
+			doClose(stmt);
 		}
 	}
+	
+	
 	
 	PreparedStatement batch_stmt;
 	int batch_type;
@@ -797,7 +788,7 @@ public abstract class Table extends Part
 	
 	public void batch_execute() throws Exception {
 		batch_stmt.executeBatch();
-		DB.doClose(batch_stmt);
+		doClose(batch_stmt);
 	}
 	
 	
@@ -810,8 +801,8 @@ public abstract class Table extends Part
 		getStaticLocal().defaultconnection = defaultconnection;
 	}
 
-	public boolean isFound() 
-	{
+	
+	public boolean isFound() {
 		return found;
 	}
 
@@ -824,11 +815,10 @@ public abstract class Table extends Part
 	{
 		Connection conn = null;
 		try {
-			T inst = clazz.newInstance();
-			conn = DB.getConnection(inst.getStaticLocal().defaultconnection);
+			conn = getConnection(clazz);
 			return query(clazz, conn, sql, params);
 		} finally {
-			DB.doClose(conn);
+			doSClose(conn);
 		}
 	}
 	
@@ -864,8 +854,8 @@ public abstract class Table extends Part
             }
         	
         } finally {
-        	DB.doClose(rset);
-        	DB.doClose(stmt);
+        	doSClose(rset);
+        	doSClose(stmt);
         }
               
         return list;
