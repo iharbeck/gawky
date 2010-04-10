@@ -101,6 +101,8 @@ public class AConnection implements Connection
     		((Statement)statements.get(i)).close();
     	}
     	
+    	statements = new ArrayList();
+    	
     	pool.returnConnection(this);
     }
 
