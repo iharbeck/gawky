@@ -35,7 +35,7 @@ public class AConnection implements Connection
     private boolean inuse;
     private long timestamp;
 
-    ArrayList statements = new ArrayList();
+    ArrayList<Statement> statements = new ArrayList<Statement>();
 
     public AConnection(Connection conn, AConnectionPool pool)
     {
@@ -98,10 +98,10 @@ public class AConnection implements Connection
          	
     	for(int i=0; i < statements.size(); i++)
     	{
-    		((Statement)statements.get(i)).close();
+    		statements.get(i).close();
     	}
     	
-    	statements = new ArrayList();
+    	statements = new ArrayList<Statement>();
     	
     	pool.returnConnection(this);
     }
@@ -119,7 +119,7 @@ public class AConnection implements Connection
         return conn;
     }
 
-    private Object store(Object val) {
+    private Statement store(Statement val) {
     	statements.add(val);
     	return val;
     }
