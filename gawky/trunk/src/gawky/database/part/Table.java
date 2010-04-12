@@ -54,8 +54,12 @@ public abstract class Table extends Part
 		public boolean binary = false;
 	}
 	
-	public Connection getConnection() throws SQLException {
-		return DB.getConnection(getStaticLocal().defaultconnection);
+	public Connection getConnection() throws SQLException 
+	{
+		if(!loop)
+			return DB.getConnection(getStaticLocal().defaultconnection);
+		else
+			return this.conn;
 	}
 
 	public static Connection getConnection(Class clazz) throws Exception {
@@ -445,6 +449,11 @@ public abstract class Table extends Part
 	PreparedStatement stmt[] = null;
 	boolean loop = false;
 	
+	public void loop_init() throws Exception
+	{
+		loop_init(getConnection());
+	}
+	
 	public void loop_init(Connection conn) throws Exception
 	{
 		loop = true;
@@ -455,9 +464,17 @@ public abstract class Table extends Part
 	
 	public void loop_exit()
 	{
+		loop_exit(true);
+	}
+	
+	public void loop_exit(boolean close)
+	{
 		loop = false;
 		for(int i=0; i < stmt.length; i++)
 			doClose(stmt[i]);
+		
+		if(close)
+			doClose(this.conn);
 	}
 		
 	
