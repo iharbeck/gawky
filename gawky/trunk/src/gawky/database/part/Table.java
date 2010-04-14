@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class Table extends Part
 {
 	boolean found = false;
+	final static int ARRAYSIZE = 2000;
 
 	private final class StaticLocal
 	{
@@ -655,7 +656,7 @@ public abstract class Table extends Part
 		
 		ResultSet rset = null;
 		
-		List<T> list = new ArrayList<T>();
+		List<T> list = new ArrayList<T>(ARRAYSIZE);
 
 		try 
 		{
@@ -852,7 +853,7 @@ public abstract class Table extends Part
 	
 	public static <T extends Table> List<T> query(Class<T> clazz, Connection conn, String sql, Object[] params) throws Exception
 	{
-        ArrayList<T> list = new ArrayList<T>();
+        ArrayList<T> list = new ArrayList<T>(ARRAYSIZE);
 
         PreparedStatement stmt = conn.prepareStatement(sql);
      
