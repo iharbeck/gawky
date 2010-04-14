@@ -44,10 +44,10 @@
 
 	<mail>
 	    <auth>yes</auth>
-		<user>mailuser</user>
-		<password>mailpass</password>
+		<user>ingo.harbeck@iharbeck.de</user>
+		<password></password>
 		<_server>amx1.bertelsmann.de</_server>
-		<server>145.228.210.110</server>
+		<server>mail.iharbeck.de</server>
   		<from></from>
   		<fromalias></fromalias>
   		<subject></subject>
