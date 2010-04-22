@@ -16,7 +16,12 @@ public class IDGeneratorMAX extends IDGenerator
 			sql = "SELECT max(" + table.getPrimdesc().dbname + ")+1  FROM " + table.getTableName();
 		
 		try {
-			return DB.getString(conn, sql); 
+			String id = DB.getString(conn, sql);
+			
+			if(id != null)
+				return id;
+			else
+				return "1";
 		} catch (Exception e) {
 			return "0";
 		}
