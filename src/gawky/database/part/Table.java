@@ -55,7 +55,7 @@ public abstract class Table extends Part
 		public boolean binary = false;
 	}
 	
-	public Connection getConnection() throws SQLException 
+	private Connection getConnection() throws SQLException 
 	{
 		if(!loop)
 			return DB.getConnection(getStaticLocal().defaultconnection);
