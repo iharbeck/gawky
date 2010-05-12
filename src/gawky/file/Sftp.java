@@ -22,9 +22,15 @@ public class Sftp extends BaseFtp {
 	public static void main(String[] args) throws Exception {
 		
 		
-		
+		System.out.println("START");
 		//Filetransfer.retrieve("sftp://8a90818a14a769670114abe9959400eb:@test.ctpe.net:2222:/INBOX.*#c]/paykey.ppk", "c:/");
+		//Filetransfer.retrieve("sftp://arvatomedia_fias:k7569eop@84.17.174.9:ENTW/tes*", "c:/");
+		
+		Filetransfer.send("sftp://arvatomedia_fias:k7569eop@84.17.174.9:ENTW/", "c:/test*");
+		
+		System.out.println("END");
 
+		System.exit(0);
 	}
 	
 	ChannelSftp sftpclient;
