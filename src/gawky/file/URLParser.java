@@ -108,6 +108,7 @@ public class URLParser {
 		System.out.println(url.getUser());
 		System.out.println(url.getPass());
 		System.out.println(url.getServer());
+		System.out.println(url.getPort());
 		System.out.println(url.getServerpath());
 		System.out.println(url.getOption());
 	}
