@@ -18,6 +18,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.tree.DefaultExpressionEngine;
+import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.LogManager;
@@ -68,6 +70,15 @@ public class Option
 			return config.getString(alias, def);
 		else
 			return def;
+	}
+	
+	
+	public void enableXPath() {
+		config.setExpressionEngine(new XPathExpressionEngine());
+	}
+	
+	public void disableXPath() {
+		config.setExpressionEngine(new DefaultExpressionEngine());
 	}
 
 	public static String getProperty(String alias)
