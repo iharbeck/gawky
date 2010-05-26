@@ -73,11 +73,11 @@ public class Option
 	}
 	
 	
-	public void enableXPath() {
+	public static void enableXPath() {
 		config.setExpressionEngine(new XPathExpressionEngine());
 	}
 	
-	public void disableXPath() {
+	public static void disableXPath() {
 		config.setExpressionEngine(new DefaultExpressionEngine());
 	}
 
