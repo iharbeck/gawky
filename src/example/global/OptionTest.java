@@ -15,7 +15,14 @@ public class OptionTest {
 		
 		Option.init();
 		
+		Option.enableXPath();
 		
+		System.out.println(Option.getProperty("server/port"));
+
+		Option.disableXPath();
+		
+		System.out.println(Option.getProperty("server.port"));
+
 	}
 	
 }
