@@ -18,6 +18,7 @@ public class OptionTest {
 		Option.enableXPath();
 		
 		System.out.println(Option.getProperty("server/port"));
+		System.out.println(Option.getProperty("att[@stage='prod']/name"));
 
 		Option.disableXPath();
 		

@@ -3,7 +3,15 @@
 <!-- encoding="ISO-8859-1"  -->
 
 <config>
+	
+	<att stage="prod">
+		<name>prod1</name>
+	</att>
 
+	<att stage="inte">
+		<name>inte1</name>
+	</att>
+	
 	<server>
 	  	<port>31680</port>
 	  	<host>localhost</host>
