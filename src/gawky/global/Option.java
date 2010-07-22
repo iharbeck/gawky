@@ -319,39 +319,6 @@ public class Option
 	}
 	
 	
-	 public static void initLib() throws Exception 
-	 {
-		 // Libraries laden
-		 Option.initLib(Locator.findBinROOT() + "../lib/");
-	 }
-	
-	 public static void initLib(String path) throws Exception 
-	 {
-		File[] list = new File(path).listFiles();
-
-		URLClassLoader sysloader = (URLClassLoader)ClassLoader.getSystemClassLoader();
-		Class sysclass = URLClassLoader.class;
-		
-		Method method = sysclass.getDeclaredMethod("addURL", new Class[]{URL.class});
-		method.setAccessible(true);
-		
-		System.out.println("CLASSPATH: " + path);
-		
-		if(list == null) {
-			System.out.println("CLASSPATH: invalid no lib path");
-			return;
-		}
-		
-		for(File file : list) 
-		{
-			if(file.getName().toLowerCase().endsWith(".jar")) 
-			{
-				System.out.println(" + " + file.getName());
-				method.invoke(sysloader, new Object[]{ file.toURI().toURL() });
-			}
-		}
-	}
-	 
 	 public static void addClasspath(String folder)
 	 {
 		 String fontpath = Locator.findBinROOT() + folder;
