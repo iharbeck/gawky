@@ -215,6 +215,9 @@ public class Mail
             String[] tos = to.split("\\s*;\\s*");
             String[] ntoaliass = toalias.split("\\s*;\\s*");
             
+            if(tos.length > ntoaliass.length)
+            	ntoaliass = tos;
+            
             try {
             	for(int i=0; i < tos.length; i++)
             		msg.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(tos[i], ntoaliass[i]));
