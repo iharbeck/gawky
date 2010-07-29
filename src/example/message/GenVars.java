@@ -1,7 +1,7 @@
 package example.message;
 
+import gawky.service.dtaus.SatzCe;
 import gawky.service.dtaus.dtaus_band.SatzC;
-import gawky.service.dtaus.dtaus_band.SatzCe;
 
 public class GenVars {
 
