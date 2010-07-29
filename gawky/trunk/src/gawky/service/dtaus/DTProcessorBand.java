@@ -3,7 +3,6 @@ package gawky.service.dtaus;
 import gawky.message.parser.EBCDICParser;
 import gawky.service.dtaus.dtaus_band.SatzA;
 import gawky.service.dtaus.dtaus_band.SatzC;
-import gawky.service.dtaus.dtaus_band.SatzCe;
 import gawky.service.dtaus.dtaus_band.SatzE;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class DTProcessorBand
 	SatzA satza;
 	SatzE satze;
 	
-	ArrayList satzcArray = new ArrayList();
+	ArrayList<SatzC> satzcArray = new ArrayList<SatzC>();
 	
 	SatzC satzc;
 	
@@ -49,11 +48,11 @@ public class DTProcessorBand
 		satzc.addExtention(satze);
 	}
 
-	public ArrayList getSatzcArray() {
+	public ArrayList<SatzC> getSatzcArray() {
 		return satzcArray;
 	}
 
-	public void setSatzcArray(ArrayList saetze) {
+	public void setSatzcArray(ArrayList<SatzC> saetze) {
 		satzcArray = saetze;
 	}
 

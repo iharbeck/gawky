@@ -6,6 +6,7 @@ import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescF;
 import gawky.message.part.Reserved;
+import gawky.service.dtaus.SatzCe;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
@@ -66,14 +67,14 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 		
 		
 		// Erweiterungsätze
-		Iterator it2 = null;
+		Iterator<SatzCe> it2 = null;
 		if(len > 0) 
 		{
 			it2 = getSatzCe().iterator();
 
 			for(int i=1; it2.hasNext() && i <= 2; i++)
 			{
-				SatzCe el = (SatzCe)it2.next();
+				SatzCe el = it2.next();
 				tmp += el.buildString();
 			}
 		}
@@ -87,7 +88,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 			StringBuilder exttmp = new StringBuilder();
 			while(it2.hasNext())
 			{
-				SatzCe el = (SatzCe)it2.next();
+				SatzCe el = it2.next();
 				exttmp.append(el.buildString());
 			}
 			

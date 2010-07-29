@@ -1,4 +1,4 @@
-package gawky.service.dtaus.dtaus_band;
+package gawky.service.dtaus;
 
 import gawky.message.part.Desc;
 import gawky.message.part.DescF;

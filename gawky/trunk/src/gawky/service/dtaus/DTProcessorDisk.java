@@ -3,7 +3,6 @@ package gawky.service.dtaus;
 import gawky.global.Constant;
 import gawky.service.dtaus.dtaus_disc.SatzA;
 import gawky.service.dtaus.dtaus_disc.SatzC;
-import gawky.service.dtaus.dtaus_disc.SatzCe;
 import gawky.service.dtaus.dtaus_disc.SatzE;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class DTProcessorDisk
 	SatzA satza;
 	SatzE satze;
 	
-	ArrayList satzcArray = new ArrayList();
+	ArrayList<SatzC> satzcArray = new ArrayList<SatzC>();
 	
 	SatzC satzc;
 	
@@ -47,11 +46,11 @@ public class DTProcessorDisk
 		satzc.addExtention(satze);
 	}
 
-	public ArrayList getSatzcArray() {
+	public ArrayList<SatzC> getSatzcArray() {
 		return satzcArray;
 	}
 
-	public void setSatzcArray(ArrayList saetze) {
+	public void setSatzcArray(ArrayList<SatzC> saetze) {
 		satzcArray = saetze;
 	}
 

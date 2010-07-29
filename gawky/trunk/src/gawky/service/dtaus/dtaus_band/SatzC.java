@@ -8,11 +8,11 @@ import gawky.message.part.DescF;
 import gawky.message.part.DescP;
 import gawky.message.part.Part;
 import gawky.message.part.Reserved;
+import gawky.service.dtaus.SatzCe;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  *
@@ -60,11 +60,11 @@ public class SatzC extends Part
 		}; 
 	}
 
-    ArrayList satzCe = new ArrayList();
+    ArrayList<SatzCe> satzCe = new ArrayList<SatzCe>();
     
     public void addExtention(SatzCe ext) {
     	if(satzCe == null)
-    		satzCe = new ArrayList();
+    		satzCe = new ArrayList<SatzCe>();
     	
     	satzCe.add(ext);
     }
@@ -96,11 +96,8 @@ public class SatzC extends Part
 		if(ext > 0)
 		{
 			int i = 0;
-			Iterator it2 = getSatzCe().iterator();
-			while(it2.hasNext())
+			for(SatzCe satzcext : getSatzCe())
 			{
-				SatzCe satzcext = (SatzCe)it2.next();
-				
 				System.arraycopy(generator.generateString(satzcext, 29), 0, satz, linelen + i*29, 29);
 				i++;
 			}
@@ -229,11 +226,11 @@ public class SatzC extends Part
 		this.waehrungskennzeichen = waehrungskennzeichen;
 	}
 
-	public ArrayList getSatzCe() {
+	public ArrayList<SatzCe> getSatzCe() { 
 		return satzCe;
 	}
 
-	public void setSatzCe(ArrayList satzCe) {
+	public void setSatzCe(ArrayList<SatzCe> satzCe) {
 		this.satzCe = satzCe;
 	}
 }
