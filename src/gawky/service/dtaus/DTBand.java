@@ -6,7 +6,6 @@ import gawky.message.parser.ParserException;
 import gawky.service.dtaus.dtaus_band.Helper;
 import gawky.service.dtaus.dtaus_band.SatzA;
 import gawky.service.dtaus.dtaus_band.SatzC;
-import gawky.service.dtaus.dtaus_band.SatzCe;
 import gawky.service.dtaus.dtaus_band.SatzE;
 
 import java.io.File;

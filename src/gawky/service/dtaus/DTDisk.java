@@ -5,7 +5,6 @@ import gawky.message.parser.Parser;
 import gawky.message.parser.ParserException;
 import gawky.service.dtaus.dtaus_disc.SatzA;
 import gawky.service.dtaus.dtaus_disc.SatzC;
-import gawky.service.dtaus.dtaus_disc.SatzCe;
 import gawky.service.dtaus.dtaus_disc.SatzE;
 
 import java.io.File;
@@ -19,9 +18,16 @@ import java.util.Iterator;
 
 public class DTDisk 
 {
-	public static void read(File f, DTProcessorDisk processor) throws IOException, Exception
+	private String encoding;
+	
+	public DTDisk(String encoding)
+	{
+		this.encoding = encoding;
+	}
+	
+	public static void read(File f, DTProcessorDisk processor, String encoding) throws IOException, Exception
     {
-		DTDisk handler = new DTDisk();
+		DTDisk handler = new DTDisk(encoding);
 		
 		handler.open(f);
 		
@@ -136,7 +142,7 @@ public class DTDisk
 		{
 			mappedbuffer.get(length, 0, 4);
 			
-			int linelen = Integer.parseInt(new String(length, Constant.ENCODE_LATIN1));
+			int linelen = Integer.parseInt(new String(length, encoding));
 			
 			if(linelen % 128 != 0)		// AUF SEGMENT LÄNGE VERGRÖSSERN
 			{
@@ -150,7 +156,7 @@ public class DTDisk
 			if(type.charAt(0) == 'C') 
 			{
 				satzc = new SatzC();
-				satzc.parse(parser, new String(line, Constant.ENCODE_LATIN1));
+				satzc.parse(parser, new String(line, encoding));
 
 				
 				
@@ -161,7 +167,7 @@ public class DTDisk
 				{
 					System.arraycopy(line, 187 + 29*x, part, 0, 29);
 					SatzCe satzce = new SatzCe();
-					satzce.parse(new String(part, Constant.ENCODE_LATIN1));
+					satzce.parse(new String(part, encoding));
 					
 					satzc.addExtention(satzce);
 				}
@@ -176,7 +182,7 @@ public class DTDisk
 						{
 							System.arraycopy(line, 4 + 29*(p), part, 0, 29);
 							SatzCe satzce = new SatzCe();
-							satzce.parse(new String(part, Constant.ENCODE_LATIN1));
+							satzce.parse(new String(part, encoding));
 							
 							satzc.addExtention(satzce);
 						}
@@ -186,12 +192,12 @@ public class DTDisk
 			} 
 			else if(type.charAt(0) == 'E')
 			{
-				satze.parse(parser, new String(line, Constant.ENCODE_LATIN1));
+				satze.parse(parser, new String(line, encoding));
 				satztype = SATZE;
 			}
 			else if(type.charAt(0) == 'A')  // Kopfsatz Mandant ermitteln
 			{
-				satza.parse(parser, new String(line, Constant.ENCODE_LATIN1));
+				satza.parse(parser, new String(line, encoding));
 				satztype = SATZA;
 			}
 		} else {
@@ -211,12 +217,26 @@ public class DTDisk
     {
     	DTProcessorDisk processor = new DTProcessorDisk();
     	
-    	File fi = new File("G:/bcos/pcama/DBDIRECT");
+    	Parser.setDocheck(false);
+    	
+    	File fi = new File("c:/dti/COMDA.100728.ASC");  // DTI DEB
+    	   //  fi = new File("c:/dti/CODAT.100728.ASC");  // DTI
 		//File f = new File("C:/work/gawky/format/rtldti230207.org");
-		DTDisk.read(fi, processor);
+		DTDisk.read(fi, processor, Constant.ENCODE_LATIN1);
 		
-		File fo = new File("G:/bcos/pcama/DBDIRECT.out");
-		DTDisk.write(fo, processor);
+		for(SatzC satzc : processor.getSatzcArray())
+		{
+			System.out.println("\n");
+			System.out.println(satzc.getKontonummer());  // Debitornummer
+			System.out.print(satzc.getVerwendungszweck());
+			for(SatzCe ce : satzc.getSatzCe())
+			{
+				if(ce.getKennzeichen().equals("02"))
+					System.out.print(ce.getDaten()); 
+			}
+		}
+		//File fo = new File("G:/bcos/pcama/DBDIRECT.out");
+		//DTDisk.write(fo, processor);
     }
 }
 
