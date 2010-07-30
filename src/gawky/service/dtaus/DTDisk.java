@@ -142,6 +142,8 @@ public class DTDisk
 		{
 			mappedbuffer.get(length, 0, 4);
 			
+			Integer.parseInt(new String("ðñòø".getBytes(), Constant.ENCODE_EBCDIC));
+					
 			int linelen = Integer.parseInt(new String(length, encoding));
 			
 			if(linelen % 128 != 0)		// AUF SEGMENT LÄNGE VERGRÖSSERN
@@ -151,7 +153,7 @@ public class DTDisk
 
 			mappedbuffer.get(line, 4, linelen-4);
 
-			String type = new String(line, 4, 1);
+			String type = new String(line, 4, 1, encoding);
 
 			if(type.charAt(0) == 'C') 
 			{
@@ -220,9 +222,11 @@ public class DTDisk
     	Parser.setDocheck(false);
     	
     	File fi = new File("c:/dti/COMDA.100728.ASC");  // DTI DEB
-    	   //  fi = new File("c:/dti/CODAT.100728.ASC");  // DTI
+    	     fi = new File("c:/dti/CODAT.100728.ASC");  // DTI
+    	//  fi = new File("c:/dti/92293#CBK.B01E29.XUB18");  // DTI
 		//File f = new File("C:/work/gawky/format/rtldti230207.org");
 		DTDisk.read(fi, processor, Constant.ENCODE_LATIN1);
+		//DTDisk.read(fi, processor, Constant.ENCODE_EBCDIC);
 		
 		for(SatzC satzc : processor.getSatzcArray())
 		{
