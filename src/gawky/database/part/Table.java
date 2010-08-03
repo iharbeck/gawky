@@ -619,8 +619,17 @@ public abstract class Table extends Part
 		}
 	}
 
-	
 	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object id) throws Exception 
+//	public static Table find(Class clazz, Connection conn, Object id) throws Exception
+	{
+		T inst = clazz.newInstance();
+
+		inst.find(conn, new Object[]{id});
+
+		return inst;
+	}
+	
+	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object[] id) throws Exception 
 //	public static Table find(Class clazz, Connection conn, Object id) throws Exception
 	{
 		T inst = clazz.newInstance();
