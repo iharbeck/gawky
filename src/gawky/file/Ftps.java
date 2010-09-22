@@ -1,5 +1,6 @@
 package gawky.file;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
@@ -14,7 +15,7 @@ public class Ftps extends BaseFtp {
 
 	// 	SftpHandler.retrieve("ftp://user768:__@ftp.brillenmacher.com:/INBOX.*", "c:/damdam/");
 
-	
+	String remotedir = "";
 	
 	public void updlaod()
 	{
@@ -206,6 +207,8 @@ public class Ftps extends BaseFtp {
 //		if(path.endsWith("/") && path.length() > 1)
 //			path = path.substring(0, path.length()-1);
 		
+		remotedir = path;
+		
 		ftpsclient.changeDirectory(path);
 	}
 
@@ -235,10 +238,13 @@ public class Ftps extends BaseFtp {
 		while(it.hasNext())
 		{
 			String file = (String)it.next();
-
-			ftpsclient.uploadFile(new FTPFile(file, file), new FTPFile(file,file + tmp_prefix));
+			
+			File filelocal = new File(file);
+			String filenamelocal = filelocal.getName();
+			
+			ftpsclient.uploadFile(new FTPFile(filelocal), new FTPFile(remotedir, filenamelocal/* + tmp_prefix */));
 	
-			renameRemoteFile(file + tmp_prefix, file);
+			//renameRemoteFile(filenamelocal + tmp_prefix, filenamelocal);
 		}
 	}
 }
