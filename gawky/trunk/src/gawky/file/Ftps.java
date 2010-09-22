@@ -212,14 +212,14 @@ public class Ftps extends BaseFtp {
 		ftpsclient.changeDirectory(path);
 	}
 
-	public void deleteRemoteFile(String path) throws Exception {
+	public void deleteRemoteFile(String file) throws Exception {
 		//TODO
-		//ftpsclient.deleteFile(new FTPFile(path, file));
+		ftpsclient.deleteFile(new FTPFile(remotedir, file));
 	}
 
 	public void renameRemoteFile(String src, String dest) throws Exception {
 		// TODO
-		//ftpsclient.renameFile(new FTPFile(src, file), new FTPFile(dest, file));
+		ftpsclient.renameFile(new FTPFile(remotedir, src), new FTPFile(remotedir, dest));
 	}
 
 	public void close() throws Exception 
@@ -242,9 +242,9 @@ public class Ftps extends BaseFtp {
 			File filelocal = new File(file);
 			String filenamelocal = filelocal.getName();
 			
-			ftpsclient.uploadFile(new FTPFile(filelocal), new FTPFile(remotedir, filenamelocal/* + tmp_prefix */));
+			ftpsclient.uploadFile(new FTPFile(filelocal), new FTPFile(remotedir, filenamelocal + tmp_prefix ));
 	
-			//renameRemoteFile(filenamelocal + tmp_prefix, filenamelocal);
+			renameRemoteFile(filenamelocal + tmp_prefix, filenamelocal);
 		}
 	}
 }
