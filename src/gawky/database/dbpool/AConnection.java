@@ -106,7 +106,9 @@ public class AConnection implements Connection
     }
 
     public void finalclose() throws SQLException {
+    	System.out.println("closing: " + conn);
         conn.close();
+        System.out.println("closed:  " + conn);
     }
 
     protected void expireLease()
@@ -115,6 +117,7 @@ public class AConnection implements Connection
     }
 
     public Connection getConnection() {
+    	System.out.println("getConn: " + conn);
         return conn;
     }
 

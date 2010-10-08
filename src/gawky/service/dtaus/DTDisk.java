@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DTDisk 
@@ -25,11 +26,15 @@ public class DTDisk
 		this.encoding = encoding;
 	}
 	
-	public static void read(File f, DTProcessorDisk processor, String encoding) throws IOException, Exception
+	public static DTProcessorDisk[] read(File f, String encoding) throws IOException, Exception
     {
 		DTDisk handler = new DTDisk(encoding);
 		
 		handler.open(f);
+		
+		ArrayList<DTProcessorDisk> list = new ArrayList<DTProcessorDisk>();
+		
+		DTProcessorDisk processor = null;
 		
 		while(handler.next())
 		{
@@ -49,11 +54,17 @@ public class DTDisk
 			{
 				SatzA satza = handler.getSatza();
 
+				processor = new DTProcessorDisk();
+				
+				list.add(processor);
+				
 				processor.setSatza(satza);
 			}
 		}
 
 		handler.close();
+		
+		return list.toArray(new DTProcessorDisk[1]);
     }
     
     
@@ -194,11 +205,13 @@ public class DTDisk
 			} 
 			else if(type.charAt(0) == 'E')
 			{
+				satze = new SatzE();
 				satze.parse(parser, new String(line, encoding));
 				satztype = SATZE;
 			}
 			else if(type.charAt(0) == 'A')  // Kopfsatz Mandant ermitteln
 			{
+				satza = new SatzA();
 				satza.parse(parser, new String(line, encoding));
 				satztype = SATZA;
 			}
@@ -217,20 +230,20 @@ public class DTDisk
 
     public static void main(String[] args) throws Exception
     {
-    	DTProcessorDisk processor = new DTProcessorDisk();
-    	
     	Parser.setDocheck(false);
     	
     	File fi = new File("c:/dti/COMDA.100728.ASC");  // DTI DEB
     	     fi = new File("c:/dti/CODAT.100728.ASC");  // DTI
     	//  fi = new File("c:/dti/92293#CBK.B01E29.XUB18");  // DTI
 		//File f = new File("C:/work/gawky/format/rtldti230207.org");
-		DTDisk.read(fi, processor, Constant.ENCODE_LATIN1);
+    	
+    	DTProcessorDisk processor[] = DTDisk.read(fi, Constant.ENCODE_LATIN1);
 		//DTDisk.read(fi, processor, Constant.ENCODE_EBCDIC);
 		
-		for(SatzC satzc : processor.getSatzcArray())
+		for(SatzC satzc : processor[0].getSatzcArray())
 		{
 			System.out.println("\n");
+			System.out.println("Betrag: " + satzc.getBetrageuro());  // Betrag
 			System.out.println(satzc.getKontonummer());  // Debitornummer
 			System.out.print(satzc.getVerwendungszweck());
 			for(SatzCe ce : satzc.getSatzCe())
