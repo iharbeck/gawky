@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DTBand
@@ -23,7 +24,7 @@ public class DTBand
 	
 	int linelen = 581;
 	
-	public static void read(File f, DTProcessorBand processor) throws IOException, Exception
+	public static DTProcessorBand[] read(File f) throws IOException, Exception
     {
 		DTBand handler = new DTBand();
 		
@@ -33,6 +34,10 @@ public class DTBand
 		long csatz = 0;
 		long cesatz = 0;
 		long esatz = 0;
+		
+		ArrayList<DTProcessorBand> list = new ArrayList<DTProcessorBand>();
+		
+		DTProcessorBand processor = null;
 		
 		while(handler.nextvar())
 		{
@@ -56,11 +61,17 @@ public class DTBand
 				asatz++;
 				SatzA satza = handler.getSatza();
 
+				processor = new DTProcessorBand();
+				
+				list.add(processor);
+				
 				processor.setSatza(satza);
 			}
 		}
 
 		handler.close();
+		
+		return list.toArray(new DTProcessorBand[1]);
     }
 
     public static void write(File f, DTProcessorBand processor) throws IOException, Exception
@@ -169,11 +180,13 @@ public class DTBand
 			} 
 			else if(type.charAt(0) == 'A')
 			{
+				satza = new SatzA();
 				satza.parse(extparser, line);
 				satztype = SATZA;
 			}
 			else if(type.charAt(0) == 'E')
 			{
+				satze = new SatzE();
 				satze.parse(extparser, line);
 				satztype = SATZE;
 			}
@@ -252,7 +265,7 @@ public class DTBand
 		//File fi = new File("G:/bcos/pcama/rtldti230207.org");    
 		File fi = new File("G:/TESTFILE3.RAW");    
 //		File fi = new File("G:/bcos/pcama/DBDIRECT.outhost");    
-		DTBand.read(fi, processor);
+		DTBand.read(fi);
 		
 		File fo = new File("G:/TESTFILE3.RAW_RE");
 		DTBand.write(fo, processor);
@@ -262,7 +275,7 @@ public class DTBand
 		
 		fi = new File("G:/TESTFILE3.RAW_RE");    
 //		File fi = new File("G:/bcos/pcama/DBDIRECT.outhost");    
-		DTBand.read(fi, processor);
+		DTBand.read(fi);
 		
 		fo = new File("G:/TESTFILE3.RAW_RE2");
 		DTBand.write(fo, processor);
@@ -272,7 +285,7 @@ public class DTBand
 		
 		fi = new File("G:/TESTFILE3.RAW_RE2");    
 //		File fi = new File("G:/bcos/pcama/DBDIRECT.outhost");    
-		DTBand.read(fi, processor);
+		DTBand.read(fi);
 		
 		fo = new File("G:/TESTFILE3.RAW_RE3");
 		DTBand.write(fo, processor);

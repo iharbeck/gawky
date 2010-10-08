@@ -105,7 +105,7 @@ public class AConnectionPool
    {
        try {
        	conn.finalclose();
-       } catch (Exception e) {};
+       } catch (Exception e) { e.printStackTrace(); };
 
        connections.removeElement(conn);
    }
@@ -142,6 +142,8 @@ public class AConnectionPool
 
        Connection conn = DriverManager.getConnection(url, info);
 
+       System.out.println("create:  " + conn);
+       
        c = new AConnection(conn, this);
        c.lease();
        connections.addElement(c);
