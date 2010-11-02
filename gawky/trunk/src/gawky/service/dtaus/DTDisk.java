@@ -153,7 +153,7 @@ public class DTDisk
 		{
 			mappedbuffer.get(length, 0, 4);
 			
-			Integer.parseInt(new String("נסער".getBytes(), Constant.ENCODE_EBCDIC));
+			//Integer.parseInt(new String("נסער".getBytes(), Constant.ENCODE_EBCDIC));
 					
 			int linelen = Integer.parseInt(new String(length, encoding));
 			
