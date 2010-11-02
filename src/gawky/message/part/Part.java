@@ -76,7 +76,7 @@ public abstract class Part implements Cloneable
 		try {
 			return getDescByName(name).getValue(this);
 		} catch (Exception e) {
-			System.out.println("name invalid in " + this);
+			System.out.println("name [" + name + "] invalid in " + this);
 			return null;
 		}
 	}
@@ -85,7 +85,7 @@ public abstract class Part implements Cloneable
 		try {
 			getDescByName(name).setValue(this, value); 
 		} catch (Exception e) {
-			System.out.println("name invalid in " + this);
+			System.out.println("name [" + name + "] invalid in " + this);
 		}
 	}
 	
