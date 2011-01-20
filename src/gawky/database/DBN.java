@@ -117,28 +117,28 @@ public class DBN
     	}
 	}
 
-	public static HashMap getHash(String sql, Object... params) {
+	public static Map<String, String> getHash(String sql, Object... params) {
 		try { 
     		return DB.getHash(sql, params);
     	} catch (Exception e) {
-    		return new HashMap();
+    		return new HashMap<String, String>();
     	}
 	}
 	
-	public static HashMap getHash(int pool, String sql, Object... params) {
+	public static Map<String, String> getHash(int pool, String sql, Object... params) {
 		try { 
     		return DB.getHash(pool, sql, params);
     	} catch (Exception e) {
-    		return new HashMap();
+    		return new HashMap<String, String>();
     	}
 	}
 
-	public static HashMap getHash(Connection conn, String sql, Object... params) 
+	public static Map<String, String> getHash(Connection conn, String sql, Object... params) 
 	{
 		try { 
     		return DB.getHash(conn, sql, params);
     	} catch (Exception e) {
-    		return new HashMap();
+    		return new HashMap<String, String>();
     	}
 	}
 
