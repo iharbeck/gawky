@@ -127,7 +127,7 @@ public class AConnection implements Connection
 //    }
     public PreparedStatement prepareStatement(String sql) throws SQLException {
     	
-        return new APreparedStatement(prepareStatement(sql));
+        return new APreparedStatement(conn.prepareStatement(sql));
     }
 
     public CallableStatement prepareCall(String sql) throws SQLException {

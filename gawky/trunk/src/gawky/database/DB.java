@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -334,12 +335,12 @@ public class DB
 		return al;
 	}
 
-	public static HashMap getHash(String sql, Object... params) throws Exception
+	public static Map<String, String> getHash(String sql, Object... params) throws Exception
 	{
 		return getHash(0, sql, params);
 	}
 	
-	public static HashMap getHash(int pool, String sql, Object... params) throws Exception
+	public static Map<String, String> getHash(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -352,9 +353,9 @@ public class DB
 		}
 	}
 
-	public static HashMap getHash(Connection conn, String sql, Object... params) throws Exception
+	public static Map<String, String> getHash(Connection conn, String sql, Object... params) throws Exception
 	{
-		HashMap hs = new HashMap();
+		LinkedHashMap<String, String> hs = new LinkedHashMap<String, String>();
 
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
