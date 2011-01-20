@@ -8,7 +8,7 @@
 	<property name="base" value="." />     
 	
 	
-	<target name="jar">
+	<target name="jar"> 
 		 <delete>
 		 	<fileset dir="bin" includes="${name}-?.?.*.jar"/>
 			<fileset dir="bin" includes="${name}-servicecrm-?.?.*.jar"/>
