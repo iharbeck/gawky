@@ -10,31 +10,18 @@ import java.util.Hashtable;
 
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * @author Ingo Harbeck
  *  
  */
 public class SimpleMail extends Mail
 {
-	private static Log log = LogFactory.getLog(SimpleMail.class);
-
-    private static String DEFAULT_USER     = "mail.user";
-    private static String DEFAULT_PASSWORD = "mail.password";
-    private static String DEFAULT_SERVER   = "mail.server";
-
     private static String DEFAULT_FROM      = "mail.from";
     private static String DEFAULT_FROMALIAS = "mail.fromalias";
     private static String DEFAULT_SUBJECT   = "mail.subject";
  
-    String server     = Option.getProperty(DEFAULT_SERVER);
-    String username   = Option.getProperty(DEFAULT_USER);
-    String password   = Option.getProperty(DEFAULT_PASSWORD);
-
-    String from       = Option.getProperty(DEFAULT_FROM, "");
-    String fromalias  = Option.getProperty(DEFAULT_FROMALIAS, "");
+    String def_from       = Option.getProperty(DEFAULT_FROM, "");
+    String def_fromalias  = Option.getProperty(DEFAULT_FROMALIAS, "");
 
     boolean html = true;
     
@@ -42,52 +29,70 @@ public class SimpleMail extends Mail
     String body     =  "";
     String altbody  =  "";
 
-    private ArrayList reply = new ArrayList();
- 
-    String to      = "";
-    String toalias = "";
-    
-    public void addTO(String TO, String alias) {
-    	to += TO + ";";
-    	toalias += alias + ";";
-    }
-    
-    public void addReplyTO(String replyTO, String alias) throws Exception {
-    	reply.add(new InternetAddress(replyTO, alias, Constant.ENCODE_ISO));
-    }
-
     private boolean dozip = false;
     private InputStream stream;
     private String attachName;
+
+    private Hashtable<String, String> cids = new Hashtable<String, String>();
+
+    InternetAddress from; 
+    private ArrayList<InternetAddress> array_to = new ArrayList<InternetAddress>();
+    private ArrayList<InternetAddress> array_reply = new ArrayList<InternetAddress>();
+
+    private Hashtable<String, String> parameter = new Hashtable<String, String>();
+
+    String bounce = "";
+    
+    public void setFrom(String from) throws Exception {
+        setFrom(from, from);
+    }
+
+    public void setFrom(String from, String alias) throws Exception {
+    	this.from = new InternetAddress(from, alias);
+    }
+    
+    public void addTo(String to) throws Exception 
+    {
+    	String[] tos = to.split("\\s*;\\s*");
+    	
+    	for(String t : tos)
+    		addTo(t, t);
+    }
+        
+    public void addTo(String to, String alias) throws Exception {
+    	
+    	String[] tos = to.split("\\s*;\\s*");
+    	String[] as =  alias.split("\\s*;\\s*");
+    	
+    	for(int i=0; i < tos.length; i++)
+    	{
+    		array_to.add(new InternetAddress(tos[i], as[i]));
+    	}
+    }
+    
+    public void addReplyTo(String replyTO) throws Exception {
+    	addReplyTo(replyTO, replyTO);
+    }
+    
+    public void addReplyTo(String replyTO, String alias) throws Exception {
+    	array_reply.add(new InternetAddress(replyTO, alias, Constant.ENCODE_UTF8));
+    }
+
     
     public void addAttachment(String path, String name, boolean zip) throws Exception {
     	stream = new FileInputStream(path);
     	attachName = name;
     	dozip = zip;
     }
-    
-    private Hashtable cids = new Hashtable();
+
     public void addImage(String path, String cid) {
     	cids.put(cid, path);
     }
-    
-    private Hashtable parameter = new Hashtable();
     
     public void addParameter(String key, String value) {
     	parameter.put(key, value);
     }
     
-    public int send() 
-    {
-    	return Mail.sendMailGeneric(username, password, 
-    								server, 
-    								from, fromalias, 
-    								to,   toalias, reply, 
-    								subject, body, html, 
-    								stream, attachName, 
-    								dozip, parameter, cids);
-    }
-
 	public String getAltbody() {
 		return altbody;
 	}
@@ -104,44 +109,12 @@ public class SimpleMail extends Mail
 		this.body = body;
 	}
 
-	public String getFrom() {
-		return from;
-	}
-
-	public void setFrom(String from) {
-		this.from = from;
-	}
-
-	public String getFromalias() {
-		return fromalias;
-	}
-
-	public void setFromalias(String fromalias) {
-		this.fromalias = fromalias;
-	}
-
 	public boolean isHtml() {
 		return html;
 	}
 
 	public void setHtml(boolean html) {
 		this.html = html;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getServer() {
-		return server;
-	}
-
-	public void setServer(String server) {
-		this.server = server;
 	}
 
 	public String getSubject() {
@@ -152,28 +125,82 @@ public class SimpleMail extends Mail
 		this.subject = subject;
 	}
 
-	public String getTo() {
-		return to;
+
+	public boolean isDozip() {
+		return dozip;
 	}
 
-	public void setTo(String to) {
-		this.to = to;
+	public void setDozip(boolean dozip) {
+		this.dozip = dozip;
 	}
 
-	public String getToalias() {
-		return toalias;
+	public Hashtable<String, String> getParameter() {
+		return parameter;
 	}
 
-	public void setToalias(String toalias) {
-		this.toalias = toalias;
+	public void setParameter(Hashtable<String, String> parameter) {
+		this.parameter = parameter;
 	}
 
-	public String getUsername() {
-		return username;
+	public InputStream getStream() {
+		return stream;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setStream(InputStream stream, String attachname) {
+		this.stream = stream;
+		this.attachName = attachname;
+	}
+
+	public String getAttachName() {
+		return attachName;
+	}
+
+	public Hashtable<String, String> getCids() {
+		return cids;
+	}
+
+	public void setCids(Hashtable<String, String> cids) {
+		this.cids = cids;
+	}
+
+	public String getBounce() {
+		return bounce;
+	}
+
+	public void setBounce(String bounce) {
+		this.bounce = bounce;
+	}
+
+	public ArrayList<InternetAddress> getArray_to() {
+		return array_to;
+	}
+
+	public void setArray_to(ArrayList<InternetAddress> arrayTo) {
+		array_to = arrayTo;
+	}
+
+	public ArrayList<InternetAddress> getArray_reply() {
+		return array_reply;
+	}
+
+	public void setArray_reply(ArrayList<InternetAddress> arrayReply) {
+		array_reply = arrayReply;
+	}
+
+	public InternetAddress getFrom() throws Exception 
+	{
+		if(from == null)
+		{
+			if(def_fromalias.length() > 0)
+				setFrom(def_from, def_fromalias);
+			else
+				setFrom(def_from);
+		}
+		return from;
+	}
+
+	public void setFrom(InternetAddress from) {
+		this.from = from;
 	}
 }
 

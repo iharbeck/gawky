@@ -1,9 +1,8 @@
 package example.mail;
 
 import gawky.global.Option;
-import gawky.mail.Mail;
-
-import java.util.Hashtable;
+import gawky.mail.SimpleMail;
+import gawky.mail.SimpleMailSender;
 
 public class TestHTMLMail {
  
@@ -11,19 +10,17 @@ public class TestHTMLMail {
 		
 		Option.init();
 		
-		String username = Option.getProperty("mail.user");
-        String password = Option.getProperty("mail.password");
-        String host     = Option.getProperty("mail.server");
+        SimpleMail mail = new SimpleMail();
         
-        Hashtable list = new Hashtable();
+        mail.addTo("ingo.harbeck@iharbeck.de");
+        mail.setSubject("NEW NEW Ã¶Ã¤Ã¼");
+        mail.setBody("<b>Hello Ã¶Ã¶Ã¤Ã¤ 6ex</b><img src=\"cid:strutter.jpg\"/>");
+        mail.addImage("strutter.jpg", "strutter.jpg");
         
-        list.put("strutter.jpg", "strutter.jpg");
+        SimpleMailSender server = new SimpleMailSender();
         
-		Mail.sendMailGeneric(username, password, host,  
-				            "ingo.harbeck@bertelsmann.de", "harb05", 
-							"ingo.harbeck@bertelsmann.de", "harb05", null,
-							"Test subject öäü new", "<b>Hello öäü 6ex</b><img src=\"cid:strutter.jpg\"/>",
-							 true, null, null, false, null, list);
+        server.send(mail);
+		
 		System.exit(0);
 	}
 }

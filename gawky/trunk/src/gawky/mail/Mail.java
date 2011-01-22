@@ -19,6 +19,8 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.Address;
+import javax.mail.Authenticator;
+import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
@@ -28,7 +30,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,152 +38,36 @@ import org.apache.commons.logging.LogFactory;
  * @author Ingo Harbeck
  *  
  */
+
 public class Mail 
 {
 	private static Log log = LogFactory.getLog(Mail.class);
 
     public static int ERROR_INVALIDADDRESS = 1;
-    public static int ERROR_SENDFAILED = 2;
-    public static int ERROR_IO = 3;
-    public static int STATUS_OK = 0;
+    public static int ERROR_SENDFAILED 	   = 2;
+    public static int ERROR_IO 			   = 3;
+    public static int STATUS_OK 		   = 0;
     
     private static String charsettext = Constant.ENCODE_UTF8; 
     
-    // dependency on Option Class. Alias in XML config file:
-    // call sendMailGeneric if Option Class is not used
-    private static String DEFAULT_USER     = "mail.user";
-    private static String DEFAULT_PASSWORD = "mail.password";
-    private static String DEFAULT_SERVER   = "mail.server";
-
  
-    public static int sendParameterMail(
-            String from,    String fromalias,
-            String to,      String toalias,
-            String subject, String message,
-            Hashtable hash) 
-    {
-        String username = Option.getProperty(DEFAULT_USER);
-        String password = Option.getProperty(DEFAULT_PASSWORD);
-        String server   = Option.getProperty(DEFAULT_SERVER);
-        
-        return sendMailGeneric(username, password, server, 
-                		   from, fromalias, to, toalias, null, subject, message, false, null, null, false, hash, null);
-    }
-    
-    public static int sendParameterHTMLMail(
-            String from,    String fromalias,
-            String to,      String toalias,
-            String subject, String message,
-            Hashtable hash) 
-    {
-        String username = Option.getProperty(DEFAULT_USER);
-        String password = Option.getProperty(DEFAULT_PASSWORD);
-        String server   = Option.getProperty(DEFAULT_SERVER);
-        
-        return sendMailGeneric(username, password, server, 
-                		   from, fromalias, to, toalias, null, subject, message, true, null, null, false, hash, null);
-    }
-    
-    public static int sendMailAttachStream(
-            String from,    String fromalias,
-            String to,      String toalias,
-            String subject, String message,
-            InputStream stream, String attachName) 
-    {
-    	return sendMailAttachStream(
-                 from,     fromalias,
-                 to,       toalias,
-                 subject,  message,
-                 stream,  attachName, false);
-    }
-        
-    public static int sendMailAttachStream(
-            String from,    String fromalias,
-            String to,      String toalias,
-            String subject, String message,
-            InputStream stream, String attachName, boolean dozip) 
-    {
-        String username = Option.getProperty(DEFAULT_USER);
-        String password = Option.getProperty(DEFAULT_PASSWORD);
-        String server   = Option.getProperty(DEFAULT_SERVER);
-        
-        return sendMailGeneric(username, password, server, 
-                           from, fromalias, to, toalias, null, subject, message, 
-                           false, stream, attachName, dozip, null, null);
-    }
-    
-    public static int sendHTMLMailAttachStream(
-            String from,    String fromalias,
-            String to,      String toalias,
-            String subject, String message,
-            InputStream stream, String attachName) 
-    {
-        String username = Option.getProperty(DEFAULT_USER);
-        String password = Option.getProperty(DEFAULT_PASSWORD);
-        String server   = Option.getProperty(DEFAULT_SERVER);
-        
-        return sendMailGeneric(username, password, server, 
-                           from, fromalias, to, toalias, null, subject, message, 
-                           true, stream, attachName, false, null, null);
-    }
-
-    
-    public static int sendSimpleMail(
-            String from, String fromalias,
-            String to,   String toalias,
-            String subject, String message) 
-    {
-    	String username = Option.getProperty(DEFAULT_USER);
-        String password = Option.getProperty(DEFAULT_PASSWORD);
-        String server   = Option.getProperty(DEFAULT_SERVER);
-        
-    	return sendMailGeneric(username, password, server, 
-                           from, fromalias, to, toalias, null, subject, message, 
-                           false, null, null, false, null, null);
-    }
-
-    
-    public static int sendMailGeneric(
-            String username, String password, String host, 
-            String from, String fromalias, String to, String toalias,
-            ArrayList reply,
-            String subject, String message,
+    public static int sendMailMain(
+    		String host, String username, String password, String doauth,
+    		InternetAddress from, 
+            ArrayList<InternetAddress> to, 
+            ArrayList<InternetAddress> reply, String bounceaddress,
+            String subject, String body,
             boolean html,
             InputStream stream, 
             String attachName,
             boolean dozip,
-            Hashtable templateparameter, Hashtable cids
-            ) 
-    {
-    	return sendMailGenericBounce(
-                username, password, host, 
-                from, fromalias, to, toalias,
-                reply, null,
-                subject, message,
-                html,
-                stream, 
-                attachName,
-                dozip,
-                templateparameter, cids
-                ); 
-    }
-    
-    public static int sendMailGenericBounce(
-            String username, String password, String host, 
-            String from, String fromalias, String to, String toalias,
-            ArrayList reply, String bounceaddress,
-            String subject, String message,
-            boolean html,
-            InputStream stream, 
-            String attachName,
-            boolean dozip,
-            Hashtable templateparameter, Hashtable cids
+            Hashtable<String, String> templateparameter, Hashtable cids
             ) 
     {
     	// templates in message / subject ersetzen
     	if(templateparameter != null)
         {
-         	message = templateReplacer(message, templateparameter);
+         	body    = templateReplacer(body, templateparameter);
             subject = templateReplacer(subject, templateparameter);
         }
     	 
@@ -192,46 +77,40 @@ public class Mail
 
             // Get system properties
             java.util.Properties prop = System.getProperties();
-    	    prop.put("mail.smtp.host", host);
-    	    prop.put("mail.smtp.auth",  Option.getProperty("mail.auth", "false"));
+            prop.put("mail.transport.protocol", "smtp");
+            prop.put("mail.smtp.host", host);
+    	    prop.put("mail.smtp.auth", doauth);
 
-    	    if(bounceaddress != null)
+    	    if(bounceaddress != null && !bounceaddress.equals(""))
     	    	prop.put("mail.smtp.from", bounceaddress);
     	    
+    	    //Auth
+            Authenticator auth = new SMTPAuthenticator(username, password);
+
             // Get session
-    	    Session ses1 = Session.getDefaultInstance(prop, null);
+    	    Session session = Session.getDefaultInstance(prop, auth);
 
     	    // Define message
-            MimeMessage msg = new MimeMessage(ses1);
-            msg.setHeader("Content-Transfer-Encoding", "8bit");
+            MimeMessage message = new MimeMessage(session);
+            message.setHeader("Content-Transfer-Encoding", "8bit");
            
             // set Type and Charset in Headerfield 'Content-Type'
-            msg.setHeader("Content-Type", "text/plain; charset=UTF-8");
+            message.setHeader("Content-Type", "text/plain; charset=UTF-8");
 
             
             //TO
-            msg.setFrom(new InternetAddress(from, fromalias));
-            
-            String[] tos = to.split("\\s*;\\s*");
-            String[] ntoaliass = toalias.split("\\s*;\\s*");
-            
-            if(tos.length > ntoaliass.length)
-            	ntoaliass = tos;
-            
-            try {
-            	for(int i=0; i < tos.length; i++)
-            		msg.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(tos[i], ntoaliass[i]));
-            } catch(Exception e) {
-            	log.error(e);
-            }
-    	    //FROM
+            message.setFrom(from);
             
             
-            msg.setSubject(subject.trim(), charsettext); 
+        	for(InternetAddress addr : to)
+        		message.addRecipient(javax.mail.Message.RecipientType.TO, addr);
+            
+            
+            message.setSubject(subject.trim(), charsettext); 
             
     	    
     	    if(reply != null)
-    	    	msg.setReplyTo((Address[]) reply.toArray(new Address[reply.size()]) );
+    	    	message.setReplyTo((Address[]) reply.toArray(new Address[reply.size()]) );
     	    
     	    //BODY
     	    MimeBodyPart messageBodyPart = new MimeBodyPart();
@@ -241,17 +120,18 @@ public class Mail
             // SET HTML MAIL
             if(html)
             {
-            	messageBodyPart.setContent(message, "text/html; charset=utf-8");
+            	messageBodyPart.setContent(body, "text/html; charset=utf-8");
             }
             else 
             {
-            	messageBodyPart.setContent(message, "text/plain; charset=utf-8");            	
-            	messageBodyPart.setText(message, charsettext);
+            	messageBodyPart.setContent(body, "text/plain; charset=utf-8");            	
+            	messageBodyPart.setText(body, charsettext);
             }
             
             // Multipart Email
             Multipart multipart = new MimeMultipart("mixed");
     	    //Multipart multipart = new MimeMultipart("related");
+            
             multipart.addBodyPart(messageBodyPart);
     	    
     	    
@@ -262,7 +142,7 @@ public class Mail
     	    	
     	    	String imagepath = Option.getProperty("mail.images");
     	    	
-    	    	Enumeration it=cids.keys();
+    	    	Enumeration it = cids.keys();
     	    	
     	    	while(it.hasMoreElements())
     	    	{
@@ -284,41 +164,46 @@ public class Mail
 
     	     
     	     
-    	    //ATTACHEMENT
+    	    //ATTACHMENT
 		    if(stream != null && stream.available() > 0)
 		    {
 			    messageBodyPart = new MimeBodyPart();
 			    
-			    //ByteArrayOutputStream bout = new ByteArrayOutputStream();
-			    
-			    
 			    javax.activation.DataSource source = null;
 			    
-			    if(!dozip)
-			    {
-			    	// ohne zip
-			    	//source =  new ByteArrayDataSource(stream, "plain/text");
+			    if(!dozip) // ohne zip
 			    	source =  new ByteArrayDataSource(stream, "application/octet-stream");
-			    } else {
-				    // gzip
-				    //source = new ByteArrayDataSource(zipStream(stream), "plain/text");
+			    else  // gzip
 				    source = new ByteArrayDataSource(zipStream(stream), "application/octet-stream");
-			    }
-			    
 			    
 			    messageBodyPart.setDataHandler(new DataHandler(source));
 			    messageBodyPart.setFileName(attachName);
 			    multipart.addBodyPart(messageBodyPart);
 		    }
     	    
-    	    msg.setContent(multipart);
+    	    message.setContent(multipart);
     	    
     	    // Send Mail
+    	    /*
     	    Transport tr = ses1.getTransport("smtp");
     	    tr.connect(host, username, password);
     	    msg.saveChanges();
     	    tr.sendMessage(msg, msg.getAllRecipients());
     	    tr.close();
+    	    */
+            Transport transport = session.getTransport();
+
+            //MimeMessage message = new MimeMessage(mailSession);
+            //message.setContent("This is a test", "text/plain");
+            //message.setFrom(new InternetAddress("ingo.harbeck@iharbeck.de"));
+            //message.addRecipient(Message.RecipientType.TO,
+            //     new InternetAddress("ingo.harbeck@iharbeck.de"));
+
+            transport.connect();
+            // transport.sendMessage(msg, msg.getAllRecipients());
+            transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+            transport.close();
+            
         
         } catch (IOException e) {
             log.error(e);
@@ -333,6 +218,9 @@ public class Mail
         
         return STATUS_OK;
     }
+    
+    
+
     
     public static byte[] zipStream(InputStream stream) throws IOException 
     {
@@ -357,9 +245,9 @@ public class Mail
      * @param hash
      * @return
      */
-    public static final String templateReplacer(String message, Hashtable hash)
+    public static final String templateReplacer(String message, Hashtable<String, String> hash)
     {
-        Enumeration en = hash.keys();
+        Enumeration<String> en = hash.keys();
         
         while(en.hasMoreElements()) {
             String key = (String) en.nextElement();
