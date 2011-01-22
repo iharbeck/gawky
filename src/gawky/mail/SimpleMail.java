@@ -202,5 +202,11 @@ public class SimpleMail extends Mail
 	public void setFrom(InternetAddress from) {
 		this.from = from;
 	}
+	
+	public int send() throws Exception
+	{
+		SimpleMailSender sender = new SimpleMailSender();
+		return sender.send(this);
+	}
 }
 
