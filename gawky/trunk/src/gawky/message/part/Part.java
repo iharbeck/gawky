@@ -89,6 +89,15 @@ public abstract class Part implements Cloneable
 		}
 	}
 	
+	public final Object getValueOld(String name) {
+		try {
+			return getDescByName(name).getValue(getBackup());
+		} catch (Exception e) {
+			System.out.println("name [" + name + "] invalid in " + this);
+			return null;
+		}
+	}
+	
 	/**
 	 * TEST dynamic getter/setter
 	 * @param args
