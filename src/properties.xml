@@ -51,12 +51,12 @@
 	</db_production>
 
 	<mail>
-	    <auth>yes</auth>
+	    <auth>true</auth>
 		<user>ingo.harbeck@iharbeck.de</user>
 		<password></password>
 		<_server>amx1.bertelsmann.de</_server>
 		<server>mail.iharbeck.de</server>
-  		<from></from>
+  		<from>ingo.harbeck@iharbeck.de</from>
   		<fromalias></fromalias>
   		<subject></subject>
   		<images>d:</images>
