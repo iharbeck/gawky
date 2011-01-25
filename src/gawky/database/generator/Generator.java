@@ -319,9 +319,9 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			sql.append("\"");
+			sql.append("");
 			sql.append(desc.dbname);  // column name
-			sql.append("\"");
+			sql.append("");
 
 			int len = desc.len;
 			
