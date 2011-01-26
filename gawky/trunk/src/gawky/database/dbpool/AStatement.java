@@ -54,11 +54,11 @@ public class AStatement implements Statement
 	}
 
 	public int[] executeBatch() throws SQLException {
-		return executeBatch();
+		return stmt.executeBatch();
 	}
 
 	public ResultSet executeQuery(String sql) throws SQLException {
-		return executeQuery(sql);
+		return stmt.executeQuery(sql);
 	}
 
 	public int executeUpdate(String sql) throws SQLException {
