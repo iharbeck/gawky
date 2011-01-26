@@ -13,6 +13,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
@@ -61,7 +63,7 @@ public class Mail
             InputStream stream, 
             String attachName,
             boolean dozip,
-            Hashtable<String, String> templateparameter, Hashtable cids
+            Map<String, String> templateparameter, Hashtable cids
             ) 
     {
     	// templates in message / subject ersetzen
@@ -245,12 +247,9 @@ public class Mail
      * @param hash
      * @return
      */
-    public static final String templateReplacer(String message, Hashtable<String, String> hash)
+    public static final String templateReplacer(String message, Map<String, String> hash)
     {
-        Enumeration<String> en = hash.keys();
-        
-        while(en.hasMoreElements()) {
-            String key = (String) en.nextElement();
+        for(String key : hash.keySet()) {
             message = message.replaceAll("\\{" + key + "\\}", (String)hash.get(key));
         }
         
