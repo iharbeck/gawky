@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.mail.internet.InternetAddress;
 
@@ -39,7 +40,7 @@ public class SimpleMail extends Mail
     private ArrayList<InternetAddress> array_to = new ArrayList<InternetAddress>();
     private ArrayList<InternetAddress> array_reply = new ArrayList<InternetAddress>();
 
-    private Hashtable<String, String> parameter = new Hashtable<String, String>();
+    private Map<String, String> parameter = new Hashtable<String, String>();
 
     String bounce = "";
     
@@ -134,12 +135,8 @@ public class SimpleMail extends Mail
 		this.dozip = dozip;
 	}
 
-	public Hashtable<String, String> getParameter() {
+	public Map<String, String> getParameter() {
 		return parameter;
-	}
-
-	public void setParameter(Hashtable<String, String> parameter) {
-		this.parameter = parameter;
 	}
 
 	public InputStream getStream() {
@@ -207,6 +204,10 @@ public class SimpleMail extends Mail
 	{
 		SimpleMailSender sender = new SimpleMailSender();
 		return sender.send(this);
+	}
+
+	public void setParameter(Map<String, String> parameter) {
+		this.parameter = parameter;
 	}
 }
 
