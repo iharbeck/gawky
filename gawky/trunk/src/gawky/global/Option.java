@@ -207,7 +207,7 @@ public class Option
 			// XML Configfile
 			config = new XMLConfiguration();
 			config.setEncoding("UTF8");
-			
+			config.setDelimiterParsingDisabled(true);
 			
 			if(Validation.notEmpty(propfile))
 			{
