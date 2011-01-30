@@ -15,6 +15,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.zip.GZIPOutputStream;
 
 import javax.activation.DataHandler;
@@ -22,16 +23,23 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
+import javax.mail.Flags;
+import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.AndTerm;
+import javax.mail.search.FlagTerm;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SubjectTerm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,6 +60,57 @@ public class Mail
     
     private static String charsettext = Constant.ENCODE_UTF8; 
     
+    
+    public static void main(String[] args) throws Exception 
+	{
+    	Option.init();
+		// Create empty properties
+		Properties props = new Properties();
+
+		// Get session
+		Session session = Session.getDefaultInstance(props, null);
+
+		String host = Option.getProperty("mail.server");
+		String user = Option.getProperty("mail.user");
+		String pass = Option.getProperty("mail.password");
+		// Get the store
+		Store store = session.getStore("imap");
+		store.connect(host, user, pass);
+
+		// Get folder
+		Folder folder = store.getFolder("INBOX");
+		folder.open(Folder.READ_ONLY);
+		
+		SearchTerm st = new AndTerm(
+			    	    new SubjectTerm("TICKING"), 
+			    		new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+		
+		Message messages[] = folder.search(st);
+
+		//Message message[] = folder.getMessages();
+		
+		// message.setFlag(Flags.Flag.SEEN, true); 
+
+		for (Message message : messages) 
+		{
+		   MailParter cmessage;
+
+           cmessage = new MailParter(message);
+		   
+           System.out.println(cmessage.getMessageNumber() + ": " + cmessage.getFrom() + " " + cmessage.getSubject());
+		   System.out.println(cmessage.getBodytext());
+		   System.out.println(cmessage.getAttachmentCount());
+
+		   for(gawky.mail.Attachment att : cmessage.getAttachments())
+		   {
+			   System.out.println(att.getFilename());
+		   }
+		}
+
+		// Close connection 
+		folder.close(false);
+		store.close();
+	}
  
     public static int sendMailMain(
     		String host, String username, String password, String doauth,
@@ -63,7 +122,7 @@ public class Mail
             InputStream stream, 
             String attachName,
             boolean dozip,
-            Map<String, String> templateparameter, Hashtable cids
+            Map<String, String> templateparameter, Map<String, String> cids
             ) 
     {
     	// templates in message / subject ersetzen
@@ -78,7 +137,7 @@ public class Mail
         	System.setProperty("mail.mime.charset", charsettext);
 
             // Get system properties
-            java.util.Properties prop = System.getProperties();
+            java.util.Properties prop = new Properties(); // System.getProperties();
             prop.put("mail.transport.protocol", "smtp");
             prop.put("mail.smtp.host", host);
     	    prop.put("mail.smtp.auth", doauth);
@@ -144,11 +203,9 @@ public class Mail
     	    	
     	    	String imagepath = Option.getProperty("mail.images");
     	    	
-    	    	Enumeration it = cids.keys();
     	    	
-    	    	while(it.hasMoreElements())
+    	    	for(String cid : cids.keySet())
     	    	{
-    	    		String cid = (String) it.nextElement();
 	        	    String imagefilename = imagepath +  "/" + cids.get(cid);
 	        	     
 	        	    MimeBodyPart inlineimg = new MimeBodyPart();
