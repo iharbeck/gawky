@@ -1,12 +1,13 @@
 package gawky.global;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class HashMapBuilder {
+public class MapBuilder {
 
-	public static HashMap buildMap(Object[][] map) 
+	public static Map buildMap(Object[][] map) 
 	{
-		HashMap hs = new HashMap(map.length);
+		Map hs = new  LinkedHashMap(map.length);
 		
 		for(int i=0; i < map.length; i++)
 		{
@@ -24,7 +25,7 @@ public class HashMapBuilder {
 			  	{ "key3", "dritter" },
 		};
 		
-		HashMap m = HashMapBuilder.buildMap(map);
+		Map m = MapBuilder.buildMap(map);
 
 		System.out.println(m.get("key2"));
 	}
