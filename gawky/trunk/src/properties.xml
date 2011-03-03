@@ -53,7 +53,7 @@
 	<mail>
 	    <auth>true</auth>
 		<user>ingo.harbeck@iharbeck.de</user>
-		<password></password>
+		<password>login1996</password>
 		<_server>amx1.bertelsmann.de</_server>
 		<server>mail.iharbeck.de</server>
   		<from>ingo.harbeck@iharbeck.de</from>
