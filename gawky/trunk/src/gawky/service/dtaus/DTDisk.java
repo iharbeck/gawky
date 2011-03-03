@@ -64,7 +64,7 @@ public class DTDisk
 
 		handler.close();
 		
-		return list.toArray(new DTProcessorDisk[1]);
+		return list.toArray(new DTProcessorDisk[0]);
     }
     
     
