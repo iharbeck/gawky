@@ -6,7 +6,7 @@ public class Sample
 {
 	String 	  owner;
 	String 	  name;
-	ArrayList pos = new ArrayList();
+	ArrayList<Sample> pos = new ArrayList<Sample>();
 	
 	public Sample(String name) {
 		this.name = name;
@@ -22,11 +22,11 @@ public class Sample
 		this.name = name;
 	}
 
-	public ArrayList getPos() {
+	public ArrayList<Sample> getPos() {
 		return pos;
 	}
 
-	public void setPos(ArrayList pos) {
+	public void setPos(ArrayList<Sample> pos) {
 		this.pos = pos;
 	}
 

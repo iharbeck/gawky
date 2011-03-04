@@ -19,10 +19,10 @@ public class Request {
     
     RequestHead    head;
     RequestPayment paym;
-    ArrayList      posn = new ArrayList();
+    ArrayList<RequestPosition> posn = new ArrayList<RequestPosition>();
     RequestUrl     urlr;
     RequestAddress addr;
-    ArrayList      books = new ArrayList();
+    ArrayList<RequestBook> books = new ArrayList<RequestBook>();
     
        
     public void setHead(RequestHead head)
@@ -51,12 +51,12 @@ public class Request {
     {
         String ret = ""; 
         
-        Iterator i = posn.iterator();
+        Iterator<RequestPosition> i = posn.iterator();
         
         while(i.hasNext())
         {
-            RequestPosition pos = (RequestPosition)i.next();
-            ret += pos.toString();
+            RequestPosition pos = i.next();
+            ret += pos.buildString();
         }
         return ret;
     }
@@ -70,12 +70,12 @@ public class Request {
     {
         String ret = ""; 
         
-        Iterator i = books.iterator();
+        Iterator<RequestBook> i = books.iterator();
         
         while(i.hasNext())
         {
-            RequestBook book = (RequestBook)i.next();
-            ret += book.toString();
+            RequestBook book = i.next();
+            ret += book.buildString();
         }
         return ret;
     }

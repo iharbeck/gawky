@@ -106,7 +106,7 @@ public class RequestPayment extends Part
         paym_external_invoice_number = external_invoice_number;        
     }
 
-    public void setBlacklistReason(ArrayList blacklist_reason)
+    public void setBlacklistReason(ArrayList<String> blacklist_reason)
     {
         type_of_handling = "03";
              
@@ -114,7 +114,7 @@ public class RequestPayment extends Part
         {
           try {  
             Field f = this.getClass().getField("paym_blacklist_reason_0" + i);
-            f.set(this, (String)blacklist_reason.get(i-1));
+            f.set(this, blacklist_reason.get(i-1));
           } catch(Exception e) {
           } 
         }        

@@ -49,9 +49,9 @@ public class Tool {
 		return buf.toString();
 	}
 
-	public static ArrayList getFiles(String path) 
+	public static ArrayList<String> getFiles(String path) 
 	{
-		ArrayList filelist = new ArrayList();
+		ArrayList<String> filelist = new ArrayList<String>();
 		
 		//path = regbuilder(path);
 		

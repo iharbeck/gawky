@@ -43,7 +43,7 @@ public class AConnectionPool
 {
    private static Log log = LogFactory.getLog(AConnectionPool.class);
 	
-   private Vector connections;
+   private Vector<AConnection> connections;
    private String url;
    public String id;
    private long timeout;
@@ -71,7 +71,7 @@ public class AConnectionPool
 	  this.url = url;
       this.id = id;
       this.timeout = timeout;
-      connections = new Vector(poolsize);
+      connections = new Vector<AConnection>(poolsize);
       reaper = new ConnectionReaper(this, timeout/5);
       reaper.start();
    }
@@ -79,7 +79,7 @@ public class AConnectionPool
    public synchronized void reapConnections()
    {
       long stale = System.currentTimeMillis() - timeout;
-      Enumeration connlist = connections.elements();
+      Enumeration<AConnection> connlist = connections.elements();
 
       while((connlist != null) && (connlist.hasMoreElements()))
       {
@@ -92,7 +92,7 @@ public class AConnectionPool
 
    public synchronized void closeConnections()
    {
-      Enumeration connlist = connections.elements();
+      Enumeration<AConnection> connlist = connections.elements();
 
       while((connlist != null) && (connlist.hasMoreElements()))
       {

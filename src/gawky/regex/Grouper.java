@@ -51,7 +51,7 @@ public class Grouper {
 		
 		Matcher matcher = pattern.matcher(val);
 		
-		ArrayList list = new ArrayList();
+		ArrayList<String> list = new ArrayList<String>();
 		while(matcher.find())
 		{
 			int c = matcher.groupCount()+1;

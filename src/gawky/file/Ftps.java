@@ -3,6 +3,7 @@ package gawky.file;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import org.ftp4che.FTPConnection;
@@ -175,11 +176,11 @@ public class Ftps extends BaseFtp {
 	
 	public String[] retrieveFiles(String filefilter) throws Exception
 	{
-		java.util.List vfiles = ftpsclient.getDirectoryListing();
+		List<FTPFile> vfiles = ftpsclient.getDirectoryListing();
 		
         filefilter = Tool.regbuilder(filefilter);
         
-		ArrayList files = new ArrayList();
+		ArrayList<String> files = new ArrayList<String>();
 		
 		for(int i=0; i < vfiles.size(); i++)
 		{
@@ -231,13 +232,13 @@ public class Ftps extends BaseFtp {
 	{
 		String tmp_prefix = ".temp";
 		
-		ArrayList filesources = Tool.getFiles(localdir + filename);
+		ArrayList<String> filesources = Tool.getFiles(localdir + filename);
 		
-		Iterator it = filesources.iterator();
+		Iterator<String> it = filesources.iterator();
 		
 		while(it.hasNext())
 		{
-			String file = (String)it.next();
+			String file = it.next();
 			
 			File filelocal = new File(file);
 			String filenamelocal = filelocal.getName();
