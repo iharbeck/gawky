@@ -798,12 +798,30 @@ public abstract class Table extends Part
 	
 	PreparedStatement batch_stmt;
 	int batch_type;
+
+	public void batch_init(Connection conn) throws Exception {
+		batch_init(conn, SQL_INSERT);
+	}
+
 	
 	public void batch_init(Connection conn, int type) throws Exception {
 		batch_type = type;
 		batch_stmt = getStmt(conn, type);
 	}
 
+	public void batch_add_insert() throws Exception {
+		batch_add(SQL_INSERT);
+	}
+	
+	public void batch_add_update() throws Exception {
+		batch_add(SQL_UPDATE);
+	}
+	
+	public void batch_add(int type) throws Exception {
+		fillPreparedStatement(batch_stmt, type == SQL_INSERT);
+		batch_stmt.addBatch();
+	}
+	
 	public void batch_add() throws Exception {
 		fillPreparedStatement(batch_stmt, batch_type == SQL_INSERT);
 		batch_stmt.addBatch();
