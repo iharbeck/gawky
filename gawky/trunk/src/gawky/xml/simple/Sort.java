@@ -14,7 +14,7 @@ public class Sort {
 	 */
 	public static void main(String[] args) {
 
-		ArrayList ar = new ArrayList();
+		ArrayList<String> ar = new ArrayList<String>();
 		
 		ar.add("3433");
 		ar.add("1122");
@@ -24,8 +24,8 @@ public class Sort {
 		
 		Collections.sort(ar, new Sorter());
 		
-		for (Iterator it = ar.iterator(); it.hasNext();) {
-			String element = (String) it.next();
+		for (Iterator<String> it = ar.iterator(); it.hasNext();) {
+			String element = it.next();
 			System.out.println(element);
 		}
 		

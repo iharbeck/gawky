@@ -24,7 +24,7 @@ public class PagerTable {
 		Option.init();
 		
 		//ArrayList Source with String[]
-		ArrayList rows = new ArrayList();
+		ArrayList<String[]> rows = new ArrayList<String[]>();
 		
 		rows.add(new String[] { "a1", "2", "3"});
 		rows.add(new String[] { "a11", "22", "33"});

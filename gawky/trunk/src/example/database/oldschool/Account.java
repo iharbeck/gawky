@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class Account 
 {	
-	ArrayList bookings = new ArrayList();
+	ArrayList<Booking> bookings = new ArrayList<Booking>();
 	
 	
 	String client_id;
@@ -189,10 +189,10 @@ public class Account
 		}
 	}
 
-	public ArrayList getBookings() {
+	public ArrayList<Booking> getBookings() {
 		return bookings;
 	}
-	public void setBookings(ArrayList bookings) {
+	public void setBookings(ArrayList<Booking> bookings) {
 		this.bookings = bookings;
 	}
 	public String getClient_id() {

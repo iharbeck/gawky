@@ -7,7 +7,7 @@ public class Report1060 implements ConsumerI
 {
 	int count = 0;
     long totalamount = 0;
-	ArrayList username = new ArrayList();
+	ArrayList<String> username = new ArrayList<String>();
 
 	public void open() {
 

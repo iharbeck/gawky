@@ -1,6 +1,5 @@
 package gawky.file;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
@@ -59,8 +58,6 @@ public class Scp implements URLInterface
 	
 	public static void execute(String host, String user, String pass, String command) throws Exception
 	{
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
         JSch jsch = new JSch();
         
         // execute the command
@@ -71,7 +68,7 @@ public class Scp implements URLInterface
 		session.setUserInfo(ui);
 
 		// disable Hostkey checking 
-		java.util.Hashtable config=new java.util.Hashtable();
+		Hashtable<String, String> config = new Hashtable<String, String>();
 	    config.put("StrictHostKeyChecking", "no");
         session.setConfig(config);
       
@@ -128,7 +125,7 @@ public class Scp implements URLInterface
 			session.setUserInfo(ui);
 
 			// disable Hostkey checking 
-			java.util.Hashtable config=new java.util.Hashtable();
+			Hashtable<String, String> config=new Hashtable<String, String>();
 		    config.put("StrictHostKeyChecking", "no");
   	        session.setConfig(config);
   	      
@@ -138,12 +135,12 @@ public class Scp implements URLInterface
 			
 			rfile = rfile.replaceFirst("~", "");
 			
-			ArrayList list = Tool.getFiles(lfile);
-			Iterator it = list.iterator();
+			ArrayList<String> list = Tool.getFiles(lfile);
+			Iterator<String> it = list.iterator();
 			
 			while(it.hasNext())
 			{
-				String lfilepath = (String)it.next();
+				String lfilepath = it.next();
 				
 				// exec 'scp -t rfile' remotely
 				String command = "scp -p -t " + (tofolder ? rfile + Tool.getFilename(lfilepath) : rfile);

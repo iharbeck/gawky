@@ -16,7 +16,7 @@ public class Dispatcher {
 	public static final int TYPE_LIST   = 2;
 	public static final int TYPE_END    = 3;
 	
-	HashMap map = new HashMap();
+	HashMap<String, String> map = new HashMap<String, String>();
 	
 	public void Register(Class clazz, String tag, int type) {
 		try {

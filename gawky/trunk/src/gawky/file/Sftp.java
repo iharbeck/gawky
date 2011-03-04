@@ -89,15 +89,15 @@ public class Sftp extends BaseFtp {
 	
 	public String[] retrieveFiles(String filefilter) throws Exception
 	{
-        Vector vfiles = sftpclient.ls(".");
+        Vector<LsEntry> vfiles = sftpclient.ls(".");
 
         filefilter = Tool.regbuilder(filefilter);
         
-		ArrayList files = new ArrayList();
+		ArrayList<String> files = new ArrayList<String>();
 		
 		for(int i=0; i < vfiles.size(); i++)
 		{
-			LsEntry lsEntry = (LsEntry) vfiles.get(i);
+			LsEntry lsEntry = vfiles.get(i);
 			
 			if(lsEntry.getAttrs().isDir() || filefilter == null)
 				continue;
@@ -141,13 +141,13 @@ public class Sftp extends BaseFtp {
 	{
 		String tmp_prefix = ""; //".temp";
 		
-		ArrayList filesources = Tool.getFiles(localdir + filename);
+		ArrayList<String> filesources = Tool.getFiles(localdir + filename);
 		
-		Iterator it = filesources.iterator();
+		Iterator<String> it = filesources.iterator();
 		
 		while(it.hasNext())
 		{
-			String file = (String)it.next();
+			String file = it.next();
 
 			File f = new File(file);
 			FileInputStream is = new FileInputStream(f);

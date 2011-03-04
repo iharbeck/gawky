@@ -4,14 +4,12 @@ import gawky.database.DB;
 import gawky.global.Option;
 import gawky.list.datasource.ArrayListDatasource;
 import gawky.list.datasource.Column;
-import gawky.list.datasource.ResultSetDatasource;
 import gawky.list.generator.HtmlTable;
 import gawky.list.generator.PdfTable;
 import gawky.list.generator.XlsTable;
 import gawky.list.listener.LinkListener;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -22,7 +20,7 @@ public class TestTable {
 		Option.init();
 		
 		//ArrayList Source with String[]
-		ArrayList rows = new ArrayList();
+		ArrayList<String[]> rows = new ArrayList<String[]>();
 		
 		rows.add(new String[] { "1", "2", "3"});
 		rows.add(new String[] { "11", "22", "33"});
