@@ -16,7 +16,7 @@ public class SimpleMailSender extends Mail
     private String server     = Option.getProperty(DEFAULT_SERVER);
     private String username   = Option.getProperty(DEFAULT_USER);
     private String password   = Option.getProperty(DEFAULT_PASSWORD);
-    private String auth  	  = Option.getProperty(DEFAULT_AUTH, "true");
+    private String auth  	  = Option.getProperty(DEFAULT_AUTH, "false");
     
     public int send(SimpleMail mail) throws Exception
     {
