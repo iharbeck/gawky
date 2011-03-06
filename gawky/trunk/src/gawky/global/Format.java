@@ -24,6 +24,10 @@ public class Format {
 		}
 	}
 
+	public static double getDouble(String val) {
+		return getDouble(Locale.ENGLISH, val);
+	}
+	
 	public static double getDouble(Locale loc, String val) {
 		try {
 			NumberFormat nf = NumberFormat.getNumberInstance(loc);
