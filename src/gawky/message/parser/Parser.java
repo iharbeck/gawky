@@ -50,7 +50,7 @@ public class Parser
 		throw new ParserException(1, "ONLY String support");
 	}
 
-	public Object parse(String str, Object bean) throws ParserException
+	public Object parse(String str, Part bean) throws ParserException
 	{
 		try
 		{
@@ -58,7 +58,7 @@ public class Parser
 			line = str;
 
 			// Get Description Object
-			descs = ((Part)bean).getCachedDesc();
+			descs = bean.getCachedDesc();
 
 			String value = "";
 
@@ -160,9 +160,9 @@ public class Parser
 
 			return bean;
 		} finally {
-			((Part)bean).afterFill();
-			if(doclone)
-				((Part)bean).doclone();
+			bean.afterFill();
+			
+			if(doclone) bean.doclone();
 		}
 	}
 

@@ -30,7 +30,7 @@ public abstract class Part implements Cloneable
 	private static Parser    parser;
     private static Generator generator;
 
-    private Object clone;
+    private Part clone;
     
     public void buildVars()
     {
@@ -427,12 +427,11 @@ public abstract class Part implements Cloneable
 	
 	public void doclone() 
 	{
-		clone = clone();
-		
+		clone = (Part)clone();
 		cloned = true;
 	}
 
-	public Object getBackup() {
+	public Part getBackup() {
 		return clone;
 	}
 	
