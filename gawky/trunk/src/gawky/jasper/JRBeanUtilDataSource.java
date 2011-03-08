@@ -87,10 +87,10 @@ public class JRBeanUtilDataSource implements JRDataSource
 			}
 			
 			if (bean instanceof HashMap) {
-				if(!((HashMap)bean).containsKey(path))
-					return "$$" + path + "$$";
-				else
+				if(((HashMap)bean).containsKey(path))
 					return ((HashMap)bean).get(path);
+				else
+					return "$$" + path + "$$";
 			}
 			
 			// TODO: implement cached version

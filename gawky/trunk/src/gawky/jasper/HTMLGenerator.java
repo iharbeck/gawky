@@ -1,9 +1,6 @@
 package gawky.jasper;
 
 
-import gawky.file.Locator;
-
-import java.io.OutputStream;
 import java.util.HashMap;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
