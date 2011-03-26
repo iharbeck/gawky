@@ -25,7 +25,7 @@ public class DaoObject extends Table {
 		
 		return new Desc[]  {
 		
-			new Column("kunde_id"), //.setPrimary(),
+			new Column("kunde_id").setPrimary(),
 			new Column("name")
 		};
 	}
