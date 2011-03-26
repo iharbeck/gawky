@@ -87,6 +87,8 @@ g%3D%3D
 	  generator.addCertificatesAndCRLs(getCertStore());
 	  CMSProcessable content = new CMSProcessableByteArray(data);
 
+	  
+	  
 	  CMSSignedData signedData = generator.generate(content, false, "BC");
 	  return signedData.getEncoded();
 	}
@@ -106,7 +108,7 @@ g%3D%3D
 	
 	PrivateKey privateKey;
 	String alias = "SAP";
-	String pass = "login96";
+	String pass = "abc123";
 	
 	//KeyStore keystore;
 	
