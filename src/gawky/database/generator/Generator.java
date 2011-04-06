@@ -238,7 +238,7 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			if(bean.isPrimary(desc)) // desc == descid) // && bean.getIdgenerator() != null) // ID Element überspringen
+			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element überspringen
 				continue;
 
 			sql.append(desc.dbname);  // column name
@@ -450,7 +450,7 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			if(bean.isPrimary(desc))
+			if(desc.isPrimary())
 				continue;
 
 			sql.append(desc.dbname).append("=?,");  // column name
@@ -547,7 +547,7 @@ public class Generator
 
 			try
 			{
-				if(bean.isPrimary(desc))  // ID überspringen
+				if(desc.isPrimary())  // ID überspringen
 					continue;
 
 				setter++;
@@ -576,7 +576,6 @@ public class Generator
 
 				for(int i=0; i < descids.length; i++)
 			    {
-					//stmt.setOString(setter + i +1, descids[i].getValue(bean));
 					mapSetObjectToDBType(descids[i], stmt, setter + i +1, descids[i].getValue(bean));
 			    }
 			}
