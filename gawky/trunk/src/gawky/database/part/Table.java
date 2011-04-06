@@ -186,10 +186,10 @@ public abstract class Table extends Part
 	abstract public String getTableName();
 
 
-	public final boolean isPrimary(Desc desc) 
+	/*public final boolean isPrimary(Desc desc) 
 	{
 		return desc.isPrimary();
-	}
+	}*/
 
 	public Desc[] getDescIDs()
 	{
