@@ -65,27 +65,27 @@ public class DBN
      */
 
 
-	public static Map getRow(String sql, Object... params) {
+	public static Map<String, String> getRow(String sql, Object... params) {
 		try { 
     		return DB.getRow(sql, params);
     	} catch (Exception e) {
-    		return new Hashtable();
+    		return new Hashtable<String, String>();
     	}
 	}
 	
-	public static Map getRow(int pool, String sql, Object... params) {
+	public static Map<String, String> getRow(int pool, String sql, Object... params) {
 		try { 
     		return DB.getRow(pool, sql, params);
     	} catch (Exception e) {
-    		return new Hashtable();
+    		return new Hashtable<String, String>();
     	}
 	}
 
-	public static Map getRow(Connection conn, String sql, Object... params) {
+	public static Map<String, String> getRow(Connection conn, String sql, Object... params) {
 		try { 
     		return DB.getHash(conn, sql, params);
     	} catch (Exception e) {
-    		return new Hashtable();
+    		return new Hashtable<String, String>();
     	}
 	}
 
@@ -93,27 +93,27 @@ public class DBN
 	 * Eine ArrayList von Map
 	 */
 
-	public static ArrayList getRowList(String sql, Object... params) {
+	public static ArrayList<Map<String, String>> getRowList(String sql, Object... params) {
 		try { 
     		return DB.getRowList(sql, params);
     	} catch (Exception e) {
-    		return new ArrayList();
+    		return new ArrayList<Map<String, String>>();
     	}
 	}
 
-	public static ArrayList getRowList(int pool, String sql, Object... params) {
+	public static ArrayList<Map<String, String>> getRowList(int pool, String sql, Object... params) {
 		try { 
     		return DB.getRowList(pool, sql, params);
     	} catch (Exception e) {
-    		return new ArrayList();
+    		return new ArrayList<Map<String, String>>();
     	}
 	}
 
-	public static ArrayList getRowList(Connection conn, String sql, Object... params) {
+	public static ArrayList<Map<String, String>> getRowList(Connection conn, String sql, Object... params) {
 		try { 
     		return DB.getRowList(conn, sql, params);
     	} catch (Exception e) {
-    		return new ArrayList();
+    		return new ArrayList<Map<String, String>>();
     	}
 	}
 
@@ -147,30 +147,30 @@ public class DBN
 	 *
 	 */
 
-	public static ArrayList getList(String sql, Object... params) 
+	public static ArrayList<String> getList(String sql, Object... params) 
 	{
 		try { 
     		return DB.getList(sql, params);
     	} catch (Exception e) {
-    		return new ArrayList();
+    		return new ArrayList<String>();
     	}
 	}
 
-	public static ArrayList getList(int pool, String sql, Object... params) 
+	public static ArrayList<String> getList(int pool, String sql, Object... params) 
 	{
 		try { 
     		return DB.getList(pool, sql, params);
     	} catch (Exception e) {
-    		return new ArrayList();
+    		return new ArrayList<String>();
     	}
 	}
 
-	public static ArrayList getList(Connection conn, String sql, Object... params) 
+	public static ArrayList<String> getList(Connection conn, String sql, Object... params) 
 	{
 		try {
 			return DB.getList(sql, params);
 		} catch (Exception e) {
-			return new ArrayList();
+			return new ArrayList<String>();
 		}
 	}
 	

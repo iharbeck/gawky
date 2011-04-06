@@ -224,12 +224,12 @@ public class DB
      */
 
 
-	public static Map getRow(String sql, Object... params) throws Exception
+	public static Map<String, String> getRow(String sql, Object... params) throws Exception
 	{
 		return getRow(0, sql, params);
 	}
 	
-	public static Map getRow(int pool, String sql, Object... params) throws Exception
+	public static Map<String, String> getRow(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -242,9 +242,9 @@ public class DB
 		}
 	}
 
-	public static Map getRow(Connection conn, String sql, Object... params) throws Exception
+	public static Map<String, String> getRow(Connection conn, String sql, Object... params) throws Exception
 	{
-		Map hs = null;
+		Map<String, String> hs = null;
 
 		ResultSet rset = null;
 
@@ -259,7 +259,7 @@ public class DB
 
 			if (rset.next())
 			{
-				hs = new Hashtable();
+				hs = new Hashtable<String, String>();
 				ResultSetMetaData md = rset.getMetaData();
 
 				for (int i = md.getColumnCount(); i > 0; i --) {
@@ -281,12 +281,12 @@ public class DB
 	 * Eine ArrayList von Map
 	 */
 
-	public static ArrayList getRowList(String sql, Object... params) throws Exception
+	public static ArrayList<Map<String, String>> getRowList(String sql, Object... params) throws Exception
 	{
 		return getRowList(0, sql, params);
 	}
 
-	public static ArrayList getRowList(int pool, String sql, Object... params) throws Exception
+	public static ArrayList<Map<String, String>> getRowList(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -299,9 +299,9 @@ public class DB
 		}
 	}
 
-	public static ArrayList getRowList(Connection conn, String sql, Object... params) throws Exception
+	public static ArrayList<Map<String, String>> getRowList(Connection conn, String sql, Object... params) throws Exception
 	{
-		ArrayList al = new ArrayList();
+		ArrayList<Map<String, String>> al = new ArrayList<Map<String, String>>();
 
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
@@ -317,7 +317,7 @@ public class DB
 			boolean info = log.isInfoEnabled();
 			while (rset.next())
 			{
-				Map hs = new Hashtable();
+				Map<String, String> hs = new Hashtable<String, String>();
 
 				for (int i = md.getColumnCount(); i > 0; i --) {
 					if(info)
@@ -383,12 +383,12 @@ public class DB
 	 *
 	 */
 
-	public static ArrayList getList(String sql, Object... params) throws Exception
+	public static ArrayList<String> getList(String sql, Object... params) throws Exception
 	{
 		return getList(0, sql, params);
 	}
 	
-	public static ArrayList getList(int pool, String sql, Object... params) throws Exception
+	public static ArrayList<String> getList(int pool, String sql, Object... params) throws Exception
 	{
 		Connection conn = null;
 
@@ -401,9 +401,9 @@ public class DB
 		}
 	}
 
-	public static ArrayList getList(Connection conn, String sql, Object... params) throws Exception
+	public static ArrayList<String> getList(Connection conn, String sql, Object... params) throws Exception
 	{
-		ArrayList al = new ArrayList();
+		ArrayList<String> al = new ArrayList<String>();
 
 		ResultSet rset = null;
 
