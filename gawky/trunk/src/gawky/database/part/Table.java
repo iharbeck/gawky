@@ -63,7 +63,7 @@ public abstract class Table extends Part
 			return this.conn;
 	}
 
-	public static Connection getConnection(Class clazz) throws Exception {
+	public static <T extends Table> Connection getConnection(Class<T> clazz) throws Exception {
 		Table inst = (Table)clazz.newInstance();
 		return  DB.getConnection(inst.getStaticLocal().defaultconnection);
 	}
@@ -153,15 +153,18 @@ public abstract class Table extends Part
 		if(staticlocal != null)
 			return staticlocal;
 
-		staticlocal = (StaticLocal)hmStaticLocal.get(getClass());
-
-		if(staticlocal == null)
+		synchronized (staticlocal) 
 		{
-			staticlocal = new StaticLocal();
-			hmStaticLocal.put(getClass(), staticlocal);
+			staticlocal = (StaticLocal)hmStaticLocal.get(getClass());
+	
+			if(staticlocal == null)
+			{
+				staticlocal = new StaticLocal();
+				hmStaticLocal.put(getClass(), staticlocal);
+			}
+	
+			return staticlocal;
 		}
-
-		return staticlocal;
 	}
 	
 	public void setBinary(boolean val) {
