@@ -1,21 +1,15 @@
 package gawky.database.generator;
 
-import gawky.database.DB;
 import gawky.database.part.Table;
-import gawky.global.Option;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -290,7 +284,7 @@ public class Generator
 	{
 		StringBuilder sql = new StringBuilder();
 		
-		sql.append("CREATE TABLE ").append(bean.getTableName());
+		sql.append("CREATE TABLE \"").append(bean.getTableName()).append("\"");
 
 		return generateBASESQL(bean, sql);
 	}
@@ -299,7 +293,7 @@ public class Generator
 	{
 		StringBuilder sql = new StringBuilder();
 		
-		sql.append("ALTER TABLE ").append(bean.getTableName()).append(" ADD ");
+		sql.append("ALTER TABLE \"").append(bean.getTableName()).append("\" ADD ");
 
 		return generateBASESQL(bean, sql);
 	}
@@ -319,9 +313,9 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			sql.append("");
+			sql.append("\"");
 			sql.append(desc.dbname);  // column name
-			sql.append("");
+			sql.append("\"");
 
 			int len = desc.len;
 			
