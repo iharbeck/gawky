@@ -181,7 +181,10 @@ public class DB
 	}
 
 	
-	
+    public static int execute(String sql) throws Exception
+	{
+		return execute(0, sql, (Object[])null);
+	}
 	  
 	public static int execute(String sql, Object... params) throws Exception
 	{

@@ -36,6 +36,11 @@ public class DBN
     	}
 	}
 
+    public static int execute(String sql) throws Exception
+	{
+		return execute(0, sql, (Object[])null);
+	}
+
 	public static int execute(String sql, Object... params) {
 		try { 
     		return DB.execute(sql, params);
