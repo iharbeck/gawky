@@ -35,9 +35,8 @@ public abstract class Table extends Part
 
 	private final class StaticLocal
 	{
-		public String[]            sql  = new String[5];
-		//public PreparedStatement[] stmt = new PreparedStatement[4];
-		public boolean             parameter = false;
+		public String[] sql  = new String[5];
+		public boolean parameter = false;
 
 		public StaticLocal() {
 			descIds = new Desc[1];
@@ -48,8 +47,8 @@ public abstract class Table extends Part
 
 		//IDGenerator idgenerator   = null;
 
-		Generator generator       = new Generator();
-		int defaultconnection     = 0;
+		Generator generator   = new Generator();
+		int defaultconnection = 0;
 		
 		boolean primarydefined = false;
 		public boolean binary = false;
@@ -189,11 +188,6 @@ public abstract class Table extends Part
 	abstract public String getTableName();
 
 
-	/*public final boolean isPrimary(Desc desc) 
-	{
-		return desc.isPrimary();
-	}*/
-
 	public Desc[] getDescIDs()
 	{
 		return getStaticLocal().descIds;
@@ -209,7 +203,8 @@ public abstract class Table extends Part
 	private final String getQuery(int type)
 	{
 		String sql = getQueries()[type];
-		if(sql == null)	{
+		if(sql == null)	
+		{
 			switch (type) {
 				case SQL_DELETE:
 					sql = getDeleteSQL();
@@ -548,7 +543,8 @@ public abstract class Table extends Part
 	}
 	
 	
-	public void fillByResultSet(ResultSet rset) { 
+	public void fillByResultSet(ResultSet rset) 
+	{ 
 		try {
 			getStaticLocal().generator.fillPartPartial(rset, this);
 		} catch (Exception e) {
@@ -623,7 +619,6 @@ public abstract class Table extends Part
 	}
 
 	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object id) throws Exception 
-//	public static Table find(Class clazz, Connection conn, Object id) throws Exception
 	{
 		T inst = clazz.newInstance();
 
@@ -633,7 +628,6 @@ public abstract class Table extends Part
 	}
 	
 	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object[] id) throws Exception 
-//	public static Table find(Class clazz, Connection conn, Object id) throws Exception
 	{
 		T inst = clazz.newInstance();
 
@@ -711,11 +705,10 @@ public abstract class Table extends Part
 	{
 		Table inst = (Table)clazz.newInstance();
 		
-		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
-
 		if(!inst.hasPrimary())
 			throw new NoPrimaryColumnException(inst);
 
+		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
 		
 		try 
 		{
@@ -779,13 +772,13 @@ public abstract class Table extends Part
 
 	public int update (Connection conn) throws SQLException
 	{
-		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
-
 		if(!isDirty())
 			return 0;
 
 		if(!this.hasPrimary())
 			throw new NoPrimaryColumnException(this);
+
+		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
 
 		try 
 		{
