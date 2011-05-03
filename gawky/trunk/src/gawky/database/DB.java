@@ -119,10 +119,10 @@ public class DB
 		return true;
     }
 
-    private static final String secString(Object val)
+    private static final String secString(String val)
 	{
 		if(val != null)
-			val = ((String)val).trim();
+			val = val.trim();
 		else
 			val = "";
 		return (String)val;
@@ -265,8 +265,11 @@ public class DB
 				hs = new Hashtable<String, String>();
 				ResultSetMetaData md = rset.getMetaData();
 
+				boolean info = log.isInfoEnabled();
+				
 				for (int i = md.getColumnCount(); i > 0; i --) {
-					log.info(md.getColumnName(i) + " -- " + rset.getString(i));
+					if(info)
+						log.info(md.getColumnName(i) + " -- " + rset.getString(i));
 					hs.put(md.getColumnName(i), secString(rset.getString(i)));
 				}
 			} else {
@@ -317,7 +320,9 @@ public class DB
 			rset = stmt_select.executeQuery();
 
 			ResultSetMetaData md = rset.getMetaData();
+			
 			boolean info = log.isInfoEnabled();
+			
 			while (rset.next())
 			{
 				Map<String, String> hs = new Hashtable<String, String>();
