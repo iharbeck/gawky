@@ -342,7 +342,7 @@ public class DB
 
 		return al;
 	}
-
+	
 	public static Map<String, String> getHash(String sql, Object... params) throws Exception
 	{
 		return getHash(0, sql, params);
