@@ -129,19 +129,20 @@ public class DB
 	}
 
 
-    /**
-     * get Long
-     */
-
+    public static String getString(String sql) throws Exception
+	{
+    	return getString(sql, (Object[]) null);	
+	}
+    
     public static String getString(String sql, Object... params) throws Exception
 	{
     	return getString(0, sql, params);
 	}
     
-//    public static String getString(int pool, String sql) throws Exception
-//    {
-//    	return getString(pool, sql, null);
-//    }
+    public static String getString(int pool, String sql) throws Exception
+    {
+    	return getString(pool, sql, (Object[])null);
+    }
     
     public static String getString(int pool, String sql, Object... params) throws Exception
 	{
@@ -155,10 +156,10 @@ public class DB
 		}
 	}
 
-//    public static String getString(Connection conn, String sql) throws Exception
-//    {
-//    	return getString(conn, sql, null);
-//    }
+    public static String getString(Connection conn, String sql) throws Exception
+    {
+    	return getString(conn, sql, (Object[])null);
+    }
     
     
     public static String getString(Connection conn, String sql, Object... params) throws Exception
@@ -192,6 +193,10 @@ public class DB
 	}
 
 
+	public static int execute(int pool, String sql) throws Exception
+	{
+		return execute(pool, sql, (Object[])null);
+	}
 
 	public static int execute(int pool, String sql, Object... params) throws Exception
 	{
@@ -206,6 +211,11 @@ public class DB
 		}
 	}
 
+	public static int execute(Connection conn, String sql) throws Exception
+	{
+		return execute(conn, sql, (Object[])null);
+	}
+	
 	public static int execute(Connection conn, String sql, Object... params) throws Exception
 	{
 		PreparedStatement stmt_select = null;
