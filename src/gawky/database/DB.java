@@ -131,7 +131,7 @@ public class DB
 
     public static String getString(String sql) throws Exception
 	{
-    	return getString(sql, (Object[]) null);	
+    	return getString(sql, (Object[])null);	
 	}
     
     public static String getString(String sql, Object... params) throws Exception
