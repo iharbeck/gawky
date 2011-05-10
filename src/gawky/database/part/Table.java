@@ -62,7 +62,7 @@ public abstract class Table extends Part
 			return this.conn;
 	}
 
-	public static <T extends Table> Connection getConnection(Class<T> clazz) throws Exception {
+	public static Connection getConnection(Class clazz) throws Exception {
 		Table inst = (Table)clazz.newInstance();
 		return  DB.getConnection(inst.getStaticLocal().defaultconnection);
 	}
