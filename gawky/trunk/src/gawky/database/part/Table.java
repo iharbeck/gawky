@@ -664,7 +664,7 @@ public abstract class Table extends Part
 		try 
 		{
 			rset = stmt.executeQuery();
-			rset.setFetchSize(30);
+			rset.setFetchSize(100);
 			
 			while (rset.next())
 			{

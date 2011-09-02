@@ -147,6 +147,7 @@ public class Format {
 	}
 	
 	public static void main(String[] args) {
+		System.out.println(stringformat("123456789"));
 		System.out.println(decimalformat("123456789"));
 	}
 	
