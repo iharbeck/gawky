@@ -32,6 +32,17 @@ public class Formatter
    
    public static void main(String[] args) 
    {
+	   long start = System.currentTimeMillis();
+	   
+	   String val = "";
+	   for(int i = 1; i < 3000; i++)
+	     	val += rtrim(System.currentTimeMillis() + "ingo    ");
+	   
+	   System.out.println(System.currentTimeMillis() - start);
+   }
+   
+   public static void _main(String[] args) 
+   {
 	   byte[] pass = new byte[] {}; //'1', '2', '3', '1', '2', '3'};
 	 
 	   byte[] fin = bpad(6, pass);
@@ -83,6 +94,23 @@ public class Formatter
    }
 
    public final static String rtrim(String value)
+   {
+	   int count = value.length();
+	   int len = count;
+	   
+	   //char[] src = value.toCharArray();
+	   
+	   while ((len > 0) && (value.charAt(len-1) <= ' ')) {
+		    len--;
+	   }
+
+	   if(count == len)
+		   return value;
+	   
+	   return value.substring(0, len);
+   }
+   
+   public final static String rtrim_old(String value)
    {
 	   int len = value.length();
 	   char[] src = value.toCharArray();
