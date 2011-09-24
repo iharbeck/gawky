@@ -19,11 +19,15 @@ import org.htmlcleaner.Utils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
-public class Html2PDF {
+public class Html2PDF 
+{
+	public static void main(String[] args) throws Exception {
+		//renderURL(new URL("http://www.google.de"), new FileOutputStream("e:/users/test.pdf"), "UTF-8", "http://www.google.de");
+		
+		renderString("<table border=1><tr><td><div style='font-weight:bold; text-decoration:underline'>hello</div></td></tr></table>", "testxml.pdf", "UTF-8", "http://www.google.de");
+	}
 
-	static int cssCounter = 0;
-
-    static void renderString(String xml, OutputStream os, String encoding, String base) throws Exception
+	static void renderString(String xml, OutputStream os, String encoding, String base) throws Exception
     {
         byte[] byteArray = xml.getBytes(encoding); 
         ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
@@ -37,12 +41,6 @@ public class Html2PDF {
         renderString(xml, os, encoding, base);
     }
     
-    public static void main(String[] args) throws Exception {
-    	//renderURL(new URL("http://www.google.de"), new FileOutputStream("e:/users/test.pdf"), "UTF-8", "http://www.google.de");
-    	
-    	renderString("<table border=1><tr><td><div style='font-weight:bold; text-decoration:underline'>hello</div></td></tr></table>", "e:/users/testxml.pdf", "UTF-8", "http://www.google.de");
-    
-    }
     
     static void renderStream(InputStream in, OutputStream os, String encoding, String base)
     {
