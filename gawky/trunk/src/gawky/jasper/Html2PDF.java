@@ -27,14 +27,15 @@ public class Html2PDF
 		renderString("<table border=1><tr><td><div style='font-weight:bold; text-decoration:underline'>hello</div></td></tr></table>", "testxml.pdf", "UTF-8", "http://www.google.de");
 	}
 
-	static void renderString(String xml, OutputStream os, String encoding, String base) throws Exception
+	public static void renderString(String xml, OutputStream os, String encoding, String base) throws Exception
     {
         byte[] byteArray = xml.getBytes(encoding); 
         ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
 
         render(bais, os, encoding, base);
     }
-    static void renderString(String xml, String filename_pdf, String encoding, String base) throws Exception
+    
+	public static void renderString(String xml, String filename_pdf, String encoding, String base) throws Exception
     {
         OutputStream os = new FileOutputStream(filename_pdf);
 
@@ -42,12 +43,12 @@ public class Html2PDF
     }
     
     
-    static void renderStream(InputStream in, OutputStream os, String encoding, String base)
+	public static void renderStream(InputStream in, OutputStream os, String encoding, String base)
     {
     	render(in, os, encoding, base);
     }
     
-    static void renderURL(URL in, OutputStream os, String encoding, String base)
+	public static void renderURL(URL in, OutputStream os, String encoding, String base)
     {
     	render(in, os, encoding, base);
     }
