@@ -232,16 +232,25 @@ public class DTDisk
     {
     	Parser.setDocheck(false);
     	
-    	File fi = new File("c:/dti/COMDA.100728.ASC");  // DTI DEB
-    	     fi = new File("c:/dti/CODAT.100728.ASC");  // DTI
-    	//  fi = new File("c:/dti/92293#CBK.B01E29.XUB18");  // DTI
-		//File f = new File("C:/work/gawky/format/rtldti230207.org");
+    	File fi = new File("E:/ZE_COMDA.ASC");  // DTI
     	
     	DTProcessorDisk processor[] = DTDisk.read(fi, Constant.ENCODE_LATIN1);
 		//DTDisk.read(fi, processor, Constant.ENCODE_EBCDIC);
 		
-		for(SatzC satzc : processor[0].getSatzcArray())
+    	DTProcessorDisk mainprocessor = processor[0];
+    	
+    	SatzA satza = mainprocessor.getSatza();
+    	satza.setDateidatum("010911");
+    	satza.setValutadatum("010911");
+    	
+		for(SatzC satzc : mainprocessor.getSatzcArray())
 		{
+			satzc.setKontonummer("4" + "47700160");
+			satzc.setBetrageuro("23800");
+			satzc.setSatzCe(new ArrayList<SatzCe>());
+			satzc.setVerwendungszweck("12345");
+			satzc.setAuftraggebername("Testkunde");
+			
 			System.out.println("\n");
 			System.out.println("Betrag: " + satzc.getBetrageuro());  // Betrag
 			System.out.println(satzc.getKontonummer());  // Debitornummer
@@ -252,8 +261,11 @@ public class DTDisk
 					System.out.print(ce.getDaten()); 
 			}
 		}
-		//File fo = new File("G:/bcos/pcama/DBDIRECT.out");
-		//DTDisk.write(fo, processor);
+		
+		
+		
+		File fo = new File("E:/ZE_COMDA.ASC.out");
+		DTDisk.write(fo, mainprocessor);
     }
 }
 
