@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 public class DB
 {
 	private static Log log = LogFactory.getLog(DB.class);
+	private static int INITIALCAP = 2000; 
 
 	public static void init()
 	{
@@ -317,7 +318,7 @@ public class DB
 
 	public static ArrayList<Map<String, String>> getRowList(Connection conn, String sql, Object... params) throws Exception
 	{
-		ArrayList<Map<String, String>> al = new ArrayList<Map<String, String>>();
+		ArrayList<Map<String, String>> al = new ArrayList<Map<String, String>>(INITIALCAP);
 
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
@@ -373,7 +374,7 @@ public class DB
 
 	public static Map<String, String> getHash(Connection conn, String sql, Object... params) throws Exception
 	{
-		LinkedHashMap<String, String> hs = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> hs = new LinkedHashMap<String, String>(INITIALCAP);
 
 		ResultSet rset = null;
 		PreparedStatement stmt_select = null;
@@ -421,7 +422,7 @@ public class DB
 
 	public static ArrayList<String> getList(Connection conn, String sql, Object... params) throws Exception
 	{
-		ArrayList<String> al = new ArrayList<String>();
+		ArrayList<String> al = new ArrayList<String>(INITIALCAP);
 
 		ResultSet rset = null;
 
