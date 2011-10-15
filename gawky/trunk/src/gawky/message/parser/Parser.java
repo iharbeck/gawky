@@ -1,5 +1,6 @@
 package gawky.message.parser;
 
+import gawky.global.Matcher;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 import gawky.message.part.DescL;
@@ -91,8 +92,8 @@ public class Parser
 
 						value = str.substring(start);
 						
-						if(Parser.dotrim)
-							value = Formatter.rtrim(value);
+						//if(Parser.dotrim)
+						//	value = Formatter.rtrim(value);
 						
 						storeValue(bean, i, desc, value);
 						return bean;
@@ -244,32 +245,38 @@ public class Parser
 		return true; //value.matches("[\\w\\söäüÖÄÜß]*");
 	}
 
+	static Matcher matcher_digit = new Matcher("[\\d,\\.+-]*");
 	final boolean fmt_digit(String value) {
-		return value.matches("[\\d,\\.+-]*");
+		return matcher_digit.matches(value); 
 	}
 
 	final boolean fmt_blank(String value) {
-		return value.equals("");
+		return value.length() == 0;
 	}
 
+	static Matcher matcher_blank_zero = new Matcher("[\\s0]*");
 	final boolean fmt_blank_zero(String value) {
-		return value.matches("[\\s0]*");
+		return matcher_blank_zero.matches(value);
 	}
 
+	static Matcher matcher_binary = new Matcher("[01]*");
 	final boolean fmt_binary(String value) {
-		return value.matches("[01]*");
+		return matcher_binary.matches(value);
 	}
 
+	static Matcher matcher_upper = new Matcher("[A-Z]*");
 	final boolean fmt_upper(String value) {
-		return value.matches("[A-Z]*");
+		return matcher_upper.matches(value);
 	}
 
+	static Matcher matcher_lower = new Matcher("[a-z]*");
 	final boolean fmt_lower(String value) {
-		return value.matches("[a-z]*");
+		return matcher_lower.matches(value);
 	}
 
+	static Matcher matcher_blank_letter = new Matcher("[\\p{Lower}\\p{Upper}\\s]*");
 	final boolean fmt_blank_letter(String value)	{
-		return value.matches("[\\p{Lower}\\p{Upper}\\s]*");
+		return matcher_blank_letter.matches(value);
 	}
 
 	final boolean fmt_DATE(String value)

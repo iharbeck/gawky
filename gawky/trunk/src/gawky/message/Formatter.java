@@ -96,10 +96,13 @@ public class Formatter
    public final static String rtrim(String value)
    {
 	   int count = value.length();
+
+	   if(count == 0)
+		   return value;
+	   
 	   int len = count;
 	   
 	   //char[] src = value.toCharArray();
-	   
 	   while ((len > 0) && (value.charAt(len-1) <= ' ')) {
 		    len--;
 	   }

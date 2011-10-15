@@ -189,9 +189,9 @@ public abstract class Part implements Cloneable
 
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
 
-		String folder = "file://" + Locator.findBinROOT() + "worker/";
+		//String folder = "file://" + Locator.findBinROOT() + "worker/";
 
-		log.info("JavaAssist folder: " + folder);
+		//log.info("JavaAssist folder: " + folder);
 
 //		ClassLoader urlCl = null;
 //
@@ -303,18 +303,20 @@ public abstract class Part implements Cloneable
 
 	Desc[] cacheddesc = null;
 
-	public Desc[] getCachedDesc()
+	public final Desc[] getCachedDesc()
 	{
 		if(cacheddesc != null)
 			return cacheddesc;
 
-		synchronized (hmDesc) 
+		//synchronized (hmDesc) 
 		{
-			cacheddesc = (Desc[])hmDesc.get(getClass());
+			Class clazz = getClass();
+			
+			cacheddesc = hmDesc.get(clazz);
 			
 			if(cacheddesc == null) {
 				cacheddesc = getOptDesc();
-				hmDesc.put(getClass(), cacheddesc);
+				hmDesc.put(clazz, cacheddesc);
 			}
 		}
 
