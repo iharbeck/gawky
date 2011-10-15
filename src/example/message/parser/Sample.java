@@ -1,5 +1,6 @@
 package example.message.parser;
 
+import gawky.message.parser.Parser;
 import gawky.message.part.Desc;
 import gawky.message.part.DescC;
 import gawky.message.part.DescV;
@@ -11,16 +12,23 @@ public class Sample extends Part {
 	}
 	
 	public static void main(String[] args) throws Exception {
+		
+		Parser.setDotrim(true);
 		Sample sample = new Sample();
 		
-		sample.parse("FOOT,100,30");
+		for(int i=1; i <= 200; i++)
+		{
+			String val = "FOOT, " + i + " ,0030";
+			sample.parse(val);
+			
+			System.out.print(sample.countrecords);
+			System.out.println(sample.sumamount);
+		}
 		System.out.println(sample.countrecords);
 		System.out.println(sample.sumamount);
 		
-		System.out.println(sample.toString());
-		System.out.println(sample.toDebugString());
-		
-		
+		//System.out.println(sample.toString());
+		//System.out.println(sample.toDebugString());
 	}
 	
 	public Desc[] getDesc() 
