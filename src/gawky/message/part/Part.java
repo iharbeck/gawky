@@ -437,24 +437,24 @@ public abstract class Part implements Cloneable
 		return clone;
 	}
 	
-	public boolean isDirty() 
-	{
-		if(this instanceof Table && ((Table)this).isBinary())
-			return true;
-				
-		if(cloned) {
-			return !((Part)this.getBackup()).buildString().equals(this.buildString());
-		}else
-			return true;
-	}
-	
-	public boolean isDirty(String field) 
-	{
-		if(cloned) {
-			return !((Part)this.getBackup()).getValue(field).equals(this.getValue(field));
-		}else
-			return true;
-	}
+//	public boolean isDirty() 
+//	{
+//		if(this instanceof Table && ((Table)this).isBinary())
+//			return true;
+//				
+//		if(cloned) {
+//			return !((Part)this.getBackup()).buildString().equals(this.buildString());
+//		}else
+//			return true;
+//	}
+//	
+//	public boolean isDirty(String field) 
+//	{
+//		if(cloned) {
+//			return !((Part)this.getBackup()).getValue(field).equals(this.getValue(field));
+//		}else
+//			return true;
+//	}
 	
 	public static void setDotostring(boolean dotostring) {
 		Part.dotostring = dotostring;

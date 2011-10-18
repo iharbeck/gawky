@@ -769,8 +769,8 @@ public abstract class Table extends Part
 
 	public int update (Connection conn) throws SQLException
 	{
-		if(!isDirty())
-			return 0;
+//		if(!isDirty())
+//			return 0;
 
 		if(!this.hasPrimary())
 			throw new NoPrimaryColumnException(this);
