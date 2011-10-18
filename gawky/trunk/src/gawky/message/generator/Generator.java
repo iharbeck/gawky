@@ -26,7 +26,7 @@ public class Generator
 		if(bean == null)
 			return "";
 		
-		bean.beforeStore();
+		//bean.beforeStore();
 		
 		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
@@ -92,7 +92,7 @@ public class Generator
 		if(bean == null)
 			return "";
 
-		bean.beforeStore();
+		//bean.beforeStore();
 
 		StringBuilder str = new StringBuilder(1000);
 		Desc   descs[] = bean.getCachedDesc();
