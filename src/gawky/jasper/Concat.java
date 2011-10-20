@@ -30,29 +30,67 @@ public class Concat
 	private static final Log log = LogFactory.getLog(Concat.class);
 
 
+	public static void concatFiles(InputStream[] streamin, OutputStream target)
+	{
+		try 
+		{
+            Document document = null;
+            PdfCopy  writer = null;
+            
+            for(int i=0; i < streamin.length; i++)
+            {
+                PdfReader reader = new PdfReader(streamin[i]);
+                reader.consolidateNamedDestinations();
+
+                // we retrieve the total number of pages
+                int numberofpages = reader.getNumberOfPages();
+
+                if(i == 0) // create document writer
+                {
+                	document = new Document(reader.getPageSizeWithRotation(1));
+                	writer = new PdfCopy(document, target);
+                    document.open();
+                }
+
+                // attach pages
+                PdfImportedPage page;
+                for(int x = 1; x <= numberofpages; x++) 
+                {
+                    page = writer.getImportedPage(reader, x);
+                    writer.addPage(page);
+                }
+                writer.freeReader(reader);
+            }
+
+            document.close();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+	}
+	
 	public static void concatFiles(String path, String target)
 	{
 		// Get list of *.pdf files in source folder
 		String[] files = new File(path).list(new PDFFilter());
 
-		try {
-            int x = 0;
-
+		try 
+		{
             Document document = null;
             PdfCopy  writer = null;
 
-            while (x < files.length-1)
+            for(int i=0; i < files.length; i++)
             {
-                PdfReader reader = new PdfReader(path + files[x]);
+                PdfReader reader = new PdfReader(path + files[i]);
                 reader.consolidateNamedDestinations();
 
                 // we retrieve the total number of pages
-                int n = reader.getNumberOfPages();
+                int numberofpages = reader.getNumberOfPages();
 
                 if(log.isDebugEnabled())
-                	log.debug("There are " + n + " pages in " + files[x]);
+                	log.debug("There are " + numberofpages + " pages in " + files[i]);
 
-                if (x == 0) // create document writer
+                if(i == 0) // create document writer
                 {
                 	document = new Document(reader.getPageSizeWithRotation(1));
                 	writer = new PdfCopy(document, new FileOutputStream(target));
@@ -61,15 +99,14 @@ public class Concat
 
                 // attach pages
                 PdfImportedPage page;
-                for (int i = 1; i <= n; i++) {
-                    page = writer.getImportedPage(reader, i);
+                for(int x = 1; x <= numberofpages; x++) 
+                {
+                    page = writer.getImportedPage(reader, x);
                     writer.addPage(page);
-                    log.debug("Processed page " + i);
+                    log.debug("Processed page " + x);
                 }
                 writer.freeReader(reader);
-                x++;
             }
-
 
             document.close();
         }
