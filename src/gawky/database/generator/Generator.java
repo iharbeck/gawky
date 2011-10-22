@@ -56,7 +56,6 @@ public class Generator
 		this.locale = locale;
 	}
 
-
 	public double parseNumber(String val) throws Exception
 	{
 		return new BigDecimal(val).doubleValue();
@@ -99,8 +98,8 @@ public class Generator
 			{   
 			    val = mapGetDBToObjectType(desc, rset, x+1);
 
-			    if(dotrim && val instanceof String)
-			    	val = Formatter.rtrim((String)val);
+			    //if(dotrim && val instanceof String)
+			    //	val = Formatter.rtrim((String)val);
 
 			    descs[i].setValue(part, val);
 
@@ -202,8 +201,8 @@ public class Generator
 			{
 				val = mapGetDBToObjectType(desc, rset, name);
 				
-			    if(dotrim && val instanceof String)
-			    	val = Formatter.rtrim((String)val);
+			    //if(dotrim && val instanceof String)
+			    //	val = Formatter.rtrim((String)val);
 
 			    desc.setValue(part, val);
 

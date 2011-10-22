@@ -32,13 +32,18 @@ public class Formatter
    
    public static void main(String[] args) 
    {
-	   long start = System.currentTimeMillis();
-	   
-	   String val = "";
-	   for(int i = 1; i < 3000; i++)
-	     	val += rtrim(System.currentTimeMillis() + "ingo    ");
-	   
-	   System.out.println(System.currentTimeMillis() - start);
+	   int avg = 0;
+	   for(int x = 1; x < 50; x++)
+	   {
+		   long start = System.currentTimeMillis();
+		   String val = "";
+		   for(int i = 1; i < 30000; i++)
+		     	val = ltrim("00000ingo    sjdkasjdklajdklasjdljsljlsdjklsajlsjad" + System.currentTimeMillis(), '0');
+		   
+		   avg += System.currentTimeMillis() - start;
+		   System.out.println(val);
+	   }
+	   System.out.println(avg / 50);
    }
    
    public static void _main(String[] args) 
@@ -82,17 +87,26 @@ public class Formatter
 
    public final static String ltrim(String value)
    {
+	   return ltrim(value, ' ');
+   }
+
+   
+   public final static String ltrim(String value, char ch)
+   {
 	   int len = value.length();
-	   char[] src = value.toCharArray();
 
 	   int i=0;
-	   while ((i < len) && (src[i] <= ' ')) {
+	   while ((i < len) && (value.charAt(i) == ch)) {
 		    i++;
 	   }
 	   
-	   return value.substring(i, len);
+	   if(i > 0)
+		   return value.substring(i, len);
+	   
+	   return value;			  
    }
 
+   
    public final static String rtrim(String value)
    {
 	   int count = value.length();
@@ -102,7 +116,6 @@ public class Formatter
 	   
 	   int len = count;
 	   
-	   //char[] src = value.toCharArray();
 	   while ((len > 0) && (value.charAt(len-1) <= ' ')) {
 		    len--;
 	   }
@@ -112,6 +125,7 @@ public class Formatter
 	   
 	   return value.substring(0, len);
    }
+
    
    public final static String rtrim_old(String value)
    {
