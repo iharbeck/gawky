@@ -16,16 +16,17 @@ public class Sample extends Part {
 		Parser.setDotrim(true);
 		Sample sample = new Sample();
 		
-		for(int i=1; i <= 200; i++)
+		for(int i=1; i <= 999; i++)
 		{
 			String val = "FOOT, " + i + " ,0030";
 			sample.parse(val);
 			
-			System.out.print(sample.countrecords);
+			System.out.print(sample.countrecords + "#");
 			System.out.println(sample.sumamount);
 		}
 		System.out.println(sample.countrecords);
 		System.out.println(sample.sumamount);
+		System.out.println(sample.buildString());
 		
 		//System.out.println(sample.toString());
 		//System.out.println(sample.toDebugString());
@@ -35,8 +36,9 @@ public class Sample extends Part {
 	{
 		return new Desc[] {
 			new DescC("FOOT,"),
-			new DescV(5,  "countrecords", Desc.ENDCOMMA),
-			new DescV(12, "sumamount",    Desc.ENDALL),
+			//new DescV(5,  "countrecords", Desc.ENDCOMMA),
+			new Desc(Desc.FMT_A, Desc.CODE_O, 5,  "countrecords", Desc.ENDCOMMA),
+			new Desc(Desc.FMT_9, Desc.CODE_O, 12, "sumamount"), //,    Desc.ENDALL),
 		}; 
 	}
 	
