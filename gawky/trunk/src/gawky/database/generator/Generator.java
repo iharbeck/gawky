@@ -72,41 +72,26 @@ public class Generator
 
 		Object val = null;
 
-
-		if(debug)
-			System.out.println(" -------------------- ");
-		
-		int x = 0;
-		for(int i=0; i < descs.length; i++)
+		for(int i=0, x = 1; i < descs.length; i++, x++)
 		{
 			desc = descs[i];
 			
-			
-			if(debug) {
-				try {
-					System.out.println(desc.dbname + " : " + rset.getString(x+1));
-				} catch (Exception e) {
-					System.out.println(desc.dbname + " : " + e);
-				}
-			}
-
-
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
 			try
 			{   
-			    val = mapGetDBToObjectType(desc, rset, x+1);
+			    val = mapGetDBToObjectType(desc, rset, x);
 
-			    //if(dotrim && val instanceof String)
-			    //	val = Formatter.rtrim((String)val);
+			    if(dotrim && val instanceof String)
+			    	val = Formatter.rtrim((String)val);
 
 			    descs[i].setValue(part, val);
-
-			} catch(Exception e) {
+			} 
+			catch(Exception e) 
+			{
 				try  { descs[i].setValue(part, ""); } catch(Exception ee) {}
 			}
-			x++;
 		}
 
 		part.afterFill();
@@ -133,7 +118,8 @@ public class Generator
 				val = rset.getString(x);
 				break;
 			case Desc.FMT_DIGIT :
-				val = formatNumber(rset.getDouble(x));
+				//val = formatNumber(rset.getDouble(x));
+				val = rset.getDouble(x);
 				break;
 			case Desc.FMT_DATE :
 				val =  df_YYYYMMDD.format( rset.getDate(x) );
@@ -164,7 +150,8 @@ public class Generator
 				val = rset.getString(name);
 				break;
 			case Desc.FMT_DIGIT :
-				val = formatNumber(rset.getDouble(name));
+				//val = formatNumber(rset.getDouble(name));
+				val = rset.getDouble(name);
 				break;
 			case Desc.FMT_DATE :
 				val =  df_YYYYMMDD.format( rset.getDate(name) );
@@ -183,13 +170,12 @@ public class Generator
 	
 	public final void fillPartPartial(ResultSet rset, Table part) throws Exception
 	{
-		//Desc[] descs = part.getCachedDesc();
-		Desc   desc;
-		
 		ResultSetMetaData meta = rset.getMetaData();
 		
 		int c = meta.getColumnCount();
 		
+		Desc desc;
+
 		for(int i = 1; i <= c; i++)
 		{
 			String name = meta.getColumnName(i).toLowerCase();
@@ -201,8 +187,8 @@ public class Generator
 			{
 				val = mapGetDBToObjectType(desc, rset, name);
 				
-			    //if(dotrim && val instanceof String)
-			    //	val = Formatter.rtrim((String)val);
+			    if(dotrim && val instanceof String)  // studip
+			    	val = Formatter.rtrim((String)val);
 
 			    desc.setValue(part, val);
 
@@ -218,10 +204,10 @@ public class Generator
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 
-		StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder(2000);
 		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(customcolumns);
 
-		StringBuilder params = new StringBuilder();
+		StringBuilder params = new StringBuilder(1000);
 
 		int par = 0;
 		for(int i = 0; i < descs.length; i++)
@@ -248,10 +234,10 @@ public class Generator
 			params.deleteCharAt(params.length()-1);
 		}
 
-		if(bean.getDescIDs().length > 0) 
+		Desc[] descids = bean.getDescIDs();
+		
+		if(descids.length > 0) // parameter
 		{
-			// parameter
-			Desc[] descids = bean.getDescIDs();
 			for(int i=0; i < descids.length; i++)
 		    {
 				if(par > 0)
@@ -260,7 +246,7 @@ public class Generator
 					params.append(",");
 				}
 				sql.append(descids[i].dbname);
-				params.append("?"); // manuel
+				params.append("?"); // manuell
 				par++;
 		    }
 
@@ -281,18 +267,18 @@ public class Generator
 
 	public static StringBuilder generateCreateSQL(Table bean)
 	{
-		StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder(2000);
 		
-		sql.append("CREATE TABLE \"").append(bean.getTableName()).append("\"");
+		sql.append("CREATE TABLE ").append(bean.getTableName());
 
 		return generateBASESQL(bean, sql);
 	}
 
 	public static StringBuilder generateAlterSQL(Table bean)
 	{
-		StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder(2000);
 		
-		sql.append("ALTER TABLE \"").append(bean.getTableName()).append("\" ADD ");
+		sql.append("ALTER TABLE ").append(bean.getTableName()).append(" ADD ");
 
 		return generateBASESQL(bean, sql);
 	}
@@ -312,9 +298,7 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			sql.append("\"");
 			sql.append(desc.dbname);  // column name
-			sql.append("\"");
 
 			int len = desc.len;
 			
@@ -370,7 +354,7 @@ public class Generator
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 
-		StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder(2000);
 
 		sql.append("SELECT ");
 
@@ -412,7 +396,7 @@ public class Generator
 	public StringBuilder generateDeleteSQL(Table bean)
 	{
 		try {
-			StringBuilder sql = new StringBuilder();
+			StringBuilder sql = new StringBuilder(2000);
 
 			sql.append("DELETE FROM ").append(bean.getTableName());
 
@@ -432,7 +416,7 @@ public class Generator
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
 
-		StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder(2000);
 		sql.append("UPDATE ").append(bean.getTableName()).append(" SET ");
 
 		int par = 0;
@@ -471,7 +455,7 @@ public class Generator
 	{
 		Desc[] descids = bean.getDescIDs();
 
-		StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder(2000);
 
 		if(descids.length == 0) 
 			return sql;
@@ -491,7 +475,7 @@ public class Generator
 
 	protected final StringBuilder generateUpdateWHERE(Table bean) {
 
-		StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder(2000);
 
 		sql.append(" WHERE ");
 
@@ -518,23 +502,12 @@ public class Generator
 
 		bean.beforeStore();
 
-		int setter = 0;
+		int setter = 1;
 
-		if(debug)
-			System.out.println(" ------------------------------ ");
-		
 		for(int i = 0; i < descs.length; i++)
 		{
 			desc = descs[i];
 
-			if(debug) {
-				try {
-					System.out.println(desc.dbname + " : " + desc.getValue(bean));
-				} catch (Exception e) {
-					System.out.println(desc.dbname + " : " + e);
-				}
-			}
-			
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
@@ -543,14 +516,12 @@ public class Generator
 				if(desc.isPrimary())  // ID überspringen
 					continue;
 
-				setter++;
-
 				Object val = desc.getValue(bean);
 
-				mapSetObjectToDBType(desc, stmt, setter, val);
-				
-			} catch(Exception e) {
-
+				mapSetObjectToDBType(desc, stmt, setter++, val);
+			} 
+			catch(Exception e) 
+			{
 				try {
 					if(desc.format == Desc.FMT_DIGIT)
 						stmt.setDouble(setter, 0);
@@ -561,18 +532,33 @@ public class Generator
 			}
 		}
 
-		try {
-			//update oder insert mit parameter  (keine customfields)
-			if(!insert || (insert && bean.getParameter()))
+		/*
+		try 
+		{
+			if(!insert || (insert && bean.getParameter())) //update oder insert mit parameter  (keine customfields)
 			{
 				Desc[] descids = bean.getDescIDs();
 
 				for(int i=0; i < descids.length; i++)
 			    {
-					mapSetObjectToDBType(descids[i], stmt, setter + i +1, descids[i].getValue(bean));
+					mapSetObjectToDBType(descids[i], stmt, setter + i, descids[i].getValue(bean));
 			    }
 			}
 		} catch(Exception e) {
+			log.error(e);
+		}
+		*/
+		try 
+		{
+			Desc[] descids = bean.getDescIDs();
+			
+			for(int i=0; i < descids.length; i++)
+		    {
+				mapSetObjectToDBType(descids[i], stmt, setter + i, descids[i].getValue(bean));
+		    }
+		} 
+		catch(Exception e) 
+		{
 			log.error(e);
 		}
 	}
@@ -590,10 +576,10 @@ public class Generator
 				stmt.setString(setter, (String)val);
 				break;
 			case Desc.FMT_DIGIT :
-				stmt.setDouble(setter,  parseNumber((String)val));
+				stmt.setDouble(setter, parseNumber((String)val));
 				break;
 			case Desc.FMT_DATE :
-				stmt.setDate(setter, new Date( df_YYYYMMDD.parse((String)val).getTime()));
+				stmt.setDate(setter, new Date(df_YYYYMMDD.parse((String)val).getTime()));
 				break;
 			case Desc.FMT_TIME :
 				stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse((String)val).getTime()));
