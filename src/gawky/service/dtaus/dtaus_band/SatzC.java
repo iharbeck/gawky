@@ -89,7 +89,7 @@ public class SatzC extends Part
 		byte[] satz = new byte[linelen_total];
 		Arrays.fill(satz, (byte)0x40);
 
-		System.arraycopy(generator.generateString(this, linelen), 4, satz, 4, linelen-4);
+		System.arraycopy(generator.buildString(this, linelen), 4, satz, 4, linelen-4);
 		
 		Helper.writeNumberBinary(satz, linelen_total-4);
 		
@@ -98,7 +98,7 @@ public class SatzC extends Part
 			int i = 0;
 			for(SatzCe satzcext : getSatzCe())
 			{
-				System.arraycopy(generator.generateString(satzcext, 29), 0, satz, linelen + i*29, 29);
+				System.arraycopy(generator.buildString(satzcext, 29), 0, satz, linelen + i*29, 29);
 				i++;
 			}
 		}

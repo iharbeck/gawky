@@ -42,7 +42,7 @@ public class SatzA extends Part
     public byte[] getSatzA() throws UnsupportedEncodingException
     {
     	int linelen = 150;
-    	byte[] satz = generator.generateString(this, linelen);
+    	byte[] satz = generator.buildString(this, linelen);
     	
     	Helper.writeNumberBinary(satz, linelen-4);
     	

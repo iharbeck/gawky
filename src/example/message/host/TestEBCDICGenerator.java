@@ -19,7 +19,7 @@ public class TestEBCDICGenerator {
 		satza.setReferenznummer("1234567");
 		satza.setEmpfaenger("COMMERZBANK HAMBURG        ");
 		
-		byte[] s = ebcdic.generateString(satza, 150);
+		byte[] s = ebcdic.buildString(satza, 150);
 		System.out.println( new String( s ) );
 
 		EBCDICParser parser = new EBCDICParser();
