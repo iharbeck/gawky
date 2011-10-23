@@ -122,6 +122,7 @@ public abstract class Part implements Cloneable
 	 */
 	
 	static HashMap<Class<?>, Part> parts = new HashMap<Class<?>, Part>();
+	
 	static Part factory(Class c) 
 	{
 		Part p = (Part)parts.get(c);
@@ -129,7 +130,8 @@ public abstract class Part implements Cloneable
 		if(p != null)
 			return p;
 		
-		try {
+		try 
+		{
 			ClassPool cp = ClassPool.getDefault();
 			
 			cp.appendClassPath(new ClassClassPath(Part.class.getClass()));
@@ -152,21 +154,18 @@ public abstract class Part implements Cloneable
 				}
 
 				String accessName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-				try {
-					cc.addMethod(CtNewMethod.make(
-						"public void set" + accessName + "(String _){" +
-						fieldName + " = _;" +
-						"}", cc));
-				} catch (Exception e) {
-				}
-				
-				try {
-					cc.addMethod(CtNewMethod.make(
-						"public String get" + accessName + "(){" +
-						"  return " + fieldName + ";" +
-						"}", cc));
-				} catch (Exception e) {
-				}
+				cc.addMethod(CtNewMethod.make(
+					"public void set" + accessName + "(String " + fieldName + ")" +
+				    "{" +
+					   "this." +fieldName + " = " + fieldName + ";" +
+					"}", cc)
+				);
+			
+				cc.addMethod(CtNewMethod.make(
+					"public String get" + accessName + "(){" +
+					"  return " + fieldName + ";" +
+					"}", cc)
+				);
 			}
 			
 			cc.setName(c.getName() + "Ext");
@@ -308,16 +307,13 @@ public abstract class Part implements Cloneable
 		if(cacheddesc != null)
 			return cacheddesc;
 
-		//synchronized (hmDesc) 
-		{
-			Class clazz = getClass();
-			
-			cacheddesc = hmDesc.get(clazz);
-			
-			if(cacheddesc == null) {
-				cacheddesc = getOptDesc();
-				hmDesc.put(clazz, cacheddesc);
-			}
+		Class clazz = getClass();
+		
+		cacheddesc = hmDesc.get(clazz);
+		
+		if(cacheddesc == null) {
+			cacheddesc = getOptDesc();
+			hmDesc.put(clazz, cacheddesc);
 		}
 
 		return cacheddesc;
@@ -326,32 +322,33 @@ public abstract class Part implements Cloneable
 	/**
 	 * use buildString
 	 */
-	@Deprecated 
-	public String toString()
-	{
-		if(dotostring)
-			return getGenerator().buildString(this);
-		else
-			return super.toString();
-	}
-
-	@Deprecated
-	public String toDebugString()
-	{
-		return getGenerator().buildDebugString(this);
-	}
+//	@Deprecated 
+//	public String toString()
+//	{
+//		return "";
+//		if(dotostring)
+//			return getGenerator().buildString(this);
+//		else
+//			return super.toString();
+//	}
+//
+//	@Deprecated
+//	public String toDebugString()
+//	{
+//		return getGenerator().buildDebugString(this);
+//	}
 
 	/**
 	 * for spezialized Generators
 	 */
-	@Deprecated
-	public String toString(Generator extgenerator)
-	{
-		if(dotostring)
-			return extgenerator.buildString(this);
-		else
-			return super.toString();
-	}
+//	@Deprecated
+//	public String toString(Generator extgenerator)
+//	{
+//		if(dotostring)
+//			return extgenerator.buildString(this);
+//		else
+//			return super.toString();
+//	}
 
 	public String buildString()
 	{
