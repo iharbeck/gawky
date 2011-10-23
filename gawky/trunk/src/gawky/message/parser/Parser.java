@@ -83,10 +83,9 @@ public class Parser
 					{
 						position = max;
 
-//						if(desc.len > 0 && desc.code != Desc.CODE_O)
-//							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
-
 						value = str.substring(start);  // bis zum Zeilenende
+						
+						i = descs.length-1; // ende einleiten
 					} 
 					else 
 					{
@@ -101,19 +100,16 @@ public class Parser
 				{
 					end = str.indexOf(desc.delimiter, start);  // Trennzeichen finden
 
-					if(end == -1) // Feld zu kurz wenn nicht option
+					if(end == -1) // eventuell kein Delimiter am Ende; Feld zu kurz (wenn nicht option)
 					{
 						// eventuell fehlt einfach nur der Delimiter am Zeilenende
 						value = str.substring(start);
 
-//						if(value.length() == 0 && desc.len > 0 && desc.code != Desc.CODE_O)
-//							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
-
-							
-//						storeValue(bean, i, desc, value);
-
+						i = descs.length-1; // ende einleiten
+						
 						// am Ende der Zeile angekommen und weiteres nicht optionales feld
-						if(i+1 < descs.length  && desc.code != Desc.CODE_O)
+						//if(i+1 < descs.length  && desc.code != Desc.CODE_O)
+						if(desc.code != Desc.CODE_O)
 							throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
 					}
 					else 
@@ -136,11 +132,6 @@ public class Parser
 					{
 						throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
 					}	
-//					else if(desc.code == Desc.CODE_O)  // Optional Field
-//					{
-//						storeValue(bean, i, desc, value);
-//						continue;
-//					}
 				} 
 				else 
 				{
@@ -158,8 +149,8 @@ public class Parser
 						typeCheck(desc, value);
 				}
 				
-				
-			    storeValue(bean, i, desc, value);
+				if(!desc.nostore)  // wenn store dann speichern
+					storeValue(bean, i, desc, value);
 			}
 
 			return bean;
@@ -235,9 +226,6 @@ public class Parser
 
 		if(desc.nostore)
 			return;
-
-//		if(Parser.dotrim)
-//			value = Formatter.rtrim(value);
 
 		try {
 			desc.setValue(bean, value);
