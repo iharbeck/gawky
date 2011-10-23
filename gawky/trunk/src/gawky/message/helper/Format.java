@@ -41,6 +41,9 @@ public class Format
 	
 	public static final String lowerNumber(String val, int dec) 
 	{
+		if(val.length() == 0)
+			return "0";
+		
 		BigDecimal dc = new BigDecimal(val);
 		dc = dc.divide(decimals[dec]);
 		return dc.setScale(dec).toString();
@@ -59,6 +62,9 @@ public class Format
 	
 	public static final String upperNumber(String val, int dec) 
 	{
+		if(val.length() == 0)
+			return "0";
+
 		BigDecimal dc = new BigDecimal(val);
 		//dc.setScale(dec);
 		dc = dc.multiply(decimals[dec]);
