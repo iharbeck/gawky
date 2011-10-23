@@ -29,8 +29,8 @@ public class Formatter
 	   
 	   return target;
    }
-   
-   public static void main(String[] args) 
+      
+   public static void ___main(String[] args) 
    {
 	   int avg = 0;
 	   for(int x = 1; x < 50; x++)
@@ -88,6 +88,46 @@ public class Formatter
    public final static String ltrim(String value)
    {
 	   return ltrim(value, ' ');
+   }
+   
+   
+   public static void main(String[] args) 
+   {
+	    System.out.println(lntrim("000000"));
+	    System.out.println(lntrim(""));
+	    System.out.println(lntrim("2"));
+	    System.out.println(lntrim("00000123"));
+	   	System.out.println(lntrim("000001.23"));
+	   	System.out.println(lntrim("0000012,3"));
+	   	System.out.println(lntrim("00000.123"));
+	   	System.out.println(lntrim("000000"));
+   }
+
+   
+   public final static String lntrim(String value)
+   {
+
+	   int len = value.length();
+
+	   int i = 0;
+	   while ((i < len) && (value.charAt(i) == '0')) {
+		    i++;
+	   }
+	   
+	   if(i == len)  // nichts bleibt über
+		   return "0";
+	   
+	   if(i > 0)
+	   {
+		   char ch = value.charAt(i);  // letztes Zeichen decimal
+		   
+		   if(ch == '.' || ch == ',')
+			   i--;
+			   
+		   return value.substring(i, len);
+	   }
+	   
+	   return value; // keine nullen		  
    }
 
    
