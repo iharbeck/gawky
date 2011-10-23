@@ -35,13 +35,13 @@ public class PatternParserBean extends Part
 		
 		String str = "1.3AB456CD122,33222,44,";
 		bean.parse(parser, str);
-	    System.out.println(str + "\n" + bean.toString(generator));
+	    System.out.println(str + "\n" + bean.buildString(generator));
 	    System.out.println(parser.getNext().length());
 
 	    
 		str = "1235555A456CD122,33111,5533,2AA";
 	    bean.parse(parser, str);
-	    System.out.println(str + "\n" + bean.toString(generator));
+	    System.out.println(str + "\n" + bean.buildString(generator));
 	    System.out.println(parser.getNext().length());
 	}
 	
