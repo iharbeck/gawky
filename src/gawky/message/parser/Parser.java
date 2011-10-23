@@ -3,7 +3,6 @@ package gawky.message.parser;
 import gawky.global.Matcher;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
-import gawky.message.part.DescL;
 import gawky.message.part.Part;
 
 import java.text.SimpleDateFormat;
@@ -76,94 +75,101 @@ public class Parser
 				if(desc.skipparsing)
 					continue;
 
-				if(desc.delimiter == null)   // fixed
+				if(desc.delimiter == null)   // fixed length
 				{
-					end = start+desc.len;
+					end = start + desc.len;
 
-					if(end > max) // Feld zu kurz wenn nicht option
+					if(end > max) // Feld zu kurz (wenn nicht option)
 					{
 						position = max;
 
-						if(desc.len > 0 && desc.code != Desc.CODE_O)
-							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+//						if(desc.len > 0 && desc.code != Desc.CODE_O)
+//							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
 
-						// Optionale Felder mit zu kurzem Wert gefüllt !!!
-						//log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
-
-						value = str.substring(start);
+						value = str.substring(start);  // bis zum Zeilenende
+					} 
+					else 
+					{
+						value = str.substring(start, start+desc.len);
 						
-						//if(Parser.dotrim)
-						//	value = Formatter.rtrim(value);
-						
-						storeValue(bean, i, desc, value);
-						return bean;
+						start += desc.len;
+	
+						position = start;
 					}
-					value = str.substring(start, start+desc.len);
-					
-					if(Parser.dotrim)
-						value = Formatter.rtrim(value);
-					
-					start += desc.len;
-
-					position = start;
 				}
 				else // variable
 				{
-					end = str.indexOf(desc.delimiter, start);
+					end = str.indexOf(desc.delimiter, start);  // Trennzeichen finden
 
-					if(end > max || end == -1) // Feld zu kurz wenn nicht option
+					if(end == -1) // Feld zu kurz wenn nicht option
 					{
-						//position = max;
+						// eventuell fehlt einfach nur der Delimiter am Zeilenende
+						value = str.substring(start);
 
-						if(desc.len > 0 && desc.code != Desc.CODE_O)
-							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+//						if(value.length() == 0 && desc.len > 0 && desc.code != Desc.CODE_O)
+//							throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
 
-						if(end == -1) {
-							// enventuell fehlt einfach nur der Delimiter am Zeilenende
-							value = str.substring(start);
 							
-							storeValue(bean, i, desc, value);
-						}
-						// am Ende der Zeile angekommen und weiteres nicht optionales feld
-						if(i+1 < descs.length  && descs[i].code != Desc.CODE_O)
-							throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
+//						storeValue(bean, i, desc, value);
 
-						return bean;
+						// am Ende der Zeile angekommen und weiteres nicht optionales feld
+						if(i+1 < descs.length  && desc.code != Desc.CODE_O)
+							throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
+					}
+					else 
+					{
+						value = str.substring(start, end);
+						
+						start = end + desc.delimiter.length();  // Multicharacter delimiter
+	
+						position = start;
+	
+						if(desc.len > 0 && value.length() > desc.len)
+							throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
+					}
+				}
+
+				
+				if(value.length() == 0)
+				{
+					if(desc.code == Desc.CODE_R)  // Required Field
+					{
+						throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
+					}	
+//					else if(desc.code == Desc.CODE_O)  // Optional Field
+//					{
+//						storeValue(bean, i, desc, value);
+//						continue;
+//					}
+				} 
+				else 
+				{
+					if(Parser.dotrim)
+					{
+						if(desc.format == Desc.FMT_DIGIT)
+							value = Formatter.lntrim(value); 
+						else
+							value = Formatter.rtrim(value);
 					}
 
-					value = str.substring(start, end);
-					
-					start = end + desc.delimiter.length();  // Multicharacter delimiter
-
-					position = start;
-
-					if(desc.len > 0 && value.length() > desc.len)
-						throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
+					// Inhaltlich prüfung
+					//if(desc.code != Desc.CODE_O && Parser.docheck)
+					if(Parser.docheck)
+						typeCheck(desc, value);
 				}
-
-				// Required Field
-				if(desc.code == Desc.CODE_R && value.length() == 0)
-					throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
-				// Optional Field
-				else if(desc.code == Desc.CODE_O && value.length() == 0)
-				{
-					storeValue(bean, i, desc, value);
-					continue;
-				}
-
-				// Inhaltlich prüfung
-				//if(desc.code != Desc.CODE_O && Parser.docheck)
-				if(Parser.docheck)
-					typeCheck(desc, value);
-
+				
+				
 			    storeValue(bean, i, desc, value);
 			}
 
 			return bean;
-		} finally {
+		} 
+		finally 
+		{
 			bean.afterFill();
 			
-			if(doclone) bean.doclone();
+			if(doclone) 
+				bean.doclone();
 		}
 	}
 
@@ -218,25 +224,25 @@ public class Parser
 			if(!value.matches(desc.pattern))
 				throw new ParserException(ParserException.ERROR_TYPE_PATTERN, desc, value);
 		}
-
 	}
 
-	boolean info = log.isInfoEnabled();
+	//boolean info = log.isInfoEnabled();
 
 	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException
 	{
-		if(info)
-			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
+//		if(info)
+//			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
 
 		if(desc.nostore)
 			return;
 
-		if(Parser.dotrim)
-			value = Formatter.rtrim(value);
+//		if(Parser.dotrim)
+//			value = Formatter.rtrim(value);
 
 		try {
 			desc.setValue(bean, value);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ParserException(ParserException.ERROR_MISSING_SETTER, desc, value + ":" + bean.toString());
 		}
 	}
