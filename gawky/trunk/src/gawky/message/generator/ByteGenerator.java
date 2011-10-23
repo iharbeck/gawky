@@ -21,7 +21,7 @@ public class ByteGenerator extends Generator
 		this.encoding = encoding;
 	}
 	
-	public byte[] generateString(Part bean, int len)
+	public byte[] buildString(Part bean, int len)
 	{
 		byte str[] = new byte[len];
 		Arrays.fill(str, (byte)0x40); 
