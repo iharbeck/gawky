@@ -28,7 +28,8 @@ public class PatternParser extends Parser
 
 	boolean hasDelimiter;
 
-	public Object parse(String str, Object bean) throws ParserException
+	@Override
+	public Object parse(String str, Part bean) throws ParserException
 	{
 		// store for splitting records
 		line = str;
