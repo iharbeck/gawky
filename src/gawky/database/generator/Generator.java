@@ -119,8 +119,8 @@ public class Generator
 				val = rset.getString(x);
 				break;
 			case Desc.FMT_DIGIT :
-				//val = formatNumber(rset.getDouble(x));
-				val = rset.getDouble(x);
+				val = formatNumber(rset.getDouble(x));
+				//val = rset.getDouble(x);
 				break;
 			case Desc.FMT_DATE :
 				val =  df_YYYYMMDD.format( rset.getDate(x) );
@@ -151,8 +151,8 @@ public class Generator
 				val = rset.getString(name);
 				break;
 			case Desc.FMT_DIGIT :
-				//val = formatNumber(rset.getDouble(name));
-				val = rset.getDouble(name);
+				val = formatNumber(rset.getDouble(name));
+				//val = rset.getDouble(name);
 				break;
 			case Desc.FMT_DATE :
 				val =  df_YYYYMMDD.format( rset.getDate(name) );
