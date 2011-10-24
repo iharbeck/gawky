@@ -518,7 +518,8 @@ public class Generator
 
 				Object val = desc.getValue(bean);
 
-				mapSetObjectToDBType(desc, stmt, setter++, val);
+				mapSetObjectToDBType(desc, stmt, setter, val);
+				setter++;
 			} 
 			catch(Exception e) 
 			{
@@ -529,6 +530,7 @@ public class Generator
 						stmt.setString(setter, "");
 				} catch (Exception ee) {
 				}
+				setter++;
 			}
 		}
 
