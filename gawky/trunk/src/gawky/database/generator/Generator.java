@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -490,12 +491,12 @@ public class Generator
 		return sql;
 	}
 	
-	public void fillPreparedStatement(PreparedStatement stmt, Table bean)
+	public void fillPreparedStatement(PreparedStatement stmt, Table bean) throws Exception
 	{
 		fillPreparedStatement(stmt, bean, true);
 	}
 
-	public void fillPreparedStatement(PreparedStatement stmt, Table bean, boolean insert)
+	public void fillPreparedStatement(PreparedStatement stmt, Table bean, boolean insert) throws Exception
 	{
 		Desc   descs[] = bean.getCachedDesc();
 		Desc   desc;
@@ -511,45 +512,12 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			try
-			{
-				if(desc.isPrimary())  // ID überspringen
-					continue;
+			if(desc.isPrimary())  // ID überspringen
+				continue;
 
-				Object val = desc.getValue(bean);
-
-				mapSetObjectToDBType(desc, stmt, setter, val);
-				setter++;
-			} 
-			catch(Exception e) 
-			{
-				try {
-					if(desc.format == Desc.FMT_DIGIT)
-						stmt.setDouble(setter, 0);
-					else
-						stmt.setString(setter, "");
-				} catch (Exception ee) {
-				}
-				setter++;
-			}
+			mapSetObjectToDBType(desc, stmt, setter++, desc.getValue(bean));
 		}
 
-		/*
-		try 
-		{
-			if(!insert || (insert && bean.getParameter())) //update oder insert mit parameter  (keine customfields)
-			{
-				Desc[] descids = bean.getDescIDs();
-
-				for(int i=0; i < descids.length; i++)
-			    {
-					mapSetObjectToDBType(descids[i], stmt, setter + i, descids[i].getValue(bean));
-			    }
-			}
-		} catch(Exception e) {
-			log.error(e);
-		}
-		*/
 		try 
 		{
 			Desc[] descids = bean.getDescIDs();
@@ -567,28 +535,36 @@ public class Generator
 	
 	private final void mapSetObjectToDBType(Desc desc, PreparedStatement stmt, int setter, Object val) throws Exception 
 	{
-		switch (desc.format) 
+		try 
 		{
-			case Desc.FMT_ASCII :
-			case Desc.FMT_BLANK :
-			case Desc.FMT_BLANK_ZERO :
-			case Desc.FMT_UPPER :
-			case Desc.FMT_LOWER :
-			case Desc.FMT_BLANK_LETTER :
-				stmt.setString(setter, (String)val);
-				break;
-			case Desc.FMT_DIGIT :
-				stmt.setDouble(setter, parseNumber((String)val));
-				break;
-			case Desc.FMT_DATE :
-				stmt.setDate(setter, new Date(df_YYYYMMDD.parse((String)val).getTime()));
-				break;
-			case Desc.FMT_TIME :
-				stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse((String)val).getTime()));
-				break;
-			case Desc.FMT_BINARY :
-				stmt.setBytes(setter, Formatter.bpad(desc.len, (byte[])val));
-				break;
+			switch (desc.format) 
+			{
+				case Desc.FMT_ASCII :
+				case Desc.FMT_BLANK :
+				case Desc.FMT_BLANK_ZERO :
+				case Desc.FMT_UPPER :
+				case Desc.FMT_LOWER :
+				case Desc.FMT_BLANK_LETTER :
+					stmt.setString(setter, (String)val);
+					break;
+				case Desc.FMT_DIGIT :
+					stmt.setDouble(setter, parseNumber((String)val));
+					break;
+				case Desc.FMT_DATE :
+					stmt.setDate(setter, new Date(df_YYYYMMDD.parse((String)val).getTime()));
+					break;
+				case Desc.FMT_TIME :
+					stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse((String)val).getTime()));
+					break;
+				case Desc.FMT_BINARY :
+					stmt.setBytes(setter, Formatter.bpad(desc.len, (byte[])val));
+					break;
+			}
+		} catch (Exception e) {
+			if(desc.format == Desc.FMT_DIGIT)
+				stmt.setDouble(setter, 0);
+			else
+				stmt.setString(setter, "");
 		}
 	}
 
