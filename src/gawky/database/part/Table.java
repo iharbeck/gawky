@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +53,7 @@ public abstract class Table extends Part
 		public boolean binary = false;
 	}
 	
-	private Connection getConnection() throws SQLException 
+	private Connection getConnection() throws Exception 
 	{
 		if(!loop)
 			return DB.getConnection(getStaticLocal().defaultconnection);
@@ -225,7 +224,7 @@ public abstract class Table extends Part
 		return sql;
 	}
 
-	public final PreparedStatement getStmt(Connection conn, int type) throws SQLException
+	public final PreparedStatement getStmt(Connection conn, int type) throws Exception
 	{
 		if(loop && this.stmt[type] != null)
 			return this.stmt[type];
@@ -241,7 +240,7 @@ public abstract class Table extends Part
 		return stmt;
 	}
 	
-	public final PreparedStatement getStmtScroll(Connection conn, int type) throws SQLException
+	public final PreparedStatement getStmtScroll(Connection conn, int type) throws Exception
 	{
 		String sql = getQuery(type);
 		return conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -268,7 +267,7 @@ public abstract class Table extends Part
 		return getStaticLocal().generator.generateDeleteSQL(this).toString();
 	}
 
-	protected final void fillPreparedStatement(PreparedStatement stmt, boolean insert) {
+	protected final void fillPreparedStatement(PreparedStatement stmt, boolean insert) throws Exception {
 		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
 	}
 
@@ -293,7 +292,7 @@ public abstract class Table extends Part
 		return 1;
 	}
 
-	public void insert() throws SQLException
+	public void insert() throws Exception
 	{
 		Connection conn = null;
 		try {
@@ -305,7 +304,7 @@ public abstract class Table extends Part
 	}
 
 
-	public void insert (Connection conn) throws SQLException
+	public void insert (Connection conn) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_INSERT);
 
@@ -767,7 +766,7 @@ public abstract class Table extends Part
 		}
 	}
 
-	public int update (Connection conn) throws SQLException
+	public int update (Connection conn) throws Exception
 	{
 //		if(!isDirty())
 //			return 0;
