@@ -38,9 +38,9 @@ public abstract class Part implements Cloneable
 		
     	StringBuilder buf = new StringBuilder(2000);
     	
-		for(int i=0; i < descs.length; i++){
-			if(descs[i].format != Desc.FMT_CONSTANT)
-				buf.append("private String " + descs[i].name + ";\n");
+    	for(Desc desc : descs) {
+			if(desc.format != Desc.FMT_CONSTANT)
+				buf.append("private String " + desc.name + ";\n");
 		}
 		
     	System.out.println(buf.toString());
@@ -54,9 +54,9 @@ public abstract class Part implements Cloneable
 	public Desc getDescByName(String name) {
 		Desc[] descs = getCachedDesc();
 
-		for(int i=0; i < descs.length; i++) {
-			if(descs[i].name.equals(name))
-				return descs[i];
+		for(Desc desc : descs) {
+			if(desc.name.equals(name))
+				return desc;
 		}
 		return null;
 	}
@@ -140,9 +140,9 @@ public abstract class Part implements Cloneable
 	
 			Desc descs[] = ((Part)c.newInstance()).getDesc();
 			
-			for(int i=0; i < descs.length; i++) 
+			for(Desc desc : descs)
 			{
-				String fieldName = descs[i].name;
+				String fieldName = desc.name;
 				
 				if(fieldName.equals(""))
 					continue;
@@ -188,20 +188,6 @@ public abstract class Part implements Cloneable
 
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
 
-		//String folder = "file://" + Locator.findBinROOT() + "worker/";
-
-		//log.info("JavaAssist folder: " + folder);
-
-//		ClassLoader urlCl = null;
-//
-//		try {
-//			urlCl  = URLClassLoader.newInstance(
-//					    new URL[]{new URL( folder )});
-//		} catch(Exception e) {
-//			log.error("Missing temp folder: " + folder);
-//			hasJavaAssist = false;
-//		}
-
 		if(hasJavaAssist)
 		{
 			pool = ClassPool.getDefault();
@@ -209,81 +195,62 @@ public abstract class Part implements Cloneable
 		}
 		
 		// Prepare Attribute Access
-		for(int i=0; i < descs.length; i++)
+		for(Desc desc : descs)
 		{
-			if(descs[i] instanceof BColumn && (this instanceof Table))
+			if(desc instanceof BColumn && (this instanceof Table))
 				((Table)this).setBinary(true);
 			
 			// Constanten do not have an attribute
-			if(descs[i].format == Desc.FMT_CONSTANT)
+			if(desc.format == Desc.FMT_CONSTANT)
 				continue;
 
-			try {
-				String mname = Character.toUpperCase(descs[i].name.charAt(0)) +  descs[i].name.substring(1);
+			try 
+			{
+				String mname = Character.toUpperCase(desc.name.charAt(0)) +  desc.name.substring(1);
 
 				if(hasJavaAssist)
 				{
-					log.info("Attribute access: using JavaAssist");
-
 					// Native case - Generate Native Bytecode for ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
 
-					// **CACHING
-					//if(!Option.isClassInClassloader(urlCl, proxycname, ""))
-					{
-						CtClass cc = null;
-						//try {
-						//	cc = pool.get(proxycname);
-						//} catch (Exception e) 
-						{  // Class not already in pool
-							log.info("Generating Proxyclass: " + proxycname);
-							
-							cc = pool.makeClass(proxycname);
-
-							cc.addInterface( pool.get(Accessor.class.getName()) );
-	
-							String type = descs[i].format == Desc.FMT_BINARY ? "byte[]" : "String";
-							
-							// Create setter
-							CtMethod ms = CtNewMethod.make(
-									" public final void setValue(Object bean, Object value) throws Exception {" +
-									"  ((" + classname + ")bean).set" + mname + "((" + type + ")value); " +
-									" } "
-									, cc);
-							cc.addMethod(ms);
-	
-							// Create getter
-							CtMethod mg = CtNewMethod.make(
-									" public final Object getValue(Object bean) throws Exception {" +
-									"  return ((" + classname + ")bean).get" + mname + "(); " +
-									" } "
-									, cc);
-							cc.addMethod(mg);
-	
-							// Generate Class files ** CACHING
-							//cc.writeFile(Locator.findBinROOT() + "worker");
-							//cc.detach();
-						}
+					log.info("Generating Proxyclass: " + proxycname);
 						
-						// Alternative if not written to local disk (no detach!!)
-						descs[i].accessor = (Accessor)cc.toClass().newInstance();
-					}
+					CtClass cc = pool.makeClass(proxycname);
 
-					// load class from Classpath ** CACHING
-					//descs[i].accessor = (Accessor)Class.forName(proxycname, false, urlCl).newInstance();
+					cc.addInterface( pool.get(Accessor.class.getName()) );
 
-					if(descs[i].accessor == null)
+					String type = desc.format == Desc.FMT_BINARY ? "byte[]" : "String";
+					
+					// Create setter
+					CtMethod ms = CtNewMethod.make(" public final void setValue(Object bean, Object value) throws Exception {" +
+												   "  ((" + classname + ")bean).set" + mname + "((" + type + ")value); " +
+												   " } "
+												   , cc);
+					cc.addMethod(ms);
+
+					// Create getter
+					CtMethod mg = CtNewMethod.make(" public final Object getValue(Object bean) throws Exception {" +
+												   "  return ((" + classname + ")bean).get" + mname + "(); " +
+												   " } "
+												   , cc);
+					cc.addMethod(mg);
+					
+					desc.accessor = (Accessor)cc.toClass().newInstance();
+
+					if(desc.accessor == null)
 						throw new Exception("Can't generate GetterSetterclass for [" + mname + "]");
-				} else {
+				} 
+				else 
+				{
 					log.info("Attribute access: using Reflection");
 
 					// Reflection case - Prepare Method details
-					descs[i].smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
-					descs[i].gmethod = getClass().getMethod( "get" + mname, null);
+					desc.smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
+					desc.gmethod = getClass().getMethod( "get" + mname, null);
 
-					if(descs[i].smethod == null)
+					if(desc.smethod == null)
 						throw new Exception("Missing Setter for [" + mname + "]");
-					if(descs[i].gmethod == null)
+					if(desc.gmethod == null)
 						throw new Exception("Missing Getter for [" + mname + "]");
 				}
 			} catch (Exception e) {
