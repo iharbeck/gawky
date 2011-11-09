@@ -179,7 +179,7 @@ public abstract class Part implements Cloneable
 		return p;
 	}
 
-	protected synchronized final Desc[] getOptDesc() 
+	protected final Desc[] getOptDesc() 
 	{
 		Desc[] descs = getDesc();
 
@@ -276,11 +276,14 @@ public abstract class Part implements Cloneable
 
 		Class clazz = getClass();
 		
-		cacheddesc = hmDesc.get(clazz);
-		
-		if(cacheddesc == null) {
-			cacheddesc = getOptDesc();
-			hmDesc.put(clazz, cacheddesc);
+		synchronized (hmDesc) 
+		{			
+			cacheddesc = hmDesc.get(clazz);
+			
+			if(cacheddesc == null) {
+				cacheddesc = getOptDesc();
+				hmDesc.put(clazz, cacheddesc);
+			}
 		}
 
 		return cacheddesc;
