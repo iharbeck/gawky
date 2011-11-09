@@ -125,6 +125,13 @@ public class Parser
 					}
 				}
 
+				if(Parser.dotrim)
+				{
+					if(desc.format == Desc.FMT_DIGIT)
+						value = Formatter.lntrim(value); 
+					else
+						value = Formatter.rtrim(value);
+				}
 				
 				if(value.length() == 0)
 				{
@@ -135,14 +142,6 @@ public class Parser
 				} 
 				else 
 				{
-					if(Parser.dotrim)
-					{
-						if(desc.format == Desc.FMT_DIGIT)
-							value = Formatter.lntrim(value); 
-						else
-							value = Formatter.rtrim(value);
-					}
-
 					// Inhaltlich prüfung
 					//if(desc.code != Desc.CODE_O && Parser.docheck)
 					if(Parser.docheck)
