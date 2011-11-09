@@ -133,18 +133,15 @@ public class Parser
 						value = Formatter.rtrim(value);
 				}
 				
-				if(value.length() == 0)
+				
+				if(desc.code == Desc.CODE_R)  // Required Field
 				{
-					if(desc.code == Desc.CODE_R)  // Required Field
-					{
+					if(value.length() == 0)
 						throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
-					}	
 				} 
-				else 
+				else  // Inhaltlich prüfung
 				{
-					// Inhaltlich prüfung
-					//if(desc.code != Desc.CODE_O && Parser.docheck)
-					if(Parser.docheck)
+					if(Parser.docheck)        //if(desc.code != Desc.CODE_O && Parser.docheck)
 						typeCheck(desc, value);
 				}
 				
