@@ -13,21 +13,24 @@ public class Sample extends Part {
 	
 	public static void main(String[] args) throws Exception {
 		
+		long start = System.currentTimeMillis();
 		Parser.setDotrim(true);
+		Parser.setDocheck(false);
 		Sample sample = new Sample();
 		
-		for(int i=1; i <= 999; i++)
+		for(int i=1; i <= 999999; i++)
 		{
-			String val = "FOOT, " + i + " ,0030";
+			String val = "FOOT," + i + ",0030";
 			sample.parse(val);
 			
-			System.out.print(sample.countrecords + "#");
-			System.out.println(sample.sumamount);
+			//System.out.print(sample.countrecords + "#");
+			//System.out.println(sample.sumamount);
 		}
 		System.out.println(sample.countrecords);
 		System.out.println(sample.sumamount);
 		System.out.println(sample.buildString());
 		
+		System.out.println(System.currentTimeMillis() - start);
 		//System.out.println(sample.toString());
 		//System.out.println(sample.toDebugString());
 	}
@@ -37,7 +40,7 @@ public class Sample extends Part {
 		return new Desc[] {
 			new DescC("FOOT,"),
 			//new DescV(5,  "countrecords", Desc.ENDCOMMA),
-			new Desc(Desc.FMT_A, Desc.CODE_O, 5,  "countrecords", Desc.ENDCOMMA),
+			new Desc(Desc.FMT_A, Desc.CODE_O, 10,  "countrecords", Desc.ENDCOMMA),
 			new Desc(Desc.FMT_9, Desc.CODE_O, 12, "sumamount"), //,    Desc.ENDALL),
 		}; 
 	}

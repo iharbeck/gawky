@@ -2,7 +2,6 @@ package gawky.message.part;
 
 import gawky.database.part.BColumn;
 import gawky.database.part.Table;
-import gawky.file.Locator;
 import gawky.global.Option;
 import gawky.message.generator.Generator;
 import gawky.message.parser.Parser;
@@ -10,6 +9,7 @@ import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javassist.ClassClassPath;
 import javassist.ClassPool;
@@ -23,7 +23,9 @@ import org.apache.commons.logging.LogFactory;
 
 public abstract class Part implements Cloneable
 {
-	Log log = LogFactory.getLog(Part.class);
+	static Log log = LogFactory.getLog(Part.class);
+
+	abstract protected Desc[] getDesc();
 
 	private static boolean dotostring = true;
 	
@@ -61,7 +63,6 @@ public abstract class Part implements Cloneable
 		return null;
 	}
 
-	abstract protected Desc[] getDesc();
 
 	public void descAfterInterceptor(Desc[] descs) {
 
@@ -179,7 +180,7 @@ public abstract class Part implements Cloneable
 		return p;
 	}
 
-	protected final Desc[] getOptDesc() 
+	protected Desc[] getOptDesc() 
 	{
 		Desc[] descs = getDesc();
 
@@ -260,27 +261,24 @@ public abstract class Part implements Cloneable
 
 		descAfterInterceptor(descs);
 
-		cacheddesc = descs;
-		
 		return descs;
 	}
 
-	private static HashMap<Class<?>, Desc[]> hmDesc = new HashMap<Class<?>, Desc[]>();
-
-	Desc[] cacheddesc = null;
+	private static TreeMap<String, Desc[]> hmDesc = new TreeMap<String, Desc[]>();
 
 	public final Desc[] getCachedDesc()
 	{
+		String clazz = getClass().getName();
+	
+		Desc[] cacheddesc = hmDesc.get(clazz);
+		
 		if(cacheddesc != null)
 			return cacheddesc;
-
-		Class clazz = getClass();
 		
 		synchronized (hmDesc) 
-		{			
-			cacheddesc = hmDesc.get(clazz);
-			
-			if(cacheddesc == null) {
+		{		
+			if(!hmDesc.containsKey(clazz))
+			{
 				cacheddesc = getOptDesc();
 				hmDesc.put(clazz, cacheddesc);
 			}
