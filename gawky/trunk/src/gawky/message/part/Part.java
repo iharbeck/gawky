@@ -268,19 +268,21 @@ public abstract class Part implements Cloneable
 
 	public final Desc[] getCachedDesc()
 	{
-		String clazz = getClass().getName();
+		String key = getClass().getName();
 	
-		Desc[] cacheddesc = hmDesc.get(clazz);
+		Desc[] cacheddesc = hmDesc.get(key);
 		
 		if(cacheddesc != null)
 			return cacheddesc;
 		
 		synchronized (hmDesc) 
 		{		
-			if(!hmDesc.containsKey(clazz))
+			cacheddesc = hmDesc.get(key);  // DOUBLE CHECK LOCK
+			
+			if(cacheddesc != null)
 			{
 				cacheddesc = getOptDesc();
-				hmDesc.put(clazz, cacheddesc);
+				hmDesc.put(key, cacheddesc);
 			}
 		}
 
