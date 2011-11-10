@@ -279,7 +279,7 @@ public abstract class Part implements Cloneable
 		{		
 			cacheddesc = hmDesc.get(key);  // DOUBLE CHECK LOCK
 			
-			if(cacheddesc != null)
+			if(cacheddesc == null)
 			{
 				cacheddesc = getOptDesc();
 				hmDesc.put(key, cacheddesc);
