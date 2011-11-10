@@ -264,11 +264,11 @@ public abstract class Part implements Cloneable
 		return descs;
 	}
 
-	private static TreeMap<String, Desc[]> hmDesc = new TreeMap<String, Desc[]>();
+	private static HashMap<Class<?>, Desc[]> hmDesc = new HashMap<Class<?>, Desc[]>();
 
 	public final Desc[] getCachedDesc()
 	{
-		String key = getClass().getName();
+		Class key = getClass();
 	
 		Desc[] cacheddesc = hmDesc.get(key);
 		
