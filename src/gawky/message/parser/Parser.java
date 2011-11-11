@@ -141,7 +141,7 @@ public class Parser
 				} 
 				else  // Inhaltlich prüfung
 				{
-					if(Parser.docheck)        //if(desc.code != Desc.CODE_O && Parser.docheck)
+					if(desc.code != Desc.CODE_O && Parser.docheck)        //if(desc.code != Desc.CODE_O && Parser.docheck)
 						typeCheck(desc, value);
 				}
 				
