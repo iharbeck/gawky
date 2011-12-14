@@ -19,9 +19,8 @@ public class Sftp extends BaseFtp {
 
 	// 	SftpHandler.retrieve("ftp://user768:__@ftp.brillenmacher.com:/INBOX.*", "c:/damdam/");
 
-	public static void main(String[] args) throws Exception {
-		
-		
+	public static void main(String[] args) throws Exception 
+	{
 		System.out.println("START");
 		//Filetransfer.retrieve("sftp://8a90818a14a769670114abe9959400eb:@test.ctpe.net:2222:/INBOX.*#c]/paykey.ppk", "c:/");
 		//Filetransfer.retrieve("sftp://arvatomedia_fias:k7569eop@84.17.174.9:ENTW/tes*", "c:/");
@@ -34,6 +33,7 @@ public class Sftp extends BaseFtp {
 	}
 	
 	ChannelSftp sftpclient;
+	Session session = null;
 
 	public Sftp() throws Exception 
 	{
@@ -54,7 +54,6 @@ public class Sftp extends BaseFtp {
 	{
 		this.port = port;
 		JSch jsch = new JSch();
-        Session session = null;
         Channel channel = null;
 
         if(pass.equals("") || option != null)
@@ -134,7 +133,9 @@ public class Sftp extends BaseFtp {
 
 	public void close() throws Exception 
 	{
-		sftpclient.quit();
+		try { sftpclient.disconnect(); } catch (Exception e) {}
+		try { sftpclient.quit(); } catch (Exception e) {}
+		try { session.disconnect(); } catch (Exception e) {}
 	}
 	
 	public void sendLocalFiles(String filename) throws Exception
