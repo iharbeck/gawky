@@ -82,7 +82,7 @@ public class Generator
 
 			try
 			{   
-			    val = mapGetDBToObjectType(desc, rset, x);
+			    val = mapGetDBToObjectType(desc, rset, desc.dbname);
 
 			    if(dotrim && val instanceof String)
 			    	val = Formatter.rtrim((String)val);
@@ -266,6 +266,73 @@ public class Generator
 		return sql;
 	}
 
+	public StringBuilder generateMergeSQL(Table bean)
+	{
+		Desc   descs[] = bean.getCachedDesc();
+		Desc   desc;
+
+		StringBuilder sql = new StringBuilder(2000);
+		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(customcolumns);
+
+		StringBuilder params = new StringBuilder(1000);
+
+		int par = 0;
+		for(int i = 0; i < descs.length; i++)
+		{
+			desc = descs[i];
+
+			if(desc.dbname == null || desc.nostore)
+				continue;
+
+			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element überspringen
+				continue;
+
+			sql.append(desc.dbname);  // column name
+			params.append("?");		  // parameter
+
+			sql.append(",");
+			params.append(",");
+
+			par++;
+		}
+
+		if(par > 0) {
+			sql.deleteCharAt(sql.length()-1);
+			params.deleteCharAt(params.length()-1);
+		}
+
+		Desc[] descids = bean.getDescIDs();
+		
+		if(descids.length > 0) // parameter
+		{
+			for(int i=0; i < descids.length; i++)
+		    {
+				if(par > 0)
+				{
+					sql.append(",");
+					params.append(",");
+				}
+				sql.append(descids[i].dbname);
+				params.append("?"); // manuell
+				par++;
+		    }
+
+		    bean.setParameter(true);
+		} else {
+			bean.setParameter(false);
+		}
+
+		sql.append(" ) VALUES ( ");
+		sql.append(customparams).append(params);
+		sql.append(" ) ");
+
+		if(log.isDebugEnabled())
+			log.debug(sql.toString());
+
+		return sql;
+	}
+
+	
 	public static StringBuilder generateCreateSQL(Table bean)
 	{
 		StringBuilder sql = new StringBuilder(2000);
