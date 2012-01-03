@@ -34,7 +34,7 @@ public abstract class Table extends Part
 
 	private final class StaticLocal
 	{
-		public String[] sql  = new String[5];
+		public String[] sql  = new String[6];
 		public boolean parameter = false;
 
 		public StaticLocal() {
@@ -136,6 +136,7 @@ public abstract class Table extends Part
 	public static final int SQL_UPDATE = 2;
 	public static final int SQL_DELETE = 3;
 	public static final int SQL_SELECT = 4;
+	public static final int SQL_MERGE  = 5;
 
 	public  static final int NO_ID = -1;
 
@@ -217,6 +218,9 @@ public abstract class Table extends Part
 				case SQL_SELECT:
 					sql = getSelectSQL();
 					break;
+				case SQL_MERGE:
+					sql = getMergeSQL();
+					break;
 			}
 			getQueries()[type] = sql;
 		}
@@ -258,6 +262,10 @@ public abstract class Table extends Part
 	protected final String getSelectSQL() {
 		return getStaticLocal().generator.generateSelectSQL(this).toString();
 	}
+	
+	protected final String getMergeSQL() {
+		return getStaticLocal().generator.generateMergeSQL(this).toString();
+	}
 
 	protected final String getFindSQL() {
 		return getStaticLocal().generator.generateFindSQL(this).toString();
@@ -292,6 +300,87 @@ public abstract class Table extends Part
 		return 1;
 	}
 
+	
+
+
+	public void merge() throws Exception
+	{
+		Connection conn = null;
+		try {
+			conn = getConnection();
+			merge(conn);
+		} finally {
+			doClose(conn);
+		}
+	}
+
+
+	public void merge(Connection conn) throws Exception
+	{
+		PreparedStatement stmt = getStmt(conn, SQL_MERGE);
+
+		
+		/*
+		 
+		 
+		MERGE INTO oak_translation USING dual ON ( locale='de' and messagekey = 'ingotest'   )
+		WHEN MATCHED THEN 
+		
+		    UPDATE SET 
+		       value='ingo2' --, value2='ingo'
+		
+		WHEN NOT MATCHED THEN 
+		
+		    INSERT (locale, messagekey, value) 
+		    VALUES ('de','ingotest', 'ingo')
+			 
+	    */
+		
+		try 
+		{
+			Desc prim = getPrimdesc();
+			IDGenerator gen = null;
+			
+			if(prim != null)
+			{
+				gen = prim.getIDGenerator();
+				if(gen != null) {
+					try { 
+						prim.setValue(this, gen.nextVal(conn, this)); 
+					} catch (Exception e) {
+					}
+				}
+			}
+			
+			fillPreparedStatement(stmt, true);
+			
+			stmt.execute();
+	
+			if(gen instanceof IDGeneratorAUTO) {
+				try { 
+					prim.setValue(this, gen.lastVal(conn, this)); 
+				} catch (Exception e) {
+				}
+			}
+			
+/*
+			try {
+				// versuche to generierte ID zu ermitteln und im Object abzulegen
+				if(getPrimdesc().getIDGenerator() != null)
+					getPrimdesc().setValue(this, getPrimdesc().getIDGenerator().getGeneratedID(conn, this));
+			} catch (Exception e) {
+				log.error("insert Record", e);
+			}
+*/
+			
+			setFound(true);
+		} finally {
+			doClose(stmt);
+		}
+	}
+
+	
+	
 	public void insert() throws Exception
 	{
 		Connection conn = null;
@@ -454,7 +543,7 @@ public abstract class Table extends Part
 		loop = true;
 		this.conn = conn; 
 		
-		stmt = new PreparedStatement[5];
+		stmt = new PreparedStatement[6];
 	}
 	
 	public void loop_exit()
