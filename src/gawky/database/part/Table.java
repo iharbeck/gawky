@@ -910,9 +910,12 @@ public abstract class Table extends Part
 		batch_stmt.addBatch(sql);
 	}
 	
+	public void batch_close() throws Exception {
+		doClose(batch_stmt);
+	}
+	
 	public void batch_execute() throws Exception {
 		batch_stmt.executeBatch();
-		doClose(batch_stmt);
 	}
 	
 	
