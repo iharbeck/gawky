@@ -769,7 +769,7 @@ public abstract class Table extends Part
 	}
 	
 	
-	public static <T extends Table> void find(Class<T> clazz, Connection conn, String where, Object[] params, Result resulter) throws Exception
+	public static <T extends Table> void find(Class<T> clazz, Connection conn, String where, Object[] params, TableProcessor resulter) throws Exception
 	{
 		T inst = clazz.newInstance();
 
