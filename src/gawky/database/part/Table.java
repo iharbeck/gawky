@@ -767,6 +767,43 @@ public abstract class Table extends Part
 		
 		return list;
 	}
+	
+	
+	public static <T extends Table> void find(Class<T> clazz, Connection conn, Result resulter, String where, Object[] params) throws Exception
+	{
+		T inst = clazz.newInstance();
+
+		String sql = inst.getQuery(SQL_SELECT);
+
+		if(where != null)
+			sql += " " + where;
+
+		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
+		
+		fillParameter(stmt, params);
+		
+		ResultSet rset = null;
+
+		try 
+		{
+			rset = stmt.executeQuery();
+			rset.setFetchSize(100);
+			
+			inst = clazz.newInstance();
+
+			while (rset.next())
+			{
+				getStaticLocal(inst).generator.fillPart(rset, inst);
+	
+				resulter.process(inst);
+	
+			}
+		} finally {
+			doSClose(rset);
+			doSClose(stmt);
+		}
+	}
+
 
 	public static<T extends Table> int delete(Class<T> clazz, Object id) throws Exception
 	{
