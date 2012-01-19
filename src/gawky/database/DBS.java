@@ -1,18 +1,20 @@
 package gawky.database;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DBS 
 {
 	HashMap<String, Object> map = new HashMap<String, Object>();
+	ArrayList<Object> param = new ArrayList<Object>();
 	
 	Connection conn = null;
 	int pool = 0; 
 	
 	public DBS addParam(String key, Object value)
 	{
-		map.put(key, value);
+		param.add(value);
 		return this;
 	}
 	
