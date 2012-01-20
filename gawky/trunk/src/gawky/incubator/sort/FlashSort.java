@@ -34,7 +34,7 @@ class FlashSort
      */
     public static void main(String[] args) 
     {
-        int size = 120;
+        int size = 10000;
         
         FlashSort.flashSort(size);
     }
@@ -114,7 +114,7 @@ class FlashSort
                 nmove++;
             }
         }
-        //printArray(a);
+        printArray(a);
     }
     
     /**
