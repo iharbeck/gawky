@@ -750,7 +750,7 @@ public abstract class Table extends Part
 		try 
 		{
 			rset = stmt.executeQuery();
-			rset.setFetchSize(100);
+			//rset.setFetchSize(100);
 			
 			while (rset.next())
 			{
@@ -787,7 +787,7 @@ public abstract class Table extends Part
 		try 
 		{
 			rset = stmt.executeQuery();
-			rset.setFetchSize(100);
+			//rset.setFetchSize(100);
 			
 			inst = clazz.newInstance();
 
