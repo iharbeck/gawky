@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
@@ -128,8 +127,6 @@ public abstract class Table extends Part
 		}
 		
 	}
-
-	private static Log log = LogFactory.getLog(Table.class);
 
 	public static final int SQL_INSERT = 0;
 	public static final int SQL_FIND   = 1;
@@ -582,7 +579,7 @@ public abstract class Table extends Part
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
 			} else {
-				log.error("no result (" + getQuery(SQL_FIND) + ")");
+				LogFactory.getLog(this.getClass()).error("no result (" + getQuery(SQL_FIND) + ")");
 			}
 		} finally {
 			doClose(rset);
@@ -617,7 +614,7 @@ public abstract class Table extends Part
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
 			} else {
-				log.error("no result (" + getQuery(SQL_FIND) + ")");
+				LogFactory.getLog(this.getClass()).error("no result (" + getQuery(SQL_FIND) + ")");
 			}
 		} finally {
 			doClose(rset);
@@ -666,7 +663,7 @@ public abstract class Table extends Part
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
 			} else {
-				log.error("no result (" + sql + ")");
+				LogFactory.getLog(this.getClass()).error("no result (" + sql + ")");
 			}
 		} finally {
 			doClose(rset);
