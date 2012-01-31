@@ -9,7 +9,6 @@ import gawky.message.parser.ParserException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 import javassist.ClassClassPath;
 import javassist.ClassPool;
@@ -18,13 +17,10 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public abstract class Part implements Cloneable
 {
-	static Log log = LogFactory.getLog(Part.class);
-
 	abstract protected Desc[] getDesc();
 
 	private static boolean dotostring = true;
@@ -214,7 +210,7 @@ public abstract class Part implements Cloneable
 					// Native case - Generate Native Bytecode for ProxyClasses
 					String proxycname = classname + "Accessor" + mname;
 
-					log.info("Generating Proxyclass: " + proxycname);
+					LogFactory.getLog(this.getClass()).info("Generating Proxyclass: " + proxycname);
 						
 					CtClass cc = pool.makeClass(proxycname);
 
@@ -243,7 +239,7 @@ public abstract class Part implements Cloneable
 				} 
 				else 
 				{
-					log.info("Attribute access: using Reflection");
+					LogFactory.getLog(this.getClass()).info("Attribute access: using Reflection");
 
 					// Reflection case - Prepare Method details
 					desc.smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
@@ -255,7 +251,7 @@ public abstract class Part implements Cloneable
 						throw new Exception("Missing Getter for [" + mname + "]");
 				}
 			} catch (Exception e) {
-				log.error("Generating Getter/Setter", e);
+				LogFactory.getLog(this.getClass()).error("Generating Getter/Setter", e);
 			}
 		}
 
