@@ -1,5 +1,6 @@
 package example.template;
 
+import gawky.global.Constant;
 import gawky.global.Option;
 import gawky.template.FreemarkerTemplate;
 import gawky.template.Template;
@@ -29,11 +30,11 @@ public class TestTemplate {
 
 		Template tmp = FreemarkerTemplate.getInstance();
 		// in eine String Variable
-		String res = tmp.processToString(root, "test.ftl");
+		String res = tmp.processToString(root, "test.ftl", Constant.ENCODE_ISO);
 		System.out.println(res);
 		
 		// direkt zum Screen
-		tmp.process(root, "test.ftl", System.out);
+		tmp.process(root, "test.ftl", System.out, Constant.ENCODE_ISO);
 		
 		System.exit(0);
 	}
