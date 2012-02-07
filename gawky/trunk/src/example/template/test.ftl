@@ -6,7 +6,7 @@
   <h1>Welcome ${user}!</h1>
   <p>Our latest product:
   <a href="${latestProduct.url}">${latestProduct.name}</a>!
-   
+   abc צהü abc
  <#list ["winter", "spring", "summer", "autumn"] as x>
     --  ${x?cap_first}
  </#list> 
