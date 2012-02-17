@@ -146,8 +146,12 @@ public class Formatter
 	   return value;			  
    }
 
-   
    public final static String rtrim(String value)
+   {
+	   return rtrim(value, ' ');
+   }
+   
+   public final static String rtrim(String value, char ch)
    {
 	   int count = value.length();
 
@@ -156,7 +160,7 @@ public class Formatter
 	   
 	   int len = count;
 	   
-	   while ((len > 0) && (value.charAt(len-1) <= ' ')) {
+	   while ((len > 0) && (value.charAt(len-1) <= ch)) {
 		    len--;
 	   }
 
