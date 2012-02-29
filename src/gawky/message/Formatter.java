@@ -106,9 +106,11 @@ public class Formatter
    
    public final static String lntrim(String value)
    {
-
 	   int len = value.length();
 
+	   if(len == 0)
+		   return "";
+	   
 	   int i = 0;
 	   while ((i < len) && (value.charAt(i) == '0')) {
 		    i++;
