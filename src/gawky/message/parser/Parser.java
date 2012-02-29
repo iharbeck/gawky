@@ -139,9 +139,10 @@ public class Parser
 					if(value.length() == 0)
 						throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
 				} 
-				else  // Inhaltlich prüfung
+				
+				//else  // Inhaltlich prüfung
 				{
-					if(desc.code != Desc.CODE_O && Parser.docheck)        //if(desc.code != Desc.CODE_O && Parser.docheck)
+					if(Parser.docheck)        
 						typeCheck(desc, value);
 				}
 				
@@ -162,6 +163,9 @@ public class Parser
 
 	public final void typeCheck(Desc desc, String value) throws ParserException
 	{
+		if(value.length() == 0)
+			return;
+				
 		// Inhaltlich prüfung
 	    switch (desc.format) {
 			case Desc.FMT_ASCII :
