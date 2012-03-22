@@ -27,9 +27,12 @@ public class Mt940Reader
 	static PatternParser parser = new PatternParser();
 	
 	
+	String currenttag = "";
 	
 	private void handler(String line, Part part) throws Exception
 	{
+		currenttag = line.substring(0, 4);
+		
 		// Parser
 		part.parse(parser, line);
 	
@@ -63,6 +66,11 @@ public class Mt940Reader
     		handler(line, new Satz86());
     	else if(line.equals("-"))
     		System.out.println("--------------------------------------------------------<br>");
+    	else if(!line.startsWith(":")) // if(line.startsWith(":86"))
+        {
+           line = currenttag + line;
+           processLine(line);
+        }
     }
     
     public final void matchLines(CharBuffer cb) throws Exception
