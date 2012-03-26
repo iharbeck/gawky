@@ -260,7 +260,7 @@ public abstract class Part implements Cloneable
 		return descs;
 	}
 
-	private static HashMap<Class<?>, Desc[]> hmDesc = new HashMap<Class<?>, Desc[]>();
+	private static volatile HashMap<Class<?>, Desc[]> hmDesc = new HashMap<Class<?>, Desc[]>();
 
 	public final Desc[] getCachedDesc()
 	{

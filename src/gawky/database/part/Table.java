@@ -187,7 +187,7 @@ public abstract class Table extends Part
 		return getStaticLocal().descIds;
 	}
 
-	private static HashMap<Class<?>, StaticLocal> hmStaticLocal    = new HashMap<Class<?>, StaticLocal>();
+	private static volatile HashMap<Class<?>, StaticLocal> hmStaticLocal    = new HashMap<Class<?>, StaticLocal>();
 
 	protected final String[] getQueries()
 	{

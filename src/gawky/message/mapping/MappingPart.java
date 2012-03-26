@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public abstract class MappingPart {
 	
-	private static HashMap hsMappingDesc = new HashMap();
+	private static volatile HashMap hsMappingDesc = new HashMap();
 	
 	public final Desc[][] getCachedMappingDesc(Part source_obj, Part target_obj) 
 	{
