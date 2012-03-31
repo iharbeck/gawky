@@ -952,7 +952,9 @@ public abstract class Table extends Part
 		batch_stmt.executeBatch();
 	}
 	
-	
+	public void batch_clear() throws Exception {
+		batch_stmt.clearBatch();
+	}
 
 	public int getDefaultconnection() {
 		return getStaticLocal().defaultconnection;
