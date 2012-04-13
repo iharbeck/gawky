@@ -484,17 +484,31 @@ public abstract class Table extends Part
 	
 	public void find() throws Exception
 	{
+		Connection conn = null;
+		try {
+			conn = getConnection();
+			find(conn);
+		} finally {
+			doClose(conn);
+		}
+	}
+	
+	public void find(Connection conn) throws Exception
+	{
 		getCachedDesc();
 		Desc[] descids = getDescIDs();
 
-		if(descids.length == 1)
-			find(getPrimdesc().getValue(this));
-		else {
+		if(descids.length == 1) 
+		{
+			find(conn, getPrimdesc().getValue(this));
+		} 
+		else 
+		{
 			Object[] val = new Object[descids.length];
 			for(int i=0; i < descids.length; i++) {
 				val[i] = descids[i].getValue(this);
 			}
-			find(val);
+			find(conn, val);
 		}
 	}
 
