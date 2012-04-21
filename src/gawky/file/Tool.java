@@ -194,45 +194,32 @@ public class Tool {
     	return buffer;
 	 }
 	 
-	 /**
-		 * xml in Datei schreiben (Overwrite mode)
-		 * @param filename
-		 * @param xml
-		 * @throws Exception
-		 */
-		public static void write(String filename, StringBuilder xml) throws Exception 
+		public static void write(String filename, StringBuilder data) throws Exception 
 		{
-			write(filename, xml, MODE_OVERWRITE);
+			write(filename, data, MODE_OVERWRITE);
 		}
 		
-		/**
-		 * xml in Datei schreiben
-		 * @param filename
-		 * @param xml
-		 * @param attach
-		 * @throws Exception
-		 */
-		public static void write(String filename, StringBuilder xml, boolean attach) throws Exception 
+		public static void write(String filename, StringBuilder data, boolean attach) throws Exception 
 		{
-			write(filename, xml.toString(), attach);
+			write(filename, data.toString(), attach);
 		}
-		public static void write(String filename, String xml, boolean attach) throws Exception 
+		public static void write(String filename, String data, boolean attach) throws Exception 
 		{
-			write(filename, xml, attach, Constant.ENCODE_UTF8);
+			write(filename, data, attach, Constant.ENCODE_UTF8);
 		}
 		
-		public static void write(String filename, StringBuilder xml, boolean attach, String encoding) throws Exception 
+		public static void write(String filename, StringBuilder data, boolean attach, String encoding) throws Exception 
 		{
-			write(filename, xml.toString(), attach, encoding);
+			write(filename, data.toString(), attach, encoding);
 		}
-		public static void write(String filename, String xml, boolean attach, String encoding) throws Exception 
+		public static void write(String filename, String data, boolean attach, String encoding) throws Exception 
 		{
 			// create target folder
 			createFolder(filename);
 			
 			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(filename, attach), encoding);
 			
-			out.write( xml );
+			out.write( data );
 
 			out.close();
 		}
