@@ -21,7 +21,7 @@ public class Mt940Reader
     private static CharsetDecoder decoder = charset.newDecoder();
 
     // Pattern used to parse lines
-    private static Pattern linePattern = Pattern.compile("(?s)((.*?)\r?\n)((:[0-9]{0,2}.?:)|(-)|(\\s))");
+    private static Pattern linePattern = Pattern.compile("(?s)((.*?)\r?\n)((:[0-9]{0,2}.?:))");
     // DOTALL, nongreedy, to tag :99a: OR - OR blank
     
 	static PatternParser parser = new PatternParser();
