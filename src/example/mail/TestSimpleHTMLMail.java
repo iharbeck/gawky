@@ -15,10 +15,11 @@ public class TestSimpleHTMLMail {
 		
 		server.setServer("mail.iharbeck.de");
 		server.setUsername("ingo.harbeck@iharbeck.de");
-		server.setPassword("login1996");
-		mail.addTo("ingo.harbeck@iharbeck.de");
-		//mailer.addImage("shit.gif", "shit.gif");
-		mail.setBody("<b>Hello äöü 7ex</b><img src=\"cid:shit.gif\"/>");
+		server.setPassword("password");
+		
+		mail.addTo("ingo.harbeck@iharbeck.de")
+		  //.addImage("shit.gif", "shit.gif");
+			.setBody("<b>Hello äöü 7ex</b><img src=\"cid:shit.gif\"/>");
 		
 		server.send(mail);
 		
