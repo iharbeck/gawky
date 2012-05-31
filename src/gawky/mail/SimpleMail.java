@@ -44,6 +44,11 @@ public class SimpleMail extends Mail
 
 	String bounce = "";
 
+	public static SimpleMail create()
+	{
+		return new SimpleMail();
+	}
+	
 	public SimpleMail setFrom(String from) throws Exception
 	{
 		return setFrom(from, from);
