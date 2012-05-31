@@ -13,178 +13,241 @@ import javax.mail.internet.InternetAddress;
 
 /**
  * @author Ingo Harbeck
- *  
+ * 
  */
 public class SimpleMail extends Mail
 {
-    private static String DEFAULT_FROM      = "mail.from";
-    private static String DEFAULT_FROMALIAS = "mail.fromalias";
-    private static String DEFAULT_SUBJECT   = "mail.subject";
- 
-    String def_from       = Option.getProperty(DEFAULT_FROM, "");
-    String def_fromalias  = Option.getProperty(DEFAULT_FROMALIAS, "");
+	private static String DEFAULT_FROM = "mail.from";
+	private static String DEFAULT_FROMALIAS = "mail.fromalias";
+	private static String DEFAULT_SUBJECT = "mail.subject";
 
-    boolean html = true;
-    
-    String subject  =  Option.getProperty(DEFAULT_SUBJECT, "");
-    String body     =  "";
-    String altbody  =  "";
+	String def_from = Option.getProperty(DEFAULT_FROM, "");
+	String def_fromalias = Option.getProperty(DEFAULT_FROMALIAS, "");
 
-    private boolean dozip = false;
-    private InputStream stream;
-    private String attachName;
+	boolean html = true;
 
-    private Hashtable<String, String> cids = new Hashtable<String, String>();
+	String subject = Option.getProperty(DEFAULT_SUBJECT, "");
+	String body = "";
+	String altbody = "";
 
-    InternetAddress from; 
-    private ArrayList<InternetAddress> array_to = new ArrayList<InternetAddress>();
-    private ArrayList<InternetAddress> array_reply = new ArrayList<InternetAddress>();
+	private boolean dozip = false;
+	private InputStream stream;
+	private String attachName;
 
-    private Map<String, String> parameter = new Hashtable<String, String>();
+	private Hashtable<String, String> cids = new Hashtable<String, String>();
 
-    String bounce = "";
-    
-    public void setFrom(String from) throws Exception {
-        setFrom(from, from);
-    }
+	InternetAddress from;
+	private ArrayList<InternetAddress> array_to = new ArrayList<InternetAddress>();
+	private ArrayList<InternetAddress> array_reply = new ArrayList<InternetAddress>();
 
-    public void setFrom(String from, String alias) throws Exception {
-    	this.from = new InternetAddress(from, alias);
-    }
-    
-    public void addTo(String to) throws Exception 
-    {
-    	String[] tos = to.split("\\s*;\\s*");
-    	
-    	for(String t : tos)
-    		addTo(t, t);
-    }
-        
-    public void addTo(String to, String alias) throws Exception {
-    	
-    	String[] tos = to.split("\\s*;\\s*");
-    	String[] as =  alias.split("\\s*;\\s*");
-    	
-    	for(int i=0; i < tos.length; i++)
-    	{
-    		array_to.add(new InternetAddress(tos[i], as[i]));
-    	}
-    }
-    
-    public void addReplyTo(String replyTO) throws Exception {
-    	addReplyTo(replyTO, replyTO);
-    }
-    
-    public void addReplyTo(String replyTO, String alias) throws Exception {
-    	array_reply.add(new InternetAddress(replyTO, alias, Constant.ENCODE_UTF8));
-    }
+	private Map<String, String> parameter = new Hashtable<String, String>();
 
-    
-    public void addAttachment(String path, String name, boolean zip) throws Exception {
-    	stream = new FileInputStream(path);
-    	attachName = name;
-    	dozip = zip;
-    }
+	String bounce = "";
 
-    public void addImage(String path, String cid) {
-    	cids.put(cid, path);
-    }
-    
-    public void addParameter(String key, String value) {
-    	parameter.put(key, value);
-    }
-    
-	public String getAltbody() {
+	public SimpleMail setFrom(String from) throws Exception
+	{
+		return setFrom(from, from);
+	}
+
+	public SimpleMail setFrom(String from, String alias) throws Exception
+	{
+		this.from = new InternetAddress(from, alias);
+		return this;
+	}
+
+	public SimpleMail addTo(String to) throws Exception
+	{
+		String[] tos = to.split("\\s*;\\s*");
+
+		for(String t : tos)
+			addTo(t, t);
+
+		return this;
+	}
+
+	public SimpleMail addTo(String to, String alias) throws Exception
+	{
+
+		String[] tos = to.split("\\s*;\\s*");
+		String[] as = alias.split("\\s*;\\s*");
+
+		for(int i = 0; i < tos.length; i++)
+		{
+			array_to.add(new InternetAddress(tos[i], as[i]));
+		}
+
+		return this;
+	}
+
+	public SimpleMail addReplyTo(String replyTO) throws Exception
+	{
+		addReplyTo(replyTO, replyTO);
+
+		return this;
+	}
+
+	public SimpleMail addReplyTo(String replyTO, String alias) throws Exception
+	{
+		array_reply.add(new InternetAddress(replyTO, alias, Constant.ENCODE_UTF8));
+
+		return this;
+	}
+
+	public SimpleMail addAttachment(String path, String name, boolean zip) throws Exception
+	{
+		stream = new FileInputStream(path);
+		attachName = name;
+		dozip = zip;
+
+		return this;
+	}
+
+	public SimpleMail addImage(String path, String cid)
+	{
+		cids.put(cid, path);
+
+		return this;
+	}
+
+	public SimpleMail addParameter(String key, String value)
+	{
+		parameter.put(key, value);
+
+		return this;
+	}
+
+	public String getAltbody()
+	{
 		return altbody;
 	}
 
-	public void setAltbody(String altbody) {
+	public SimpleMail setAltbody(String altbody)
+	{
 		this.altbody = altbody;
+
+		return this;
 	}
 
-	public String getBody() {
+	public String getBody()
+	{
 		return body;
 	}
 
-	public void setBody(String body) {
+	public SimpleMail setBody(String body)
+	{
 		this.body = body;
+
+		return this;
 	}
 
-	public boolean isHtml() {
+	public boolean isHtml()
+	{
 		return html;
 	}
 
-	public void setHtml(boolean html) {
+	public SimpleMail setHtml(boolean html)
+	{
 		this.html = html;
+
+		return this;
 	}
 
-	public String getSubject() {
+	public String getSubject()
+	{
 		return subject;
 	}
 
-	public void setSubject(String subject) {
+	public SimpleMail setSubject(String subject)
+	{
 		this.subject = subject;
+
+		return this;
 	}
 
-
-	public boolean isDozip() {
+	public boolean isDozip()
+	{
 		return dozip;
 	}
 
-	public void setDozip(boolean dozip) {
+	public SimpleMail setDozip(boolean dozip)
+	{
 		this.dozip = dozip;
+
+		return this;
 	}
 
-	public Map<String, String> getParameter() {
+	public Map<String, String> getParameter()
+	{
 		return parameter;
 	}
 
-	public InputStream getStream() {
+	public InputStream getStream()
+	{
 		return stream;
 	}
 
-	public void setStream(InputStream stream, String attachname) {
+	public SimpleMail setStream(InputStream stream, String attachname)
+	{
 		this.stream = stream;
 		this.attachName = attachname;
+
+		return this;
 	}
 
-	public String getAttachName() {
+	public String getAttachName()
+	{
 		return attachName;
 	}
 
-	public Hashtable<String, String> getCids() {
+	public Hashtable<String, String> getCids()
+	{
 		return cids;
 	}
 
-	public void setCids(Hashtable<String, String> cids) {
+	public SimpleMail setCids(Hashtable<String, String> cids)
+	{
 		this.cids = cids;
+
+		return this;
 	}
 
-	public String getBounce() {
+	public String getBounce()
+	{
 		return bounce;
 	}
 
-	public void setBounce(String bounce) {
+	public SimpleMail setBounce(String bounce)
+	{
 		this.bounce = bounce;
+
+		return this;
 	}
 
-	public ArrayList<InternetAddress> getArray_to() {
+	public ArrayList<InternetAddress> getArray_to()
+	{
 		return array_to;
 	}
 
-	public void setArray_to(ArrayList<InternetAddress> arrayTo) {
+	public SimpleMail setArray_to(ArrayList<InternetAddress> arrayTo)
+	{
 		array_to = arrayTo;
+
+		return this;
 	}
 
-	public ArrayList<InternetAddress> getArray_reply() {
+	public ArrayList<InternetAddress> getArray_reply()
+	{
 		return array_reply;
 	}
 
-	public void setArray_reply(ArrayList<InternetAddress> arrayReply) {
+	public SimpleMail setArray_reply(ArrayList<InternetAddress> arrayReply)
+	{
 		array_reply = arrayReply;
+
+		return this;
 	}
 
-	public InternetAddress getFrom() throws Exception 
+	public InternetAddress getFrom() throws Exception
 	{
 		if(from == null)
 		{
@@ -196,18 +259,23 @@ public class SimpleMail extends Mail
 		return from;
 	}
 
-	public void setFrom(InternetAddress from) {
+	public SimpleMail setFrom(InternetAddress from)
+	{
 		this.from = from;
+
+		return this;
 	}
-	
+
 	public int send() throws Exception
 	{
 		SimpleMailSender sender = new SimpleMailSender();
 		return sender.send(this);
 	}
 
-	public void setParameter(Map<String, String> parameter) {
+	public SimpleMail setParameter(Map<String, String> parameter)
+	{
 		this.parameter = parameter;
+
+		return this;
 	}
 }
-
