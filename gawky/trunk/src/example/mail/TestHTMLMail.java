@@ -2,7 +2,6 @@ package example.mail;
 
 import gawky.global.Option;
 import gawky.mail.SimpleMail;
-import gawky.mail.SimpleMailSender;
 
 public class TestHTMLMail {
  
@@ -12,14 +11,11 @@ public class TestHTMLMail {
 		
         SimpleMail mail = new SimpleMail();
         
-        mail.addTo("ingo.harbeck@iharbeck.de");
-        mail.setSubject("NEW NEW öäü");
-        mail.setBody("<b>Hello ööää 6ex</b><img src=\"cid:strutter.jpg\"/>");
-        mail.addImage("strutter.jpg", "strutter.jpg");
-        
-        SimpleMailSender server = new SimpleMailSender();
-        
-        server.send(mail);
+        mail.addTo("ingo.harbeck@iharbeck.de")
+            .setSubject("NEW NEW öäü")
+            .setBody("<b>Hello ööää 6ex</b><img src=\"cid:strutter.jpg\"/>")
+            .addImage("strutter.jpg", "strutter.jpg")
+        	.send();
 		
 		System.exit(0);
 	}
