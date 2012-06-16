@@ -29,8 +29,8 @@
 	  
 	  <root>
 	    <level value="error"/>
-	    <!--
-	     <appender-ref ref="console"/>
+        <appender-ref ref="console"/>	    
+        <!--
 	    <appender-ref ref="file"/>
 	    -->
 	  </root>
