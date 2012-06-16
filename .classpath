@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="lib/html/iText-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.45.jar"/>
+	<classpathentry kind="lib" path="lib/svn/svnkit-1.7.4-v1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
