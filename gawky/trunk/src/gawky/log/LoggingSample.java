@@ -1,4 +1,4 @@
-package gawky.logging;
+package gawky.log;
 
 import gawky.global.Option;
 
