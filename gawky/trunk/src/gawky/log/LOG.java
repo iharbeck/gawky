@@ -78,7 +78,7 @@ public class LOG
 		System.setOut(LOG.createLoggingProxy(System.out));
 		System.setErr(LOG.createLoggingProxy(System.err));
 		
-		LOG.log("GAWKY INIT IN PROGRESS.");
+		LOG.log("GAWKY INIT IN PROGRESS.\n***\n****\n****");
 		System.out.println("OUT: Console Output Redirect");
 		System.err.println("ERR: Console Output Redirect");
 		
