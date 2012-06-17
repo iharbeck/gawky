@@ -3,6 +3,7 @@ package gawky.global;
 import gawky.database.DB;
 import gawky.file.Locator;
 import gawky.file.Tool;
+import gawky.log.LOG;
 import gawky.regex.Grouper;
 import gawky.regex.Replacer;
 
@@ -12,6 +13,8 @@ import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Enumeration;
+import java.util.Formatter;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
@@ -23,10 +26,12 @@ import org.apache.commons.configuration.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.apache.log4j.Priority;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.xml.DOMConfigurator;
 
@@ -189,19 +194,6 @@ public class Option
 		System.exit(0);
 	}
 
-	static Logger root;
-	public static PrintStream createLoggingProxy(final PrintStream realPrintStream)
-	{
-		return new PrintStream(realPrintStream)
-		{
-			public void print(final String string)
-			{
-				root.info(string);
-				//realPrintStream.print(string);
-			}
-		};
-	}
-
 	/**
 	 * Initialze Global properties with custom properties file name
 	 * 
@@ -221,41 +213,10 @@ public class Option
 		// Standard file encoding
 		System.setProperty("file.encoding", Constant.ENCODE_UTF8);
 
-		// Application BINROOT for LOG4J
-		System.setProperty("BINROOT", Locator.findBinROOT());
+		LOG.init();
 
-		String filename = Locator.findBinROOT() + "log4j.xml";
+		log = LOG.getLog(Option.class);
 
-		System.out.println("LOG4J File: " + filename);
-
-		if(new File(filename).exists())
-			DOMConfigurator.configure(Locator.findBinROOT() + "log4j.xml");
-
-		root = Logger.getRootLogger();
-		
-		if(!root.getAllAppenders().hasMoreElements()) // No appenders means log4j is not initialized!
-		{
-			root.setLevel(Level.INFO);
-
-			String pattern = "%d{dd.MM.yyyy HH:mm:ss,SSS} %-5p [%t %c] - %m%n";
-
-			// ConsoleLogger
-			root.addAppender(new ConsoleAppender(new PatternLayout(pattern))); //PatternLayout.TTCC_CONVERSION_PATTERN;
-
-			// FileLogger
-			String logfolder = Locator.findBinROOT() + "../logs";
-			new File(logfolder).mkdir();
-
-			String logfile = logfolder + "/default.log";
-			root.addAppender(new RollingFileAppender(new PatternLayout(pattern), logfile)); //PatternLayout.TTCC_CONVERSION_PATTERN;
-
-			System.setOut(createLoggingProxy(System.out));
-			System.setErr(createLoggingProxy(System.err));
-		}
-
-		log = LogFactory.getLog(Option.class);
-
-		log.info("START");
 		log.info("BINROOT " + Locator.findBinROOT());
 
 		// Properties parsen

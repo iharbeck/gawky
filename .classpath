@@ -4,7 +4,7 @@
 	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.11.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.11.jar" sourcepath="C:/logj/apache-log4j-1.2.17/src/main/java"/>
 	<classpathentry kind="lib" path="lib/codegen/freemarker.jar"/>
 	<classpathentry kind="lib" path="lib/codegen/javassist.jar"/>
 	<classpathentry kind="lib" path="lib/database/mysql-connector-java-3.1.11-bin.jar"/>
