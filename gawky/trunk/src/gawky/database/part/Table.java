@@ -593,7 +593,7 @@ public abstract class Table extends Part
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
 			} else {
-				LogFactory.getLog(this.getClass()).error("no result (" + getQuery(SQL_FIND) + ")");
+				LogFactory.getLog(this.getClass()).warn("no result (" + getQuery(SQL_FIND) + ")");
 			}
 		} finally {
 			doClose(rset);
@@ -628,7 +628,7 @@ public abstract class Table extends Part
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
 			} else {
-				LogFactory.getLog(this.getClass()).error("no result (" + getQuery(SQL_FIND) + ")");
+				LogFactory.getLog(this.getClass()).warn("no result (" + getQuery(SQL_FIND) + ")");
 			}
 		} finally {
 			doClose(rset);
@@ -677,7 +677,7 @@ public abstract class Table extends Part
 			if (found) {
 				getStaticLocal().generator.fillPart(rset, this);
 			} else {
-				LogFactory.getLog(this.getClass()).error("no result (" + sql + ")");
+				LogFactory.getLog(this.getClass()).warn("no result (" + sql + ")");
 			}
 		} finally {
 			doClose(rset);

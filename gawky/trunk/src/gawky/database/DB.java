@@ -309,7 +309,7 @@ public class DB
 			}
 			else
 			{
-				log.error("no result (" + sql + ")");
+				log.warn("no result (" + sql + ")");
 			}
 		}
 		finally
