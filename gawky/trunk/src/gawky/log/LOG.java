@@ -69,6 +69,13 @@ public class LOG
 		new File(logfolder).mkdir();
 
 		String logfile = logfolder + "/default.log";
+		
+		// Permissions des Logfile setzen
+		File lf = new File(logfile);
+		lf.setWritable(true, true);
+		lf.setReadable(true, true);
+		lf.setExecutable(true, true);
+		
 		root.addAppender(new RollingFileAppender(new PatternLayout(LOG_PATTERN), logfile)); //PatternLayout.TTCC_CONVERSION_PATTERN;
 
 		
