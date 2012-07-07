@@ -66,9 +66,13 @@ public class LOG
 
 		// FileLogger
 		String logfolder = Locator.findBinROOT() + "../logs";
-		new File(logfolder).mkdir();
 
-		String logfile = logfolder + "/default.log";
+		File folder = new File(logfolder);
+		folder.mkdir();
+		folder.setWritable(true, true);
+		folder.setReadable(true, true);
+
+		String logfile = logfolder + "/default2.log";
 		
 		// Permissions des Logfile setzen
 		File lf = new File(logfile);
