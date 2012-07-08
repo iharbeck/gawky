@@ -31,6 +31,11 @@ public abstract class Table extends Part
 	boolean found = false;
 	final static int INITIALCAP = 2000;
 
+	private String nativecolumns;
+	private String nativevalues;
+	
+	
+	
 	private final class StaticLocal
 	{
 		public String[] sql  = new String[6];
@@ -1041,5 +1046,25 @@ public abstract class Table extends Part
 	public boolean hasPrimary() {
 		return getStaticLocal().primarydefined;
 	}
+
+	public String getNativecolumns()
+    {
+    	return nativecolumns;
+    }
+
+	public void setNativecolumns(String nativecolumns)
+    {
+    	this.nativecolumns = nativecolumns;
+    }
+
+	public String getNativevalues()
+    {
+    	return nativevalues;
+    }
+
+	public void setNativevalues(String nativevalues)
+    {
+    	this.nativevalues = nativevalues;
+    }
 	
 }

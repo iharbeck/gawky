@@ -14,6 +14,10 @@ public class DaoObject extends Table {
 	//Record definition
 	public Desc[] getDesc()
 	{
+		setNativecolumns("id,");
+		setNativevalues("proud_ikaros_seq.nextval,");
+
+		
 //		setDialect(new MySQL());
 //		setDescID(0, IDGenerator.ID_AUTO());                    // MYSQL auto column
 		
@@ -24,7 +28,6 @@ public class DaoObject extends Table {
 		
 		
 		return new Desc[]  {
-		
 			new Column("kunde_id").setPrimary(),
 			new Column("name")
 		};
@@ -33,6 +36,7 @@ public class DaoObject extends Table {
 	public String getTableName() {
 		return "kunde";
 	}
+
 	
 	public static void main(String[] args) throws Exception 
 	{

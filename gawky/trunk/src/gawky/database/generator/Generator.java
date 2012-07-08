@@ -31,11 +31,7 @@ public class Generator
 
 	Locale locale = new Locale("de", "DE");
 
-	String customcolumns = "";
-	String customparams = "";
-
 	NumberFormat fmt;
-
 	
 	boolean debug = false;
 	
@@ -206,7 +202,7 @@ public class Generator
 		Desc   desc;
 
 		StringBuilder sql = new StringBuilder(2000);
-		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(customcolumns);
+		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(bean.getNativecolumns());
 
 		StringBuilder params = new StringBuilder(1000);
 
@@ -257,7 +253,7 @@ public class Generator
 		}
 
 		sql.append(" ) VALUES ( ");
-		sql.append(customparams).append(params);
+		sql.append(bean.getNativevalues()).append(params);
 		sql.append(" ) ");
 
 		if(log.isDebugEnabled())
@@ -272,7 +268,7 @@ public class Generator
 		Desc   desc;
 
 		StringBuilder sql = new StringBuilder(2000);
-		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(customcolumns);
+		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(bean.getNativecolumns());
 
 		StringBuilder params = new StringBuilder(1000);
 
@@ -323,7 +319,7 @@ public class Generator
 		}
 
 		sql.append(" ) VALUES ( ");
-		sql.append(customparams).append(params);
+		sql.append(bean.getNativevalues()).append(params);
 		sql.append(" ) ");
 
 		if(log.isDebugEnabled())
@@ -633,22 +629,6 @@ public class Generator
 			else
 				stmt.setString(setter, "");
 		}
-	}
-
-	public String getCustomcolumns() {
-		return customcolumns;
-	}
-
-	public void setCustomcolumns(String customcolumns) {
-		this.customcolumns = customcolumns;
-	}
-
-	public String getCustomparams() {
-		return customparams;
-	}
-
-	public void setCustomparams(String customparams) {
-		this.customparams = customparams;
 	}
 
 	public static void setDotrim(boolean dotrim) {
