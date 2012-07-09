@@ -200,8 +200,6 @@ public class Formatter
 		return value.substring(0, len);
 	}
 
-	static char[] iv = "\n\r\0\t".toCharArray();
-
 	// public final static String lpad(int size, String value, char filler)
 	// {
 	// return lpad(size, value, filler, false);
@@ -231,13 +229,9 @@ public class Formatter
 		{
 			for(int i = 0; i < size; i++)
 			{
-				for(int a = 0; a < 4; a++)
+				if(target[i] <= ' ')
 				{
-					if(target[i] == iv[a])
-					{
-						target[i] = ' ';
-						continue;
-					}
+					target[i] = ' ';
 				}
 			}
 		}
@@ -264,13 +258,9 @@ public class Formatter
 
 		for(int i = 0; i < size; i++)
 		{
-			for(int a = 0; a < 4; a++)
+			if(target[i] <= ' ')
 			{
-				if(target[i] == iv[a])
-				{
-					target[i] = ' ';
-					continue;
-				}
+				target[i] = ' ';
 			}
 		}
 
@@ -301,8 +291,6 @@ public class Formatter
 	{
 		return rpad(size, value, '0');
 	}
-
-	static Matcher spaces = new Matcher("[\n\r\0\t]");
 
 	public final static String getStringC(int size, String value)
 	{
