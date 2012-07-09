@@ -1136,12 +1136,19 @@ public abstract class Table extends Part
 		return getStaticLocal().primarydefined;
 	}
 
+	
 	public void addNative(String column, String value)
 	{
 		getStaticLocal().nativecolumns += column + ",";
 		getStaticLocal().nativevalues += value + ",";
 	}
 
+	public void clearNative()
+	{
+		getStaticLocal().nativecolumns = null;
+		getStaticLocal().nativevalues = null;
+	}
+	
 	public String lookupNativeColumns()
 	{
 		return getStaticLocal().nativecolumns;
