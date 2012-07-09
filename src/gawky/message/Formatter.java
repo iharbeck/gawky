@@ -110,8 +110,28 @@ public class Formatter
 		System.out.println(substr("123456", 1, 3));
 		System.out.println(substr("123456", 2, 3));
 		System.out.println(substr("123456", 6, 3));
+
+		
+		System.out.println(makeDecimalnumber("123456", 2));
+		System.out.println(deleteChar("1234.56", '.'));
+	}
+	
+	public static String makeDecimalnumber(String value, int decs)
+	{
+		int len = value.length();
+
+		if(len <= decs)
+			return "0." + Formatter.lpad(decs, value, '0');
+		else
+			return value.substring(0, len - decs) + "." + value.substring(len - decs);
 	}
 
+	public static String deleteChar(String value, char sym)
+	{
+		int pos = value.lastIndexOf(sym);
+		return value.substring(0, pos) + value.substring(pos+1);
+	}
+	
 	public final static String lntrim(String value)
 	{
 		return lntrim(value, "0");
