@@ -20,9 +20,8 @@ import java.util.List;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Persistence Layer for Part based Objects
- * Insert / Update / Delete / Find
- *
+ * Persistence Layer for Part based Objects Insert / Update / Delete / Find
+ * 
  * @author Ingo Harbeck
  */
 
@@ -31,17 +30,16 @@ public abstract class Table extends Part
 	boolean found = false;
 	final static int INITIALCAP = 2000;
 
-	private String nativecolumns;
-	private String nativevalues;
-	
-	
-	
 	private final class StaticLocal
 	{
-		public String[] sql  = new String[6];
+		public String[] sql = new String[6];
 		public boolean parameter = false;
 
-		public StaticLocal() {
+		public String nativecolumns;
+		public String nativevalues;
+
+		public StaticLocal()
+		{
 			descIds = new Desc[1];
 			descIds[0] = null;
 		}
@@ -50,14 +48,14 @@ public abstract class Table extends Part
 
 		//IDGenerator idgenerator   = null;
 
-		Generator generator   = new Generator();
+		Generator generator = new Generator();
 		int defaultconnection = 0;
-		
+
 		boolean primarydefined = false;
 		public boolean binary = false;
 	}
-	
-	private Connection getConnection() throws Exception 
+
+	private Connection getConnection() throws Exception
 	{
 		if(!loop)
 			return DB.getConnection(getStaticLocal().defaultconnection);
@@ -65,87 +63,98 @@ public abstract class Table extends Part
 			return this.conn;
 	}
 
-	public static <T extends Table> Connection getConnection(Class<T> clazz) throws Exception {
+	public static <T extends Table> Connection getConnection(Class<T> clazz) throws Exception
+	{
 		Table inst = clazz.newInstance();
-		return  DB.getConnection(inst.getStaticLocal().defaultconnection);
+		return DB.getConnection(inst.getStaticLocal().defaultconnection);
 	}
-	
-	private final void doClose(Connection conn) {
+
+	private final void doClose(Connection conn)
+	{
 		if(!loop)
 			DB.doClose(conn);
 	}
-	
-	private final void doClose(ResultSet rset) {
+
+	private final void doClose(ResultSet rset)
+	{
 		DB.doClose(rset);
 	}
-	
-	private final void doClose(Statement stmt) {
+
+	private final void doClose(Statement stmt)
+	{
 		if(!loop)
 			DB.doClose(stmt);
 	}
 
-	private final static void doSClose(Connection conn) {
+	private final static void doSClose(Connection conn)
+	{
 		DB.doClose(conn);
 	}
-	
-	private final static void doSClose(ResultSet rset) {
+
+	private final static void doSClose(ResultSet rset)
+	{
 		DB.doClose(rset);
 	}
 
-	private final static void doSClose(Statement stmt) {
+	private final static void doSClose(Statement stmt)
+	{
 		DB.doClose(stmt);
 	}
 
-	
 	// SQL Generator
-	public void buildTableCreate() {
+	public void buildTableCreate()
+	{
 		System.out.println(Generator.generateCreateSQL(this).toString());
 	}
-	
-	public void buildTableAlter() {
+
+	public void buildTableAlter()
+	{
 		System.out.println(Generator.generateAlterSQL(this).toString());
 	}
-	
-	
-	public void descAfterInterceptor(Desc[] descs) 
+
+	public void descAfterInterceptor(Desc[] descs)
 	{
 		StaticLocal local = getStaticLocal();
 
 		// Anzahl Prim�rfelder
-		int c=0;
-		for(int i=0; i < descs.length; i++) {
+		int c = 0;
+		for(int i = 0; i < descs.length; i++)
+		{
 			if(descs[i].isPrimary())
 				c++;
 		}
-		
+
 		if(c > 0)
 			local.primarydefined = true;
-		
+
 		// Array mit ids erstellen
 		local.descIds = new Desc[c];
-	
-		for(int i=0, a=0; i < descs.length; i++) {
-			if(descs[i].isPrimary()) {
+
+		for(int i = 0, a = 0; i < descs.length; i++)
+		{
+			if(descs[i].isPrimary())
+			{
 				local.descIds[a] = descs[i];
 				a++;
 			}
 		}
-		
+
 	}
 
 	public static final int SQL_INSERT = 0;
-	public static final int SQL_FIND   = 1;
+	public static final int SQL_FIND = 1;
 	public static final int SQL_UPDATE = 2;
 	public static final int SQL_DELETE = 3;
 	public static final int SQL_SELECT = 4;
-	public static final int SQL_MERGE  = 5;
+	public static final int SQL_MERGE = 5;
 
-	public  static final int NO_ID = -1;
+	public static final int NO_ID = -1;
 
 	//Instance Cache
 	StaticLocal staticlocal;
 
-	private final static StaticLocal getStaticLocal(Table bean) {
+	private final static StaticLocal getStaticLocal(Table bean)
+	{
 		return bean.getStaticLocal();
 	}
 
@@ -164,12 +173,14 @@ public abstract class Table extends Part
 
 		return staticlocal;
 	}
-	
-	public void setBinary(boolean val) {
+
+	public void setBinary(boolean val)
+	{
 		getStaticLocal().binary = val;
 	}
-	
-	public boolean isBinary() {
+
+	public boolean isBinary()
+	{
 		return getStaticLocal().binary;
 	}
 
@@ -184,15 +195,15 @@ public abstract class Table extends Part
 	}
 
 	abstract protected Desc[] getDesc();
-	abstract public String getTableName();
 
+	abstract public String getTableName();
 
 	public Desc[] getDescIDs()
 	{
 		return getStaticLocal().descIds;
 	}
 
-	private static volatile HashMap<Class<?>, StaticLocal> hmStaticLocal    = new HashMap<Class<?>, StaticLocal>();
+	private static volatile HashMap<Class<?>, StaticLocal> hmStaticLocal = new HashMap<Class<?>, StaticLocal>();
 
 	protected final String[] getQueries()
 	{
@@ -202,9 +213,10 @@ public abstract class Table extends Part
 	private final String getQuery(int type)
 	{
 		String sql = getQueries()[type];
-		if(sql == null)	
+		if(sql == null)
 		{
-			switch (type) {
+			switch(type)
+			{
 				case SQL_DELETE:
 					sql = getDeleteSQL();
 					break;
@@ -234,50 +246,56 @@ public abstract class Table extends Part
 	{
 		if(loop && this.stmt[type] != null)
 			return this.stmt[type];
-		
+
 		String sql = getQuery(type);
-		
+
 		PreparedStatement stmt = conn.prepareStatement(sql);
 
 		// Store statement in loop mode
 		if(loop)
 			this.stmt[type] = stmt;
-		
+
 		return stmt;
 	}
-	
+
 	public final PreparedStatement getStmtScroll(Connection conn, int type) throws Exception
 	{
 		String sql = getQuery(type);
 		return conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	}
-	
 
-	protected final String getInsertSQL() {
+	protected final String getInsertSQL()
+	{
 		return getStaticLocal().generator.generateInsertSQL(this).toString();
 	}
 
-	protected final String getUpdateSQL() {
+	protected final String getUpdateSQL()
+	{
 		return getStaticLocal().generator.generateUpdateSQL(this).toString();
 	}
 
-	protected final String getSelectSQL() {
+	protected final String getSelectSQL()
+	{
 		return getStaticLocal().generator.generateSelectSQL(this).toString();
 	}
-	
-	protected final String getMergeSQL() {
+
+	protected final String getMergeSQL()
+	{
 		return getStaticLocal().generator.generateMergeSQL(this).toString();
 	}
 
-	protected final String getFindSQL() {
+	protected final String getFindSQL()
+	{
 		return getStaticLocal().generator.generateFindSQL(this).toString();
 	}
 
-	protected final String getDeleteSQL() {
+	protected final String getDeleteSQL()
+	{
 		return getStaticLocal().generator.generateDeleteSQL(this).toString();
 	}
 
-	protected final void fillPreparedStatement(PreparedStatement stmt, boolean insert) throws Exception {
+	protected final void fillPreparedStatement(PreparedStatement stmt, boolean insert) throws Exception
+	{
 		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
 	}
 
@@ -302,142 +320,144 @@ public abstract class Table extends Part
 		return 1;
 	}
 
-	
-
-
 	public void merge() throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			merge(conn);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
-
 
 	public void merge(Connection conn) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_MERGE);
 
-		
 		/*
-		 
-		 
-		MERGE INTO oak_translation USING dual ON ( locale='de' and messagekey = 'ingotest'   )
-		WHEN MATCHED THEN 
-		
-		    UPDATE SET 
-		       value='ingo2' --, value2='ingo'
-		
-		WHEN NOT MATCHED THEN 
-		
-		    INSERT (locale, messagekey, value) 
-		    VALUES ('de','ingotest', 'ingo')
-			 
-	    */
-		
-		try 
+		 * 
+		 * 
+		 * MERGE INTO oak_translation USING dual ON ( locale='de' and messagekey = 'ingotest' ) WHEN MATCHED THEN
+		 * 
+		 * UPDATE SET value='ingo2' --, value2='ingo'
+		 * 
+		 * WHEN NOT MATCHED THEN
+		 * 
+		 * INSERT (locale, messagekey, value) VALUES ('de','ingotest', 'ingo')
+		 */
+
+		try
 		{
 			Desc prim = getPrimdesc();
 			IDGenerator gen = null;
-			
+
 			if(prim != null)
 			{
 				gen = prim.getIDGenerator();
-				if(gen != null) {
-					try { 
-						prim.setValue(this, gen.nextVal(conn, this)); 
-					} catch (Exception e) {
+				if(gen != null)
+				{
+					try
+					{
+						prim.setValue(this, gen.nextVal(conn, this));
+					}
+					catch(Exception e)
+					{
 					}
 				}
 			}
-			
+
 			fillPreparedStatement(stmt, true);
-			
+
 			stmt.execute();
-	
-			if(gen instanceof IDGeneratorAUTO) {
-				try { 
-					prim.setValue(this, gen.lastVal(conn, this)); 
-				} catch (Exception e) {
+
+			if(gen instanceof IDGeneratorAUTO)
+			{
+				try
+				{
+					prim.setValue(this, gen.lastVal(conn, this));
+				}
+				catch(Exception e)
+				{
 				}
 			}
-			
-/*
-			try {
-				// versuche to generierte ID zu ermitteln und im Object abzulegen
-				if(getPrimdesc().getIDGenerator() != null)
-					getPrimdesc().setValue(this, getPrimdesc().getIDGenerator().getGeneratedID(conn, this));
-			} catch (Exception e) {
-				log.error("insert Record", e);
-			}
-*/
-			
+
+			/*
+			 * try { // versuche to generierte ID zu ermitteln und im Object abzulegen if(getPrimdesc().getIDGenerator() != null) getPrimdesc().setValue(this, getPrimdesc().getIDGenerator().getGeneratedID(conn, this)); } catch (Exception e) { log.error("insert Record", e); }
+			 */
+
 			setFound(true);
-		} finally {
+		}
+		finally
+		{
 			doClose(stmt);
 		}
 	}
 
-	
-	
 	public void insert() throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			insert(conn);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
-
 
 	public void insert(Connection conn) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_INSERT);
 
-		try 
+		try
 		{
 			Desc prim = getPrimdesc();
 			IDGenerator gen = null;
-			
+
 			if(prim != null)
 			{
 				gen = prim.getIDGenerator();
-				if(gen != null) {
-					try { 
-						prim.setValue(this, gen.nextVal(conn, this)); 
-					} catch (Exception e) {
+				if(gen != null)
+				{
+					try
+					{
+						prim.setValue(this, gen.nextVal(conn, this));
+					}
+					catch(Exception e)
+					{
 					}
 				}
 			}
-			
+
 			fillPreparedStatement(stmt, true);
-			
+
 			stmt.execute();
-	
-			if(gen instanceof IDGeneratorAUTO) {
-				try { 
-					prim.setValue(this, gen.lastVal(conn, this)); 
-				} catch (Exception e) {
+
+			if(gen instanceof IDGeneratorAUTO)
+			{
+				try
+				{
+					prim.setValue(this, gen.lastVal(conn, this));
+				}
+				catch(Exception e)
+				{
 				}
 			}
-			
-/*
-			try {
-				// versuche to generierte ID zu ermitteln und im Object abzulegen
-				if(getPrimdesc().getIDGenerator() != null)
-					getPrimdesc().setValue(this, getPrimdesc().getIDGenerator().getGeneratedID(conn, this));
-			} catch (Exception e) {
-				log.error("insert Record", e);
-			}
-*/
-			
+
+			/*
+			 * try { // versuche to generierte ID zu ermitteln und im Object abzulegen if(getPrimdesc().getIDGenerator() != null) getPrimdesc().setValue(this, getPrimdesc().getIDGenerator().getGeneratedID(conn, this)); } catch (Exception e) { log.error("insert Record", e); }
+			 */
+
 			setFound(true);
-		} finally {
+		}
+		finally
+		{
 			doClose(stmt);
 		}
 	}
@@ -446,71 +466,77 @@ public abstract class Table extends Part
 	{
 		queryToStream(conn, where, out, Constant.ENCODE_UTF8);
 	}
-	
+
 	public void queryToStream(Connection conn, String where, OutputStream out, String encoding) throws Exception
 	{
 		String sql = getQuery(SQL_SELECT);
 
 		PreparedStatement stmt = conn.prepareStatement(sql + " " + where);
 		ResultSet rset = null;
-		
-		try 
+
+		try
 		{
 			rset = stmt.executeQuery();
-	
+
 			byte endline = '\n';
-	
-			while (rset.next())
+
+			while(rset.next())
 			{
-				Table table = (Table) this.getClass().newInstance();
-	
+				Table table = (Table)this.getClass().newInstance();
+
 				getStaticLocal().generator.fillPart(rset, table);
-	
+
 				//out.write(Formatter.getStringC(300, table.buildBytes());
 				out.write(table.buildBytes(encoding));
 				out.write('\r');
 				out.write(endline);
 			}
-		} finally {
+		}
+		finally
+		{
 			doClose(rset);
 			doClose(stmt);
 		}
 	}
 
 	Desc primdesc = null;
-	
-	public Desc getPrimdesc() 
+
+	public Desc getPrimdesc()
 	{
 		if(primdesc == null && getDescIDs().length > 0)
 			primdesc = getDescIDs()[0];
 
-		return primdesc;	
+		return primdesc;
 	}
-	
+
 	public void find() throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			find(conn);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
-	
+
 	public void find(Connection conn) throws Exception
 	{
 		getCachedDesc();
 		Desc[] descids = getDescIDs();
 
-		if(descids.length == 1) 
+		if(descids.length == 1)
 		{
 			find(conn, getPrimdesc().getValue(this));
-		} 
-		else 
+		}
+		else
 		{
 			Object[] val = new Object[descids.length];
-			for(int i=0; i < descids.length; i++) {
+			for(int i = 0; i < descids.length; i++)
+			{
 				val[i] = descids[i].getValue(this);
 			}
 			find(conn, val);
@@ -520,145 +546,165 @@ public abstract class Table extends Part
 	public void find(Object id) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			find(conn, id);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
 
 	public void find(Connection conn, Object id) throws Exception
 	{
-		find(conn, new Object[] {id});
+		find(conn, new Object[] { id });
 	}
 
 	public void find(Object ids[]) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			find(conn, ids);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
 
-	
 	Connection conn = null;
 	PreparedStatement stmt[] = null;
 	boolean loop = false;
-	
+
 	public void loop_init() throws Exception
 	{
 		loop_init(getConnection());
 	}
-	
+
 	public void loop_init(Connection conn) throws Exception
 	{
 		loop = true;
-		this.conn = conn; 
-		
+		this.conn = conn;
+
 		stmt = new PreparedStatement[6];
 	}
-	
+
 	public void loop_exit()
 	{
 		loop_exit(true);
 	}
-	
+
 	public void loop_exit(boolean close)
 	{
 		loop = false;
-		for(int i=0; i < stmt.length; i++)
+		for(int i = 0; i < stmt.length; i++)
 			doClose(stmt[i]);
-		
+
 		if(close)
 			doClose(this.conn);
 	}
-		
-	
+
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_FIND);
-			
+
 		if(!this.hasPrimary())
 			throw new NoPrimaryColumnException(this);
 
 		ResultSet rset = null;
-		try 
+		try
 		{
 			// Find by IDs
 			fillParameter(stmt, ids);
-			
+
 			rset = stmt.executeQuery();
 			rset.setFetchSize(1);
-			
+
 			found = rset.next();
-			if (found) {
+			if(found)
+			{
 				getStaticLocal().generator.fillPart(rset, this);
-			} else {
+			}
+			else
+			{
 				LogFactory.getLog(this.getClass()).warn("no result (" + getQuery(SQL_FIND) + ")");
 			}
-		} finally {
+		}
+		finally
+		{
 			doClose(rset);
 			doClose(stmt);
 		}
 	}
-	
 
 	public void findRow(int row) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			findRow(conn, row);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
-	
+
 	public void findRow(Connection conn, int row) throws Exception
 	{
 		PreparedStatement stmt = getStmtScroll(conn, SQL_FIND);
-		
+
 		ResultSet rset = null;
-		try 
+		try
 		{
 			rset = stmt.executeQuery();
 			rset.setFetchSize(1);
-			
+
 			rset.next();
 			found = rset.absolute(row);
-			if (found) {
+			if(found)
+			{
 				getStaticLocal().generator.fillPart(rset, this);
-			} else {
+			}
+			else
+			{
 				LogFactory.getLog(this.getClass()).warn("no result (" + getQuery(SQL_FIND) + ")");
 			}
-		} finally {
+		}
+		finally
+		{
 			doClose(rset);
 			doClose(stmt);
 		}
 	}
-	
-	
-	public void fillByResultSet(ResultSet rset) 
-	{ 
-		try {
+
+	public void fillByResultSet(ResultSet rset)
+	{
+		try
+		{
 			getStaticLocal().generator.fillPartPartial(rset, this);
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			System.out.println(e);
 		}
 	}
 
-
 	public void find(String where, Object[] params) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			find(conn, where, params);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
@@ -672,19 +718,25 @@ public abstract class Table extends Part
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 
 		fillParameter(stmt, params);
-		
+
 		ResultSet rset = null;
-		
-		try {
+
+		try
+		{
 			rset = stmt.executeQuery();
-	
+
 			found = rset.next();
-			if (found) {
+			if(found)
+			{
 				getStaticLocal().generator.fillPart(rset, this);
-			} else {
+			}
+			else
+			{
 				LogFactory.getLog(this.getClass()).warn("no result (" + sql + ")");
 			}
-		} finally {
+		}
+		finally
+		{
 			doClose(rset);
 			doClose(stmt);
 		}
@@ -694,39 +746,44 @@ public abstract class Table extends Part
 	 * static Find Methods
 	 */
 
-	
-	public static <T extends Table> T find(Class<T> clazz, Object id) throws Exception 
+	public static <T extends Table> T find(Class<T> clazz, Object id) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection(clazz);
 			return find(clazz, conn, id);
-		} finally {
+		}
+		finally
+		{
 			doSClose(conn);
 		}
 	}
 
-	public static <T extends Table> T find(Class<T> clazz, Object[] id) throws Exception 
+	public static <T extends Table> T find(Class<T> clazz, Object[] id) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection(clazz);
 			return find(clazz, conn, id);
-		} finally {
+		}
+		finally
+		{
 			doSClose(conn);
 		}
 	}
 
-	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object id) throws Exception 
+	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object id) throws Exception
 	{
 		T inst = clazz.newInstance();
 
-		inst.find(conn, new Object[]{id});
+		inst.find(conn, new Object[] { id });
 
 		return inst;
 	}
-	
-	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object[] id) throws Exception 
+
+	public static <T extends Table> T find(Class<T> clazz, Connection conn, Object[] id) throws Exception
 	{
 		T inst = clazz.newInstance();
 
@@ -738,10 +795,13 @@ public abstract class Table extends Part
 	public static <T extends Table> List<T> find(Class<T> clazz, String where, Object[] params) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection(clazz);
 			return find(clazz, conn, where, params);
-		} finally {
+		}
+		finally
+		{
 			doSClose(conn);
 		}
 	}
@@ -756,35 +816,36 @@ public abstract class Table extends Part
 			sql += " " + where;
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
-		
+
 		fillParameter(stmt, params);
-		
+
 		ResultSet rset = null;
-		
+
 		List<T> list = new ArrayList<T>(INITIALCAP);
 
-		try 
+		try
 		{
 			rset = stmt.executeQuery();
 			//rset.setFetchSize(100);
-			
-			while (rset.next())
+
+			while(rset.next())
 			{
 				getStaticLocal(inst).generator.fillPart(rset, inst);
-	
+
 				list.add(inst);
-	
+
 				inst = clazz.newInstance();
 			}
-		} finally {
+		}
+		finally
+		{
 			doSClose(rset);
 			doSClose(stmt);
 		}
-		
+
 		return list;
 	}
-	
-	
+
 	public static <T extends Table> void find(Class<T> clazz, Connection conn, String where, Object[] params, TableProcessor resulter) throws Exception
 	{
 		T inst = clazz.newInstance();
@@ -795,64 +856,70 @@ public abstract class Table extends Part
 			sql += " " + where;
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
-		
+
 		fillParameter(stmt, params);
-		
+
 		ResultSet rset = null;
 
-		try 
+		try
 		{
 			rset = stmt.executeQuery();
 			//rset.setFetchSize(100);
-			
+
 			inst = clazz.newInstance();
 
-			while (rset.next())
+			while(rset.next())
 			{
 				getStaticLocal(inst).generator.fillPart(rset, inst);
-	
+
 				resulter.process(inst);
-	
+
 			}
-		} finally {
+		}
+		finally
+		{
 			doSClose(rset);
 			doSClose(stmt);
 		}
 	}
 
-
-	public static<T extends Table> int delete(Class<T> clazz, Object id) throws Exception
+	public static <T extends Table> int delete(Class<T> clazz, Object id) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection(clazz);
 			return delete(clazz, conn, id);
-		} finally {
+		}
+		finally
+		{
 			doSClose(conn);
 		}
 	}
 
 	public static <T extends Table> int delete(Class<T> clazz, Connection conn, Object id) throws Exception
 	{
-		return delete(clazz, conn, new Object[] { id } );
+		return delete(clazz, conn, new Object[] { id });
 	}
 
 	public static <T extends Table> int delete(Class<T> clazz, Connection conn, Object[] ids) throws Exception
 	{
 		Table inst = (Table)clazz.newInstance();
-		
+
 		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
 
 		if(!inst.hasPrimary())
 			throw new NoPrimaryColumnException(inst);
-		
-		try 
+
+		try
 		{
 			// Delete by ID
 			fillParameter(stmt, ids);
-	
+
 			return stmt.executeUpdate();
-		} finally {
+		}
+		finally
+		{
 			doSClose(stmt);
 		}
 	}
@@ -860,37 +927,38 @@ public abstract class Table extends Part
 	public int delete() throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			return delete(conn);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
-
 
 	public int delete(Connection conn) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_DELETE);
 
-		try 
+		try
 		{
 			// Delete by combined ID
 			Desc[] descs = getDescIDs();
-	
-			for(int i=0; i < descs.length; i++)
+
+			for(int i = 0; i < descs.length; i++)
 			{
 				if(descs[i].getValue(this) instanceof byte[])
-					stmt.setBytes(i+1, (byte[])descs[i].getValue(this));
+					stmt.setBytes(i + 1, (byte[])descs[i].getValue(this));
 				else
-					stmt.setObject(i+1, descs[i].getValue(this));
+					stmt.setObject(i + 1, descs[i].getValue(this));
 			}
-			
-			
 
-			
 			return stmt.executeUpdate();
-		} finally {
+		}
+		finally
+		{
 			doClose(stmt);
 		}
 	}
@@ -898,173 +966,189 @@ public abstract class Table extends Part
 	public int update() throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection();
 			return update(conn);
-		} finally {
+		}
+		finally
+		{
 			doClose(conn);
 		}
 	}
 
-	public int update (Connection conn) throws Exception
+	public int update(Connection conn) throws Exception
 	{
-//		if(!isDirty())
-//			return 0;
+		//		if(!isDirty())
+		//			return 0;
 
 		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
 
 		if(!this.hasPrimary())
 			throw new NoPrimaryColumnException(this);
 
-		try 
+		try
 		{
 			fillPreparedStatement(stmt, false);
-	
+
 			return stmt.executeUpdate();
-		} finally {
+		}
+		finally
+		{
 			doClose(stmt);
 		}
 	}
-	
-	
-	
+
 	PreparedStatement batch_stmt;
 	int batch_type;
 
-	public void batch_init(Connection conn) throws Exception {
+	public void batch_init(Connection conn) throws Exception
+	{
 		batch_init(conn, SQL_INSERT);
 	}
 
-	
-	public void batch_init(Connection conn, int type) throws Exception {
+	public void batch_init(Connection conn, int type) throws Exception
+	{
 		batch_type = type;
 		batch_stmt = getStmt(conn, type);
 	}
 
-	public void batch_add_insert() throws Exception {
+	public void batch_add_insert() throws Exception
+	{
 		batch_add(SQL_INSERT);
 	}
-	
-	public void batch_add_update() throws Exception {
+
+	public void batch_add_update() throws Exception
+	{
 		batch_add(SQL_UPDATE);
 	}
-	
-	public void batch_add(int type) throws Exception {
+
+	public void batch_add(int type) throws Exception
+	{
 		fillPreparedStatement(batch_stmt, type == SQL_INSERT);
 		batch_stmt.addBatch();
 	}
-	
-	public void batch_add() throws Exception {
+
+	public void batch_add() throws Exception
+	{
 		fillPreparedStatement(batch_stmt, batch_type == SQL_INSERT);
 		batch_stmt.addBatch();
 	}
-	
-	public void batch_add(String sql) throws Exception {
+
+	public void batch_add(String sql) throws Exception
+	{
 		batch_stmt.addBatch(sql);
 	}
-	
-	public void batch_close() throws Exception {
+
+	public void batch_close() throws Exception
+	{
 		doClose(batch_stmt);
 	}
-	
-	public void batch_execute() throws Exception {
+
+	public void batch_execute() throws Exception
+	{
 		batch_stmt.executeBatch();
 	}
-	
-	public void batch_clear() throws Exception {
+
+	public void batch_clear() throws Exception
+	{
 		batch_stmt.clearBatch();
 	}
 
-	public int getDefaultconnection() {
+	public int getDefaultconnection()
+	{
 		return getStaticLocal().defaultconnection;
 	}
 
-	public void setDefaultconnection(int defaultconnection) {
+	public void setDefaultconnection(int defaultconnection)
+	{
 		getStaticLocal().defaultconnection = defaultconnection;
 	}
 
-	
-	public boolean isFound() {
+	public boolean isFound()
+	{
 		return found;
 	}
 
-	public void setFound(boolean found) {
+	public void setFound(boolean found)
+	{
 		this.found = found;
 	}
-	
 
 	public static <T extends Table> List<T> query(Class<T> clazz, String sql, Object[] params) throws Exception
 	{
 		Connection conn = null;
-		try {
+		try
+		{
 			conn = getConnection(clazz);
 			return query(clazz, conn, sql, params);
-		} finally {
+		}
+		finally
+		{
 			doSClose(conn);
 		}
 	}
-	
+
 	public final static void fillParameter(PreparedStatement stmt, Object[] params) throws Exception
 	{
-		for(int i=0; params != null && i < params.length; i++)
+		for(int i = 0; params != null && i < params.length; i++)
 		{
 			if(params[i] instanceof byte[])
-				stmt.setBytes(i+1, (byte[])params[i]);
+				stmt.setBytes(i + 1, (byte[])params[i]);
 			else
-				stmt.setObject(i+1, params[i]);
+				stmt.setObject(i + 1, params[i]);
 		}
 	}
-	
+
 	public static <T extends Table> List<T> query(Class<T> clazz, Connection conn, String sql, Object[] params) throws Exception
 	{
-        ArrayList<T> list = new ArrayList<T>(INITIALCAP);
+		ArrayList<T> list = new ArrayList<T>(INITIALCAP);
 
-        PreparedStatement stmt = conn.prepareStatement(sql);
-     
-        fillParameter(stmt, params);
-        
-        ResultSet rset = null;
-        
-        try 
-        {
-        	rset = stmt.executeQuery(sql);
-            
-        	while(rset.next()) {
-	   			T row = clazz.newInstance();                           
-	            row.fillByResultSet(rset);
-	            list.add(row);
-            }
-        	
-        } finally {
-        	doSClose(rset);
-        	doSClose(stmt);
-        }
-              
-        return list;
+		PreparedStatement stmt = conn.prepareStatement(sql);
+
+		fillParameter(stmt, params);
+
+		ResultSet rset = null;
+
+		try
+		{
+			rset = stmt.executeQuery(sql);
+
+			while(rset.next())
+			{
+				T row = clazz.newInstance();
+				row.fillByResultSet(rset);
+				list.add(row);
+			}
+
+		}
+		finally
+		{
+			doSClose(rset);
+			doSClose(stmt);
+		}
+
+		return list;
 	}
 
-	public boolean hasPrimary() {
+	public boolean hasPrimary()
+	{
 		return getStaticLocal().primarydefined;
 	}
 
-	public String getNativecolumns()
-    {
-    	return nativecolumns;
-    }
+	public void addNative(String column, String value)
+	{
+		getStaticLocal().nativecolumns += column + ",";
+		getStaticLocal().nativevalues += value + ",";
+	}
 
-	public void setNativecolumns(String nativecolumns)
-    {
-    	this.nativecolumns = nativecolumns;
-    }
+	public String lookupNativeColumns()
+	{
+		return getStaticLocal().nativecolumns;
+	}
 
-	public String getNativevalues()
-    {
-    	return nativevalues;
-    }
-
-	public void setNativevalues(String nativevalues)
-    {
-    	this.nativevalues = nativevalues;
-    }
-	
+	public String lookupNativeValues()
+	{
+		return getStaticLocal().nativevalues;
+	}
 }

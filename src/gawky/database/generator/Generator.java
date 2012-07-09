@@ -202,7 +202,12 @@ public class Generator
 		Desc   desc;
 
 		StringBuilder sql = new StringBuilder(2000);
-		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(bean.getNativecolumns());
+		sql.append("INSERT INTO ")
+		   .append(bean.getTableName())
+		   .append(" ( ");
+		
+		if(bean.lookupNativeColumns() != null)
+			sql.append(bean.lookupNativeColumns());
 
 		StringBuilder params = new StringBuilder(1000);
 
@@ -253,7 +258,9 @@ public class Generator
 		}
 
 		sql.append(" ) VALUES ( ");
-		sql.append(bean.getNativevalues()).append(params);
+		if(bean.lookupNativeValues() != null)
+			sql.append(bean.lookupNativeValues());
+		sql.append(params);
 		sql.append(" ) ");
 
 		if(log.isDebugEnabled())
@@ -268,7 +275,12 @@ public class Generator
 		Desc   desc;
 
 		StringBuilder sql = new StringBuilder(2000);
-		sql.append("INSERT INTO ").append(bean.getTableName()).append(" ( ").append(bean.getNativecolumns());
+		sql.append("INSERT INTO ")
+		   .append(bean.getTableName())
+		   .append(" ( ");
+		
+		if(bean.lookupNativeColumns() != null)
+			sql.append(bean.lookupNativeColumns());
 
 		StringBuilder params = new StringBuilder(1000);
 
@@ -319,7 +331,12 @@ public class Generator
 		}
 
 		sql.append(" ) VALUES ( ");
-		sql.append(bean.getNativevalues()).append(params);
+		
+		if(bean.lookupNativeValues() != null)
+			sql.append(bean.lookupNativeValues());
+		
+		sql.append(params);
+		
 		sql.append(" ) ");
 
 		if(log.isDebugEnabled())
