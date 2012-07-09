@@ -14,8 +14,7 @@ public class DaoObject extends Table {
 	//Record definition
 	public Desc[] getDesc()
 	{
-		setNativecolumns("id,");
-		setNativevalues("proud_ikaros_seq.nextval,");
+		addNative("id", "proud_ikaros_seq.nextval");
 
 		
 //		setDialect(new MySQL());
