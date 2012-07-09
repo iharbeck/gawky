@@ -41,12 +41,14 @@ public class Format
 	
 	public static final String lowerNumber(String val, int dec) 
 	{
-		if(val.length() == 0)
-			return "0";
+		return gawky.global.Format.decimalformat(val, dec);
 		
-		BigDecimal dc = new BigDecimal(val);
-		dc = dc.divide(decimals[dec]);
-		return dc.setScale(dec).toString();
+//		if(val.length() == 0)
+//			return "0";
+//		
+//		BigDecimal dc = new BigDecimal(val);
+//		dc = dc.divide(decimals[dec]);
+//		return dc.setScale(dec).toString();
 		
 		//return Double.toString((Double.parseDouble(val)/decimals[dec]));
 	}
