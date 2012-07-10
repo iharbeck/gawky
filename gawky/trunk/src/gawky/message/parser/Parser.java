@@ -218,7 +218,7 @@ public class Parser
 
 	public final static String rtrim(String value, int start, int end)
 	{
-		while(end > 0 && value.charAt(end - 1) <= ' ')
+		while(end > start && value.charAt(end - 1) <= ' ')
 		{
 			end--;
 		}
