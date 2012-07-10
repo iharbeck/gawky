@@ -69,16 +69,21 @@ public class LOG
 
 		File folder = new File(logfolder);
 		folder.mkdir();
-		folder.setWritable(true, true);
-		folder.setReadable(true, true);
-
-		String logfile = logfolder + "/default2.log";
+		folder.setWritable(true, false);
+		folder.setReadable(true, false);
+		folder.setExecutable(true, false);
+		
+		String logfile = logfolder + "/default4.log";
 		
 		// Permissions des Logfile setzen
 		File lf = new File(logfile);
-		lf.setWritable(true, true);
-		lf.setReadable(true, true);
-		lf.setExecutable(true, true);
+		
+		if(lf.exists())
+			lf.createNewFile();
+		
+		lf.setWritable(true, false);
+		lf.setReadable(true, false);
+		lf.setExecutable(true, false);
 		
 		root.addAppender(new RollingFileAppender(new PatternLayout(LOG_PATTERN), logfile)); //PatternLayout.TTCC_CONVERSION_PATTERN;
 
