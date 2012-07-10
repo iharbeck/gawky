@@ -1139,8 +1139,16 @@ public abstract class Table extends Part
 	
 	public void addNative(String column, String value)
 	{
-		getStaticLocal().nativecolumns += column + ",";
-		getStaticLocal().nativevalues += value + ",";
+		if(getStaticLocal().nativecolumns == null)
+		{
+			getStaticLocal().nativecolumns = column + ",";
+			getStaticLocal().nativevalues = value + ",";
+		}
+		else
+		{
+			getStaticLocal().nativecolumns += column + ",";
+			getStaticLocal().nativevalues += value + ",";
+		}
 	}
 
 	public void clearNative()
