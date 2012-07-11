@@ -73,20 +73,22 @@ public class LOG
 		folder.setReadable(true, false);
 		folder.setExecutable(true, false);
 		
-		String logfile = logfolder + "/default4.log";
+		String logfile = logfolder + "/default.log";
 		
 		// Permissions des Logfile setzen
 		File lf = new File(logfile);
 		
-		if(lf.exists())
+		if(!lf.exists())
 			lf.createNewFile();
 		
 		lf.setWritable(true, false);
 		lf.setReadable(true, false);
 		lf.setExecutable(true, false);
 		
-		root.addAppender(new RollingFileAppender(new PatternLayout(LOG_PATTERN), logfile)); //PatternLayout.TTCC_CONVERSION_PATTERN;
-
+		try {
+			root.addAppender(new RollingFileAppender(new PatternLayout(LOG_PATTERN), logfile)); //PatternLayout.TTCC_CONVERSION_PATTERN;
+		} catch (Exception e) {
+		}
 		
 		log = Logger.getLogger(LOG.class);
 		log.setLevel(Level.INFO);
@@ -94,7 +96,7 @@ public class LOG
 		System.setOut(LOG.createLoggingProxy(System.out));
 		System.setErr(LOG.createLoggingProxy(System.err));
 		
-		LOG.log("GAWKY INIT IN PROGRESS.\n***\n****\n****");
+		LOG.log("GAWKY INIT IN PROGRESS.\n****\n****\n****");
 		System.out.println("OUT: Console Output Redirect");
 		System.err.println("ERR: Console Output Redirect");
 		
@@ -102,7 +104,6 @@ public class LOG
 		// AUSGABE der LOG - SETTINGS
 		
 		Formatter formatter = new Formatter();
-		StringBuilder logInfo = new StringBuilder(500);
 
 		formatter.format(" > %-6s | %s\n", "LEVEL", "NAME");
 
