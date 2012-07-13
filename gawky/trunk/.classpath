@@ -46,13 +46,11 @@
 	<classpathentry kind="lib" path="lib/mail/imap.jar"/>
 	<classpathentry kind="lib" path="lib/mail/pop3.jar"/>
 	<classpathentry kind="lib" path="lib/html/commons-io-2.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/html/core-renderer-minimal.jar"/>
-	<classpathentry kind="lib" path="lib/html/core-renderer.jar"/>
+	<classpathentry kind="lib" path="lib/html/core-renderer.jar" sourcepath="C:/work/saucer/src/java"/>
 	<classpathentry kind="lib" path="lib/html/htmlcleaner-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/html/httpclient-4.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/html/httpcore-4.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/html/httpmime-4.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/html/iText-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.45.jar"/>
 	<classpathentry kind="lib" path="lib/svn/svnkit-1.7.4-v1.jar"/>
@@ -61,5 +59,6 @@
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
+	<classpathentry kind="lib" path="lib/html/iText-2.1.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
