@@ -101,7 +101,7 @@ public class AConnectionPool
       }
    }
 
-   private synchronized void removeConnection(AConnection conn)
+   public synchronized void removeConnection(AConnection conn)
    {
        try {
        	conn.finalclose();
