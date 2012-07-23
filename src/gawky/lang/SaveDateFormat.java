@@ -6,10 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ThreadDateFormat
+public class SaveDateFormat
 {
 	private final String format;
-	private static final ThreadLocal<Map<String, SimpleDateFormat>> map = new ThreadLocal<Map<String, SimpleDateFormat>>()
+
+	private static final ThreadLocal<Map<String, SimpleDateFormat>> mapformat = new ThreadLocal<Map<String, SimpleDateFormat>>()
 	{
 		public Map<String, SimpleDateFormat> initialValue()
 		{
@@ -19,19 +20,19 @@ public class ThreadDateFormat
 
 	private SimpleDateFormat getDateFormat(String format)
 	{
-		Map<String, SimpleDateFormat> formatters = map.get();
-		SimpleDateFormat formatter = formatters.get(format);
-		
+		Map<String, SimpleDateFormat> parsers = mapformat.get();
+		SimpleDateFormat formatter = parsers.get(format);
+
 		if(formatter == null)
 		{
 			formatter = new SimpleDateFormat(format);
-			formatters.put(format, formatter);
+			parsers.put(format, formatter);
 		}
-		
+
 		return formatter;
 	}
 
-	public ThreadDateFormat(String format)
+	public SaveDateFormat(String format)
 	{
 		this.format = format;
 	}
