@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class SaveDateFormat
 {
@@ -50,5 +51,20 @@ public class SaveDateFormat
 	public Date parse(String day) throws ParseException
 	{
 		return getDateFormat(format).parse(day);
+	}
+	
+	public String getPattern()
+	{
+		return format;
+	}
+	
+	public void setLenient(boolean lenient)
+	{
+		getDateFormat(format).setLenient(lenient);
+	}
+	
+	public void setTimeZone(TimeZone zone)
+	{
+		getDateFormat(format).setTimeZone(zone);
 	}
 }
