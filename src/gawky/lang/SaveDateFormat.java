@@ -53,9 +53,9 @@ public class SaveDateFormat
 		return getDateFormat(format).parse(day);
 	}
 	
-	public String getPattern()
+	public String toPattern()
 	{
-		return format;
+		return getDateFormat(format).toPattern();
 	}
 	
 	public void setLenient(boolean lenient)
