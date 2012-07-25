@@ -190,8 +190,11 @@ public class DB
 			fillParams(stmt_select, params);
 
 			rset = stmt_select.executeQuery();
-			rset.next();
-			return rset.getString(1);
+			
+			if(rset.next())
+				return rset.getString(1);
+			
+			return "";
 		}
 		finally
 		{
