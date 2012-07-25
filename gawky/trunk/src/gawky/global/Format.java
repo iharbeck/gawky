@@ -1,10 +1,13 @@
 package gawky.global;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Format
 {
@@ -66,15 +69,60 @@ public class Format
 			return null;
 		}
 	}
+	
+
+	static ConcurrentHashMap<String, SimpleDateFormat> dateHash = new ConcurrentHashMap<String, SimpleDateFormat>();
+
+	public static String bytesToStringUTFNIO(byte[] bytes)
+	{
+		CharBuffer cBuffer = ByteBuffer.wrap(bytes).asCharBuffer();
+		return cBuffer.toString();
+	}
+
+	public static byte[] stringToBytesUTFNIO(String str)
+	{
+		char[] buffer = str.toCharArray();
+		byte[] b = new byte[buffer.length << 1];
+		CharBuffer cBuffer = ByteBuffer.wrap(b).asCharBuffer();
+		for(int i = 0; i < buffer.length; i++)
+			cBuffer.put(buffer[i]);
+		return b;
+	}
+
+	public static byte[] stringToBytesASCII(String str)
+	{
+		byte[] b = new byte[str.length()];
+		for(int i = 0; i < b.length; i++)
+		{
+			b[i] = (byte)str.charAt(i);
+		}
+		return b;
+	}
 
 	public static String convertDate(String datum, String pattern, String targetPattern) throws Exception
 	{
-
 		if(datum == null)
 			datum = "";
+
+		SimpleDateFormat sdfparse = dateHash.get(pattern);
+
+		if(sdfparse == null)
+		{
+			sdfparse = new SimpleDateFormat(pattern);
+			dateHash.put(pattern, sdfparse);
+		}
+
+		SimpleDateFormat sdftarget = dateHash.get(targetPattern);
+
+		if(sdftarget == null)
+		{
+			sdftarget = new SimpleDateFormat(targetPattern);
+			dateHash.put(targetPattern, sdftarget);
+		}
+
 		try
 		{
-			return new SimpleDateFormat(targetPattern).format(new SimpleDateFormat(pattern).parse(datum));
+			return sdftarget.format(sdfparse.parse(datum));
 		}
 		catch(Exception ex)
 		{
@@ -149,10 +197,10 @@ public class Format
 	public static String decimalformat(String cent, int decs)
 	{
 		int len = cent.length();
-		
+
 		if(len == 0)
 			return "0";
-			
+
 		int pos = len;
 
 		if(len <= decs)
