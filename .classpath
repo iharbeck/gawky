@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.11.jar" sourcepath="C:/logj/apache-log4j-1.2.17/src/main/java"/>
 	<classpathentry kind="lib" path="lib/codegen/freemarker.jar"/>
 	<classpathentry kind="lib" path="lib/codegen/javassist.jar"/>
@@ -60,5 +59,6 @@
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
 	<classpathentry kind="lib" path="lib/html/iText-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
