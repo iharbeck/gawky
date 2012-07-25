@@ -1,10 +1,11 @@
 package gawky.svn;
 
+import gawky.lang.SaveDateFormat;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -32,8 +33,8 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 public class SVNClient
 {
-	static SimpleDateFormat sdfSVN = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-	static SimpleDateFormat SDFddmmyyyyHHmmss = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+	static SaveDateFormat sdfSVN = new SaveDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	static SaveDateFormat SDFddmmyyyyHHmmss = new SaveDateFormat("dd.mm.yyyy HH:mm:ss");
 	
 	public static int REVISION_LATEST = -1;
 

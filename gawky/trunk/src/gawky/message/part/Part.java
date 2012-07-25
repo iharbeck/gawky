@@ -25,8 +25,8 @@ public abstract class Part implements Cloneable
 
 	private static boolean dotostring = true;
 	
-	private static Parser    parser;
-    private static Generator generator;
+	private volatile static Parser    parser;
+    private volatile static Generator generator;
 
     private Part clone;
     
