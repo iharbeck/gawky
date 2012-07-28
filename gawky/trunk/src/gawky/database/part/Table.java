@@ -1011,6 +1011,7 @@ public abstract class Table extends Part
 	{
 		batch_type = type;
 		batch_stmt = getStmt(conn, type);
+		
 	}
 
 	public void batch_add_insert() throws Exception
