@@ -2,12 +2,12 @@ package gawky.range;
 
 public class Range<K, V>
 {
-    public K upper;
+    public K range_end;
     public V value;
 	  
-    public Range(K upper, V value)
+    public Range(K range_end, V value)
     {
-	this.upper = upper;
+	this.range_end = range_end;
 	this.value = value;
     }
 }
