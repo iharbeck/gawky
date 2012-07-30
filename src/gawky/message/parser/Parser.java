@@ -126,9 +126,11 @@ public class Parser
 
 						position = start;
 
-						if(desc.len > 0 && value.length() > desc.len)
-							throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
 					}
+
+					if(desc.len > 0 && value.length() > desc.len)
+						throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
+				
 				}
 
 				if(desc.code == Desc.CODE_R) // Required Field
