@@ -78,20 +78,27 @@ public class DB
 	static public Connection getConnection() throws SQLException
 	{
 		Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
-		log.info("get connection [" + conn + "]");
+		
+		if(log.isInfoEnabled())
+			log.info("get connection [" + conn + "]");
+		
 		return conn;
 	}
 
 	static public Connection getConnection(int number) throws SQLException
 	{
 		Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
-		log.info("get connection [" + conn + "]");
+		
+		if(log.isInfoEnabled())
+			log.info("get connection [" + conn + "]");
+		
 		return conn;
 	}
 
 	static public Connection getConnection(String alias) throws SQLException
 	{
-		log.info("get connection");
+		if(log.isInfoEnabled())
+			log.info("get connection");
 		return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
 	}
 
