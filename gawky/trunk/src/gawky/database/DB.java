@@ -21,6 +21,9 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.jolbox.bonecp.BoneCP;
+import com.jolbox.bonecp.BoneCPConfig;
+
 /**
  * @author Ingo Harbeck
  * 
@@ -31,6 +34,8 @@ public class DB
 	private static Log log = LogFactory.getLog(DB.class);
 	private static int INITIALCAP = 2000;
 
+	static HashMap<String, BoneCP> dbpool = new HashMap<String, BoneCP>();
+	
 	public static void init()
 	{
 		int dbc = Option.getProperties("db_${staging}.driver").length;
@@ -59,13 +64,35 @@ public class DB
 			}
 
 			log.info("Register: " + dburl);
-
+			
+			try
+            {
+				Class.forName(dbdriver);
+            }
+            catch(Exception e)
+            {
+	            System.out.println("No Suitable Driver: " + dbdriver);
+            }
+			
+			
+			BoneCPConfig config = new BoneCPConfig();
+			config.setJdbcUrl(dburl); 
+			config.setUsername(dbuser); 
+			config.setPassword(dbpass);
+			config.setMinConnectionsPerPartition(5);
+			config.setMaxConnectionsPerPartition(10);
+			config.setPartitionCount(2);
+			
 			try
 			{
+				BoneCP connectionPool = new BoneCP(config); 
+				
 				if(dbalias == null)
-					new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000, props);
+					//new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000, props);
+					dbpool.put(Integer.toString(i), connectionPool);
 				else
-					new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, dbalias, 5000000, props);
+					//new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, dbalias, 5000000, props);
+					dbpool.put(dbalias, connectionPool);
 			}
 			catch(Exception e)
 			{
@@ -77,7 +104,9 @@ public class DB
 	// Verbindung aus Connectionpool holen
 	static public Connection getConnection() throws SQLException
 	{
-		Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
+		//Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
+		
+		Connection conn = dbpool.get("0").getConnection();
 		
 		if(log.isInfoEnabled())
 			log.info("get connection [" + conn + "]");
@@ -87,7 +116,9 @@ public class DB
 
 	static public Connection getConnection(int number) throws SQLException
 	{
-		Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
+		//Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
+		
+		Connection conn = dbpool.get(Integer.toString(number)).getConnection();
 		
 		if(log.isInfoEnabled())
 			log.info("get connection [" + conn + "]");
@@ -99,7 +130,9 @@ public class DB
 	{
 		if(log.isInfoEnabled())
 			log.info("get connection");
-		return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
+		// return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
+		
+		return dbpool.get(alias).getConnection();
 	}
 
 	static public Driver getDriver() throws SQLException
