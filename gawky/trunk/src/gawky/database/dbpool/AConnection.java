@@ -71,18 +71,20 @@ public class AConnection implements Connection
 
 	public boolean validate()
 	{
-		try
-		{
-			ResultSet rset = conn.getMetaData().getSchemas();
-			rset.next();
-			DB.doClose(rset);
-		}
-		catch(Exception e)
-		{
-			DB.doClose(conn);
-			return false;
-		}
 		return true;
+		
+//		try
+//		{
+//			ResultSet rset = conn.getMetaData().getSchemas();
+//			rset.next();
+//			DB.doClose(rset);
+//		}
+//		catch(Exception e)
+//		{
+//			DB.doClose(conn);
+//			return false;
+//		}
+//		return true;
 	}
 
 	public boolean inUse()
@@ -97,7 +99,7 @@ public class AConnection implements Connection
 
 	public void close() throws SQLException
 	{
-		log.info("closing [" + this + "]");
+		//log.info("closing [" + this + "]");
 
 		//    	log.info("close statements[" + statements.size() + "]");
 		//         	
