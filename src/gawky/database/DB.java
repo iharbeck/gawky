@@ -23,6 +23,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
+import com.jolbox.bonecp.ConnectionHandle;
+import com.jolbox.bonecp.hooks.AbstractConnectionHook;
+import com.jolbox.bonecp.hooks.ConnectionHook;
 
 /**
  * @author Ingo Harbeck
@@ -35,7 +38,7 @@ public class DB
 	private static int INITIALCAP = 2000;
 
 	static HashMap<String, BoneCP> dbpool = new HashMap<String, BoneCP>();
-	
+
 	public static void init() throws Exception
 	{
 		int dbc = Option.getProperties("db_${staging}.driver").length;
@@ -51,6 +54,8 @@ public class DB
 			String dbalias = Option.getProperty("db_${staging}(" + i + ").alias", null);
 			String[] dbproperties = Option.getProperties("db_${staging}(" + i + ").property");
 
+			final String trigger = Option.getProperty("db_${staging}(" + i + ").trigger", null);
+
 			Properties props = new Properties();
 
 			//String urladd = "";
@@ -59,45 +64,73 @@ public class DB
 
 				for(int x = 0; x < dbproperties.length; x++)
 				{
-//					if(x == 0)
-//						urladd += "?" + dbproperties[x];
-//					else
-//						urladd += "&" + dbproperties[x];
-						
+					//					if(x == 0)
+					//						urladd += "?" + dbproperties[x];
+					//					else
+					//						urladd += "&" + dbproperties[x];
+
 					String[] val = dbproperties[x].split("=");
 					props.put(val[0], val[1]);
 				}
 			}
-			
+
 			//dburl += urladd;
-			
+
 			System.out.println(dburl);
 
 			log.info("Register: " + dburl);
-			
+
 			try
-            {
+			{
 				Class.forName(dbdriver);
-            }
-            catch(Exception e)
-            {
-	            System.out.println("No Suitable Driver: " + dbdriver);
-            }
-			
-			
+			}
+			catch(Exception e)
+			{
+				System.out.println("No Suitable Driver: " + dbdriver);
+			}
+
 			BoneCPConfig config = new BoneCPConfig();
-			config.setJdbcUrl(dburl); 
-			config.setUsername(dbuser); 
+			config.setJdbcUrl(dburl);
+			config.setUsername(dbuser);
 			config.setPassword(dbpass);
 			config.setMinConnectionsPerPartition(5);
 			config.setMaxConnectionsPerPartition(10);
 			config.setPartitionCount(2);
 			config.setDriverProperties(props);
-			
+
+			config.setConnectionHook(
+			        new AbstractConnectionHook()
+			        {
+				        @Override
+				        public void onAcquire(ConnectionHandle connection)
+				        {
+					        if(trigger != null)
+					        {
+						        Statement stmt = null;
+
+						        try
+						        {
+							        stmt = connection.createStatement();
+							        stmt.execute(trigger);
+						        }
+						        catch(Exception e)
+						        {
+
+						        }
+						        finally
+						        {
+							        DB.doClose(stmt);
+						        }
+						        super.onAcquire(connection);
+					        }
+				        }
+			        }
+			        );
+
 			try
 			{
-				BoneCP connectionPool = new BoneCP(config); 
-				
+				BoneCP connectionPool = new BoneCP(config);
+
 				if(dbalias == null)
 					//new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000, props);
 					dbpool.put(Integer.toString(i), connectionPool);
@@ -116,24 +149,24 @@ public class DB
 	static public Connection getConnection() throws SQLException
 	{
 		//Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
-		
+
 		Connection conn = dbpool.get("0").getConnection();
-		
+
 		if(log.isInfoEnabled())
 			log.info("get connection [" + conn + "]");
-		
+
 		return conn;
 	}
 
 	static public Connection getConnection(int number) throws SQLException
 	{
 		//Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
-		
+
 		Connection conn = dbpool.get(Integer.toString(number)).getConnection();
-		
+
 		if(log.isInfoEnabled())
 			log.info("get connection [" + conn + "]");
-		
+
 		return conn;
 	}
 
@@ -142,7 +175,7 @@ public class DB
 		if(log.isInfoEnabled())
 			log.info("get connection");
 		// return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
-		
+
 		return dbpool.get(alias).getConnection();
 	}
 
@@ -241,10 +274,10 @@ public class DB
 			fillParams(stmt_select, params);
 
 			rset = stmt_select.executeQuery();
-			
+
 			if(rset.next())
 				return rset.getString(1);
-			
+
 			return "";
 		}
 		finally
@@ -612,42 +645,25 @@ public class DB
 }
 
 /*
- * static final public Connection getConnection() throws Exception { //return
- * DriverManager.getConnection("jdbc:bms:pool0"); return
- * getDBSession(0).connection(); }
+ * static final public Connection getConnection() throws Exception { //return DriverManager.getConnection("jdbc:bms:pool0"); return getDBSession(0).connection(); }
  * 
- * static final public Connection getConnection(int number) throws Exception {
- * //return DriverManager.getConnection("jdbc:bms:pool" + number); return
- * getDBSession(number).connection(); }
+ * static final public Connection getConnection(int number) throws Exception { //return DriverManager.getConnection("jdbc:bms:pool" + number); return getDBSession(number).connection(); }
  * 
  * private static SessionFactory[] sessionFactory;
  * 
  * static { try { sessionFactory = new SessionFactory[dbc];
  * 
- * for(int i=0; i < dbc; i++) { String dburl = Option.getProperty("db(" + i +
- * ").url"); String dbconfig = Option.getProperty("db(" + i + ").config",
- * "hibernate.cfg.xml");
+ * for(int i=0; i < dbc; i++) { String dburl = Option.getProperty("db(" + i + ").url"); String dbconfig = Option.getProperty("db(" + i + ").config", "hibernate.cfg.xml");
  * 
  * Configuration cfg = new Configuration().configure(dbconfig);
  * 
- * cfg //.addClass(org.hibernate.auction.Item.class)
- * //.addClass(org.hibernate.auction.Bid.class)
- * //.setProperty("hibernate.dialect",
- * "org.hibernate.dialect.SQLServerDialect");
- * .setProperty("hibernate.connection.url", dburl)
- * .setProperty("hibernate.connection.password", Option.getProperty("db(" + i +
- * ").password")) .setProperty("hibernate.connection.username",
- * Option.getProperty("db(" + i + ").user"))
- * .setProperty("hibernate.connection.driver_class", Option.getProperty("db(" +
- * i + ").driver"));
+ * cfg //.addClass(org.hibernate.auction.Item.class) //.addClass(org.hibernate.auction.Bid.class) //.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect"); .setProperty("hibernate.connection.url", dburl) .setProperty("hibernate.connection.password", Option.getProperty("db(" + i + ").password")) .setProperty("hibernate.connection.username", Option.getProperty("db(" + i + ").user")) .setProperty("hibernate.connection.driver_class", Option.getProperty("db(" + i + ").driver"));
  * 
  * sessionFactory[i] = cfg.buildSessionFactory(); } }
  * 
- * public static Session getDBSession() throws Exception { return
- * getDBSession(0); }
+ * public static Session getDBSession() throws Exception { return getDBSession(0); }
  * 
- * public static Session getDBSession(int number) throws Exception { return
- * sessionFactory[number].openSession(); }
+ * public static Session getDBSession(int number) throws Exception { return sessionFactory[number].openSession(); }
  * 
  * public static void initObject(Object obj) { Hibernate.initialize(obj); }
  */
