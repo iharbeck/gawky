@@ -147,7 +147,9 @@ public class AConnectionPool
        c = new AConnection(conn, this);
        c.lease();
        connections.addElement(c);
-       log.debug("Count++: " + connections.size());
+       
+       //log.debug("Count++: " + connections.size());
+       
        return c;
    }
 
