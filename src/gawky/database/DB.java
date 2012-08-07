@@ -36,7 +36,7 @@ public class DB
 
 	static HashMap<String, BoneCP> dbpool = new HashMap<String, BoneCP>();
 	
-	public static void init()
+	public static void init() throws Exception
 	{
 		int dbc = Option.getProperties("db_${staging}.driver").length;
 
@@ -53,15 +53,25 @@ public class DB
 
 			Properties props = new Properties();
 
+			//String urladd = "";
 			if(dbproperties != null)
 			{
 
 				for(int x = 0; x < dbproperties.length; x++)
 				{
+//					if(x == 0)
+//						urladd += "?" + dbproperties[x];
+//					else
+//						urladd += "&" + dbproperties[x];
+						
 					String[] val = dbproperties[x].split("=");
 					props.put(val[0], val[1]);
 				}
 			}
+			
+			//dburl += urladd;
+			
+			System.out.println(dburl);
 
 			log.info("Register: " + dburl);
 			
@@ -82,6 +92,7 @@ public class DB
 			config.setMinConnectionsPerPartition(5);
 			config.setMaxConnectionsPerPartition(10);
 			config.setPartitionCount(2);
+			config.setDriverProperties(props);
 			
 			try
 			{
