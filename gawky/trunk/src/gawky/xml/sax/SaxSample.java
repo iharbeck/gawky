@@ -68,7 +68,7 @@ public class SaxSample implements  ContentHandler {
     parser.setContentHandler(counter);
     
     try {
-    	parser.parse(Locator.findPath("", SaxSample.class) + "../data/example.xml"); 
+    	parser.parse(Locator.findPath("", SaxSample.class) + "../data/example_large.xml"); 
     }
     catch (SAXException e) {
     	System.err.println(e); 

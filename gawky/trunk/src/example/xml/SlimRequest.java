@@ -13,7 +13,7 @@ public class SlimRequest {
 	public static void main(String[] args) throws Exception {
 
 		StringBuilder buf = new StringBuilder();
-		buf.replace(10, 15, "tomtom");
+		//buf.replace(10, 15, "tomtom");
 		
 		StreamResult streamResult = new StreamResult(System.out);
 		SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory

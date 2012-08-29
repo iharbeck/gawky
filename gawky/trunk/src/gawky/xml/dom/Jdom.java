@@ -13,25 +13,32 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
 
-public class Jdom {
+public class Jdom
+{
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception {
-		 
-		SAXBuilder parser = new SAXBuilder();
-		Document doc = parser.build( new File(Locator.findPath("", SaxSample.class) + "../data/example.xml"));
+	public static void main(String[] args) throws Exception
+	{
+		long start = System.currentTimeMillis();
 
-		System.out.println( doc.getRootElement().getChildren("record").size() );
-		
+		SAXBuilder parser = new SAXBuilder();
+		Document doc = parser.build(new File(Locator.findPath("", SaxSample.class) + "../data/example_large.xml"));
+
+		System.out.println(doc.getRootElement().getChildren("record").size());
+
 		//xpath
 		List nodeList = XPath.selectNodes(doc, "/fias2/record/address");
-	
-		
-		Element el = (Element)nodeList.get(0);
-		System.out.println( el.getParentElement().getParentElement().getAttributeValue("uniqueid") );
-		System.out.println( nodeList.size() );
+
+		for(int i = 0; i < nodeList.size(); i++)
+		{
+			Element el = (Element)nodeList.get(i);
+			System.out.println(el.getParentElement().getParentElement().getAttributeValue("uniqueid"));
+			System.out.println(nodeList.size());
+		}
+
+		System.out.println("ms " + (System.currentTimeMillis() - start));
 	}
 
 }
