@@ -221,10 +221,9 @@ public class DB
 	private static final String secString(String val)
 	{
 		if(val != null)
-			val = val.trim();
+			return val.trim();
 		else
-			val = "";
-		return (String)val;
+			return "";
 	}
 
 	public static String getString(String sql) throws Exception
@@ -265,16 +264,23 @@ public class DB
 	public static String getString(Connection conn, String sql, Object... params) throws Exception
 	{
 		ResultSet rset = null;
-		PreparedStatement stmt_select = null;
+		Statement stmt_select = null;
 
 		try
 		{
-			stmt_select = conn.prepareStatement(sql);
+			if(params == null)
+			{
+				stmt_select = conn.createStatement();
+				rset = stmt_select.executeQuery(sql);
+			}
+			else
+			{
+				stmt_select = conn.prepareStatement(sql);
+				fillParams((PreparedStatement)stmt_select, params);
 
-			fillParams(stmt_select, params);
-
-			rset = stmt_select.executeQuery();
-
+				rset = ((PreparedStatement)stmt_select).executeQuery();
+			}
+			
 			if(rset.next())
 				return rset.getString(1);
 
@@ -324,15 +330,22 @@ public class DB
 
 	public static int execute(Connection conn, String sql, Object... params) throws Exception
 	{
-		PreparedStatement stmt_select = null;
+		Statement stmt_select = null;
 
 		try
 		{
-			stmt_select = conn.prepareStatement(sql);
-
-			fillParams(stmt_select, params);
-
-			return stmt_select.executeUpdate();
+			if(params == null)
+			{
+				stmt_select = conn.createStatement();
+				return stmt_select.executeUpdate(sql);
+			}
+			else
+			{
+    			stmt_select = conn.prepareStatement(sql);
+				fillParams((PreparedStatement)stmt_select, params);
+    
+    			return ((PreparedStatement)stmt_select).executeUpdate();
+			}
 		}
 		finally
 		{
@@ -370,31 +383,36 @@ public class DB
 
 		ResultSet rset = null;
 
-		PreparedStatement stmt_select = null;
+		Statement stmt_select = null;
 
 		try
 		{
-			stmt_select = conn.prepareStatement(sql);
-
-			fillParams(stmt_select, params);
-
-			rset = stmt_select.executeQuery();
-
+			if(params == null)
+			{
+				stmt_select = conn.createStatement();
+				rset = stmt_select.executeQuery(sql);
+			}
+			else
+			{
+    			stmt_select = conn.prepareStatement(sql);
+				fillParams((PreparedStatement)stmt_select, params);
+    
+    			rset = ((PreparedStatement)stmt_select).executeQuery();
+			}
+			
 			if(rset.next())
 			{
-				hs = new Hashtable<String, String>();
 				ResultSetMetaData md = rset.getMetaData();
+				int columncount = md.getColumnCount();
+				
+				hs = new HashMap<String, String>(columncount);
 
-				boolean info = log.isInfoEnabled();
-
-				for(int i = md.getColumnCount(); i > 0; i--)
+				for(int i = columncount; i > 0; i--)
 				{
-					if(info)
-						log.info(md.getColumnName(i) + " -- " + rset.getString(i));
 					hs.put(md.getColumnName(i), secString(rset.getString(i)));
 				}
 			}
-			else
+			else if(log.isWarnEnabled())
 			{
 				log.warn("no result (" + sql + ")");
 			}
@@ -437,28 +455,32 @@ public class DB
 		ArrayList<Map<String, String>> al = new ArrayList<Map<String, String>>(INITIALCAP);
 
 		ResultSet rset = null;
-		PreparedStatement stmt_select = null;
+		Statement stmt_select = null;
 
 		try
 		{
-			stmt_select = conn.prepareStatement(sql);
+			if(params == null)
+			{
+				stmt_select = conn.createStatement();
+				rset = stmt_select.executeQuery(sql);
+			}
+			else
+			{
+				stmt_select = conn.prepareStatement(sql);
+				fillParams((PreparedStatement)stmt_select, params);
 
-			fillParams(stmt_select, params);
-
-			rset = stmt_select.executeQuery();
-
+				rset = ((PreparedStatement)stmt_select).executeQuery();
+			}
+			
 			ResultSetMetaData md = rset.getMetaData();
-
-			boolean info = log.isInfoEnabled();
-
+			int columncount = md.getColumnCount();
+			
 			while(rset.next())
 			{
-				Map<String, String> hs = new Hashtable<String, String>();
+				Map<String, String> hs = new HashMap<String, String>(columncount);
 
-				for(int i = md.getColumnCount(); i > 0; i--)
+				for(int i = columncount; i > 0; i--)
 				{
-					if(info)
-						log.info(md.getColumnName(i) + " -- " + rset.getString(i));
 					hs.put(md.getColumnName(i), secString(rset.getString(i)));
 				}
 
@@ -499,16 +521,23 @@ public class DB
 		LinkedHashMap<String, String> hs = new LinkedHashMap<String, String>(INITIALCAP);
 
 		ResultSet rset = null;
-		PreparedStatement stmt_select = null;
+		Statement stmt_select = null;
 
 		try
 		{
-			stmt_select = conn.prepareStatement(sql);
-
-			fillParams(stmt_select, params);
-
-			rset = stmt_select.executeQuery();
-
+			if(params == null)
+			{
+				stmt_select = conn.createStatement();
+				rset = stmt_select.executeQuery(sql);
+			}
+			else
+			{
+    			stmt_select = conn.prepareStatement(sql);
+				fillParams((PreparedStatement)stmt_select, params);
+    
+    			rset = ((PreparedStatement)stmt_select).executeQuery();
+			}
+			
 			while(rset.next())
 			{
 				hs.put(rset.getString(1), rset.getString(2));
@@ -554,16 +583,23 @@ public class DB
 
 		ResultSet rset = null;
 
-		PreparedStatement stmt_select = null;
+		Statement stmt_select = null;
 
 		try
 		{
-			stmt_select = conn.prepareStatement(sql);
-
-			fillParams(stmt_select, params);
-
-			rset = stmt_select.executeQuery();
-
+			if(params == null)
+			{
+				stmt_select = conn.createStatement();
+				rset = stmt_select.executeQuery(sql);
+			}
+			else
+			{
+    			stmt_select = conn.prepareStatement(sql);
+				fillParams((PreparedStatement)stmt_select, params);
+    
+    			rset = ((PreparedStatement)stmt_select).executeQuery();
+			}
+			
 			while(rset.next())
 			{
 				al.add(secString(rset.getString(1)));
@@ -580,9 +616,6 @@ public class DB
 
 	private static void fillParams(PreparedStatement stmt, Object... params) throws SQLException
 	{
-		if(params == null)
-			return;
-
 		int a = 1;
 		for(int i = 0; i < params.length; i++)
 		{
