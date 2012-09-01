@@ -2,6 +2,7 @@ package gawky.database;
 
 import gawky.database.dbpool.AConnectionDriver;
 import gawky.global.Option;
+import gawky.message.Formatter;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -90,6 +91,7 @@ public class DB
 			}
 
 			BoneCPConfig config = new BoneCPConfig();
+			
 			config.setJdbcUrl(dburl);
 			config.setUsername(dbuser);
 			config.setPassword(dbpass);
@@ -97,35 +99,11 @@ public class DB
 			config.setMaxConnectionsPerPartition(10);
 			config.setPartitionCount(2);
 			config.setDriverProperties(props);
+			
+			if(trigger != null)
+			    config.setInitSQL(trigger);
 
-			config.setConnectionHook(
-			        new AbstractConnectionHook()
-			        {
-				        @Override
-				        public void onAcquire(ConnectionHandle connection)
-				        {
-					        if(trigger != null)
-					        {
-						        Statement stmt = null;
-
-						        try
-						        {
-							        stmt = connection.createStatement();
-							        stmt.execute(trigger);
-						        }
-						        catch(Exception e)
-						        {
-
-						        }
-						        finally
-						        {
-							        DB.doClose(stmt);
-						        }
-						        super.onAcquire(connection);
-					        }
-				        }
-			        }
-			        );
+			config.setLazyInit(true);
 
 			try
 			{
