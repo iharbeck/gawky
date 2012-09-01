@@ -3,6 +3,7 @@ package gawky.xml.hybrid.sample;
 import org.apache.xml.serialize.XMLSerializer;
 
 import gawky.file.Locator;
+import gawky.global.Constant;
 import gawky.xml.hybrid.XMLReaderPull;
 import gawky.xml.hybrid.alternative.XMLReaderStax;
 import gawky.xml.hybrid.sample.tag.TagFias2;
@@ -27,7 +28,7 @@ public class SampleHandler
 			reader.registerTagHandler(tagfias2);
 			reader.registerTagHandler(tagrecord);
 
-			reader.process(filename);
+			reader.process(filename, Constant.ENCODE_UTF8);
 		}
 		System.out.println("ms " + (System.currentTimeMillis() - start));
 	}
