@@ -22,19 +22,19 @@ public class XMLReaderStax
 		hshandler.put(handler.getTagName(), handler);
 	}
 
-	public void process(String filename) throws Exception
+	public void process(String filename, String encoding) throws Exception
 	{
 		InputStream in = new FileInputStream(filename);
 
-		process(in);
+		process(in, encoding);
 
 		in.close();
 	}
 
-	public void process(InputStream in) throws Exception
+	public void process(InputStream in, String encoding) throws Exception
 	{
 		XMLInputFactory factory = XMLInputFactory.newInstance();
-		XMLStreamReader parser = factory.createXMLStreamReader(in);
+		XMLStreamReader parser = factory.createXMLStreamReader(in, encoding);
 
 		for(int event = parser.next(); event != XMLStreamConstants.END_DOCUMENT; event = parser.next())
 		{

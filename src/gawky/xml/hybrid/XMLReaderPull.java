@@ -17,21 +17,21 @@ public class XMLReaderPull
 		hshandler.put(handler.getTagName(), handler);
 	}
 
-	public void process(String filename) throws Exception
+	public void process(String filename, String encoding) throws Exception
 	{
 		InputStream in = new FileInputStream(filename);
 
-		process(in);
+		process(in, encoding);
 
 		in.close();
 	}
 
-	public void process(InputStream in) throws Exception
+	public void process(InputStream in, String encoding) throws Exception
 	{
 		XmlPullParserFactory pullfactory = XmlPullParserFactory.newInstance();
 		XmlPullParser parser = pullfactory.newPullParser();
 		
-		parser.setInput(in, null);
+		parser.setInput(in, encoding);
 		
 		for(int event = parser.next(); event != XmlPullParser.END_DOCUMENT; event = parser.next())
 		{
