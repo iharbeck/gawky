@@ -80,19 +80,25 @@ public class XMLReaderPull
 		if(!buildDOM)
 			return store;
 		
+		int tagnamelen = 0;
+		
 		for(int event = parser.next(); event != XmlPullParser.END_DOCUMENT; event = parser.next())
 		{
 			switch(event)
 			{
 				case XmlPullParser.START_TAG:
-					level += "/" + parser.getName();
+					String name = parser.getName();
+					level += '/' + name;
+					
+					tagnamelen = name.length();
+					
 					processAttributes(parser);
 					break;
 				case XmlPullParser.END_TAG:
 					if(parser.getName().equals(tagname))
 						return store;
 					else
-						level = level.substring(0, level.lastIndexOf('/'));
+						level = level.substring(0, level.length() - tagnamelen - 1);
 					break;
 				case XmlPullParser.TEXT:
 					store.put(level, parser.getText());

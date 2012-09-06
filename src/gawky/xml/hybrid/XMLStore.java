@@ -37,7 +37,7 @@ public final class XMLStore
 	public void put(String xpath, String value)
 	{
 		value = value.trim();
-		if(value.trim().length() == 0)
+		if(value.length() == 0)
 			return;
 
 		items.add(new Entry(xpath, value));
@@ -56,7 +56,7 @@ public final class XMLStore
 
 	public ArrayList<String> getAll(String xpath)
 	{
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<String>(50);
 
 		for(Entry entry : items)
 		{
