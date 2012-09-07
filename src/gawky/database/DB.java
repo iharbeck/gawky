@@ -96,7 +96,7 @@ public class DB
 			config.setUsername(dbuser);
 			config.setPassword(dbpass);
 			config.setMinConnectionsPerPartition(5);
-			config.setMaxConnectionsPerPartition(10);
+			config.setMaxConnectionsPerPartition(200);
 			config.setPartitionCount(2);
 			config.setDriverProperties(props);
 			
