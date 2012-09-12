@@ -38,7 +38,7 @@ public class DB
 	private static Log log = LogFactory.getLog(DB.class);
 	private static int INITIALCAP = 2000;
 
-	static HashMap<String, BoneCP> dbpool = new HashMap<String, BoneCP>();
+	public static HashMap<String, BoneCP> dbpool = new HashMap<String, BoneCP>();
 
 	public static void init() throws Exception
 	{
