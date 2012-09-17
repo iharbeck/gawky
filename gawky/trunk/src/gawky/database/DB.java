@@ -2,7 +2,6 @@ package gawky.database;
 
 import gawky.database.dbpool.AConnectionDriver;
 import gawky.global.Option;
-import gawky.message.Formatter;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -14,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -24,9 +22,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
-import com.jolbox.bonecp.ConnectionHandle;
-import com.jolbox.bonecp.hooks.AbstractConnectionHook;
-import com.jolbox.bonecp.hooks.ConnectionHook;
 
 /**
  * @author Ingo Harbeck
