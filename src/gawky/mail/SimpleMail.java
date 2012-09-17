@@ -6,7 +6,7 @@ import gawky.global.Option;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.internet.InternetAddress;
@@ -34,13 +34,13 @@ public class SimpleMail extends Mail
 	private InputStream stream;
 	private String attachName;
 
-	private Hashtable<String, String> cids = new Hashtable<String, String>();
+	private HashMap<String, String> cids = new HashMap<String, String>();
 
 	InternetAddress from;
 	private ArrayList<InternetAddress> array_to = new ArrayList<InternetAddress>();
 	private ArrayList<InternetAddress> array_reply = new ArrayList<InternetAddress>();
 
-	private Map<String, String> parameter = new Hashtable<String, String>();
+	private Map<String, String> parameter = new HashMap<String, String>();
 
 	String bounce = "";
 
@@ -204,12 +204,12 @@ public class SimpleMail extends Mail
 		return attachName;
 	}
 
-	public Hashtable<String, String> getCids()
+	public HashMap<String, String> getCids()
 	{
 		return cids;
 	}
 
-	public SimpleMail setCids(Hashtable<String, String> cids)
+	public SimpleMail setCids(HashMap<String, String> cids)
 	{
 		this.cids = cids;
 
