@@ -100,51 +100,49 @@ public class DTBand
 
 	public boolean nextvar()  throws ParserException, UnsupportedEncodingException
 	{	
-		if(mappedbuffer.hasRemaining())
-		{
-			byte[] blen = new byte[4];
-			
-			mappedbuffer.mark();
-			mappedbuffer.get(blen, 0, 4);
-			mappedbuffer.reset();
-			
-			linelen = (int)Helper.readNumberBinary(blen);
-			
-			mappedbuffer.get(line, 0, linelen + 4);
-
-			String type = Ebcdic.toUnicode(new byte[] {line[4]});
-			
-			if(type.charAt(0) == 'C') 
-			{
-				satzc = new SatzC();
-				satzc.parse(extparser, line);
-
-				int ext = Integer.parseInt(satzc.getErweiterungskennnzeichen());
-			
-				for(int x=0; x < ext; x++)
-				{
-					part = new byte[29];
-					System.arraycopy(line, 150 + (x*29), part, 0, 29);
-				
-					SatzCe satzce = new SatzCe();
-					satzce.parse(extparser, part);
-					
-					satzc.addExtention(satzce);
-				}
-				satztype = SATZC;
-			} 
-			else if(type.charAt(0) == 'A')
-			{
-				satza.parse(extparser, line);
-				satztype = SATZA;
-			}
-			else if(type.charAt(0) == 'E')
-			{
-				satze.parse(extparser, line);
-				satztype = SATZE;
-			}
-		} else {
+		if(!mappedbuffer.hasRemaining())
 			return false;
+		
+		byte[] blen = new byte[4];
+		
+		mappedbuffer.mark();
+		mappedbuffer.get(blen, 0, 4);
+		mappedbuffer.reset();
+		
+		linelen = (int)Helper.readNumberBinary(blen);
+		
+		mappedbuffer.get(line, 0, linelen + 4);
+
+		String type = Ebcdic.toUnicode(new byte[] {line[4]});
+		
+		if(type.charAt(0) == 'C') 
+		{
+			satzc = new SatzC();
+			satzc.parse(extparser, line);
+
+			int ext = Integer.parseInt(satzc.getErweiterungskennnzeichen());
+		
+			for(int x=0; x < ext; x++)
+			{
+				part = new byte[29];
+				System.arraycopy(line, 150 + (x*29), part, 0, 29);
+			
+				SatzCe satzce = new SatzCe();
+				satzce.parse(extparser, part);
+				
+				satzc.addExtention(satzce);
+			}
+			satztype = SATZC;
+		} 
+		else if(type.charAt(0) == 'A')
+		{
+			satza.parse(extparser, line);
+			satztype = SATZA;
+		}
+		else if(type.charAt(0) == 'E')
+		{
+			satze.parse(extparser, line);
+			satztype = SATZE;
 		}
 		
 		return true;
@@ -153,45 +151,43 @@ public class DTBand
 	
 	public boolean next()  throws ParserException, UnsupportedEncodingException
 	{	
-		if(mappedbuffer.hasRemaining())
-		{
-			mappedbuffer.get(line, 0, linelen);
-
-			String type = Ebcdic.toUnicode(new byte[] {line[0]});
-			
-			if(type.charAt(0) == 'C') 
-			{
-				satzc = new SatzC();
-				satzc.parse(extparser, line);
-
-				int ext = Integer.parseInt(satzc.getErweiterungskennnzeichen());
-			
-				for(int x=0; x < ext; x++)
-				{
-					part = new byte[29];
-					System.arraycopy(line, 144 + 2 + (x*29), part, 0, 29);
-				
-					SatzCe satzce = new SatzCe();
-					satzce.parse(extparser, part);
-					
-					satzc.addExtention(satzce);
-				}
-				satztype = SATZC;
-			} 
-			else if(type.charAt(0) == 'A')
-			{
-				satza = new SatzA();
-				satza.parse(extparser, line);
-				satztype = SATZA;
-			}
-			else if(type.charAt(0) == 'E')
-			{
-				satze = new SatzE();
-				satze.parse(extparser, line);
-				satztype = SATZE;
-			}
-		} else {
+		if(!mappedbuffer.hasRemaining())
 			return false;
+
+		mappedbuffer.get(line, 0, linelen);
+
+		String type = Ebcdic.toUnicode(new byte[] {line[0]});
+		
+		if(type.charAt(0) == 'C') 
+		{
+			satzc = new SatzC();
+			satzc.parse(extparser, line);
+
+			int ext = Integer.parseInt(satzc.getErweiterungskennnzeichen());
+		
+			for(int x=0; x < ext; x++)
+			{
+				part = new byte[29];
+				System.arraycopy(line, 144 + 2 + (x*29), part, 0, 29);
+			
+				SatzCe satzce = new SatzCe();
+				satzce.parse(extparser, part);
+				
+				satzc.addExtention(satzce);
+			}
+			satztype = SATZC;
+		} 
+		else if(type.charAt(0) == 'A')
+		{
+			satza = new SatzA();
+			satza.parse(extparser, line);
+			satztype = SATZA;
+		}
+		else if(type.charAt(0) == 'E')
+		{
+			satze = new SatzE();
+			satze.parse(extparser, line);
+			satztype = SATZE;
 		}
 		
 		return true;
@@ -213,10 +209,12 @@ public class DTBand
 	SatzE satze = new SatzE();
 	SatzC satzc = new SatzC();
 
+	FileInputStream fis;
+		
 	public void open(File f) throws Exception
 	{
 		// Open the file and then get a channel from the stream
-		FileInputStream fis = new FileInputStream(f);
+		fis = new FileInputStream(f);
 		fc = fis.getChannel();
 		
 		// Get the file's size and then map it into memory
@@ -254,6 +252,9 @@ public class DTBand
 		// Close the channel and the stream
 		if(fc != null)
 			fc.close();
+		
+		if(fis != null)
+			fis.close();
 	}
 	
 

@@ -33,9 +33,9 @@ public class DescB extends Desc
 		return buf.toString();
 	}
 	
-	public static long binaryconvert(String s)
+	public static long binaryconvert(byte[] bytes)
 	{
-		BigInteger big = new BigInteger(s.getBytes());  
+		BigInteger big = new BigInteger(bytes);  
 		return big.longValue();  	
 	}
 }

@@ -110,10 +110,12 @@ public class DTDisk
 		open(f);
 	}
 	
+	FileInputStream fis;
+	
 	public void open(File f) throws Exception
 	{
 		// Open the file and then get a channel from the stream
-		FileInputStream fis = new FileInputStream(f);
+		fis = new FileInputStream(f);
 		fc = fis.getChannel();
 	
 		// Get the file's size and then map it into memory
@@ -226,6 +228,9 @@ public class DTDisk
 		// Close the channel and the stream
 		if(fc != null)
 			fc.close();
+		
+		if(fis != null)
+			fis.close();
 	}
 
     public static void main(String[] args) throws Exception
@@ -261,8 +266,6 @@ public class DTDisk
 					System.out.print(ce.getDaten()); 
 			}
 		}
-		
-		
 		
 		File fo = new File("E:/ZE_COMDA.ASC.out");
 		DTDisk.write(fo, mainprocessor);

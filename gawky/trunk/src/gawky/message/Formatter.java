@@ -97,6 +97,8 @@ public class Formatter
 
 	public static void main(String[] args)
 	{
+		System.out.println(rpad(10, "123456789", '*'));
+		System.out.println(rpad(10, "123456789012345", '*'));
 		System.out.println(lntrim("000000"));
 		System.out.println(lntrim(""));
 		System.out.println(lntrim("2"));
@@ -258,6 +260,7 @@ public class Formatter
 		return new String(target);
 	}
 
+	
 	public final static String rpad(int size, String value, char filler)
 	{
 		if(value == null)
