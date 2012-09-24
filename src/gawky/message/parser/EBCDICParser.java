@@ -8,10 +8,8 @@ import gawky.global.Constant;
  */
 public class EBCDICParser extends ByteParser
 {
-	String encoding = Constant.ENCODE_ISO;
-	
 	public EBCDICParser()
 	{
-		encoding = Constant.ENCODE_EBCDIC;
+		super(Constant.ENCODE_EBCDIC);
 	}
 }
