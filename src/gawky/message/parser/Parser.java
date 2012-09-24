@@ -290,7 +290,7 @@ public class Parser
 
 	//boolean info = log.isInfoEnabled();
 
-	final void storeValue(Object bean, int pos, Desc desc, String value) throws ParserException
+	final void storeValue(Object bean, int pos, Desc desc, Object value) throws ParserException
 	{
 		//		if(info)
 		//			log.info("value " + pos + " : " + desc.name + " <" + value + ">");

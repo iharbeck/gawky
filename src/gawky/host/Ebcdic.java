@@ -15,7 +15,7 @@ public class Ebcdic
 	public final static String toUnicode(byte[] ebcdic) throws UnsupportedEncodingException
 	{
 		String encoding = Constant.ENCODE_EBCDIC;  
-		Integer.toBinaryString(13);
+		//Integer.toBinaryString(13);
 		return new String(ebcdic, encoding);
 	}
 	
