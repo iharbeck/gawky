@@ -5,21 +5,21 @@ import gawky.host.PackedDecimal;
 import gawky.message.part.Desc;
 import gawky.message.part.Part;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * @author Ingo Harbeck
  *
  */
 public class ByteParser extends Parser
 {
-	private static Log log = LogFactory.getLog(ByteParser.class);
-
 	String encoding = Constant.ENCODE_ISO;
 	
 	public ByteParser()
 	{
+	}
+	
+	public ByteParser(String encoding)
+	{
+		this.encoding = encoding;
 	}
 	
 	public Object parse(String str, Object bean) throws ParserException
