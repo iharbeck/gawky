@@ -20,7 +20,19 @@ public class FreemarkerTemplate implements gawky.template.Template
 	 */ 
 	
 	Configuration cfg = null;
+	String templates = null;
 	
+	public FreemarkerTemplate()
+	{
+		templates = Option.getProperty("freemarker.templates", "/");
+	}
+	
+	public FreemarkerTemplate(String templates)
+	{
+		this.templates = templates;
+	}
+
+	@Deprecated 
 	public static gawky.template.Template getInstance() {
 		return new FreemarkerTemplate();
 	}
@@ -37,8 +49,6 @@ public class FreemarkerTemplate implements gawky.template.Template
 	
 	public void process(Object obj, String templatefile, OutputStream out, String encoding) throws Exception 
 	{
-		String templates = Option.getProperty("freemarker.templates", "/");
-
 		if(cfg == null)
 		{
 			cfg = new Configuration();
