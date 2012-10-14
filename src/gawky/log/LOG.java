@@ -3,7 +3,9 @@ package gawky.log;
 import gawky.file.Locator;
 import gawky.global.Option;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Enumeration;
 import java.util.Formatter;
@@ -93,8 +95,9 @@ public class LOG
 		log = Logger.getLogger(LOG.class);
 		log.setLevel(Level.INFO);
 		
-		System.setOut(LOG.createLoggingProxy(System.out));
-		System.setErr(LOG.createLoggingProxy(System.err));
+		PrintStream stream = new PrintStream(LOG.createLoggingProxy(), true);
+		System.setOut(stream); //System.out));
+		System.setErr(stream); //System.err));
 		
 		LOG.log("GAWKY INIT IN PROGRESS.\n****\n****\n****");
 		System.out.println("OUT: Console Output Redirect");
@@ -154,16 +157,49 @@ public class LOG
 		return LogFactory.getLog(Option.class);
 	}
 	
-	public static PrintStream createLoggingProxy(final PrintStream realPrintStream)
+	public static ByteArrayOutputStream createLoggingProxy()
 	{
-		return new PrintStream(realPrintStream)
+		final String linebreak = System.getProperty("line.separator");
+		
+		return new ByteArrayOutputStream()
 		{
 			@Override
-			public void println(final String string)
+			public void flush() throws IOException
 			{
-				LOG.log(string);
-				//realPrintStream.print(string);
+				super.flush();
+				String s = this.toString();
+				super.reset();
+				
+				if(s.length() == 0 || s.equals(linebreak))
+					return;
+				
+				LOG.log(s);
 			}
 		};
 	}
+	
+//	public static PrintStream createLoggingProxy(final PrintStream realPrintStream)
+//	{
+//		return new PrintStream(realPrintStream)
+//		{
+//			@Override
+//			public void flush()
+//			{
+//				super.flush();
+//				String s = this.toString();
+//				
+//				LOG.log(s);
+//				// TODO Auto-generated method stub
+//			}
+//			
+//			@Override
+//			public void println(final String string)
+//			{
+//				LOG.log(string);
+//				//realPrintStream.print(string);
+//			}
+//			
+//			
+//		};
+
 }
