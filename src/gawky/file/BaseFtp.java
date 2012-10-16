@@ -28,6 +28,15 @@ public abstract class BaseFtp implements URLInterface
 	
 	public abstract void changeRemoteDir(String path) throws Exception; 
 
+	public abstract void mkdir(String path) throws Exception;
+	
+	public abstract void chmod(int right, String path) throws Exception;
+	
+	public abstract void chown(int owner, String path) throws Exception;
+	
+	public abstract void chgrp(int owner, String path) throws Exception;
+	
+	
 	public void changeLocalDir(String path) throws Exception {
 		localdir = path;
 		

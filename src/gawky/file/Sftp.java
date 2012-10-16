@@ -89,6 +89,26 @@ public class Sftp extends BaseFtp
 
 		this.me = this;
 	}
+	
+	public void mkdir(String path) throws Exception
+	{
+		sftpclient.mkdir(path);
+	}
+	
+	public void chmod(int right, String path) throws Exception
+	{
+		sftpclient.chmod(right, path);
+	}
+	
+	public void chown(int owner, String path) throws Exception
+	{
+		sftpclient.chown(owner, path);
+	}
+	
+	public void chgrp(int owner, String path) throws Exception
+	{
+		sftpclient.chgrp(owner, path);
+	}
 
 	public String[] retrieveFiles(String filefilter) throws Exception
 	{
