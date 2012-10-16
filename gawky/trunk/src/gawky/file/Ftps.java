@@ -174,6 +174,25 @@ public class Ftps extends BaseFtp {
         ftpsclient.connect();
 	}
 	
+	
+	public void mkdir(String path) throws Exception
+	{
+		ftpsclient.makeDirectory(path);
+	}
+	
+	public void chmod(int right, String path) throws Exception
+	{
+	}
+	
+	public void chown(int owner, String path) throws Exception
+	{
+	}
+	
+	public void chgrp(int owner, String path) throws Exception
+	{
+	}
+	
+	
 	public String[] retrieveFiles(String filefilter) throws Exception
 	{
 		List<FTPFile> vfiles = ftpsclient.getDirectoryListing();

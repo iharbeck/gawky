@@ -38,10 +38,6 @@ public class Ftp extends BaseFtp
 		open(server, user, pass, port, null);
 	}
 	
-	public void mkdir(String pathname) throws Exception {
-		ftp.mkd(pathname);
-	}
-	
 	public static void mkdirhost(String url) throws Exception
 	{
 		URLParser uparser = new URLParser(url);
@@ -80,6 +76,23 @@ public class Ftp extends BaseFtp
 		log.info("FTP Connection closed");
 	}
 
+	public void mkdir(String path) throws Exception
+	{
+		ftp.makeDirectory(path);
+	}
+	
+	public void chmod(int right, String path) throws Exception
+	{
+	}
+	
+	public void chown(int owner, String path) throws Exception
+	{
+	}
+	
+	public void chgrp(int owner, String path) throws Exception
+	{
+	}
+	
 	public void retrieveFiles() throws Exception
 	{
 		retrieveFiles(null);
