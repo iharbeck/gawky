@@ -3,6 +3,7 @@ package gawky.file;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -132,7 +133,11 @@ public class Sftp extends BaseFtp
 
 			files.add(file);
 
-			sftpclient.get(file, new FileOutputStream(localdir + file));
+			OutputStream out = new FileOutputStream(localdir + file);
+			
+			sftpclient.get(file, out);
+			
+			out.close();
 		}
 
 		return (String[])files.toArray(new String[files.size()]);
