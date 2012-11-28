@@ -173,7 +173,7 @@ public class DBN
 	public static ArrayList<String> getList(Connection conn, String sql, Object... params) 
 	{
 		try {
-			return DB.getList(sql, params);
+			return DB.getList(conn, sql, params);
 		} catch (Exception e) {
 			return new ArrayList<String>();
 		}

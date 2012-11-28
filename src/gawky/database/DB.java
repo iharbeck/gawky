@@ -469,6 +469,79 @@ public class DB
 
 		return al;
 	}
+	
+	
+	public static Result getMemoryList(String sql, Object... params) throws Exception
+	{
+		return getMemoryList(0, sql, params);
+	}
+
+	public static Result getMemoryList(int pool, String sql, Object... params) throws Exception
+	{
+		Connection conn = null;
+
+		try
+		{
+			conn = DB.getConnection(pool);
+			return getMemoryList(conn, sql, params);
+		}
+		finally
+		{
+			doClose(conn);
+		}
+	}
+
+	public static Result getMemoryList(Connection conn, String sql, Object... params) throws Exception
+	{
+		ResultSet rset = null;
+		Statement stmt_select = null;
+
+		Result result;
+		
+		try
+		{
+			if(params == null)
+			{
+				stmt_select = conn.createStatement();
+				rset = stmt_select.executeQuery(sql);
+			}
+			else
+			{
+				stmt_select = conn.prepareStatement(sql);
+				fillParams((PreparedStatement)stmt_select, params);
+
+				rset = ((PreparedStatement)stmt_select).executeQuery();
+			}
+			
+			ResultSetMetaData md = rset.getMetaData();
+			int columncount = md.getColumnCount();
+
+			result = new Result(columncount);
+			
+			for(int i = 0; i < columncount; i++)
+			{
+				result.add(md.getColumnName(i+1), i);
+			}
+			
+			while(rset.next())
+			{
+				result.insert();
+
+				for(int i = 0; i < columncount; i++)
+				{
+					result.put(i, secString(rset.getString(i+1)));
+				}
+			}
+		}
+		finally
+		{
+			doClose(stmt_select);
+			doClose(rset);
+		}
+
+		return result;
+	}
+	
 
 	public static Map<String, String> getHash(String sql, Object... params) throws Exception
 	{
