@@ -91,10 +91,11 @@ public class DB
 			config.setJdbcUrl(dburl);
 			config.setUsername(dbuser);
 			config.setPassword(dbpass);
-			config.setMinConnectionsPerPartition(5);
-			config.setMaxConnectionsPerPartition(200);
+			config.setMinConnectionsPerPartition(1);
+			config.setMaxConnectionsPerPartition(100);
 			config.setPartitionCount(2);
 			config.setDriverProperties(props);
+			//config.setStatementsCacheSize(50);
 			
 			if(trigger != null)
 			    config.setInitSQL(trigger);
