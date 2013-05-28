@@ -4,7 +4,6 @@
 	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.11.jar" sourcepath="C:/logj/apache-log4j-1.2.17/src/main/java"/>
 	<classpathentry kind="lib" path="lib/codegen/freemarker.jar"/>
-	<classpathentry kind="lib" path="lib/codegen/javassist.jar"/>
 	<classpathentry kind="lib" path="lib/database/mysql-connector-java-3.1.11-bin.jar"/>
 	<classpathentry kind="lib" path="lib/web/servlet-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -50,11 +49,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ssh/jsch-0.1.45.jar"/>
 	<classpathentry kind="lib" path="lib/svn/svnkit-1.7.4-v1.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
 	<classpathentry kind="lib" path="lib/html/iText-2.1.7.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
@@ -67,5 +61,12 @@
 	<classpathentry kind="lib" path="lib/xml/vtd-xml.jar"/>
 	<classpathentry kind="lib" path="lib/database/slf4j-api-1.6.6.jar"/>
 	<classpathentry kind="lib" path="lib/database/slf4j-log4j12-1.6.6.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
+	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
+	<classpathentry kind="lib" path="lib/codegen/javassist.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -69,7 +69,7 @@ public class GeneratorCode
 			}
 
 		} catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		} finally {
 			DB.doClose(rset);
 			DB.doClose(stmt);

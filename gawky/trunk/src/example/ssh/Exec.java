@@ -85,7 +85,7 @@ public class Exec
 	      session.disconnect();
 	      
 	    } catch(Exception e){
-		      System.out.println(e);
+		      e.printStackTrace();
 		}
 
 	  }

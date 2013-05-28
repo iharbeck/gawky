@@ -63,16 +63,28 @@ public abstract class Table extends Part
 			return this.conn;
 	}
 
+	static HashMap<Class, Integer> hsConn = new HashMap<Class, Integer>();
+
 	public static <T extends Table> Connection getConnection(Class<T> clazz) throws Exception
 	{
-		Table inst = clazz.newInstance();
-		return DB.getConnection(inst.getStaticLocal().defaultconnection);
+		Integer connid = hsConn.get(clazz);
+
+		if(connid == null)
+		{
+			Table inst = clazz.newInstance();
+			connid = inst.getStaticLocal().defaultconnection;
+			hsConn.put(clazz, connid);
+		}
+
+		return DB.getConnection(connid);
 	}
 
 	private final void doClose(Connection conn)
 	{
 		if(!loop)
+		{
 			DB.doClose(conn);
+		}
 	}
 
 	private final void doClose(ResultSet rset)
@@ -83,7 +95,9 @@ public abstract class Table extends Part
 	private final void doClose(Statement stmt)
 	{
 		if(!loop)
+		{
 			DB.doClose(stmt);
+		}
 	}
 
 	private final static void doSClose(Connection conn)
@@ -210,9 +224,10 @@ public abstract class Table extends Part
 		return getStaticLocal().sql;
 	}
 
-	private final String getQuery(int type)
+	protected final String getQuery(int type)
 	{
 		String sql = getQueries()[type];
+		
 		if(sql == null)
 		{
 			switch(type)
@@ -480,11 +495,13 @@ public abstract class Table extends Part
 
 			byte endline = '\n';
 
+			Generator generator = getStaticLocal(this).generator;
+
 			while(rset.next())
 			{
 				Table table = (Table)this.getClass().newInstance();
 
-				getStaticLocal().generator.fillPart(rset, table);
+				generator.fillPart(rset, table);
 
 				//out.write(Formatter.getStringC(300, table.buildBytes());
 				out.write(table.buildBytes(encoding));
@@ -625,6 +642,7 @@ public abstract class Table extends Part
 			rset.setFetchSize(1);
 
 			found = rset.next();
+
 			if(found)
 			{
 				getStaticLocal().generator.fillPart(rset, this);
@@ -666,7 +684,9 @@ public abstract class Table extends Part
 			rset.setFetchSize(1);
 
 			rset.next();
+
 			found = rset.absolute(row);
+
 			if(found)
 			{
 				getStaticLocal().generator.fillPart(rset, this);
@@ -691,7 +711,7 @@ public abstract class Table extends Part
 		}
 		catch(Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -726,6 +746,7 @@ public abstract class Table extends Part
 			rset = stmt.executeQuery();
 
 			found = rset.next();
+
 			if(found)
 			{
 				getStaticLocal().generator.fillPart(rset, this);
@@ -828,9 +849,11 @@ public abstract class Table extends Part
 			rset = stmt.executeQuery();
 			//rset.setFetchSize(100);
 
+			Generator generator = getStaticLocal(inst).generator;
+
 			while(rset.next())
 			{
-				getStaticLocal(inst).generator.fillPart(rset, inst);
+				generator.fillPart(rset, inst);
 
 				list.add(inst);
 
@@ -866,14 +889,13 @@ public abstract class Table extends Part
 			rset = stmt.executeQuery();
 			//rset.setFetchSize(100);
 
-			inst = clazz.newInstance();
+			Generator generator = getStaticLocal(inst).generator;
 
 			while(rset.next())
 			{
-				getStaticLocal(inst).generator.fillPart(rset, inst);
+				generator.fillPart(rset, inst);
 
 				resulter.process(inst);
-
 			}
 		}
 		finally
@@ -1011,7 +1033,7 @@ public abstract class Table extends Part
 	{
 		batch_type = type;
 		batch_stmt = getStmt(conn, type);
-		
+
 	}
 
 	public void batch_add_insert() throws Exception
@@ -1137,27 +1159,30 @@ public abstract class Table extends Part
 		return getStaticLocal().primarydefined;
 	}
 
-	
 	public void addNative(String column, String value)
 	{
-		if(getStaticLocal().nativecolumns == null)
+		StaticLocal staticlocal = getStaticLocal();
+
+		if(staticlocal.nativecolumns == null)
 		{
-			getStaticLocal().nativecolumns = column + ",";
-			getStaticLocal().nativevalues = value + ",";
+			staticlocal.nativecolumns = column + ",";
+			staticlocal.nativevalues = value + ",";
 		}
 		else
 		{
-			getStaticLocal().nativecolumns += column + ",";
-			getStaticLocal().nativevalues += value + ",";
+			staticlocal.nativecolumns += column + ",";
+			staticlocal.nativevalues += value + ",";
 		}
 	}
 
 	public void clearNative()
 	{
-		getStaticLocal().nativecolumns = null;
-		getStaticLocal().nativevalues = null;
+		StaticLocal staticlocal = getStaticLocal();
+
+		staticlocal.nativecolumns = null;
+		staticlocal.nativevalues = null;
 	}
-	
+
 	public String lookupNativeColumns()
 	{
 		return getStaticLocal().nativecolumns;

@@ -69,7 +69,7 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 			}
 			catch(Exception e)
 			{
-				System.out.println(e);
+				e.printStackTrace();
 			}
 		}
 

@@ -132,7 +132,12 @@ public class Format
 
 	public static String getDecimal(Locale loc, String value, String pattern)
 	{
-		return getDecimal(getDouble(loc, value), pattern);
+		return getDecimal(loc, value, pattern, Locale.GERMAN);
+	}
+	
+	public static String getDecimal(Locale loc, String value, String pattern, Locale locformat)
+	{
+		return getDecimal(getDouble(loc, value), pattern, locformat);
 	}
 
 	public static String getDecimal(String value, String pattern)
@@ -142,9 +147,18 @@ public class Format
 
 	public static String getDecimal(double value, String pattern)
 	{
-		DecimalFormat df = new DecimalFormat(pattern);
+		return getDecimal(value, pattern, Locale.GERMAN);
+	}
+
+	public static String getDecimal(double value, String pattern, Locale loc)
+	{
+		NumberFormat df = DecimalFormat.getInstance(loc);
+		((DecimalFormat)df).applyPattern(pattern);
+		
 		return df.format(value);
 	}
+	
+	
 
 	public static String stringformat(long cent)
 	{
@@ -237,6 +251,8 @@ public class Format
 		System.out.println(decimalformat("12"));
 		System.out.println(decimalformat("123"));
 		System.out.println(decimalformat("1234567"));
+
+		System.out.println(getDecimal(454545.1, "#,###.00", Locale.ENGLISH));
 	}
 
 	public static String substr(String val, int begin, int end)

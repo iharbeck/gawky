@@ -284,7 +284,7 @@ public class Option
 			}
 			catch(Exception e)
 			{
-				System.out.println(e);
+				e.printStackTrace();
 				printHelp(processname);
 			}
 

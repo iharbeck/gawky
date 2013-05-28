@@ -71,20 +71,7 @@ public class Desc
 	
 	IDGenerator idgenerator;
 	
-	// Optimize relection
-	// store Method Definition
-	public Method smethod;
-	public Method gmethod;
-	
-	public Accessor accessor = new Accessor() {
-		public final void setValue(Object bean, Object value) throws Exception {
-			smethod.invoke(bean, new Object[] {value});
-		}
-		public final Object getValue(Object bean) throws Exception {
-			return gmethod.invoke(bean, (Object[]) null );	
-		}
-	};
-	
+	public Accessor accessor;
 
 	public final void setValue(Object bean, Object value) throws Exception {
 		accessor.setValue(bean, value);
@@ -93,7 +80,6 @@ public class Desc
 	public final Object getValue(Object bean) throws Exception {
 		return accessor.getValue(bean);	
 	}
-
 	
 	public Desc(char format, char code, int len, String name, String delimiter) // ValLength
 	{	

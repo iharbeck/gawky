@@ -100,7 +100,7 @@ public class Response extends Part
 		      date = formatter.parse(details);
 	    }
 	    catch (Exception e) {
-	      //System.out.println(e);
+	    	e.printStackTrace();
 	    }
 	}
 	

@@ -84,11 +84,11 @@ public class Generator
 			    if(dotrim && val instanceof String)
 			    	val = Formatter.rtrim((String)val);
 
-			    descs[i].setValue(part, val);
+			    desc.setValue(part, val);
 			} 
 			catch(Exception e) 
 			{
-				try  { descs[i].setValue(part, ""); } catch(Exception ee) {}
+				try  { desc.setValue(part, ""); } catch(Exception ee) {}
 			}
 		}
 

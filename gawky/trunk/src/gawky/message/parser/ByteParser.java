@@ -96,7 +96,7 @@ public class ByteParser extends Parser
 							value = new String(part, encoding);
 						}
 					} catch (Exception e) {
-						System.out.println(e);
+						e.printStackTrace();
 					}
 
 					start += desc.len;

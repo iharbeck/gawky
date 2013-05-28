@@ -59,7 +59,7 @@ public class Simple {
 		
 		Simple simpleparser = new Simple("c:/test.xml");
 	
-		ArrayList username = new ArrayList();
+		ArrayList<String> username = new ArrayList<String>();
 		
 		while(simpleparser.toTagEmpty("booking") != -1 )
 		{

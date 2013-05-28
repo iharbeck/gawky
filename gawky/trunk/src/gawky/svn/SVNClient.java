@@ -160,7 +160,7 @@ public class SVNClient
 				}
 				catch(Exception e)
 				{
-					System.out.println(e);
+					e.printStackTrace();
 				}
 			}
 

@@ -83,7 +83,7 @@ public class SimpleVTD {
 	
 	    simpleparser.parse();
 	    
-		ArrayList username = new ArrayList();
+		ArrayList<String> username = new ArrayList<String>();
 		
 		while(simpleparser.toTagEmpty("booking") != -1 )
 		{
