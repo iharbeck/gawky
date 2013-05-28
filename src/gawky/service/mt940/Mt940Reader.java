@@ -10,15 +10,14 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Mt940Reader 
 {
     // Charset and decoder for ISO-8859-15
-    private static Charset charset = Charset.forName("UTF-8");
-    private static CharsetDecoder decoder = charset.newDecoder();
+    private  Charset charset = Charset.forName("UTF-8");
+    private  CharsetDecoder decoder = charset.newDecoder();
 
     // Pattern used to parse lines
     private static Pattern linePattern = Pattern.compile("(?s)((.*?)\r?\n)((:[0-9]{0,2}.?:))");
@@ -28,6 +27,17 @@ public class Mt940Reader
 	
 	
 	String currenttag = null;
+	
+	public Mt940Reader()
+	{
+		this("UTF-8");
+	}
+	
+	public Mt940Reader(String encoding)
+	{
+		charset = Charset.forName(encoding);
+	    decoder = charset.newDecoder();
+	}
 	
 	private void handler(String line, Part part) throws Exception
 	{

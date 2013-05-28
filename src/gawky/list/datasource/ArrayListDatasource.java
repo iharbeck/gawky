@@ -5,68 +5,71 @@ import gawky.list.listener.RowListener;
 
 import java.util.ArrayList;
 
-public class ArrayListDatasource implements Datasource 
+public class ArrayListDatasource implements Datasource
 {
-	public int getRowCount() {
+	public int getRowCount()
+	{
 		if(this.columns == null)
-			return array.size() -1;
+			return array.size() - 1;
 		else
 			return array.size();
 	}
 
-	ArrayList array;
+	ArrayList<String[]> array;
 	Column[] columns;
-	ArrayList columnslist = new ArrayList();
-	
+	ArrayList<Column> columnslist = new ArrayList<Column>();
+
 	int rowcount;
 	int pos = -1;
-	
+
 	int columncount;
 	int columnshidden = -1;
-	
+
 	RowListener rowlistener = null;
-	
-	public RowListener getRowListener() {
+
+	public RowListener getRowListener()
+	{
 		return rowlistener;
 	}
-	
-	public void setRowListener(RowListener rowlistener) {
+
+	public void setRowListener(RowListener rowlistener)
+	{
 		this.rowlistener = rowlistener;
 	}
-	
+
 	/**
 	 * Initialisiere Datenquelle
 	 * @param array
 	 * @param column
 	 */
-	public ArrayListDatasource(ArrayList array, Column[] columns) 
+	public ArrayListDatasource(ArrayList<String[]> array, Column[] columns)
 	{
-		this.array  = array;
+		this.array = array;
 		this.columns = columns;
-		this.rowcount  = array.size()-1;
+		this.rowcount = array.size() - 1;
 		this.columncount = columns.length;
 	}
-	
+
 	/**
 	 * Firstline includes header
 	 * @param array
 	 */
-	public ArrayListDatasource( ArrayList array ) 
+	public ArrayListDatasource(ArrayList<String[]> array)
 	{
-		this.array  = array;
+		this.array = array;
 		this.columns = null;
-		this.rowcount  = array.size()-1;
-		this.columncount = ((Object[])array.get(0)).length;
+		this.rowcount = array.size() - 1;
+		this.columncount = array.get(0).length;
 		pos++;
 	}
-	
+
 	public int getColumnsHidden()
 	{
 		if(columnshidden == -1)
 		{
 			columnshidden = 0;
-			
-			for(int i=0; i < columncount; i++)
+
+			for(int i = 0; i < columncount; i++)
 			{
 				if(columns[i].getWidth() == Column.HIDDEN)
 					columnshidden++;
@@ -74,71 +77,78 @@ public class ArrayListDatasource implements Datasource
 		}
 		return columnshidden;
 	}
-	
-	
-	
-	 
-	public int getColumns() {
+
+	public int getColumns()
+	{
 		return columncount;
 	}
-	
-	public CellListener getListener(int i) {
+
+	public CellListener getListener(int i)
+	{
 		if(columns == null)
 			return null;
 		return columns[i].getListener();
 	}
 
-	public String getHead(int i) {
+	public String getHead(int i)
+	{
 		if(columns == null)
-			return (String)((Object[])array.get(0))[i];
-		
+			return array.get(0)[i];
+
 		return columns[i].getLable();
 	}
 
-	public int getType(int i) {
+	public int getType(int i)
+	{
 		if(columns == null)
 			return Column.TYPE_STRING;
 		return columns[i].getType();
 	}
-	
-	public int getWidth(int i) {
+
+	public int getWidth(int i)
+	{
 		if(columns == null)
 			return 0;
 		return columns[i].getWidth();
 	}
 
-	public Object getValue(int i) {
-		return ((Object[])array.get(pos))[i];
+	public Object getValue(int i)
+	{
+		return array.get(pos)[i];
 	}
 
-	public void setCurrRow(int pos) {
+	public void setCurrRow(int pos)
+	{
 		this.pos = pos;
 		if(columns != null)
 			this.pos--;
 	}
-	
-	public boolean nextRow() {
-		if(pos < rowcount) {
+
+	public boolean nextRow()
+	{
+		if(pos < rowcount)
+		{
 			pos++;
 			return true;
 		}
 		return false;
 	}
-	
-	public void reset() {
+
+	public void reset()
+	{
 		pos = -1;
-		
+
 		// Header überspringen
 		if(columns == null)
 			pos++;
 	}
-	
-	public void addColumn(Column col) 
+
+	public void addColumn(Column col)
 	{
 		columnslist.add(col);
-		
-		columns = (Column[])columnslist.toArray(new Column[columnslist.size()]);
+
+		columns = columnslist.toArray(new Column[columnslist.size()]);
 		this.columncount = columns.length;
-		pos=-1;
+		pos = -1;
 	}
 }

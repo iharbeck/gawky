@@ -9,7 +9,7 @@ import gawky.template.Template;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestTemplate
+public class TestTemplate2
 {
 
 	/**
@@ -37,17 +37,9 @@ public class TestTemplate
 
 		// Templates sind in "freemarker.templates" 
 
-		Map latest = new HashMap();
-		latest.put("url", "products/greenmouse.html");
-		latest.put("name", "green mouse");
-
-		Map root = new HashMap();
-		root.put("user", "Big Joe");
-		root.put("latestProduct", latest);
-
 		Template tmp = FreemarkerTemplate.getInstance();
 		// in eine String Variable
-		String res = tmp.processToString(root, "test.ftl", Constant.ENCODE_ISO);
+		String res = tmp.processToString(new TestData(), "test2.ftl", Constant.ENCODE_ISO);
 
 		return res;
 		//System.out.println(res);

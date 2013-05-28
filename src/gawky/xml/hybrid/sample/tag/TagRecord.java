@@ -11,52 +11,55 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class TagRecord implements XMLTagHandler
 {
-    @Override
-    public String getTagName()
-    {
-	return "record";
-    }
-
-    @Override
-    public boolean buildDOM()
-    {
-	return true;
-    }
-
-    @Override
-    public boolean handle(XMLStore store)
-    {
-	// System.out.println(store.getInfo());
-	System.out.println("Kunde: " + store.get("record@client_id"));
-	System.out.println("Ort:   " + store.get("record/address@address_line_1"));
-	System.out.println("Str:   " + store.get("record/address@address_line_2"));
-
-	ArrayList<String> positionen = store.getAll("record/booking/lineitem@text_line");
-
-	for (String position : positionen)
+	public static int count = 0;
+	
+	@Override
+	public String getTagName()
 	{
-	    System.out.println("Positionen:   " + position);
+		return "record";
 	}
 
-	return true;
-    }
+	@Override
+	public boolean buildDOM()
+	{
+		return true;
+	}
 
-    /*
-    @XmlElement(name = "record@client_id")
-    private String client_id;
+	@Override
+	public boolean handle(XMLStore store)
+	{
+		// System.out.println(store.getInfo());
+		System.out.println("Kunde: " + store.get("record@client_id"));
+		System.out.println("Ort:   " + store.get("record/address@address_line_1"));
+		System.out.println("Str:   " + store.get("record/address@address_line_2"));
 
-    public String getClient_id()
-    {
+		ArrayList<String> positionen = store.getAll("record/booking/lineitem@text_line");
+
+		for(String position : positionen)
+		{
+			System.out.println("Positionen:   " + position);
+		}
+
+		count++;
+		return true;
+	}
+
+	/*
+	@XmlElement(name = "record@client_id")
+	private String client_id;
+
+	public String getClient_id()
+	{
 	return client_id;
-    }
+	}
 
-    public void setClient_id(String client_id)
-    {
+	public void setClient_id(String client_id)
+	{
 	this.client_id = client_id;
-    }
-    
-    public static void main(String[] args) throws Exception
-    {
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
 	long stat = System.currentTimeMillis();
 	
 	Field field = TagRecord.class.getDeclaredFields()[0];
@@ -80,6 +83,6 @@ public class TagRecord implements XMLTagHandler
 	System.out.println(rec.getClient_id());
 	
 	System.out.println(System.currentTimeMillis() - stat);
-    }
-    */
+	}
+	*/
 }

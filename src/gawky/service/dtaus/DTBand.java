@@ -30,11 +30,6 @@ public class DTBand
 		
 		handler.open(f);
 		
-		long asatz = 0;
-		long csatz = 0;
-		long cesatz = 0;
-		long esatz = 0;
-		
 		ArrayList<DTProcessorBand> list = new ArrayList<DTProcessorBand>();
 		
 		DTProcessorBand processor = null;
@@ -43,22 +38,18 @@ public class DTBand
 		{
 			if(handler.isSatzC()) 
 			{
-				csatz++;
 				SatzC satzc = handler.getSatzc();
 
-				cesatz += Integer.parseInt(satzc.getErweiterungskennnzeichen());
 				processor.getSatzcArray().add(satzc);
 			} 
 			else if(handler.isSatzE())
 			{
-				esatz++;
 				SatzE satze = handler.getSatze();
 
 				processor.setSatze(satze);
 			}
 			else if(handler.isSatzA())  // Kopfsatz Mandant ermitteln
 			{
-				asatz++;
 				SatzA satza = handler.getSatza();
 
 				processor = new DTProcessorBand();

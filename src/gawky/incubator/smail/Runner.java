@@ -322,7 +322,7 @@ public class Runner {
 
 		try {
 
-			ArrayList certList = new ArrayList();
+			ArrayList<X509Certificate> certList = new ArrayList<X509Certificate>();
 
 			certList.add(senderCert);
 

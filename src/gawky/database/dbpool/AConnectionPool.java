@@ -41,7 +41,7 @@ class ConnectionReaper extends Thread
 
 public class AConnectionPool 
 {
-   private static Log log = LogFactory.getLog(AConnectionPool.class);
+   //private static Log log = LogFactory.getLog(AConnectionPool.class);
 	
    private Vector<AConnection> connections;
    private String url;

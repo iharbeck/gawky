@@ -1,7 +1,5 @@
 package gawky.database.dbpool;
 
-import gawky.database.DB;
-
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -10,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -20,13 +17,11 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.concurrent.Executor;
 
 public class AConnection implements Connection
 {
-	private static Log log = LogFactory.getLog(AConnection.class);
+	//private static Log log = LogFactory.getLog(AConnection.class);
 
 	private AConnectionPool pool;
 	private Connection conn;
@@ -226,11 +221,6 @@ public class AConnection implements Connection
 		conn.clearWarnings();
 	}
 
-	public void setTypeMap(Map m) throws SQLException
-	{
-		conn.setTypeMap(m);
-	}
-
 	public Map getTypeMap() throws SQLException
 	{
 		return conn.getTypeMap();
@@ -364,14 +354,60 @@ public class AConnection implements Connection
 	{
 	}
 
-	public boolean isWrapperFor(Class arg0) throws SQLException
-	{
-		return false;
-	}
+	@Override
+    public boolean isWrapperFor(Class<?> arg0) throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    return false;
+    }
 
-	public Object unwrap(Class arg0) throws SQLException
-	{
-		return null;
-	}
+	@Override
+    public <T> T unwrap(Class<T> arg0) throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
+
+	@Override
+    public void abort(Executor arg0) throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	@Override
+    public int getNetworkTimeout() throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    public String getSchema() throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
+
+	@Override
+    public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	@Override
+    public void setSchema(String arg0) throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	@Override
+    public void setTypeMap(Map<String, Class<?>> arg0) throws SQLException
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
 
 }

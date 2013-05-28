@@ -27,7 +27,9 @@ public abstract class Part implements Cloneable
 	
 	private volatile static Parser    parser;
     private volatile static Generator generator;
-
+    
+    private Desc[] _desc;
+    
     private Part clone;
     
     public void buildVars()
@@ -131,7 +133,7 @@ public abstract class Part implements Cloneable
 		{
 			ClassPool cp = ClassPool.getDefault();
 			
-			cp.appendClassPath(new ClassClassPath(Part.class.getClass()));
+			cp.appendClassPath(new ClassClassPath(Part.class));
 	
 			CtClass cc = cp.get(c.getName());
 	
@@ -171,24 +173,27 @@ public abstract class Part implements Cloneable
 		
 			parts.put(c, p);
 		} catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		return p;
 	}
 
-	protected Desc[] getOptDesc() 
+	private Desc[] getOptDesc() 
 	{
 		Desc[] descs = getDesc();
 
 		ClassPool pool = null;
-		String classname = getClass().getName();;
+		
+		Class<? extends Part> clazz = getClass();
+		
+		String classname = clazz.getName();
 
 		boolean hasJavaAssist = Option.isClassInPath("javassist.ClassPool", "JavaAssist is not available");
 
 		if(hasJavaAssist)
 		{
 			pool = ClassPool.getDefault();
-			pool.insertClassPath(new ClassClassPath(this.getClass()));
+			pool.insertClassPath(new ClassClassPath(clazz));
 		}
 		
 		// Prepare Attribute Access
@@ -208,9 +213,11 @@ public abstract class Part implements Cloneable
 				if(hasJavaAssist)
 				{
 					// Native case - Generate Native Bytecode for ProxyClasses
+
+					//LogFactory.getLog(clazz).info("Generating Proxyclass: " + proxycname);
+
 					String proxycname = classname + "Accessor" + mname;
 
-					LogFactory.getLog(this.getClass()).info("Generating Proxyclass: " + proxycname);
 						
 					CtClass cc = pool.makeClass(proxycname);
 
@@ -239,19 +246,14 @@ public abstract class Part implements Cloneable
 				} 
 				else 
 				{
-					LogFactory.getLog(this.getClass()).info("Attribute access: using Reflection");
-
 					// Reflection case - Prepare Method details
-					desc.smethod = getClass().getMethod( "set" + mname, new Class[] {String.class});
-					desc.gmethod = getClass().getMethod( "get" + mname, null);
 
-					if(desc.smethod == null)
-						throw new Exception("Missing Setter for [" + mname + "]");
-					if(desc.gmethod == null)
-						throw new Exception("Missing Getter for [" + mname + "]");
+					//LogFactory.getLog(clazz).info("Attribute access: using Reflection");
+
+					desc.accessor = new AccessorReflection(clazz, mname);
 				}
 			} catch (Exception e) {
-				LogFactory.getLog(this.getClass()).error("Generating Getter/Setter", e);
+				LogFactory.getLog(clazz).error("Generating Getter/Setter", e);
 			}
 		}
 
@@ -264,57 +266,33 @@ public abstract class Part implements Cloneable
 
 	public final Desc[] getCachedDesc()
 	{
-		Class key = getClass();
-	
-		Desc[] cacheddesc = hmDesc.get(key);
+		//Desc[] _desc = null;
 		
-		if(cacheddesc != null)
-			return cacheddesc;
+		if(_desc != null)
+			return _desc;
+		
+		Class<? extends Part> clazz = getClass();
+
+		_desc = hmDesc.get(clazz);
+		
+		if(_desc != null)
+		{
+			return _desc;
+		}
 		
 		synchronized (hmDesc) 
 		{		
-			cacheddesc = hmDesc.get(key);  // DOUBLE CHECK LOCK
+			_desc = hmDesc.get(clazz);  // DOUBLE CHECK LOCK
 			
-			if(cacheddesc == null)
+			if(_desc == null)
 			{
-				cacheddesc = getOptDesc();
-				hmDesc.put(key, cacheddesc);
+				_desc = getOptDesc();
+				hmDesc.put(clazz, _desc);
 			}
 		}
 
-		return cacheddesc;
+		return _desc;
 	}
-
-	/**
-	 * use buildString
-	 */
-//	@Deprecated 
-//	public String toString()
-//	{
-//		return "";
-//		if(dotostring)
-//			return getGenerator().buildString(this);
-//		else
-//			return super.toString();
-//	}
-//
-//	@Deprecated
-//	public String toDebugString()
-//	{
-//		return getGenerator().buildDebugString(this);
-//	}
-
-	/**
-	 * for spezialized Generators
-	 */
-//	@Deprecated
-//	public String toString(Generator extgenerator)
-//	{
-//		if(dotostring)
-//			return extgenerator.buildString(this);
-//		else
-//			return super.toString();
-//	}
 
 	public String buildString()
 	{

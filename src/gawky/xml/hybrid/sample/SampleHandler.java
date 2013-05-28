@@ -26,5 +26,6 @@ public class SampleHandler
 		reader.process(filename, Constant.ENCODE_UTF8);
 
 		System.out.println("ms " + (System.currentTimeMillis() - start));
+		System.out.println(TagRecord.count);
 	}
 }

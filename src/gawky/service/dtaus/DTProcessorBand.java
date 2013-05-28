@@ -201,7 +201,7 @@ public class DTProcessorBand
 				System.out.println("FEE FREMD:" + Long.parseLong(dat.substring(11, 15).replaceAll("[\\., ]", "")));
 				System.out.println("FEE EIGEN:" + Long.parseLong(dat.substring(21, 25).replaceAll("[\\., ]", "")));						
 			} catch (Exception e) {
-				System.out.println(e);
+				e.printStackTrace();
 				System.exit(-1);
 			}
 		} 

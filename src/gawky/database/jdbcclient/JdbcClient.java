@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class JdbcClient 
+public class JdbcClient
 {
 	Connection conn;
 
@@ -15,106 +15,118 @@ public class JdbcClient
 	{
 		this.conn = conn;
 	}
-	
+
 	public JdbcClient() throws Exception
 	{
 		this.conn = DB.getConnection();
 	}
-	
-	public void close() {
+
+	public void close()
+	{
 		DB.doClose(conn);
 	}
-	
-	
-	public Object select(String sql) throws Exception {
+
+	public Object select(String sql) throws Exception
+	{
 		return select(sql, null, null);
 	}
-	
-	public Object select(String sql, JdbcSelectMapper object) throws Exception {
+
+	public Object select(String sql, JdbcSelectMapper object) throws Exception
+	{
 		return select(sql, object, null);
 	}
-	
+
 	public Object select(String sql, JdbcSelectMapper object, Object[] params) throws Exception
 	{
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
-		
-		try 
+
+		try
 		{
 			stmt = conn.prepareStatement(sql);
-			
-			if(params != null) {
+
+			if(params != null)
+			{
 				for(int i = 1; i <= params.length; i++)
-					stmt.setObject(i, params[i-1]);
+					stmt.setObject(i, params[i - 1]);
 			}
-	
+
 			rset = stmt.executeQuery();
-			
+
 			if(rset.next())
 			{
 				if(object != null)
 					return object.selectmapper(rset);
 				else
 					return rset.getObject(0);
-			} else {
+			}
+			else
+			{
 				throw new Exception("Object not found " + object);
 			}
-		} finally {
+		}
+		finally
+		{
 			DB.doClose(rset);
 			DB.doClose(stmt);
 		}
 	}
 
-	
 	public String selectString(String sql, Object[] params) throws Exception
 	{
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
-		
-		try 
+
+		try
 		{
 			stmt = conn.prepareStatement(sql);
-			
-			if(params != null) {
+
+			if(params != null)
+			{
 				for(int i = 1; i <= params.length; i++)
-					stmt.setObject(i, params[i-1]);
+					stmt.setObject(i, params[i - 1]);
 			}
-	
+
 			rset = stmt.executeQuery();
-			
+
 			if(rset.next())
-					return rset.getString(0);
-			else 
+				return rset.getString(0);
+			else
 				throw new Exception("Object not found !");
-			
-		} finally {
+
+		}
+		finally
+		{
 			DB.doClose(rset);
 			DB.doClose(stmt);
 		}
 	}
-	
+
 	public long selectLong(String sql, Object[] params) throws Exception
 	{
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
-		
-		try 
+
+		try
 		{
 			stmt = conn.prepareStatement(sql);
-			
-			if(params != null) {
+
+			if(params != null)
+			{
 				for(int i = 1; i <= params.length; i++)
-					stmt.setObject(i, params[i-1]);
+					stmt.setObject(i, params[i - 1]);
 			}
-	
+
 			rset = stmt.executeQuery();
-			
+
 			if(rset.next())
-					return rset.getLong(0);
-			else 
+				return rset.getLong(0);
+			else
 				throw new Exception("Object not found !");
-			
-		} finally {
+
+		}
+		finally
+		{
 			DB.doClose(rset);
 			DB.doClose(stmt);
 		}
@@ -124,96 +136,103 @@ public class JdbcClient
 	{
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
-		
-		try 
+
+		try
 		{
 			stmt = conn.prepareStatement(sql);
-			
-			if(params != null) {
+
+			if(params != null)
+			{
 				for(int i = 1; i <= params.length; i++)
-					stmt.setObject(i, params[i-1]);
+					stmt.setObject(i, params[i - 1]);
 			}
-	
+
 			rset = stmt.executeQuery();
-			
+
 			if(rset.next())
-					return rset.getDouble(0);
-			else 
+				return rset.getDouble(0);
+			else
 				throw new Exception("Object not found !");
-			
-		} finally {
+
+		}
+		finally
+		{
 			DB.doClose(rset);
 			DB.doClose(stmt);
 		}
 	}
 
-	
 	public ArrayList list(String sql, JdbcSelectMapper object) throws Exception
 	{
 		return list(sql, object, null);
 	}
-	
-	public ArrayList list(String sql, JdbcSelectMapper object, Object[] params) throws Exception
+
+	public ArrayList<Object> list(String sql, JdbcSelectMapper object, Object[] params) throws Exception
 	{
-		ArrayList list = new ArrayList();
-		
+		ArrayList<Object> list = new ArrayList<Object>();
+
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
-		
-		try 
+
+		try
 		{
 			stmt = conn.prepareStatement(sql);
-			
-			if(params != null) {
+
+			if(params != null)
+			{
 				for(int i = 1; i <= params.length; i++)
-					stmt.setObject(i, params[i-1]);
+					stmt.setObject(i, params[i - 1]);
 			}
-	
+
 			rset = stmt.executeQuery();
-			
+
 			while(rset.next())
 			{
 				list.add(object.selectmapper(rset));
 			}
-		} finally {
+		}
+		finally
+		{
 			DB.doClose(rset);
 			DB.doClose(stmt);
 		}
 		return list;
 	}
 
-
 	//helper
-	public static String completeInsert(String sql) {
+	public static String completeInsert(String sql)
+	{
 		String ext = " VALUES (?";
-		for(int i=0; i<sql.length(); i++) 
+		for(int i = 0; i < sql.length(); i++)
 		{
 			if(sql.charAt(i) == ',')
 			{
 				ext += ",?";
 			}
 		}
-		ext +=  ")"; 
-		
+		ext += ")";
+
 		return sql + ext;
 	}
-	
+
 	public void execute(String sql) throws Exception
 	{
 		execute(sql, null, null);
 	}
-	
+
 	/**
 	 * Execute SQL with parameter list
 	 * @param sql
 	 * @param params
 	 * @throws Exception
 	 */
-	public void execute(String sql, Object[] params) throws Exception {
+	public void execute(String sql, Object[] params) throws Exception
+	{
 		execute(sql, params, null);
 	}
 
-	public void execute(String sql, JdbcParameterMapper object) throws Exception {
+	public void execute(String sql, JdbcParameterMapper object) throws Exception
+	{
 		execute(sql, null, object);
 	}
 
@@ -221,31 +240,36 @@ public class JdbcClient
 	{
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
-		
-		try 
+
+		try
 		{
 			stmt = conn.prepareStatement(sql);
-			
-			if(params != null) {
+
+			if(params != null)
+			{
 				for(int i = 1; i <= params.length; i++)
-					stmt.setObject(i, params[i-1]);
+					stmt.setObject(i, params[i - 1]);
 			}
 
-			if(object != null) {
+			if(object != null)
+			{
 				// count number of reqired params (for insert autofield case)
-				int paramcount=0;
-				for(int i=0; i<sql.length(); i++) {
+				int paramcount = 0;
+				for(int i = 0; i < sql.length(); i++)
+				{
 					if(sql.charAt(i) == '?')
 						paramcount++;
 				}
-				
+
 				StatementDecorator mappedstmt = new StatementDecorator(stmt, paramcount);
 				object.parametermapper(mappedstmt);
 			}
-			
+
 			stmt.execute();
-			
-		} finally {
+
+		}
+		finally
+		{
 			DB.doClose(rset);
 			DB.doClose(stmt);
 		}

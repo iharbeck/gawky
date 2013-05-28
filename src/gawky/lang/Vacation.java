@@ -60,6 +60,13 @@ public class Vacation
 		vacation.list();
 	}
 	
+	public void nextWorkingday(Calendar cal)
+	{
+		do {
+			cal.add(Calendar.DATE, 1);
+		} while(!isWorkingday(cal));
+	}
+	
 	public Date getNextWorkingday(Date date)
 	{
 		GregorianCalendar cal = new GregorianCalendar();
@@ -74,7 +81,7 @@ public class Vacation
 	
 	public Date getPrevWorkingday(Date date)
 	{
-		GregorianCalendar cal = new GregorianCalendar();
+		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 
 		do {
@@ -86,13 +93,13 @@ public class Vacation
 	
 	public boolean isWorkingday(Date date) 
 	{
-		GregorianCalendar cal = new GregorianCalendar();
+		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		
 		return isWorkingday(cal);
 	}
 	
-	public boolean isWorkingday(GregorianCalendar cal) 
+	public boolean isWorkingday(Calendar cal) 
 	{
 		// Wochentag ermitteln
 		int d = cal.get(Calendar.DAY_OF_WEEK);
