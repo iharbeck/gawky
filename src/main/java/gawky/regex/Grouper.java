@@ -1,15 +1,11 @@
 package gawky.regex;
 
-import gawky.file.Tool;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.sun.org.apache.xml.internal.security.signature.Reference;
 
 public class Grouper {
 
