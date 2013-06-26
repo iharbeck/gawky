@@ -74,15 +74,16 @@
 		</pluginManagement>
 	</build>
 	<repositories>
-		<!-- <repository> <id>fias</id> <name>fias Maven Repository</name> <url>http://degtlun5130.server.arvato-systems.de:8180/nexus/content/repositories/fias</url> 
-			</repository> <repository> <id>fias-snapshots</id> <name>fias-Snapshots Maven 
-			Repository</name> <url>http://degtlun5130.server.arvato-systems.de:8180/nexus/content/repositories/fias-snapshots</url> 
-			</repository> -->
+			<repository>
+                  <id>ProjectRepo</id>
+                  <name>ProjectRepo</name>
+                  <url>file://${project.basedir}/repro</url>
+            </repository>
 
-		<repository>
-			<id>private</id>
-			<url>http://oodt.jpl.nasa.gov/download/private/</url>
-		</repository>
+		    <repository>
+				  <id>pentaho</id>
+				  <url>http://repo.pentaho.org/artifactory/repo</url>
+		    </repository>
 	</repositories>
 
 	<dependencies>
@@ -266,7 +267,7 @@
 			<type>pom</type>
 		</dependency>
 		<dependency>
-			<groupId>org</groupId>
+			<groupId>ftp4che</groupId>
 			<artifactId>ftp4che</artifactId>
 			<version>0.7.1</version>
 		</dependency>
