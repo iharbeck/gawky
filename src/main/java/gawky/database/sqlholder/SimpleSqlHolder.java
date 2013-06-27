@@ -1,4 +1,4 @@
-package gawky.database;
+package gawky.database.sqlholder;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
