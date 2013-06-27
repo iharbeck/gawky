@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class SimpleSqlHolder
 {
-	static HashMap<Object, HashMap<String, StringBuffer>> hsHolder = new HashMap<Object, HashMap<String, StringBuffer>>();
+	static HashMap<Object, HashMap<String, StringBuffer>> hsTemplates = new HashMap<Object, HashMap<String, StringBuffer>>();
 
 	HashMap<String, StringBuffer> templates;
 
@@ -45,7 +45,7 @@ public class SimpleSqlHolder
 
 	public HashMap<String, StringBuffer> lookupTemplates(Class clazz)
 	{
-		HashMap<String, StringBuffer> templates = hsHolder.get(clazz);
+		HashMap<String, StringBuffer> templates = hsTemplates.get(clazz);
 
 		if(templates == null)
 		{
@@ -92,7 +92,7 @@ public class SimpleSqlHolder
 			{
 			}
 
-			hsHolder.put(clazz, templates);
+			hsTemplates.put(clazz, templates);
 		}
 
 		return templates;
