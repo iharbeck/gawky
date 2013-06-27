@@ -38,6 +38,11 @@ public class SimpleSqlHolder
 		map = null;
 	}
 	
+	public SimpleSqlHolder()
+	{
+		this(CallerClassName.getCallerClass(3));
+	}
+	
 	public SimpleSqlHolder(Class<?> clazz)
 	{
 		templates = lookupTemplates(clazz);
