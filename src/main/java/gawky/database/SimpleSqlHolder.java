@@ -43,7 +43,7 @@ public class SimpleSqlHolder
 		templates = lookupTemplates(clazz);
 	}
 
-	public HashMap<String, StringBuffer> lookupTemplates(Class clazz)
+	public HashMap<String, StringBuffer> lookupTemplates(Class<?> clazz)
 	{
 		HashMap<String, StringBuffer> templates = hsTemplates.get(clazz);
 
