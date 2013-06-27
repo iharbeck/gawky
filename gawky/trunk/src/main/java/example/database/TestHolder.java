@@ -1,6 +1,6 @@
 package example.database;
 
-import gawky.database.SimpleSqlHolder;
+import gawky.database.sqlholder.SimpleSqlHolder;
 
 public class TestHolder
 {
