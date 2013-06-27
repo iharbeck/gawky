@@ -33,6 +33,11 @@ public class SimpleSqlHolder
 		map.put(key, value);
 	}
 	
+	public void clearParameter()
+	{
+		map = null;
+	}
+	
 	public SimpleSqlHolder(Class<?> clazz)
 	{
 		templates = lookupTemplates(clazz);
