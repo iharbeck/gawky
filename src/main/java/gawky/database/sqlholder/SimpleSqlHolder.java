@@ -40,7 +40,7 @@ public class SimpleSqlHolder
 	
 	public SimpleSqlHolder()
 	{
-		this(CallerClassName.getCallerClass(3));
+		this(CallerClass.getCallerClass(3));
 	}
 	
 	public SimpleSqlHolder(Class<?> clazz)
