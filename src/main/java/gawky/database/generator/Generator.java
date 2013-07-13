@@ -1,7 +1,7 @@
 package gawky.database.generator;
 
 import gawky.database.part.Table;
-import gawky.lang.SaveDateFormat;
+import gawky.lang.SafeDateFormat;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 
@@ -27,8 +27,8 @@ public class Generator
 	private static boolean dotrim = false;
 	private static boolean doclone = false;
 
-	public static SaveDateFormat df_YYYYMMDD       = new SaveDateFormat("yyyyMMdd");
-	public static SaveDateFormat df_YYYYMMDDHHMMSS = new SaveDateFormat("yyyyMMddHHmmss");
+	public static SafeDateFormat df_YYYYMMDD       = new SafeDateFormat("yyyyMMdd");
+	public static SafeDateFormat df_YYYYMMDDHHMMSS = new SafeDateFormat("yyyyMMddHHmmss");
 
 	Locale locale = new Locale("de", "DE");
 
@@ -42,11 +42,11 @@ public class Generator
 	}
 
 	public void setDateFormat(String format) {
-		df_YYYYMMDD = new SaveDateFormat(format);
+		df_YYYYMMDD = new SafeDateFormat(format);
 	}
 
 	public void setTimeFormat(String format) {
-		df_YYYYMMDDHHMMSS   = new SaveDateFormat(format);
+		df_YYYYMMDDHHMMSS   = new SafeDateFormat(format);
 	}
 
 	public void setLocale(Locale locale)

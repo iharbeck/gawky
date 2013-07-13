@@ -1,7 +1,7 @@
 package gawky.global;
 
 import gawky.database.DB;
-import gawky.lang.SaveDateFormat;
+import gawky.lang.SafeDateFormat;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class Validation
 		if(value == null)
 			value = "";
 
-		SaveDateFormat df = new SaveDateFormat(pattern);
+		SafeDateFormat df = new SafeDateFormat(pattern);
 		df.setLenient(false);
 
 		try

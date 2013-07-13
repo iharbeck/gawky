@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class SaveDateFormat
+public class SafeDateFormat
 {
 	private final String format;
 
@@ -33,7 +33,7 @@ public class SaveDateFormat
 		return formatter;
 	}
 
-	public SaveDateFormat(String format)
+	public SafeDateFormat(String format)
 	{
 		this.format = format;
 	}
