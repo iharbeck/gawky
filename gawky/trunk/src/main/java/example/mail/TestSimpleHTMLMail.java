@@ -12,15 +12,21 @@ public class TestSimpleHTMLMail
 
 		SimpleMail mail = new SimpleMail();
 
-		mail.addTo("ingo.harbeck@iharbeck.de")
+		
+		
+		mail.addTo("to@domain.com")
 		        // .addImage("shit.gif", "shit.gif");
-		        .setBody("<b>Hello äöü 7ex</b><img src=\"cid:shit.gif\"/>");
+		        .setBody("<b>Hello äöü 7ex</b><img src=\"cid:shit.gif\"/>")
+		        .setSubject("Hello")
+		        .setFrom("from@domain.com")
+		        .setNotify("notify@domain.com");
 
 		SimpleMailSender server = SimpleMailSender.create()
-		        .setServer("mail.iharbeck.de")
-		        .setUsername("ingo.harbeck@iharbeck.de")
-		        .setPassword("password");
+		        .setServer("mail.domain.com")
+		        .setUsername("from@domain.com")
+		        .setPassword("xxx");
 
+		
 		server.send(mail);
 
 		System.exit(0);

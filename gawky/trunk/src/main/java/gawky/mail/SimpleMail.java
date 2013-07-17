@@ -37,6 +37,8 @@ public class SimpleMail extends Mail
 	private HashMap<String, String> cids = new HashMap<String, String>();
 
 	InternetAddress from;
+	InternetAddress notify;
+	
 	private ArrayList<InternetAddress> array_to = new ArrayList<InternetAddress>();
 	private ArrayList<InternetAddress> array_reply = new ArrayList<InternetAddress>();
 
@@ -58,6 +60,17 @@ public class SimpleMail extends Mail
 	{
 		this.from = new InternetAddress(from, alias);
 		return this;
+	}
+	
+	public SimpleMail setNotify(String from) throws Exception
+	{
+		this.notify = new InternetAddress(from);
+		return this;
+	}
+	
+	public InternetAddress getNotify()
+	{
+		return notify;
 	}
 
 	public SimpleMail addTo(String to) throws Exception
