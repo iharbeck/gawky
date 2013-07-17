@@ -8,6 +8,9 @@ public final class XMLStore
 	
 	public long line_start;
 	public long line_end;
+	
+	public String level = "";
+
 
 	public void setLineStart(long line_start)
 	{

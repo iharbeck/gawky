@@ -32,7 +32,9 @@ public class XMLReaderPull
 		XmlPullParser parser = pullfactory.newPullParser();
 		
 		parser.setInput(in, encoding);
-		
+
+		XMLStore store = new XMLStore();
+
 		for(int event = parser.next(); event != XmlPullParser.END_DOCUMENT; event = parser.next())
 		{
 			if(event == XmlPullParser.START_TAG)
@@ -43,11 +45,10 @@ public class XMLReaderPull
 				if(handler != null)
 				{
 					store.setLineStart(parser.getLineNumber());
-					handleRecord(parser, tagname, handler.buildDOM());
+					handleRecord(store, parser, tagname, handler.buildDOM());
 					store.setLineEnd(parser.getLineNumber());
 					
-					if(handler.handle(store))
-						store.clear();
+					handler.handle(store);
 				}
 			}
 		}
@@ -60,25 +61,23 @@ public class XMLReaderPull
 		return hshandler.get(tagname);
 	}
 
-	String level = "";
-	XMLStore store = new XMLStore();
 
-	public void processAttributes(XmlPullParser parser)
+	public void processAttributes(XMLStore store, XmlPullParser parser)
 	{
 		for(int i = 0; i < parser.getAttributeCount(); i++)
 		{
-			store.put(level + '@' + parser.getAttributeName(i), parser.getAttributeValue(i));
+			store.put(store.level + '@' + parser.getAttributeName(i), parser.getAttributeValue(i));
 		}
 	}
 
-	public XMLStore handleRecord(XmlPullParser parser, String tagname, boolean buildDOM) throws Exception
+	public void handleRecord(XMLStore store, XmlPullParser parser, String tagname, boolean buildDOM) throws Exception
 	{
-		level = parser.getName();
+		store.level = parser.getName();
 
-		processAttributes(parser);
+		processAttributes(store, parser);
 
 		if(!buildDOM)
-			return store;
+			return;
 		
 		int tagnamelen = 0;
 		
@@ -88,24 +87,22 @@ public class XMLReaderPull
 			{
 				case XmlPullParser.START_TAG:
 					String name = parser.getName();
-					level += '/' + name;
+					store.level += '/' + name;
 					
 					tagnamelen = name.length();
 					
-					processAttributes(parser);
+					processAttributes(store, parser);
 					break;
 				case XmlPullParser.END_TAG:
 					if(parser.getName().equals(tagname))
-						return store;
-					else
-						level = level.substring(0, level.length() - tagnamelen - 1);
+						return;
+					
+					store.level = store.level.substring(0, store.level.length() - tagnamelen - 1);
 					break;
 				case XmlPullParser.TEXT:
-					store.put(level, parser.getText());
+					store.put(store.level, parser.getText());
 					break;
 			}
 		}
-
-		return store;
 	}
 }

@@ -4,5 +4,5 @@ public interface XMLTagHandler
 {
 	public String getTagName(); 
 	public boolean buildDOM();
-	public boolean handle(XMLStore store);
+	public void handle(XMLStore store);
 }
