@@ -36,6 +36,8 @@ public class XMLReaderStax
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		XMLStreamReader parser = factory.createXMLStreamReader(in, encoding);
 
+		XMLStore store = new XMLStore();
+
 		for(int event = parser.next(); event != XMLStreamConstants.END_DOCUMENT; event = parser.next())
 		{
 			if(event == XMLStreamConstants.START_ELEMENT)
@@ -45,10 +47,9 @@ public class XMLReaderStax
 
 				if(handler != null)
 				{
-					handleRecord(parser, tagname, handler.buildDOM());
+					handleRecord(store, parser, tagname, handler.buildDOM());
 
-					if(handler.handle(store))
-						store.clear();
+					handler.handle(store);
 				}
 			}
 		}
@@ -61,47 +62,44 @@ public class XMLReaderStax
 		return hshandler.get(tagname);
 	}
 
-	String level = "";
-	XMLStore store = new XMLStore();
-
-	public void processAttributes(XMLStreamReader parser)
+	public void processAttributes(XMLStore store, XMLStreamReader parser)
 	{
 		for(int i = 0; i < parser.getAttributeCount(); i++)
 		{
-			store.put(level + "@" + parser.getAttributeLocalName(i), parser.getAttributeValue(i));
+			store.put(store.level + "@" + parser.getAttributeLocalName(i), parser.getAttributeValue(i));
 		}
 	}
 
-	public XMLStore handleRecord(XMLStreamReader parser, String tagname, boolean buildDOM) throws Exception
+	public void handleRecord(XMLStore store, XMLStreamReader parser, String tagname, boolean buildDOM) throws Exception
 	{
-		level = parser.getLocalName();
+		store.level = parser.getLocalName();
 
-		processAttributes(parser);
+		processAttributes(store, parser);
 
 		if(!buildDOM)
-			return store;
+			return;
 		
 		for(int event = parser.next(); event != XMLStreamConstants.END_DOCUMENT; event = parser.next())
 		{
 			switch(event)
 			{
 				case XMLStreamConstants.START_ELEMENT:
-					level += "/" + parser.getLocalName();
-					processAttributes(parser);
+					store.level += "/" + parser.getLocalName();
+					processAttributes(store, parser);
 					break;
 				case XMLStreamConstants.END_ELEMENT:
 					if(parser.getLocalName().equals(tagname))
-						return store;
+						return;
 					else
-						level = level.substring(0, level.lastIndexOf('/'));
+						store.level = store.level.substring(0, store.level.lastIndexOf('/'));
 					break;
 				case XMLStreamConstants.CHARACTERS:
-					store.put(level, parser.getText());
+					store.put(store.level, parser.getText());
 					break;
 			}
 		}
 
-		return store;
+		return;
 	}
 
 	public static void handleGeneral(XMLStreamReader parser) throws Exception

@@ -1,10 +1,10 @@
-package gawky.xml.hybrid.sample;
+package example.xml.hybrid.sample;
 
+import example.xml.hybrid.sample.tag.TagFias2;
+import example.xml.hybrid.sample.tag.TagRecord;
 import gawky.file.Locator;
 import gawky.global.Constant;
 import gawky.xml.hybrid.XMLReaderPull;
-import gawky.xml.hybrid.sample.tag.TagFias2;
-import gawky.xml.hybrid.sample.tag.TagRecord;
 import gawky.xml.sax.SaxSample;
 
 public class SampleHandler
