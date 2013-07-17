@@ -119,7 +119,9 @@ public class Mail
             InputStream stream, 
             String attachName,
             boolean dozip,
-            Map<String, String> templateparameter, Map<String, String> cids
+            Map<String, String> templateparameter, Map<String, String> cids,
+            InternetAddress notify 
+            
             ) 
     {
     	// templates in message / subject ersetzen
@@ -155,6 +157,8 @@ public class Mail
             // set Type and Charset in Headerfield 'Content-Type'
             message.setHeader("Content-Type", "text/plain; charset=UTF-8");
 
+            if(notify != null)
+            	message.setHeader("Disposition-Notification-To",  notify.getAddress());
             
             //TO
             message.setFrom(from);
