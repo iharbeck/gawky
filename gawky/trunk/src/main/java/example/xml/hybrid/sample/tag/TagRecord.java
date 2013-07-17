@@ -1,4 +1,4 @@
-package gawky.xml.hybrid.sample.tag;
+package example.xml.hybrid.sample.tag;
 
 import gawky.xml.hybrid.XMLStore;
 import gawky.xml.hybrid.XMLTagHandler;
@@ -26,7 +26,7 @@ public class TagRecord implements XMLTagHandler
 	}
 
 	@Override
-	public boolean handle(XMLStore store)
+	public void handle(XMLStore store)
 	{
 		// System.out.println(store.getInfo());
 		System.out.println("Kunde: " + store.get("record@client_id"));
@@ -41,7 +41,8 @@ public class TagRecord implements XMLTagHandler
 		}
 
 		count++;
-		return true;
+		
+		store.clear();
 	}
 
 	/*

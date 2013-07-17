@@ -1,4 +1,4 @@
-package gawky.xml.hybrid.sample.tag;
+package example.xml.hybrid.sample.tag;
 
 import gawky.xml.hybrid.XMLStore;
 import gawky.xml.hybrid.XMLTagHandler;
@@ -20,11 +20,11 @@ public class TagFias2 implements XMLTagHandler
     }	
 	
 	@Override
-    public boolean handle(XMLStore store)
+    public void handle(XMLStore store)
     {
 		//System.out.println(store.getInfo());
 		System.out.println("IDIDIDID: " + store.get("fias2@uniqueid"));
 		
-		return true;
+		store.clear();
     }
 }
