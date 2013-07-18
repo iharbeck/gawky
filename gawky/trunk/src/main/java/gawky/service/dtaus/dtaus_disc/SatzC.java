@@ -53,7 +53,7 @@ public class SatzC extends gawky.service.dtaus.dtaus_band.SatzC
 		this.len = len;
 	}
 	
-	public byte[] getSatzC() throws UnsupportedEncodingException {
+	public byte[] getSatzC() throws Exception {
 		
 		int len = 0;
 		if(getSatzCe() != null) 

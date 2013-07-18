@@ -20,7 +20,7 @@ public class Request
 	RequestAddress addr;
 	Part /*RequestPayment*/ paym;
 
-	public String toRequestString() throws UnsupportedEncodingException
+	public String toRequestString() throws Exception
     {
         String parts = "";
         

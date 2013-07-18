@@ -7,7 +7,7 @@ public class TestGenerator {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) 
+	public static void main(String[] args) throws Exception
 	{
 		long start = System.currentTimeMillis();
 		

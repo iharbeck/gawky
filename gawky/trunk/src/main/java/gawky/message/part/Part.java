@@ -294,7 +294,7 @@ public abstract class Part implements Cloneable
 		return _desc;
 	}
 
-	public String buildString()
+	public String buildString() throws Exception
 	{
 		return getGenerator().buildString(this);
 	}
@@ -307,14 +307,14 @@ public abstract class Part implements Cloneable
 	/**
 	 * for spezialized Generators
 	 */
-	public String buildString(Generator extgenerator)
+	public String buildString(Generator extgenerator) throws Exception
 	{
 		return extgenerator.buildString(this);
 	}
 
 	
 
-	public byte[] buildBytes(String charset) throws UnsupportedEncodingException
+	public byte[] buildBytes(String charset) throws Exception
 	{
 		return buildString().getBytes(charset);
 	}
