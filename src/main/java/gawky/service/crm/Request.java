@@ -47,7 +47,7 @@ public class Request {
         posn.add(pos);
     }
     
-    private String getPositions()
+    private String getPositions() throws Exception
     {
         String ret = ""; 
         
@@ -66,7 +66,7 @@ public class Request {
         books.add(book);
     }
     
-    private String getBooks()
+    private String getBooks() throws Exception
     {
         String ret = ""; 
         
@@ -88,7 +88,7 @@ public class Request {
     		return Constant.ENCODE_ISO;
     }
     
-    public String toRequestString()
+    public String toRequestString() throws Exception
     {
         String ret = "";
         

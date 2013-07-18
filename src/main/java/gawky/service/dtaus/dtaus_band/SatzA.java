@@ -39,7 +39,7 @@ public class SatzA extends Part
 
     static EBCDICGenerator generator = new EBCDICGenerator();
     
-    public byte[] getSatzA() throws UnsupportedEncodingException
+    public byte[] getSatzA() throws Exception
     {
     	int linelen = 150;
     	byte[] satz = generator.buildString(this, linelen);

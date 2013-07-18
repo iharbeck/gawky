@@ -75,7 +75,7 @@ public class SatzC extends Part
     
     static EBCDICGenerator generator = new EBCDICGenerator();
     
-    public byte[] getSatzC() throws UnsupportedEncodingException
+    public byte[] getSatzC() throws Exception
     {
     	int ext = 0;
 		if(getSatzCe() != null) 
