@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,11 +20,21 @@ import java.util.regex.Pattern;
 
 public class SimpleSqlHolder
 {
-	static HashMap<Object, HashMap<String, StringBuffer>> hsTemplates = new HashMap<Object, HashMap<String, StringBuffer>>();
+	static Map<Object, Map<String, StringBuffer>> hsTemplates = new HashMap<Object, Map<String, StringBuffer>>();
 
-	HashMap<String, StringBuffer> templates;
+	Map<String, StringBuffer> templates;
 
-	HashMap<String, String> map = null;
+	Map<String, String> map = null;
+	
+	public void setParameter(Map map)
+	{
+		this.map = map;
+	}
+	
+	public void addParameter(Map map)
+	{
+		this.map.putAll(map);
+	}
 	
 	public void addParameter(String key, String value)
 	{
@@ -48,9 +59,9 @@ public class SimpleSqlHolder
 		templates = lookupTemplates(clazz);
 	}
 
-	public HashMap<String, StringBuffer> lookupTemplates(Class<?> clazz)
+	public Map<String, StringBuffer> lookupTemplates(Class<?> clazz)
 	{
-		HashMap<String, StringBuffer> templates = hsTemplates.get(clazz);
+		Map<String, StringBuffer> templates = hsTemplates.get(clazz);
 
 		if(templates == null)
 		{
