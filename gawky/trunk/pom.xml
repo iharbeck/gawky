@@ -4,7 +4,7 @@
 	<groupId>org.ogni</groupId>
 	<artifactId>gawky</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1.6</version>
+	<version>0.1.7</version>
 
 	<build>
 	
@@ -164,6 +164,7 @@
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
 			<version>1.1</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
@@ -179,6 +180,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.4</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -232,11 +234,13 @@
 			<groupId>com.ximpleware</groupId>
 			<artifactId>vtd-xml</artifactId>
 			<version>2.11</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.agmip.thirdparty</groupId>
 			<artifactId>ximpleware-vtd-xml</artifactId>
 			<version>2.11</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
