@@ -7,27 +7,9 @@ import org.apache.commons.beanutils.BeanUtils;
 
 public class EnumHandler 
 {
-	public static void main(String[] args) throws Exception
-    {	
-		Map<String, Enum<SampleEnum>> map = buildEnumReverseMap(SampleEnum.class, "val");
-
-		System.out.println(map.get("1"));
-		System.out.println(map.get("2"));
-		System.out.println(map.get("3"));
-		
-		for(int i = 0; i < 10; i++)
-		{
-			System.out.println(lookupEnumReverse(SampleEnum.class, "val", "3"));
-		}
-		
-		System.out.println(SampleEnum.getEnumById("2"));
-    }
-	
-	static HashMap<Class, HashMap<String, Enum>> store = new HashMap<Class, HashMap<String,Enum>>();
-
-	public static <T extends Enum<T>> Map<String, Enum<T>> buildEnumReverseMap(Class<T> en, String attribute) throws Exception
+	public static <T extends Enum<T>> Map<String, T> buildEnumReverseMap(Class<T> en, String attribute) throws Exception
 	{
-		Map<String, Enum<T>> lookup = new HashMap<String, Enum<T>>();
+		Map<String, T> lookup = new HashMap<String, T>();
 	
 		for (T t : en.getEnumConstants())
 		{
@@ -37,14 +19,16 @@ public class EnumHandler
 		return lookup;
 	}
 	
+    final static HashMap<Object, HashMap<String, Enum<?>>> store = new HashMap<Object, HashMap<String,Enum<?>>>();
 	
-	public static <T extends Enum<T>> Enum<T> lookupEnumReverse(Class<T> en, String attribute, String value) throws Exception
+	@SuppressWarnings({ "unchecked" })
+    public static <T extends Enum<T>> T lookupEnumReverse(Class<T> en, String attribute, String value) throws Exception
 	{
-		Map<String, Enum> lookup = store.get((Class)en);
+		Map<String, T> lookup = (Map<String, T>)store.get(en);
 	
 		if(lookup == null)
 		{
-    		lookup = (Map)buildEnumReverseMap(en, attribute); 
+    		lookup = buildEnumReverseMap(en, attribute); 
 		}
 		
 		return lookup.get(value);
