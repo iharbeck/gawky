@@ -4,7 +4,7 @@
 	<groupId>org.ogni</groupId>
 	<artifactId>gawky</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1.7</version>
+	<version>0.1.8</version>
 
 	<build>
 	
@@ -182,11 +182,12 @@
 			<version>4.4</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+ 	    <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.6</version>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
@@ -267,11 +268,13 @@
 			<artifactId>svnkit</artifactId>
 			<version>1.7.4-v1</version>
 		</dependency>
-		<dependency>
+		<!-- 
+		 <dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-core</artifactId>
 			<version>9.0.2</version>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-pdf</artifactId>

@@ -5,8 +5,14 @@ import java.net.URL;
 
 public class Locator 
 {
-	public static final String findBinROOT() {
-		return findPath("");
+	public static final String findBinROOT() 
+	{
+		String path = findPath("properties.xml");
+		
+		if(path != null)
+			return path.substring(0, path.length()-14);
+		else
+			return findPath("");
 	}
 	
 	public static final String findPath(String filename) {
