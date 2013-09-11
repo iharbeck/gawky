@@ -1,5 +1,7 @@
 package gawky.global;
 
+import gawky.lang.SafeDateFormat;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.text.DecimalFormat;
@@ -71,7 +73,7 @@ public class Format
 	}
 	
 
-	static ConcurrentHashMap<String, SimpleDateFormat> dateHash = new ConcurrentHashMap<String, SimpleDateFormat>();
+	static ConcurrentHashMap<String, SafeDateFormat> dateHash = new ConcurrentHashMap<String, SafeDateFormat>();
 
 	public static String bytesToStringUTFNIO(byte[] bytes)
 	{
@@ -104,19 +106,19 @@ public class Format
 		if(datum == null)
 			datum = "";
 
-		SimpleDateFormat sdfparse = dateHash.get(pattern);
+		SafeDateFormat sdfparse = dateHash.get(pattern);
 
 		if(sdfparse == null)
 		{
-			sdfparse = new SimpleDateFormat(pattern);
+			sdfparse = new SafeDateFormat(pattern);
 			dateHash.put(pattern, sdfparse);
 		}
 
-		SimpleDateFormat sdftarget = dateHash.get(targetPattern);
+		SafeDateFormat sdftarget = dateHash.get(targetPattern);
 
 		if(sdftarget == null)
 		{
-			sdftarget = new SimpleDateFormat(targetPattern);
+			sdftarget = new SafeDateFormat(targetPattern);
 			dateHash.put(targetPattern, sdftarget);
 		}
 
