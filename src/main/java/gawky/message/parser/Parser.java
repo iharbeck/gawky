@@ -113,7 +113,7 @@ public class Parser
 
 						// am Ende der Zeile angekommen und weiteres nicht optionales feld
 						//if(i+1 < descs.length  && desc.code != Desc.CODE_O)
-						if(desc.code != Desc.CODE_O)
+						if(value.length() == 0 && desc.code != Desc.CODE_O)
 							throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
 					}
 					else
