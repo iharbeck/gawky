@@ -163,9 +163,9 @@ public class DB
 
 	static public Connection getConnection(String alias) throws SQLException
 	{
-		if(log.isInfoEnabled())
-			log.info("get connection");
-		// return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
+//		if(log.isInfoEnabled())
+//			log.info("get connection");
+//		return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
 
 		return dbpool.get(alias).getConnection();
 	}
