@@ -34,7 +34,7 @@ public class DB
 	private static Log log = LogFactory.getLog(DB.class);
 	private static int INITIALCAP = 2000;
 
-	public static HashMap<String, BoneCP> dbpool = new HashMap<String, BoneCP>();
+	public static HashMap<String, PoolWrapper> dbpool = new HashMap<String, PoolWrapper>();
 
 	public static void init() throws Exception
 	{
@@ -108,10 +108,10 @@ public class DB
 
 				if(dbalias == null)
 					//new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000, props);
-					dbpool.put(Integer.toString(i), connectionPool);
+					dbpool.put(Integer.toString(i), new PoolWrapper(connectionPool));
 				else
 					//new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, dbalias, 5000000, props);
-					dbpool.put(dbalias, connectionPool);
+					dbpool.put(dbalias, new PoolWrapper(connectionPool));
 			}
 			catch(Exception e)
 			{
@@ -120,29 +120,45 @@ public class DB
 		}
 	}
 
+	static public void enablePool(int number)
+	{
+		dbpool.get(Integer.toString(number)).enable();
+	}
+	
+	static public void enablePool(String alias)
+	{
+		dbpool.get(alias).enable();
+	}
+	
+	static public void enablePool()
+	{
+		dbpool.get("0").enable();
+	}
+	
+	static public void disablePool(int number)
+	{
+		dbpool.get(Integer.toString(number)).disable();
+	}
+	
+	static public void disablePool(String alias)
+	{
+		dbpool.get(alias).disable();
+	}
+	
+	static public void disablePool()
+	{
+		dbpool.get("0").disable();
+	}
+	
+	static public Connection getConnection(int number) throws SQLException
+	{
+		return getConnection(Integer.toString(number));
+	}
+
 	// Verbindung aus Connectionpool holen
 	static public Connection getConnection() throws SQLException
 	{
-		//Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool0");
-
-		Connection conn = dbpool.get("0").getConnection();
-
-		if(log.isInfoEnabled())
-			log.info("get connection [" + conn + "]");
-
-		return conn;
-	}
-
-	static public Connection getConnection(int number) throws SQLException
-	{
-		//Connection conn = DriverManager.getConnection(AConnectionDriver.URL_PREFIX + "pool" + number);
-
-		Connection conn = dbpool.get(Integer.toString(number)).getConnection();
-
-		if(log.isInfoEnabled())
-			log.info("get connection [" + conn + "]");
-
-		return conn;
+		return getConnection("0");
 	}
 
 	static public Connection getConnection(String alias) throws SQLException
