@@ -1192,4 +1192,54 @@ public abstract class Table extends Part
 	{
 		return getStaticLocal().nativevalues;
 	}
+	
+	
+	public static <T extends Table> void batchinsert(ArrayList<T> list) throws Exception
+	{
+		batchinsert(0, list);
+	}
+
+	public static <T extends Table> void batchinsert(int db, ArrayList<T> list) throws Exception
+	{
+		Connection conn = DB.getConnection(db);
+
+		conn.setAutoCommit(false);
+	
+		batchinsert(conn, list, 1000);
+
+		conn.rollback();
+		conn.setAutoCommit(true);
+		
+		DB.doClose(conn);
+	}
+
+	public static <T extends Table> void batchinsert(Connection conn, ArrayList<T> list, int batchsize) throws Exception
+	{
+		int size = list.size();
+
+		if(size == 0)
+			return;
+
+		Generator sqlGenerator = new Generator();
+
+		Table element = list.get(0);
+
+		PreparedStatement batch_stmt = element.getStmt(conn, Table.SQL_INSERT);
+
+		for(int i = 0; i < size; i++)
+		{
+			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i), true);
+			batch_stmt.addBatch();
+
+			if(i > 0 && i % batchsize == 0)
+			{
+				batch_stmt.executeBatch();
+			}
+		}
+
+		if(size % batchsize != 0)
+		{
+			batch_stmt.executeBatch();
+		}
+	}
 }
