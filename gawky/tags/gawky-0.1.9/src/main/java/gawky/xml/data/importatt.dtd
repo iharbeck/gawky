@@ -1,0 +1,105 @@
+<!ELEMENT fias2 (record*)>
+<!ATTLIST fias2 uniqueid CDATA #REQUIRED>
+
+<!ELEMENT record (address?, account?, booking?)>
+<!ATTLIST record client_id CDATA #REQUIRED customer_id CDATA #REQUIRED>
+
+<!ELEMENT address EMPTY>
+<!ATTLIST address 
+address_number CDATA #IMPLIED
+title CDATA  #IMPLIED
+name CDATA #REQUIRED
+name_2 CDATA  #IMPLIED
+street  CDATA #REQUIRED
+street_2 CDATA  #IMPLIED
+zip_code CDATA #REQUIRED
+city CDATA #REQUIRED
+country_code CDATA #REQUIRED
+zip_po_box CDATA  #IMPLIED
+po_box CDATA  #IMPLIED
+phone_number CDATA  #IMPLIED 
+fax_number CDATA  #IMPLIED
+email_address CDATA  #IMPLIED
+address_line_1 CDATA #IMPLIED
+address_line_2 CDATA #IMPLIED
+address_line_3 CDATA #IMPLIED
+address_line_4 CDATA #IMPLIED
+address_line_5 CDATA #IMPLIED
+address_line_6 CDATA #IMPLIED
+address_line_7 CDATA #IMPLIED
+>
+
+<!ELEMENT account EMPTY>
+<!ATTLIST account 
+external_customer_id CDATA #IMPLIED
+vat_id CDATA #IMPLIED
+language_debtor CDATA #IMPLIED
+account_group CDATA #IMPLIED
+reminder_block CDATA #IMPLIED
+affiliates_percent_rate CDATA #IMPLIED
+credit_card CDATA #IMPLIED
+cc_expiry_date CDATA #IMPLIED
+issue_date CDATA #IMPLIED
+issue_number CDATA #IMPLIED
+bank_id CDATA #IMPLIED
+bank_account CDATA #IMPLIED
+account_owner CDATA #IMPLIED
+rib_code CDATA #IMPLIED
+>
+
+<!ELEMENT booking ( lineitem*)> 
+<!ATTLIST booking 
+transaction_id CDATA #IMPLIED
+address_number CDATA #IMPLIED
+transaction_code CDATA #REQUIRED
+transaction_subcode CDATA #REQUIRED
+transaction_date CDATA #REQUIRED
+due_date CDATA #IMPLIED
+amount CDATA #REQUIRED
+invoice_ext CDATA #IMPLIED
+order_number CDATA #IMPLIED
+distribution_channel CDATA #IMPLIED
+sale_point CDATA #IMPLIED
+generic_field_1 CDATA #IMPLIED
+generic_field_2 CDATA #IMPLIED
+generic_field_3 CDATA #IMPLIED
+position_number CDATA #IMPLIED
+payment_type CDATA #IMPLIED
+text_line CDATA #IMPLIED
+bank_id CDATA #IMPLIED
+bank_account CDATA #IMPLIED
+reminder_level CDATA #IMPLIED
+account_owner CDATA #IMPLIED
+reminder_block CDATA #IMPLIED
+rib_code CDATA #IMPLIED
+credit_card CDATA #IMPLIED
+cc_expiry_date CDATA #IMPLIED
+issue_date CDATA #IMPLIED
+issue_number CDATA #IMPLIED
+authorization_code CDATA #IMPLIED
+cc_secure_pay_id CDATA #IMPLIED
+cc_secure_transaction_id CDATA #IMPLIED
+cc_secure_reference_number CDATA #IMPLIED
+>
+
+
+<!ELEMENT lineitem EMPTY>
+<!ATTLIST lineitem 
+amount CDATA #REQUIRED
+tax_per_cent_1 CDATA #IMPLIED
+tax_amount_1 CDATA #IMPLIED
+tax_per_cent_2 CDATA #IMPLIED
+tax_amount_2 CDATA #IMPLIED
+tax_per_cent_3 CDATA #IMPLIED
+tax_amount_3 CDATA #IMPLIED
+product_group CDATA #IMPLIED
+service_type CDATA #IMPLIED
+distribution_channel CDATA #IMPLIED
+product_id CDATA #IMPLIED
+unit_number CDATA #IMPLIED
+text_line CDATA #IMPLIED
+generic_field_1 CDATA #IMPLIED
+generic_field_2 CDATA #IMPLIED
+generic_field_3 CDATA  #IMPLIED
+>
+
