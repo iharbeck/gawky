@@ -1194,22 +1194,17 @@ public abstract class Table extends Part
 	}
 	
 	
-	public static <T extends Table> void batchinsert(ArrayList<T> list) throws Exception
+	public static <T extends Table> void batchinsert(ArrayList<T> list, int batchsize) throws Exception
 	{
-		batchinsert(0, list);
+		batchinsert(0, list, batchsize);
 	}
 
-	public static <T extends Table> void batchinsert(int db, ArrayList<T> list) throws Exception
+	public static <T extends Table> void batchinsert(int db, ArrayList<T> list, int batchsize) throws Exception
 	{
 		Connection conn = DB.getConnection(db);
 
-		conn.setAutoCommit(false);
-	
-		batchinsert(conn, list, 1000);
+		batchinsert(conn, list, batchsize);
 
-		conn.rollback();
-		conn.setAutoCommit(true);
-		
 		DB.doClose(conn);
 	}
 
