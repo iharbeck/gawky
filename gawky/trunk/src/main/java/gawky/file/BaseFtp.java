@@ -15,6 +15,11 @@ public abstract class BaseFtp implements URLInterface
 		retrieveFiles(null, false);
 	}
 	
+	public String[] retrieveFiles(String filefilter) throws Exception
+	{
+		return retrieveFiles(filefilter, false);
+	}
+	
 	public abstract String[] retrieveFiles(String filefilter, boolean simulate) throws Exception;
 
 	public abstract void renameRemoteFile(String src, String dest) throws Exception;
