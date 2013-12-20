@@ -149,7 +149,7 @@ public class Ftps extends BaseFtp {
 		
 		ff.changeLocalDir("c:/");
 		ff.changeRemoteDir("/ingo");
-		ff.retrieveFiles("*");
+		ff.retrieveFiles("*", false);
 		ff.close();
 	}
 	public void open(String server, String user, String pass, int port, String option) throws Exception 
@@ -193,7 +193,7 @@ public class Ftps extends BaseFtp {
 	}
 	
 	
-	public String[] retrieveFiles(String filefilter) throws Exception
+	public String[] retrieveFiles(String filefilter, boolean simulate) throws Exception
 	{
 		List<FTPFile> vfiles = ftpsclient.getDirectoryListing();
 		
@@ -216,7 +216,10 @@ public class Ftps extends BaseFtp {
 		
 			files.add(file);
 			
-            ftpsclient.downloadFile(lsEntry, new FTPFile(localdir, file));
+			if(simulate == false)
+			{
+				ftpsclient.downloadFile(lsEntry, new FTPFile(localdir, file));
+			}
 		}
 		
 		return (String[])files.toArray(new String[files.size()]);

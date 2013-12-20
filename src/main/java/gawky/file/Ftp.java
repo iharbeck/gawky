@@ -95,10 +95,15 @@ public class Ftp extends BaseFtp
 	
 	public void retrieveFiles() throws Exception
 	{
-		retrieveFiles(null);
+		retrieveFiles(null, false);
 	}
 	
 	public String[] retrieveFiles(String filefilter) throws Exception
+	{
+		return retrieveFiles(filefilter, false);
+	}
+
+	public String[] retrieveFiles(String filefilter, boolean simulate) throws Exception
 	{
 		FTPFile ftpFileList [] = ftp.listFiles();
 
@@ -122,7 +127,8 @@ public class Ftp extends BaseFtp
 			
 			FileOutputStream fos = new FileOutputStream(localdir + file); 
 			
-			ftp.retrieveFile(file, fos);
+			if(simulate == false)
+				ftp.retrieveFile(file, fos);
 			
 			fos.close();
 		}

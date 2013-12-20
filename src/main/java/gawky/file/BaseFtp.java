@@ -12,10 +12,10 @@ public abstract class BaseFtp implements URLInterface
 
 	public void retrieveFiles() throws Exception
 	{
-		retrieveFiles(null);
+		retrieveFiles(null, false);
 	}
 	
-	public abstract String[] retrieveFiles(String filefilter) throws Exception;
+	public abstract String[] retrieveFiles(String filefilter, boolean simulate) throws Exception;
 
 	public abstract void renameRemoteFile(String src, String dest) throws Exception;
 	
@@ -83,10 +83,15 @@ public abstract class BaseFtp implements URLInterface
 		me.close();
 	}
 
-	public void retrieve(String url, String targetpath) throws Exception
+	public String[] retrieve(String url, String targetpath) throws Exception
+	{
+		return retrieve(url, targetpath, false);
+	}
+	
+	public String[] retrieve(String url, String targetpath, boolean simulate) throws Exception
 	{
 		if(url == null)
-			return;
+			return null;
 		
 		URLParser uparser = new URLParser(url);
 		
@@ -106,12 +111,14 @@ public abstract class BaseFtp implements URLInterface
 		me.changeRemoteDir(sourcefolder);
 		me.changeLocalDir(targetfolder);
 
-		me.retrieveFiles(sourcefilename);
+		String files[] = me.retrieveFiles(sourcefilename, simulate);
 		
 //		if(targetfilename != null)
 //			me.renameLocaleFile(sourcefilename, targetfilename);
 		
 		me.close();
+		
+		return files;
 	}
 
 }

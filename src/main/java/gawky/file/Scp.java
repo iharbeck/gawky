@@ -40,11 +40,16 @@ public class Scp implements URLInterface
 		Scp.copytohost(uparser.getServer(), uparser.getUser(), uparser.getPass(), sourcepath, uparser.getServerpath());
 	}
 	
-	public void retrieve(String url, String targetpath) throws Exception
+	public String[] retrieve(String url, String targetpath) throws Exception
+	{
+		return retrieve(url, targetpath, false);
+	}
+	
+	public String[] retrieve(String url, String targetpath, boolean simulate) throws Exception
 	{
 		URLParser uparser = new URLParser(url);
 
-		Scp.copyfromhost(uparser.getServer(), uparser.getUser(), uparser.getPass(), targetpath, uparser.getServerpath());
+		return Scp.copyfromhost(uparser.getServer(), uparser.getUser(), uparser.getPass(), targetpath, uparser.getServerpath());
 	}
 	
 	public static void mkdirhost(String url) throws Exception
@@ -108,9 +113,6 @@ public class Scp implements URLInterface
         }
     }
 
-	
-	
-	
 	public static void copytohost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{
 		FileInputStream fis = null;
@@ -210,8 +212,10 @@ public class Scp implements URLInterface
 		}
 	}
 	
-	public static void copyfromhost(String host, String user, String pass, String lfile, String rfile) throws Exception
+	public static String[] copyfromhost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{
+		ArrayList<String> files = new ArrayList<String>();
+		
 		FileOutputStream fos = null;
 		
 		try 
@@ -283,7 +287,12 @@ public class Scp implements URLInterface
 
 				// directory or individual file
 				// read a content of lfile
-				fos = new FileOutputStream(prefix == null ? lfile : prefix + file);
+				String filename = prefix == null ? lfile : prefix + file;
+				
+				files.add(filename);
+				
+				fos = new FileOutputStream(filename);
+				
 				int foo;
 				while (true) {
 					if (buf.length < filesize)
@@ -304,7 +313,7 @@ public class Scp implements URLInterface
 				fos = null;
 
 				if (checkAck(in) != 0) {
-					return;
+					return files.toArray(new String[0]);
 				}
 
 				// send '\0'
@@ -315,14 +324,16 @@ public class Scp implements URLInterface
 
 			session.disconnect();
 
-			return;
+			return files.toArray(new String[0]);
 		} finally {
 			try {
 				if (fos != null)
 					fos.close();
 			} catch (Exception ee) {
 			}
+
 		}
+		
 	}
 	
 	

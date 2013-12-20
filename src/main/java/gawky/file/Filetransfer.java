@@ -7,8 +7,15 @@ public class Filetransfer {
 
 	static Log log = LogFactory.getLog(Filetransfer.class);
 	
+//	public static void main(String[] args) throws Exception {
+//		send("sftp://content_reebok_arvato_test:azer2bist@ftp.minick.net:/import/", "c:/20070606KK.txt");
+//	}
+	
 	public static void main(String[] args) throws Exception {
-		send("sftp://content_reebok_arvato_test:azer2bist@ftp.minick.net:/import/", "c:/20070606KK.txt");
+		String[] ss =  retrieve("sftp://harb05:$Sommer2030@csgpms30.server.arvato-systems.de:/CSGPMS30/PDIS/DBOPMS30/FIAS2/STREAMS/BFS-P-ALL-PAYON-DUMP-TO-BFS/*.sh", "c:/20070606KK.txt", true);
+
+		for(String s : ss)
+			System.out.println(s);
 	}
 	
 	static URLInterface getInstance(String url) throws Exception
@@ -32,10 +39,15 @@ public class Filetransfer {
 		inter.send(url, sourcepath);
 	}
 	
-	public static void retrieve(String url, String targetpath) throws Exception 
+	public static String[] retrieve(String url, String targetpath) throws Exception 
+	{
+		return retrieve(url, targetpath, false);
+	}
+
+	public static String[] retrieve(String url, String targetpath, boolean simulate) throws Exception 
 	{
 		URLInterface inter = getInstance(url);
 
-		inter.retrieve(url, targetpath);
+		return inter.retrieve(url, targetpath, simulate);
 	}
 }

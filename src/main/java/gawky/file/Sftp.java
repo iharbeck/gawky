@@ -111,7 +111,7 @@ public class Sftp extends BaseFtp
 		sftpclient.chgrp(owner, path);
 	}
 
-	public String[] retrieveFiles(String filefilter) throws Exception
+	public String[] retrieveFiles(String filefilter, boolean simulate) throws Exception
 	{
 		Vector<LsEntry> vfiles = sftpclient.ls(".");
 
@@ -132,12 +132,13 @@ public class Sftp extends BaseFtp
 			String file = lsEntry.getFilename();
 
 			files.add(file);
-
-			OutputStream out = new FileOutputStream(localdir + file);
 			
-			sftpclient.get(file, out);
-			
-			out.close();
+			if(simulate == false)
+			{
+				OutputStream out = new FileOutputStream(localdir + file);
+				sftpclient.get(file, out);
+				out.close();
+			}
 		}
 
 		return (String[])files.toArray(new String[files.size()]);
