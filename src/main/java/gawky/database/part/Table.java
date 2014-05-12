@@ -1237,4 +1237,48 @@ public abstract class Table extends Part
 			batch_stmt.executeBatch();
 		}
 	}
+	
+	public static <T extends Table> void batchupdate(ArrayList<T> list, int batchsize) throws Exception
+	{
+		batchupdate(0, list, batchsize);
+	}
+
+	public static <T extends Table> void batchupdate(int db, ArrayList<T> list, int batchsize) throws Exception
+	{
+		Connection conn = DB.getConnection(db);
+
+		batchupdate(conn, list, batchsize);
+
+		DB.doClose(conn);
+	}
+
+	public static <T extends Table> void batchupdate(Connection conn, ArrayList<T> list, int batchsize) throws Exception
+	{
+		int size = list.size();
+
+		if(size == 0)
+			return;
+
+		Generator sqlGenerator = new Generator();
+
+		Table element = list.get(0);
+
+		PreparedStatement batch_stmt = element.getStmt(conn, Table.SQL_UPDATE);
+
+		for(int i = 0; i < size; i++)
+		{
+			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i), false);
+			batch_stmt.addBatch();
+
+			if(i > 0 && i % batchsize == 0)
+			{
+				batch_stmt.executeBatch();
+			}
+		}
+
+		if(size % batchsize != 0)
+		{
+			batch_stmt.executeBatch();
+		}
+	}
 }
