@@ -126,10 +126,13 @@ public abstract class Table extends Part
 		System.out.println(Generator.generateAlterSQL(this).toString());
 	}
 
-	public void descAfterInterceptor(Desc[] descs)
+	public synchronized void descAfterInterceptor(Desc[] descs)
 	{
 		StaticLocal local = getStaticLocal();
 
+		if(local.descIds[0] != null) 
+			return;
+		
 		// Anzahl Prim�rfelder
 		int c = 0;
 		for(int i = 0; i < descs.length; i++)
