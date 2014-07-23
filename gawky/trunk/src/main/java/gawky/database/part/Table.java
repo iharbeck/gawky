@@ -180,12 +180,24 @@ public abstract class Table extends Part
 		if(staticlocal != null)
 			return staticlocal;
 
-		staticlocal = (StaticLocal)hmStaticLocal.get(getClass());
+		Class key = getClass();
+		
+		staticlocal = (StaticLocal)hmStaticLocal.get(key);
 
 		if(staticlocal == null)
 		{
-			staticlocal = new StaticLocal();
-			hmStaticLocal.put(getClass(), staticlocal);
+			synchronized (hmStaticLocal)
+			{
+				if(!hmStaticLocal.containsKey(key))
+				{	
+					staticlocal = new StaticLocal();
+					hmStaticLocal.put(key, staticlocal);
+				}
+				else
+				{
+					staticlocal = (StaticLocal)hmStaticLocal.get(key);
+				}					
+			}
 		}
 
 		return staticlocal;
