@@ -1,0 +1,196 @@
+package gawky.message.parser;
+
+import gawky.message.part.Desc;
+import gawky.message.part.DescL;
+import gawky.message.part.Part;
+
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * @author Ingo Harbeck
+ *
+ */
+public class PatternParser extends Parser
+{
+	private static Log log = LogFactory.getLog(PatternParser.class);
+
+	public final static String DELIMITER_LETTER    = "#[a-zA-Z]";
+	public final static String DELIMITER_NUMBER    = "#[0-9]";
+	public final static String DELIMITER_NOTNUMBER = "#[^0-9]";
+	public final static String PATTERN_CURRENCY    = "%[0-9]*,[0-9]{0,2}"; // ####,##
+
+	HashMap patternstore;
+
+	boolean hasDelimiter;
+
+	@Override
+	public Object parse(String str, Part bean) throws ParserException
+	{
+		// store for splitting records
+		line = str;
+
+		// Get Description Object
+		descs = ((Part)bean).getCachedDesc();
+
+		Desc   desc;
+		String value = "";
+
+		int max = str.length();
+		int start = 0;
+
+		int end =0;
+
+		for(int i = 0; i < descs.length; i++)
+		{
+			desc = descs[i];
+
+			// DISCUSS example - ID not in Importfile but later in DB
+			if(desc.skipparsing)
+				continue;
+
+			// ListValue
+			if(desc.code == Desc.CODE_L)
+			{
+				value = ((DescL)desc).lookup(str.substring(start));
+
+				if(value == null)
+					throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+
+				start += value.length();
+
+				storeValue(bean, i, desc, value);
+				continue;
+			}
+
+			if(desc.delimiter == null)   // fixed
+			{
+				end = start+desc.len;
+
+				if(end > max) // Feld zu kurz wenn nicht option
+				{
+					position = max;
+
+					if(desc.len > 0 && desc.code != Desc.CODE_O)
+						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+
+					// Optionale Felder mit zu kurzem Wert gefüllt !!!
+					log.warn("OPTIONAL VALUE AT RECORD END IS TO SHORT");
+
+					value = str.substring(start);
+					storeValue(bean, i, desc, value);
+					return bean;
+				}
+				value = str.substring(start, start+desc.len);
+				start += desc.len;
+
+				position = start;
+			}
+			else // variable
+			{
+				// spezial indexOf (Ende markiert durch Feld eines anderen Typs)
+				// auf Zahl folgt ein CHAR
+
+				//??? end = str.indexOf(desc.delimiter, start);
+
+				end = indexOf(str, desc.delimiter, start);
+
+				if(end > max || end == -1) // Feld zu kurz wenn nicht option
+				{
+					//position = max;
+
+					if(desc.len > 0 && desc.code != Desc.CODE_O)
+						throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, str.substring(start));
+
+					if(end == -1) {
+						// enventuell fehlt einfach nur der Delimiter am Zeilenende
+						value = str.substring(start);
+						storeValue(bean, i, desc, value);
+					}
+
+					// am Ende der Zeile angekommen und weiteres nicht optionales feld
+					if(i+1 < descs.length && descs[i].code != Desc.CODE_O)
+						throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
+
+					return bean;
+				}
+
+				if(desc.len > 0)
+					end = Math.min(start+desc.len, end);
+
+				value = str.substring(start, end);
+
+				start = end;
+
+				// Delimiter überspringen / set by indexOf
+				if(hasDelimiter)
+					start += desc.delimiter.length();  // Multicharacter delimiter
+
+				position = start;
+
+				if(desc.len > 0 && value.length() > desc.len)
+					throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
+			}
+
+			// Required Field
+			if(desc.code == Desc.CODE_R && value.length() == 0)
+				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
+			// Optional Field
+			else if(desc.code == Desc.CODE_O && value.length() == 0)
+			{
+				storeValue(bean, i, desc, value);
+				continue;
+			}
+
+			// Inhaltlich prüfung
+			typeCheck(desc, value);
+
+		    storeValue(bean, i, desc, value);
+		}
+
+		return bean;
+	}
+
+	public final int indexOf(String str, String end, int start)
+	{
+		if(end.charAt(0) == '#') {
+			hasDelimiter = false;
+			return indexOfField(str, end.substring(1), start);
+		}
+		else if(end.charAt(0) == '%') {
+			hasDelimiter = false;
+			return indexOfPattern(str, end.substring(1), start);
+		}
+		else{
+			hasDelimiter = true;
+			return str.indexOf(end, start);
+		}
+	}
+
+	public final int indexOfField(String str, String delimiter, int start)
+	{
+		int max = str.length();
+		for(int i=start; i < max; i++)
+			if( Character.toString(str.charAt(i)).matches(delimiter))
+				return i;
+
+		return -1;
+	}
+
+	public final int indexOfPattern(String str, String patternstr, int start)
+	{
+	   Pattern pattern = Pattern.compile(patternstr);
+
+	   Matcher matcher = pattern.matcher(str.substring(start));
+	   if (matcher.find()) {
+		   //log.debug( matcher.group(0) );
+		   return matcher.end() + start;
+	   }
+	   return -1;
+	}
+
+}
