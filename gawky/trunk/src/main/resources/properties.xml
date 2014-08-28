@@ -29,16 +29,15 @@
    		<hello>world</hello>
   	</base>
 
-    <staging>pp</staging>
+    <staging>production</staging>
 
     <db_pp>
         <driver>oracle.jdbc.driver.OracleDriver</driver>
-        <!-- <url>jdbc:oracle:thin:@bfslnxproud.debdid4:1521:dboioak1</url> -->
-        <url>jdbc:oracle:thin:@degtlun2434.server.arvato-systems.de:1485:dboioak2</url>
-        <user>oak</user>
-        <password>vivaldi</password>
+        <url>jdbc:oracle:thin:@server:port:uid</url>
+        <user>user</user>
+        <password>pass</password>
         <property>defaultNChar=true</property>
-        <trigger>ALTER SESSION SET current_schema = oak</trigger>
+        <trigger>ALTER SESSION SET current_schema = name</trigger>
     </db_pp>
     
 	<db_production>

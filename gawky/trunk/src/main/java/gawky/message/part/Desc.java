@@ -105,7 +105,7 @@ public class Desc
 		this(FMT_CONSTANT, CODE_F, value.length(), value, null);
 	}
 	
-	public Desc(int len, String value) // DescConst mit Länge
+	public Desc(int len, String value) // DescConst mit Lï¿½nge
 	{	
 		this(FMT_CONSTANT, CODE_F, len, value, null);
 	}
@@ -190,12 +190,14 @@ public class Desc
 	
 	public String  xmlpath;
 	
-	// constant informationen müssen nicht im Part
+	// constant informationen mï¿½ssen nicht im Part
 	// gespeichert werden.
 	public boolean nostore = false;
 	
 	public boolean nostring = false;
 
+	public int colnum;
+	
 	public String pattern = null;
 	
 	public Desc setPattern(String pattern) {
