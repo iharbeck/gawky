@@ -216,9 +216,14 @@ public abstract class Part implements Cloneable
 			pool.insertClassPath(new ClassClassPath(clazz));
 		}
 
+		int colnum = 1;
+		
 		// Prepare Attribute Access
 		for(Desc desc : descs)
 		{
+			if(desc.dbname == null || desc.nostore)
+				desc.colnum = colnum++;
+			
 			if(desc instanceof BColumn && (this instanceof Table))
 				((Table)this).setBinary(true);
 

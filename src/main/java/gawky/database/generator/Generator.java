@@ -50,7 +50,7 @@ public class Generator
 	}
 
 	public void setLocale(Locale locale)
-	{   // EN für ,.  DE für .,
+	{   // EN fï¿½r ,.  DE fï¿½r .,
 		this.locale = locale;
 	}
 
@@ -70,7 +70,7 @@ public class Generator
 
 		Object val = null;
 
-		for(int i=0, x = 1; i < descs.length; i++, x++)
+		for(int i=0; i < descs.length; i++)
 		{
 			desc = descs[i];
 			
@@ -79,7 +79,7 @@ public class Generator
 
 			try
 			{   
-			    val = mapGetDBToObjectType(desc, rset, desc.dbname);
+			    val = mapGetDBToObjectType(desc, rset, desc.colnum); //dbname
 
 			    if(dotrim && val instanceof String)
 			    	val = Formatter.rtrim((String)val);
@@ -101,7 +101,7 @@ public class Generator
 	}
 	
 	
-	private final Object mapGetDBToObjectType(Desc desc, ResultSet rset, int x) throws Exception 
+	private final Object mapGetDBToObjectType(Desc desc, ResultSet rset, int id) throws Exception 
 	{
 		Object val = null;
 		
@@ -113,20 +113,20 @@ public class Generator
 			case Desc.FMT_UPPER :
 			case Desc.FMT_LOWER :
 			case Desc.FMT_BLANK_LETTER :
-				val = rset.getString(x);
+				val = rset.getString(id);
 				break;
 			case Desc.FMT_DIGIT :
-				val = formatNumber(rset.getDouble(x));
+				val = formatNumber(rset.getDouble(id));
 				//val = rset.getDouble(x);
 				break;
 			case Desc.FMT_DATE :
-				val =  df_YYYYMMDD.format( rset.getDate(x) );
+				val =  df_YYYYMMDD.format( rset.getDate(id) );
 				break;
 			case Desc.FMT_TIME :
-				val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(x) );
+				val =  df_YYYYMMDDHHMMSS.format( rset.getTimestamp(id) );
 				break;
 			case Desc.FMT_BINARY :
-				val = rset.getBytes(x);
+				val = rset.getBytes(id);
 				break;
 		}
 
@@ -220,7 +220,7 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element überspringen
+			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element ï¿½berspringen
 				continue;
 
 			sql.append(desc.dbname);  // column name
@@ -293,7 +293,7 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element überspringen
+			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element ï¿½berspringen
 				continue;
 
 			sql.append(desc.dbname);  // column name
@@ -467,7 +467,7 @@ public class Generator
 	{
 		StringBuilder sql = generateSelectSQL(bean);
 
-		// ID Spalte für UPDATE zwingend
+		// ID Spalte fï¿½r UPDATE zwingend
 		sql.append( generateSelectWHERE(bean) );
 
 		log.debug(sql);
@@ -482,7 +482,7 @@ public class Generator
 
 			sql.append("DELETE FROM ").append(bean.getTableName());
 
-			// ID Spalte für UPDATE zwingend
+			// ID Spalte fï¿½r UPDATE zwingend
 			sql.append( generateUpdateWHERE(bean) );
 
 			return sql;
@@ -520,7 +520,7 @@ public class Generator
 		 sql.deleteCharAt(sql.length()-1);
 
 		try {
-			// ID Spalte für UPDATE zwingend
+			// ID Spalte fï¿½r UPDATE zwingend
 			sql.append( generateUpdateWHERE(bean) );
 		} catch (Exception e) {
 			log.error("GAWKY: Primarykey is not defined");
@@ -593,7 +593,7 @@ public class Generator
 			if(desc.dbname == null || desc.nostore)
 				continue;
 
-			if(desc.isPrimary())  // ID überspringen
+			if(desc.isPrimary())  // ID ï¿½berspringen
 				continue;
 
 			mapSetObjectToDBType(desc, stmt, setter++, desc.getValue(bean));
