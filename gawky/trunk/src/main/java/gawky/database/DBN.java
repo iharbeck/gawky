@@ -3,7 +3,6 @@ package gawky.database;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 @Deprecated
@@ -75,7 +74,7 @@ public class DBN
 		try { 
     		return DB.getRow(sql, params);
     	} catch (Exception e) {
-    		return new Hashtable<String, String>();
+    		return new HashMap<String, String>();
     	}
 	}
 	
@@ -83,7 +82,7 @@ public class DBN
 		try { 
     		return DB.getRow(pool, sql, params);
     	} catch (Exception e) {
-    		return new Hashtable<String, String>();
+    		return new HashMap<String, String>();
     	}
 	}
 
@@ -91,7 +90,7 @@ public class DBN
 		try { 
     		return DB.getHash(conn, sql, params);
     	} catch (Exception e) {
-    		return new Hashtable<String, String>();
+    		return new HashMap<String, String>();
     	}
 	}
 
