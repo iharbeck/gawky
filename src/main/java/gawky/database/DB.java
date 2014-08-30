@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -396,7 +395,7 @@ public class DB
 				ResultSetMetaData md = rset.getMetaData();
 				int columncount = md.getColumnCount();
 				
-				hs = new Hashtable<String, String>(columncount);
+				hs = new HashMap<String, String>(columncount);
 
 				for(int i = columncount; i > 0; i--)
 				{
@@ -468,7 +467,7 @@ public class DB
 			
 			while(rset.next())
 			{
-				Map<String, String> hs = new Hashtable<String, String>(columncount);
+				Map<String, String> hs = new HashMap<String, String>(columncount);
 
 				for(int i = columncount; i > 0; i--)
 				{
