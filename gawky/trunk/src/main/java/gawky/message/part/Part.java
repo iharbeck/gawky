@@ -221,7 +221,7 @@ public abstract class Part implements Cloneable
 		// Prepare Attribute Access
 		for(Desc desc : descs)
 		{
-			if(desc.dbname == null || desc.nostore)
+			if(!(desc.dbname == null || desc.nostore))
 				desc.colnum = colnum++;
 			
 			if(desc instanceof BColumn && (this instanceof Table))
