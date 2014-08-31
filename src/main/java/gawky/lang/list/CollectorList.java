@@ -3,7 +3,7 @@ package gawky.lang.list;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class CollectorList<K, T>
+public class CollectorList<K, T>
 {
 	HashMap<K, ArrayList<T>> store;
 
