@@ -1,6 +1,7 @@
 package gawky.database;
 
 import gawky.database.dbpool.AConnectionDriver;
+import gawky.global.Format;
 import gawky.global.Option;
 
 import java.sql.Connection;
@@ -50,7 +51,11 @@ public class DB
 			String dbalias = Option.getProperty("db_${staging}(" + i + ").alias", null);
 			String[] dbproperties = Option.getProperties("db_${staging}(" + i + ").property");
 
-			final String trigger = Option.getProperty("db_${staging}(" + i + ").trigger", null);
+			String trigger = Option.getProperty("db_${staging}(" + i + ").trigger", null);
+
+			int dbconnmin = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmin", "1"));
+			int dbconnmax = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmax", "100"));
+			int dbconnpartitions = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connpartitions", "1"));
 
 			Properties props = new Properties();
 
@@ -90,9 +95,9 @@ public class DB
 			config.setJdbcUrl(dburl);
 			config.setUsername(dbuser);
 			config.setPassword(dbpass);
-			config.setMinConnectionsPerPartition(1);
-			config.setMaxConnectionsPerPartition(100);
-			config.setPartitionCount(2);
+			config.setMinConnectionsPerPartition(dbconnmin);
+			config.setMaxConnectionsPerPartition(dbconnmax);
+			config.setPartitionCount(dbconnpartitions);
 			config.setDriverProperties(props);
 			//config.setStatementsCacheSize(50);
 			
