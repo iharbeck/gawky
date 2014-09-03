@@ -107,6 +107,26 @@ public class Collector implements Map<String, Object>
 		v += value;
 		map.put(_key, v);
 	}
+	
+	private void addList()
+	{
+		
+	}
+	
+	private void getList()
+	{
+		
+	}
+	
+	private void putMin()
+	{
+		
+	}
+	
+	private void putMax()
+	{
+		
+	}
 
 	@Override
 	public int size()
