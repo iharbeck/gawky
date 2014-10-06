@@ -33,6 +33,9 @@ public class SimpleSqlHolder
 	
 	public void addParameter(Map map)
 	{
+		if(map == null)
+			map = new HashMap<String, String>();
+		
 		this.map.putAll(map);
 	}
 	
