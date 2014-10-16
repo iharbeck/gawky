@@ -1209,12 +1209,12 @@ public abstract class Table extends Part
 	}
 	
 	
-	public static <T extends Table> void batchinsert(ArrayList<T> list, int batchsize) throws Exception
+	public static <T extends Table> void batchinsert(List<T> list, int batchsize) throws Exception
 	{
 		batchinsert(0, list, batchsize);
 	}
 
-	public static <T extends Table> void batchinsert(int db, ArrayList<T> list, int batchsize) throws Exception
+	public static <T extends Table> void batchinsert(int db, List<T> list, int batchsize) throws Exception
 	{
 		Connection conn = DB.getConnection(db);
 
@@ -1223,7 +1223,7 @@ public abstract class Table extends Part
 		DB.doClose(conn);
 	}
 
-	public static <T extends Table> void batchinsert(Connection conn, ArrayList<T> list, int batchsize) throws Exception
+	public static <T extends Table> void batchinsert(Connection conn, List<T> list, int batchsize) throws Exception
 	{
 		int size = list.size();
 
@@ -1251,14 +1251,16 @@ public abstract class Table extends Part
 		{
 			batch_stmt.executeBatch();
 		}
+		
+		batch_stmt.close();
 	}
 	
-	public static <T extends Table> void batchupdate(ArrayList<T> list, int batchsize) throws Exception
+	public static <T extends Table> void batchupdate(List<T> list, int batchsize) throws Exception
 	{
 		batchupdate(0, list, batchsize);
 	}
 
-	public static <T extends Table> void batchupdate(int db, ArrayList<T> list, int batchsize) throws Exception
+	public static <T extends Table> void batchupdate(int db, List<T> list, int batchsize) throws Exception
 	{
 		Connection conn = DB.getConnection(db);
 
@@ -1267,7 +1269,7 @@ public abstract class Table extends Part
 		DB.doClose(conn);
 	}
 
-	public static <T extends Table> void batchupdate(Connection conn, ArrayList<T> list, int batchsize) throws Exception
+	public static <T extends Table> void batchupdate(Connection conn, List<T> list, int batchsize) throws Exception
 	{
 		int size = list.size();
 
@@ -1295,5 +1297,7 @@ public abstract class Table extends Part
 		{
 			batch_stmt.executeBatch();
 		}
+		
+		batch_stmt.close();
 	}
 }
