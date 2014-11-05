@@ -1236,18 +1236,22 @@ public abstract class Table extends Part
 
 		PreparedStatement batch_stmt = element.getStmt(conn, Table.SQL_INSERT);
 
+		boolean batchrows = false;
+		
 		for(int i = 0; i < size; i++)
 		{
 			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i), true);
 			batch_stmt.addBatch();
-
+			batchrows = true;
+			
 			if(i > 0 && i % batchsize == 0)
 			{
 				batch_stmt.executeBatch();
+				batchrows = false;
 			}
 		}
 
-		if(size % batchsize != 0)
+		if(batchrows)
 		{
 			batch_stmt.executeBatch();
 		}
@@ -1282,18 +1286,23 @@ public abstract class Table extends Part
 
 		PreparedStatement batch_stmt = element.getStmt(conn, Table.SQL_UPDATE);
 
+		boolean batchrows = false;
+		
 		for(int i = 0; i < size; i++)
 		{
 			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i), false);
 			batch_stmt.addBatch();
 
+			batchrows = true;
+			
 			if(i > 0 && i % batchsize == 0)
 			{
 				batch_stmt.executeBatch();
+				batchrows = false;
 			}
 		}
 
-		if(size % batchsize != 0)
+		if(batchrows)
 		{
 			batch_stmt.executeBatch();
 		}
