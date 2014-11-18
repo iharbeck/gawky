@@ -470,13 +470,21 @@ public class DB
 			ResultSetMetaData md = rset.getMetaData();
 			int columncount = md.getColumnCount();
 			
+			
+			String[] columnname = new String[columncount];
+			
+			for(int i = 0; i < columncount; i++)
+			{
+				columnname[i] = md.getColumnName(i+1);
+			}
+			
 			while(rset.next())
 			{
 				Map<String, String> hs = new HashMap<String, String>(columncount);
 
 				for(int i = columncount; i > 0; i--)
 				{
-					hs.put(md.getColumnName(i), secString(rset.getString(i)));
+					hs.put(columnname[i-1], secString(rset.getString(i)));
 				}
 
 				al.add(hs);
