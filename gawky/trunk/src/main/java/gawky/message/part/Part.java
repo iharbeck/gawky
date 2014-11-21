@@ -23,8 +23,6 @@ public abstract class Part implements Cloneable
 {
 	abstract protected Desc[] getDesc();
 
-	private static boolean dotostring = true;
-
 	private volatile static Parser parser;
 	private volatile static Generator generator;
 
@@ -135,11 +133,12 @@ public abstract class Part implements Cloneable
 	 * @throws Exception
 	 */
 
-	static HashMap<Class<?>, Part> parts = new HashMap<Class<?>, Part>();
+	static HashMap<String, Part> parts = new HashMap<String, Part>();
 
 	static Part factory(Class c)
 	{
-		Part p = (Part)parts.get(c);
+		String key = c.getName();
+		Part p = (Part)parts.get(key);
 
 		if(p != null)
 			return p;
@@ -189,7 +188,7 @@ public abstract class Part implements Cloneable
 
 			p = (Part)cc.toClass().newInstance();
 
-			parts.put(c, p);
+			parts.put(key, p);
 		}
 		catch(Exception e)
 		{
@@ -288,7 +287,7 @@ public abstract class Part implements Cloneable
 		return descs;
 	}
 
-	private static volatile HashMap<Class<?>, Desc[]> hmDesc = new HashMap<Class<?>, Desc[]>();
+	private static volatile HashMap<String, Desc[]> hmDesc = new HashMap<String, Desc[]>();
 
 	public final Desc[] getCachedDesc()
 	{
@@ -297,9 +296,9 @@ public abstract class Part implements Cloneable
 		if(_desc != null)
 			return _desc;
 
-		Class<? extends Part> clazz = getClass();
-
-		_desc = hmDesc.get(clazz);
+		String key = getClass().getName();
+		
+		_desc = hmDesc.get(key);
 
 		if(_desc != null)
 		{
@@ -308,12 +307,12 @@ public abstract class Part implements Cloneable
 
 		synchronized(hmDesc)
 		{
-			_desc = hmDesc.get(clazz); // DOUBLE CHECK LOCK
+			_desc = hmDesc.get(key); // DOUBLE CHECK LOCK
 
 			if(_desc == null)
 			{
 				_desc = getOptDesc();
-				hmDesc.put(clazz, _desc);
+				hmDesc.put(key, _desc);
 			}
 		}
 
@@ -429,9 +428,4 @@ public abstract class Part implements Cloneable
 	//		}else
 	//			return true;
 	//	}
-
-	public static void setDotostring(boolean dotostring)
-	{
-		Part.dotostring = dotostring;
-	}
 }
