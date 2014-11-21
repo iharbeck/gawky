@@ -63,17 +63,18 @@ public abstract class Table extends Part
 			return this.conn;
 	}
 
-	static HashMap<Class, Integer> hsConn = new HashMap<Class, Integer>();
+	static HashMap<String, Integer> hsConn = new HashMap<String, Integer>();
 
 	public static <T extends Table> Connection getConnection(Class<T> clazz) throws Exception
 	{
-		Integer connid = hsConn.get(clazz);
+		String key = clazz.getName();
+		Integer connid = hsConn.get(key);
 
 		if(connid == null)
 		{
 			Table inst = clazz.newInstance();
 			connid = inst.getStaticLocal().defaultconnection;
-			hsConn.put(clazz, connid);
+			hsConn.put(key, connid);
 		}
 
 		return DB.getConnection(connid);
@@ -180,7 +181,7 @@ public abstract class Table extends Part
 		if(staticlocal != null)
 			return staticlocal;
 
-		Class key = getClass();
+		String key = getClass().getName();
 		
 		staticlocal = (StaticLocal)hmStaticLocal.get(key);
 
@@ -232,7 +233,7 @@ public abstract class Table extends Part
 		return getStaticLocal().descIds;
 	}
 
-	private static volatile HashMap<Class<?>, StaticLocal> hmStaticLocal = new HashMap<Class<?>, StaticLocal>();
+	private static volatile HashMap<String, StaticLocal> hmStaticLocal = new HashMap<String, StaticLocal>();
 
 	protected final String[] getQueries()
 	{
@@ -324,9 +325,9 @@ public abstract class Table extends Part
 		return getStaticLocal().generator.generateDeleteSQL(this).toString();
 	}
 
-	protected final void fillPreparedStatement(PreparedStatement stmt, boolean insert) throws Exception
+	protected final void fillPreparedStatement(PreparedStatement stmt) throws Exception
 	{
-		getStaticLocal().generator.fillPreparedStatement(stmt, this, insert);
+		getStaticLocal().generator.fillPreparedStatement(stmt, this);
 	}
 
 	public int store() throws Exception
@@ -400,7 +401,7 @@ public abstract class Table extends Part
 				}
 			}
 
-			fillPreparedStatement(stmt, true);
+			fillPreparedStatement(stmt);
 
 			stmt.execute();
 
@@ -465,7 +466,7 @@ public abstract class Table extends Part
 				}
 			}
 
-			fillPreparedStatement(stmt, true);
+			fillPreparedStatement(stmt);
 
 			stmt.execute();
 
@@ -1026,7 +1027,7 @@ public abstract class Table extends Part
 
 		try
 		{
-			fillPreparedStatement(stmt, false);
+			fillPreparedStatement(stmt);
 
 			return stmt.executeUpdate();
 		}
@@ -1053,23 +1054,17 @@ public abstract class Table extends Part
 
 	public void batch_add_insert() throws Exception
 	{
-		batch_add(SQL_INSERT);
+		batch_add();
 	}
 
 	public void batch_add_update() throws Exception
 	{
-		batch_add(SQL_UPDATE);
-	}
-
-	public void batch_add(int type) throws Exception
-	{
-		fillPreparedStatement(batch_stmt, type == SQL_INSERT);
-		batch_stmt.addBatch();
+		batch_add();
 	}
 
 	public void batch_add() throws Exception
 	{
-		fillPreparedStatement(batch_stmt, batch_type == SQL_INSERT);
+		fillPreparedStatement(batch_stmt);
 		batch_stmt.addBatch();
 	}
 
@@ -1240,7 +1235,7 @@ public abstract class Table extends Part
 		
 		for(int i = 0; i < size; i++)
 		{
-			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i), true);
+			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i));
 			batch_stmt.addBatch();
 			batchrows = true;
 			
@@ -1290,7 +1285,7 @@ public abstract class Table extends Part
 		
 		for(int i = 0; i < size; i++)
 		{
-			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i), false);
+			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i));
 			batch_stmt.addBatch();
 
 			batchrows = true;
