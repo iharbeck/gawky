@@ -27,6 +27,7 @@ public abstract class Part implements Cloneable
 	private volatile static Generator generator;
 
 	private Desc[] _desc;
+	private HashMap<String, Desc> _hsdesc;
 
 	private Part clone;
 
@@ -52,14 +53,9 @@ public abstract class Part implements Cloneable
 	 */
 	public Desc getDescByName(String name)
 	{
-		Desc[] descs = getCachedDesc();
+		HashMap<String, Desc> hsdescs = getCachedDescHash();
 
-		for(Desc desc : descs)
-		{
-			if(desc.name.equals(name))
-				return desc;
-		}
-		return null;
+		return hsdescs.get(name);
 	}
 
 	public void descAfterInterceptor(Desc[] descs)
@@ -288,11 +284,10 @@ public abstract class Part implements Cloneable
 	}
 
 	private static volatile HashMap<String, Desc[]> hmDesc = new HashMap<String, Desc[]>();
+	private static volatile HashMap<String, HashMap<String, Desc>> hmDescHash = new HashMap<String, HashMap<String, Desc>>();
 
 	public final Desc[] getCachedDesc()
 	{
-		//Desc[] _desc = null;
-
 		if(_desc != null)
 			return _desc;
 
@@ -317,6 +312,42 @@ public abstract class Part implements Cloneable
 		}
 
 		return _desc;
+	}
+	
+	public final HashMap<String, Desc> getCachedDescHash()
+	{
+		if(_hsdesc != null)
+			return _hsdesc;
+
+		String key = getClass().getName();
+		
+		_hsdesc = hmDescHash.get(key);
+
+		if(_hsdesc != null)
+		{
+			return _hsdesc;
+		}
+
+		synchronized(hmDescHash)
+		{
+			_hsdesc = hmDescHash.get(key); // DOUBLE CHECK LOCK
+
+			if(_hsdesc == null)
+			{
+				Desc[] descs = getCachedDesc();
+				
+				_hsdesc = new HashMap<String, Desc>();
+				
+				for(Desc desc : descs)
+				{
+					_hsdesc.put(desc.name, desc);
+				}
+
+				hmDescHash.put(key, _hsdesc);
+			}
+		}
+
+		return _hsdesc;
 	}
 
 	public String buildString() throws Exception
