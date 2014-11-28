@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
@@ -17,9 +16,7 @@ import org.htmlcleaner.SimpleXmlSerializer;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.TagNodeVisitor;
 import org.htmlcleaner.Utils;
-import org.xhtmlrenderer.extend.UserAgentCallback;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import org.xhtmlrenderer.protocols.data.Handler;
 
 public class Html2PDF
 {
@@ -213,13 +210,18 @@ public class Html2PDF
 
 			TagNode tagNode;
 			if(indata instanceof URL)
+			{
 				tagNode = cleaner.clean((URL)indata);
+			}
 			else
+			{
 				tagNode = cleaner.clean((InputStream)indata, encoding);
+			}
 
 			tagNode.traverse(new TagNodeVisitor()
 			{
 
+				@Override
 				public boolean visit(TagNode tagNode, HtmlNode htmlNode)
 				{
 					if(htmlNode instanceof TagNode)
@@ -232,7 +234,9 @@ public class Html2PDF
 							tag.setName("span");
 
 							if(tag.getChildren().size() == 0)
+							{
 								return true;
+							}
 
 							String text = ((TagNode)tag.getChildren().get(0)).getText().toString();
 
@@ -258,7 +262,9 @@ public class Html2PDF
 							tag.setName("span");
 
 							if(type == null)
+							{
 								return true;
+							}
 
 							if(type.equals("text"))
 							{
@@ -307,8 +313,10 @@ public class Html2PDF
 
 							if(src != null)
 							{
-								if(src.startsWith("data:")) // inline
+								if(src.startsWith("data:"))
+								{
 									return true;
+								}
 
 								if(!src.startsWith("http"))
 								{

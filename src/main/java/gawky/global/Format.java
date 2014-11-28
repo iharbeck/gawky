@@ -71,7 +71,6 @@ public class Format
 			return null;
 		}
 	}
-	
 
 	static ConcurrentHashMap<String, SafeDateFormat> dateHash = new ConcurrentHashMap<String, SafeDateFormat>();
 
@@ -86,8 +85,10 @@ public class Format
 		char[] buffer = str.toCharArray();
 		byte[] b = new byte[buffer.length << 1];
 		CharBuffer cBuffer = ByteBuffer.wrap(b).asCharBuffer();
-		for(int i = 0; i < buffer.length; i++)
-			cBuffer.put(buffer[i]);
+		for(char element : buffer)
+		{
+			cBuffer.put(element);
+		}
 		return b;
 	}
 
@@ -104,7 +105,9 @@ public class Format
 	public static String convertDate(String datum, String pattern, String targetPattern) throws Exception
 	{
 		if(datum == null)
+		{
 			datum = "";
+		}
 
 		SafeDateFormat sdfparse = dateHash.get(pattern);
 
@@ -136,7 +139,7 @@ public class Format
 	{
 		return getDecimal(loc, value, pattern, Locale.GERMAN);
 	}
-	
+
 	public static String getDecimal(Locale loc, String value, String pattern, Locale locformat)
 	{
 		return getDecimal(getDouble(loc, value), pattern, locformat);
@@ -154,13 +157,11 @@ public class Format
 
 	public static String getDecimal(double value, String pattern, Locale loc)
 	{
-		NumberFormat df = DecimalFormat.getInstance(loc);
+		NumberFormat df = NumberFormat.getInstance(loc);
 		((DecimalFormat)df).applyPattern(pattern);
-		
+
 		return df.format(value);
 	}
-	
-	
 
 	public static String stringformat(long cent)
 	{
@@ -174,7 +175,9 @@ public class Format
 		int pos = len + (len - nachkomma) / 3;
 
 		if((len - nachkomma) % 3 == 0 || len == 1)
+		{
 			pos--;
+		}
 
 		char[] target = new char[pos + 1];
 
@@ -215,14 +218,20 @@ public class Format
 		int len = cent.length();
 
 		if(len == 0)
+		{
 			return "0";
+		}
 
 		int pos = len;
 
 		if(len <= decs)
+		{
 			pos = decs + 2;
+		}
 		else
+		{
 			pos++;
+		}
 
 		char[] target = new char[pos];
 
@@ -237,9 +246,13 @@ public class Format
 			}
 
 			if(i >= 0)
+			{
 				target[pos - 1] = cent.charAt(i);
+			}
 			else
+			{
 				target[pos - 1] = '0';
+			}
 		}
 
 		return new String(target);

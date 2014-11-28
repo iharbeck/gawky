@@ -7,12 +7,17 @@ import java.util.ArrayList;
 
 public class ArrayListDatasource implements Datasource
 {
+	@Override
 	public int getRowCount()
 	{
 		if(this.columns == null)
+		{
 			return array.size() - 1;
+		}
 		else
+		{
 			return array.size();
+		}
 	}
 
 	ArrayList<String[]> array;
@@ -27,11 +32,13 @@ public class ArrayListDatasource implements Datasource
 
 	RowListener rowlistener = null;
 
+	@Override
 	public RowListener getRowListener()
 	{
 		return rowlistener;
 	}
 
+	@Override
 	public void setRowListener(RowListener rowlistener)
 	{
 		this.rowlistener = rowlistener;
@@ -63,6 +70,7 @@ public class ArrayListDatasource implements Datasource
 		pos++;
 	}
 
+	@Override
 	public int getColumnsHidden()
 	{
 		if(columnshidden == -1)
@@ -72,58 +80,78 @@ public class ArrayListDatasource implements Datasource
 			for(int i = 0; i < columncount; i++)
 			{
 				if(columns[i].getWidth() == Column.HIDDEN)
+				{
 					columnshidden++;
+				}
 			}
 		}
 		return columnshidden;
 	}
 
+	@Override
 	public int getColumns()
 	{
 		return columncount;
 	}
 
+	@Override
 	public CellListener getListener(int i)
 	{
 		if(columns == null)
+		{
 			return null;
+		}
 		return columns[i].getListener();
 	}
 
+	@Override
 	public String getHead(int i)
 	{
 		if(columns == null)
+		{
 			return array.get(0)[i];
+		}
 
 		return columns[i].getLable();
 	}
 
+	@Override
 	public int getType(int i)
 	{
 		if(columns == null)
+		{
 			return Column.TYPE_STRING;
+		}
 		return columns[i].getType();
 	}
 
+	@Override
 	public int getWidth(int i)
 	{
 		if(columns == null)
+		{
 			return 0;
+		}
 		return columns[i].getWidth();
 	}
 
+	@Override
 	public Object getValue(int i)
 	{
 		return array.get(pos)[i];
 	}
 
+	@Override
 	public void setCurrRow(int pos)
 	{
 		this.pos = pos;
 		if(columns != null)
+		{
 			this.pos--;
+		}
 	}
 
+	@Override
 	public boolean nextRow()
 	{
 		if(pos < rowcount)
@@ -134,13 +162,16 @@ public class ArrayListDatasource implements Datasource
 		return false;
 	}
 
+	@Override
 	public void reset()
 	{
 		pos = -1;
 
 		// Header überspringen
 		if(columns == null)
+		{
 			pos++;
+		}
 	}
 
 	public void addColumn(Column col)

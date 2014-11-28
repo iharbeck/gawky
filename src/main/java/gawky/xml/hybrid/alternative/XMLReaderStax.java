@@ -11,8 +11,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
-import org.xmlpull.v1.XmlPullParser;
-
 public class XMLReaderStax
 {
 	HashMap<String, XMLTagHandler> hshandler = new HashMap<String, XMLTagHandler>();
@@ -77,8 +75,10 @@ public class XMLReaderStax
 		processAttributes(store, parser);
 
 		if(!buildDOM)
+		{
 			return;
-		
+		}
+
 		for(int event = parser.next(); event != XMLStreamConstants.END_DOCUMENT; event = parser.next())
 		{
 			switch(event)
@@ -89,9 +89,13 @@ public class XMLReaderStax
 					break;
 				case XMLStreamConstants.END_ELEMENT:
 					if(parser.getLocalName().equals(tagname))
+					{
 						return;
+					}
 					else
+					{
 						store.level = store.level.substring(0, store.level.lastIndexOf('/'));
+					}
 					break;
 				case XMLStreamConstants.CHARACTERS:
 					store.put(store.level, parser.getText());
@@ -115,7 +119,9 @@ public class XMLReaderStax
 					break;
 				case XMLStreamConstants.END_ELEMENT:
 					if(parser.getLocalName().equals("record"))
+					{
 						System.out.println("END!!!!!!!!!!!:" + parser.getLocalName());
+					}
 					break;
 				case XMLStreamConstants.CHARACTERS:
 					parser.getText();

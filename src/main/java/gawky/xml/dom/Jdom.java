@@ -3,9 +3,7 @@ package gawky.xml.dom;
 import gawky.file.Locator;
 import gawky.xml.sax.SaxSample;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.jdom2.Document;

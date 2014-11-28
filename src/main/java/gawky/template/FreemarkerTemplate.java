@@ -17,37 +17,39 @@ public class FreemarkerTemplate implements gawky.template.Template
 {
 	/**
 	 *  http://freemarker.sourceforge.net/docs/dgui_quickstart_basics.html#example.first
-	 */ 
-	
+	 */
+
 	Configuration cfg = null;
 	String templates = null;
-	
+
 	public FreemarkerTemplate()
 	{
 		templates = Option.getProperty("freemarker.templates", "/");
 	}
-	
+
 	public FreemarkerTemplate(String templates)
 	{
 		this.templates = templates;
 	}
 
-	@Deprecated 
-	public static gawky.template.Template getInstance() {
+	@Deprecated
+	public static gawky.template.Template getInstance()
+	{
 		return new FreemarkerTemplate();
 	}
-	
-	public String processToString(Object obj, String templatefile, String encoding) throws Exception 
+
+	@Override
+	public String processToString(Object obj, String templatefile, String encoding) throws Exception
 	{
 		ByteArrayOutputStream barray = new ByteArrayOutputStream();
 		process(obj, templatefile, barray, encoding);
-		
+
 		//return barray.toString();
 		return barray.toString(encoding);
 	}
-	
-	
-	public void process(Object obj, String templatefile, OutputStream out, String encoding) throws Exception 
+
+	@Override
+	public void process(Object obj, String templatefile, OutputStream out, String encoding) throws Exception
 	{
 		if(cfg == null)
 		{
@@ -57,13 +59,12 @@ public class FreemarkerTemplate implements gawky.template.Template
 			cfg.setObjectWrapper(new DefaultObjectWrapper());
 			cfg.setEncoding(Locale.GERMAN, encoding);
 		}
-		
+
 		Template temp = cfg.getTemplate(templatefile);
-		
+
 		Writer writer = new OutputStreamWriter(out, encoding);
 		temp.process(obj, writer);
 		writer.flush();
 	}
-	
-	
+
 }

@@ -7,19 +7,21 @@ import gawky.file.Locator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class TestFile implements LineHandler 
+public class TestFile implements LineHandler
 {
 	private static Log log = LogFactory.getLog(TestFile.class);
 
-	public void processLine(String line) {
+	@Override
+	public void processLine(String line)
+	{
 		System.out.println(line);
 	}
-	
-	public static void main(String[] args) throws Exception 
+
+	public static void main(String[] args) throws Exception
 	{
 		log.info("start");
 		String filename = Locator.findPath("properties.xml");
-		
+
 		LineReader.processFile(filename, new TestFile());
 	}
 }

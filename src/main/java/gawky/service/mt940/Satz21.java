@@ -13,48 +13,55 @@ import gawky.message.part.Part;
  */
 public class Satz21 extends Part implements MTRecord
 {
-	public Desc[] getDesc() {
+	@Override
+	public Desc[] getDesc()
+	{
 		return new Desc[] {
-			new DescC(":21:"),
-			new DescV(16,  "relatedrefnr", Desc.LF)
+		        new DescC(":21:"),
+		        new DescV(16, "relatedrefnr", Desc.LF)
 		};
 	}
-	
-	public static void main(String[] args) throws Exception 
+
+	public static void main(String[] args) throws Exception
 	{
 		PatternParser parser = new PatternParser();
-		
+
 		Satz21 bean = new Satz21();
-		
+
 		String str = ":21:333333";
-			   
+
 		bean.parse(parser, str);
 		bean.echo();
-		
+
 	}
-	
+
 	public void echo()
 	{
 		System.out.println("Relatedrefnr = " + this.relatedrefnr);
 	}
-	
-	private String type=":21:";
+
+	private String type = ":21:";
 	private String relatedrefnr;
 
-	public String getRelatedrefnr() {
+	public String getRelatedrefnr()
+	{
 		return relatedrefnr;
 	}
 
-	public void setRelatedrefnr(String transrefnr) {
+	public void setRelatedrefnr(String transrefnr)
+	{
 		this.relatedrefnr = transrefnr;
 	}
 
-	public String getType() {
+	@Override
+	public String getType()
+	{
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(String type)
+	{
 		this.type = type;
 	}
-	
+
 }

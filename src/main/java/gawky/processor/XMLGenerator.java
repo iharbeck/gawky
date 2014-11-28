@@ -2,25 +2,28 @@ package gawky.processor;
 
 import java.io.FileOutputStream;
 
-public class XMLGenerator 
+public class XMLGenerator
 {
 	public FileOutputStream out;
 	public StringBuilder xml = new StringBuilder();
-	
-	public void init(String filename) throws Exception {
+
+	public void init(String filename) throws Exception
+	{
 		out = new FileOutputStream(filename, false);
-		
+
 		out.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n".getBytes());
 		out.write("<bookings>\n".getBytes());
 	}
-	
+
 	public final void addAttribut(String name, String value)
 	{
 		if(value != null)
+		{
 			xml.append(name).append("=\"").append(value).append("\" ");
+		}
 	}
-	
-	public final void genxml(BaseObjectI obj) throws Exception 
+
+	public final void genxml(BaseObjectI obj) throws Exception
 	{
 		xml.append("<booking ");
 
@@ -71,11 +74,12 @@ public class XMLGenerator
 
 		xml.append("/>\n");
 	}
-	
-	public void close() throws Exception {
-		
+
+	public void close() throws Exception
+	{
+
 		out.write(xml.toString().getBytes());
-		
+
 		out.write("</bookings>\n".getBytes());
 		out.close();
 	}

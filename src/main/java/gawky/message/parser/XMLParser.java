@@ -26,9 +26,12 @@ public class XMLParser extends Parser
 
 		Document doc = null;
 
-		try {
+		try
+		{
 			doc = parser.build(new StringReader(xml));
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			throw new ParserException(ParserException.ERROR_PARSING, null, xml);
 		}
 
@@ -40,9 +43,8 @@ public class XMLParser extends Parser
 		// Get Description Object
 		descs = ((Part)bean).getCachedDesc();
 
-		Desc   desc;
+		Desc desc;
 		String value = "";
-
 
 		for(int i = 0; i < descs.length; i++)
 		{
@@ -50,22 +52,30 @@ public class XMLParser extends Parser
 
 			// DISCUSS example - ID not in Importfile but later in DB
 			if(desc.skipparsing)
+			{
 				continue;
+			}
 
-			try {
+			try
+			{
 				value = ((Element)XPath.selectSingleNode(xml, desc.xmlpath)).getValue();
-			} catch (Exception e) {
+			}
+			catch(Exception e)
+			{
 			}
 
 			if(value == null)
+			{
 				throw new ParserException(ParserException.ERROR_FIELD_TO_SHORT, desc, "");
+			}
 
 			storeValue(bean, i, desc, value);
 
 			// Required Field
 			if(desc.code == Desc.CODE_R && value.length() == 0)
+			{
 				throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
-			// Optional Field
+			}
 			else if(desc.code == Desc.CODE_O && value.length() == 0)
 			{
 				storeValue(bean, i, desc, value);
@@ -75,7 +85,7 @@ public class XMLParser extends Parser
 			// Inhaltlich prüfung
 			typeCheck(desc, value);
 
-		    storeValue(bean, i, desc, value);
+			storeValue(bean, i, desc, value);
 		}
 
 		return bean;

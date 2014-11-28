@@ -23,16 +23,19 @@ public class ResultSetDatasource implements Datasource
 
 	RowListener rowlistener = null;
 
+	@Override
 	public RowListener getRowListener()
 	{
 		return rowlistener;
 	}
 
+	@Override
 	public void setRowListener(RowListener rowlistener)
 	{
 		this.rowlistener = rowlistener;
 	}
 
+	@Override
 	public int getRowCount()
 	{
 		return rowcount;
@@ -48,7 +51,9 @@ public class ResultSetDatasource implements Datasource
 		this.rset = rset;
 
 		if(version == COUNT_NONE)
+		{
 			return;
+		}
 
 		try
 		{
@@ -72,7 +77,9 @@ public class ResultSetDatasource implements Datasource
 			}
 
 			if(rowcount > 0)
+			{
 				rset.beforeFirst();
+			}
 
 		}
 		catch(Exception e)
@@ -82,6 +89,7 @@ public class ResultSetDatasource implements Datasource
 
 	}
 
+	@Override
 	public int getColumnsHidden()
 	{
 		if(columnshidden == -1)
@@ -92,12 +100,15 @@ public class ResultSetDatasource implements Datasource
 			while(it.hasNext())
 			{
 				if(((Column)it.next()).getWidth() == Column.HIDDEN)
+				{
 					columnshidden++;
+				}
 			}
 		}
 		return columnshidden;
 	}
 
+	@Override
 	public int getColumns()
 	{
 		try
@@ -110,15 +121,20 @@ public class ResultSetDatasource implements Datasource
 		}
 	}
 
+	@Override
 	public String getHead(int i)
 	{
 		try
 		{
 			String name = rset.getMetaData().getColumnName(i + 1);
 			if(columns.get(name) == null)
+			{
 				return name;
+			}
 			else
-				return ((Column)columns.get(name)).getLable();
+			{
+				return columns.get(name).getLable();
+			}
 		}
 		catch(Exception e)
 		{
@@ -126,12 +142,15 @@ public class ResultSetDatasource implements Datasource
 		}
 	}
 
+	@Override
 	public int getType(int i)
 	{
 		// TODO map rset types
 
 		if(columns.size() == 0)
+		{
 			return Column.TYPE_STRING;
+		}
 
 		int rsettype;
 		try
@@ -193,15 +212,20 @@ public class ResultSetDatasource implements Datasource
 		return Column.TYPE_STRING;
 	}
 
+	@Override
 	public int getWidth(int i)
 	{
 		try
 		{
 			String name = rset.getMetaData().getColumnName(i + 1);
 			if(columns.get(name) == null)
+			{
 				return 0;
+			}
 			else
-				return ((Column)columns.get(name)).getWidth();
+			{
+				return columns.get(name).getWidth();
+			}
 		}
 		catch(Exception e)
 		{
@@ -209,6 +233,7 @@ public class ResultSetDatasource implements Datasource
 		}
 	}
 
+	@Override
 	public Object getValue(int i)
 	{
 		try
@@ -222,14 +247,19 @@ public class ResultSetDatasource implements Datasource
 		}
 	}
 
+	@Override
 	public void setCurrRow(int pos)
 	{
 		try
 		{
 			if(pos == 0)
+			{
 				rset.beforeFirst();
+			}
 			else
+			{
 				rset.absolute(pos);
+			}
 		}
 		catch(Exception e)
 		{
@@ -239,10 +269,13 @@ public class ResultSetDatasource implements Datasource
 
 	boolean notdone = true;
 
+	@Override
 	public boolean nextRow()
 	{
 		if(notdone == false)
+		{
 			return notdone;
+		}
 		try
 		{
 			notdone = rset.next();
@@ -254,6 +287,7 @@ public class ResultSetDatasource implements Datasource
 		}
 	}
 
+	@Override
 	public void reset()
 	{
 		try
@@ -268,6 +302,7 @@ public class ResultSetDatasource implements Datasource
 		}
 	}
 
+	@Override
 	public CellListener getListener(int i)
 	{
 		String name;
@@ -281,10 +316,12 @@ public class ResultSetDatasource implements Datasource
 		}
 
 		//Column col = (Column) columns.get(getHead(i));
-		Column col = (Column)columns.get(name);
+		Column col = columns.get(name);
 
 		if(col == null)
+		{
 			return null;
+		}
 
 		return col.getListener();
 	}

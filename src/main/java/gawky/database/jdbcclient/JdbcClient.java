@@ -48,7 +48,9 @@ public class JdbcClient
 			if(params != null)
 			{
 				for(int i = 1; i <= params.length; i++)
+				{
 					stmt.setObject(i, params[i - 1]);
+				}
 			}
 
 			rset = stmt.executeQuery();
@@ -56,9 +58,13 @@ public class JdbcClient
 			if(rset.next())
 			{
 				if(object != null)
+				{
 					return object.selectmapper(rset);
+				}
 				else
+				{
 					return rset.getObject(0);
+				}
 			}
 			else
 			{
@@ -84,15 +90,21 @@ public class JdbcClient
 			if(params != null)
 			{
 				for(int i = 1; i <= params.length; i++)
+				{
 					stmt.setObject(i, params[i - 1]);
+				}
 			}
 
 			rset = stmt.executeQuery();
 
 			if(rset.next())
+			{
 				return rset.getString(0);
+			}
 			else
+			{
 				throw new Exception("Object not found !");
+			}
 
 		}
 		finally
@@ -114,15 +126,21 @@ public class JdbcClient
 			if(params != null)
 			{
 				for(int i = 1; i <= params.length; i++)
+				{
 					stmt.setObject(i, params[i - 1]);
+				}
 			}
 
 			rset = stmt.executeQuery();
 
 			if(rset.next())
+			{
 				return rset.getLong(0);
+			}
 			else
+			{
 				throw new Exception("Object not found !");
+			}
 
 		}
 		finally
@@ -144,15 +162,21 @@ public class JdbcClient
 			if(params != null)
 			{
 				for(int i = 1; i <= params.length; i++)
+				{
 					stmt.setObject(i, params[i - 1]);
+				}
 			}
 
 			rset = stmt.executeQuery();
 
 			if(rset.next())
+			{
 				return rset.getDouble(0);
+			}
 			else
+			{
 				throw new Exception("Object not found !");
+			}
 
 		}
 		finally
@@ -181,7 +205,9 @@ public class JdbcClient
 			if(params != null)
 			{
 				for(int i = 1; i <= params.length; i++)
+				{
 					stmt.setObject(i, params[i - 1]);
+				}
 			}
 
 			rset = stmt.executeQuery();
@@ -248,7 +274,9 @@ public class JdbcClient
 			if(params != null)
 			{
 				for(int i = 1; i <= params.length; i++)
+				{
 					stmt.setObject(i, params[i - 1]);
+				}
 			}
 
 			if(object != null)
@@ -258,7 +286,9 @@ public class JdbcClient
 				for(int i = 0; i < sql.length(); i++)
 				{
 					if(sql.charAt(i) == '?')
+					{
 						paramcount++;
+					}
 				}
 
 				StatementDecorator mappedstmt = new StatementDecorator(stmt, paramcount);

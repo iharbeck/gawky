@@ -1,5 +1,6 @@
 package example.incubator;
 
-public class Swagger {
+public class Swagger
+{
 
 }

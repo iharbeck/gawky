@@ -12,7 +12,7 @@ public class Reserved extends Desc
 	{
 		super(len);
 	}
-	
+
 	public Reserved(String delimiter)
 	{
 		super(FMT_CONSTANT, CODE_O, 0, "", delimiter);

@@ -10,11 +10,11 @@ import java.util.Vector;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.ChannelSftp.LsEntry;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
-import com.jcraft.jsch.ChannelSftp.LsEntry;
 
 public class Sftp extends BaseFtp
 {
@@ -55,6 +55,7 @@ public class Sftp extends BaseFtp
 		open(server, user, pass, port, null);
 	}
 
+	@Override
 	public void open(String server, String user, String pass, int port, String option) throws Exception
 	{
 		this.port = port;
@@ -62,7 +63,9 @@ public class Sftp extends BaseFtp
 		Channel channel = null;
 
 		if(pass.equals("") || option != null)
+		{
 			jsch.addIdentity(option.replaceFirst("]", ":"));
+		}
 
 		session = jsch.getSession(user, server, port);
 		// System.out.println("Session created.");
@@ -90,27 +93,32 @@ public class Sftp extends BaseFtp
 
 		this.me = this;
 	}
-	
+
+	@Override
 	public void mkdir(String path) throws Exception
 	{
 		sftpclient.mkdir(path);
 	}
-	
+
+	@Override
 	public void chmod(int right, String path) throws Exception
 	{
 		sftpclient.chmod(right, path);
 	}
-	
+
+	@Override
 	public void chown(int owner, String path) throws Exception
 	{
 		sftpclient.chown(owner, path);
 	}
-	
+
+	@Override
 	public void chgrp(int owner, String path) throws Exception
 	{
 		sftpclient.chgrp(owner, path);
 	}
 
+	@Override
 	public String[] retrieveFiles(String filefilter, boolean simulate) throws Exception
 	{
 		Vector<LsEntry> vfiles = sftpclient.ls(".");
@@ -124,15 +132,19 @@ public class Sftp extends BaseFtp
 			LsEntry lsEntry = vfiles.get(i);
 
 			if(lsEntry.getAttrs().isDir() || filefilter == null)
+			{
 				continue;
+			}
 
 			if(!(lsEntry.getFilename().matches(filefilter) || lsEntry.getFilename().endsWith(filefilter)))
+			{
 				continue;
+			}
 
 			String file = lsEntry.getFilename();
 
 			files.add(file);
-			
+
 			if(simulate == false)
 			{
 				OutputStream out = new FileOutputStream(localdir + file);
@@ -141,9 +153,10 @@ public class Sftp extends BaseFtp
 			}
 		}
 
-		return (String[])files.toArray(new String[files.size()]);
+		return files.toArray(new String[files.size()]);
 	}
 
+	@Override
 	public void changeRemoteDir(String path) throws Exception
 	{
 		// if(path.endsWith("/") && path.length() > 1)
@@ -152,16 +165,19 @@ public class Sftp extends BaseFtp
 		sftpclient.cd(path);
 	}
 
+	@Override
 	public void deleteRemoteFile(String path) throws Exception
 	{
 		sftpclient.rm(path);
 	}
 
+	@Override
 	public void renameRemoteFile(String src, String dest) throws Exception
 	{
 		sftpclient.rename(src, dest);
 	}
 
+	@Override
 	public void close() throws Exception
 	{
 		try
@@ -171,7 +187,7 @@ public class Sftp extends BaseFtp
 		catch(Exception e)
 		{
 		}
-		
+
 		try
 		{
 			sftpclient.quit();
@@ -179,7 +195,7 @@ public class Sftp extends BaseFtp
 		catch(Exception e)
 		{
 		}
-		
+
 		try
 		{
 			session.disconnect();
@@ -189,6 +205,7 @@ public class Sftp extends BaseFtp
 		}
 	}
 
+	@Override
 	public void sendLocalFiles(String filename) throws Exception
 	{
 		String tmp_prefix = ""; // ".temp";
@@ -207,12 +224,15 @@ public class Sftp extends BaseFtp
 			is.close();
 
 			if(!tmp_prefix.equals(""))
+			{
 				renameRemoteFile(f.getName() + tmp_prefix, f.getName());
+			}
 		}
 	}
 
 	public static class StaticUserInfo implements UserInfo, UIKeyboardInteractive
 	{
+		@Override
 		public String[] promptKeyboardInteractive(String destination,
 		        String name, String instruction, String[] prompt, boolean[] echo)
 		{
@@ -226,31 +246,37 @@ public class Sftp extends BaseFtp
 			this.password = password;
 		}
 
+		@Override
 		public String getPassphrase()
 		{
 			return password;
 		}
 
+		@Override
 		public String getPassword()
 		{
 			return password;
 		}
 
+		@Override
 		public boolean promptPassphrase(String arg0)
 		{
 			return true;
 		}
 
+		@Override
 		public boolean promptPassword(String arg0)
 		{
 			return true;
 		}
 
+		@Override
 		public boolean promptYesNo(String arg0)
 		{
 			return true; // accept all
 		}
 
+		@Override
 		public void showMessage(String arg0)
 		{
 		}

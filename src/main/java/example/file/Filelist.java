@@ -20,7 +20,7 @@ public class Filelist
 		System.out.println("-----------------------------------------------");
 		System.out.println("Directories: " + directoriesCount);
 		System.out.println("Files: " + (allElementsCount - directoriesCount));
-		
+
 		System.out.println("DONE " + (System.currentTimeMillis() - start));
 	}
 

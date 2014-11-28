@@ -9,7 +9,7 @@ public class TestCollectorList
 	public void test()
 	{
 		CollectorList<String, String> cl = new CollectorList<String, String>(200, 200);
-		
+
 		cl.add("1", "a1");
 		cl.add("1", "a2");
 		cl.add("1", "a3");
@@ -17,9 +17,9 @@ public class TestCollectorList
 
 		cl.add("2", "b1");
 		cl.add("2", "b2");
-		
+
 		Assert.assertEquals(cl.get("1").size(), 4);
 		Assert.assertEquals(cl.get("2").size(), 2);
 	}
-	
+
 }

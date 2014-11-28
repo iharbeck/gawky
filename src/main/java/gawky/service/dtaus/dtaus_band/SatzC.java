@@ -10,7 +10,6 @@ import gawky.message.part.Part;
 import gawky.message.part.Reserved;
 import gawky.service.dtaus.SatzCe;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,219 +17,295 @@ import java.util.Arrays;
  *
  * @author  Ingo Harbeck
  */
-public class SatzC extends Part 
+public class SatzC extends Part
 {
-    public Desc[] getDesc() 
+	@Override
+	public Desc[] getDesc()
 	{
 		return new Desc[] {
-			new Reserved(4),
-			new DescC("C"),
-			new DescP(5, "blzerstbeteiligt"),          
-			new DescP(5, "blzkontofuehrend"),          
-			new DescP(6, "kontonummer"),          
-			new DescP(6, "referenznummer", false),
-			
-			new Reserved(7),
-			
-			//ABBUCHUNGSAUFTRAG       <04000> nach schriftlicher Authorisierung bei Bank möglich
-			//EINZUGSERMAECHTIGUNG    <05000> nach schriftlicher Authorisierung bei Mandant möglich
+		        new Reserved(4),
+		        new DescC("C"),
+		        new DescP(5, "blzerstbeteiligt"),
+		        new DescP(5, "blzkontofuehrend"),
+		        new DescP(6, "kontonummer"),
+		        new DescP(6, "referenznummer", false),
 
-			//UEBERWEISUNG            <51000> Auszahlung
-			
-			new DescP(1, "textschluessel", false),
-			new DescP(2, "textschluesselergaenzung"),
+		        new Reserved(7),
 
-			new Reserved(1),
-			
-			new DescP(6, "betragdm"),
-			new DescP(5, "blzauftraggeber"),
-			new DescP(6, "kontonummerauftraggeber"),
-			new DescP(6, "betrageuro"),
-			
-			new Reserved(3),
-			
-			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "empfaengername"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "auftraggebername"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 27,  "verwendungszweck"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 1,   "waehrungskennzeichen"),
-			
-			new Reserved(2),
-			
-			new DescP(2,   "erweiterungskennnzeichen"),
-		}; 
+		        //ABBUCHUNGSAUFTRAG       <04000> nach schriftlicher Authorisierung bei Bank möglich
+		        //EINZUGSERMAECHTIGUNG    <05000> nach schriftlicher Authorisierung bei Mandant möglich
+
+		        //UEBERWEISUNG            <51000> Auszahlung
+
+		        new DescP(1, "textschluessel", false),
+		        new DescP(2, "textschluesselergaenzung"),
+
+		        new Reserved(1),
+
+		        new DescP(6, "betragdm"),
+		        new DescP(5, "blzauftraggeber"),
+		        new DescP(6, "kontonummerauftraggeber"),
+		        new DescP(6, "betrageuro"),
+
+		        new Reserved(3),
+
+		        new DescF(Desc.FMT_A, Desc.CODE_R, 27, "empfaengername"),
+		        new DescF(Desc.FMT_A, Desc.CODE_R, 27, "auftraggebername"),
+		        new DescF(Desc.FMT_A, Desc.CODE_R, 27, "verwendungszweck"),
+		        new DescF(Desc.FMT_A, Desc.CODE_R, 1, "waehrungskennzeichen"),
+
+		        new Reserved(2),
+
+		        new DescP(2, "erweiterungskennnzeichen"),
+		};
 	}
 
-    ArrayList<SatzCe> satzCe = new ArrayList<SatzCe>();
-    
-    public void addExtention(SatzCe ext) {
-    	if(satzCe == null)
-    		satzCe = new ArrayList<SatzCe>();
-    	
-    	satzCe.add(ext);
-    }
-  
-    public void reset() {
-    	satzCe = null;
-    }
-    
-    static EBCDICGenerator generator = new EBCDICGenerator();
-    
-    public byte[] getSatzC() throws Exception
-    {
-    	int ext = 0;
-		if(getSatzCe() != null) 
+	ArrayList<SatzCe> satzCe = new ArrayList<SatzCe>();
+
+	public void addExtention(SatzCe ext)
+	{
+		if(satzCe == null)
+		{
+			satzCe = new ArrayList<SatzCe>();
+		}
+
+		satzCe.add(ext);
+	}
+
+	public void reset()
+	{
+		satzCe = null;
+	}
+
+	static EBCDICGenerator generator = new EBCDICGenerator();
+
+	public byte[] getSatzC() throws Exception
+	{
+		int ext = 0;
+		if(getSatzCe() != null)
+		{
 			ext = getSatzCe().size();
+		}
 
 		int linelen = 150;
-		int linelen_total = linelen + ext*29;
-		
-		setErweiterungskennnzeichen(Formatter.getStringN(2, ""+ext));
-		
+		int linelen_total = linelen + ext * 29;
+
+		setErweiterungskennnzeichen(Formatter.getStringN(2, "" + ext));
+
 		byte[] satz = new byte[linelen_total];
 		Arrays.fill(satz, (byte)0x40);
 
-		System.arraycopy(generator.buildString(this, linelen), 4, satz, 4, linelen-4);
-		
-		Helper.writeNumberBinary(satz, linelen_total-4);
-		
+		System.arraycopy(generator.buildString(this, linelen), 4, satz, 4, linelen - 4);
+
+		Helper.writeNumberBinary(satz, linelen_total - 4);
+
 		if(ext > 0)
 		{
 			int i = 0;
 			for(SatzCe satzcext : getSatzCe())
 			{
-				System.arraycopy(generator.buildString(satzcext, 29), 0, satz, linelen + i*29, 29);
+				System.arraycopy(generator.buildString(satzcext, 29), 0, satz, linelen + i * 29, 29);
 				i++;
 			}
 		}
 		return satz;
-    }
-    
-    private String blzerstbeteiligt;
-    private String blzkontofuehrend;
-    private String kontonummer;
-    private String referenznummer;
-    private String bankintern;
-    private String textschluessel;
-    private String textschluesselergaenzung;
-    private String betragdm;
-    private String blzauftraggeber;
-    private String kontonummerauftraggeber;
-    private String betrageuro;
-    private String valuta;
-    private String empfaengername;
-    private String auftraggebername;
-    private String verwendungszweck;
-    private String waehrungskennzeichen;
-    private String erweiterungskennnzeichen;
-    
-	public String getAuftraggebername() {
+	}
+
+	private String blzerstbeteiligt;
+	private String blzkontofuehrend;
+	private String kontonummer;
+	private String referenznummer;
+	private String bankintern;
+	private String textschluessel;
+	private String textschluesselergaenzung;
+	private String betragdm;
+	private String blzauftraggeber;
+	private String kontonummerauftraggeber;
+	private String betrageuro;
+	private String valuta;
+	private String empfaengername;
+	private String auftraggebername;
+	private String verwendungszweck;
+	private String waehrungskennzeichen;
+	private String erweiterungskennnzeichen;
+
+	public String getAuftraggebername()
+	{
 		return auftraggebername;
 	}
-	public void setAuftraggebername(String auftragnehmername) {
+
+	public void setAuftraggebername(String auftragnehmername)
+	{
 		this.auftraggebername = auftragnehmername;
 	}
-	public String getBankintern() {
+
+	public String getBankintern()
+	{
 		return bankintern;
 	}
-	public void setBankintern(String bankintern) {
+
+	public void setBankintern(String bankintern)
+	{
 		this.bankintern = bankintern;
 	}
-	public String getBetragdm() {
+
+	public String getBetragdm()
+	{
 		return betragdm;
 	}
-	public void setBetragdm(String betragdm) {
+
+	public void setBetragdm(String betragdm)
+	{
 		this.betragdm = betragdm;
 	}
-	public String getBetrageuro() {
+
+	public String getBetrageuro()
+	{
 		return betrageuro;
 	}
-	public void setBetrageuro(String betrageuro) {
+
+	public void setBetrageuro(String betrageuro)
+	{
 		this.betrageuro = betrageuro;
 	}
-	public String getBlzauftraggeber() {
+
+	public String getBlzauftraggeber()
+	{
 		return blzauftraggeber;
 	}
-	public void setBlzauftraggeber(String blzauftraggeber) {
+
+	public void setBlzauftraggeber(String blzauftraggeber)
+	{
 		this.blzauftraggeber = blzauftraggeber;
 	}
-	public String getBlzerstbeteiligt() {
+
+	public String getBlzerstbeteiligt()
+	{
 		return blzerstbeteiligt;
 	}
-	public void setBlzerstbeteiligt(String blzerstbeteiligt) {
+
+	public void setBlzerstbeteiligt(String blzerstbeteiligt)
+	{
 		this.blzerstbeteiligt = blzerstbeteiligt;
 	}
-	public String getBlzkontofuehrend() {
+
+	public String getBlzkontofuehrend()
+	{
 		return blzkontofuehrend;
 	}
-	public void setBlzkontofuehrend(String blzkontofuehrend) {
+
+	public void setBlzkontofuehrend(String blzkontofuehrend)
+	{
 		this.blzkontofuehrend = blzkontofuehrend;
 	}
-	public String getEmpfaengername() {
+
+	public String getEmpfaengername()
+	{
 		return empfaengername;
 	}
-	public void setEmpfaengername(String empfaengername) {
+
+	public void setEmpfaengername(String empfaengername)
+	{
 		this.empfaengername = empfaengername;
 	}
-	public String getErweiterungskennnzeichen() {
+
+	public String getErweiterungskennnzeichen()
+	{
 		return erweiterungskennnzeichen;
 	}
-	public void setErweiterungskennnzeichen(String erweiterungskennnzeichen) {
+
+	public void setErweiterungskennnzeichen(String erweiterungskennnzeichen)
+	{
 		this.erweiterungskennnzeichen = erweiterungskennnzeichen;
 	}
-	public String getKontonummer() {
+
+	public String getKontonummer()
+	{
 		return kontonummer;
 	}
-	public void setKontonummer(String kontonummer) {
+
+	public void setKontonummer(String kontonummer)
+	{
 		this.kontonummer = kontonummer;
 	}
-	public String getKontonummerauftraggeber() {
+
+	public String getKontonummerauftraggeber()
+	{
 		return kontonummerauftraggeber;
 	}
-	public void setKontonummerauftraggeber(String kontonummerauftraggeber) {
+
+	public void setKontonummerauftraggeber(String kontonummerauftraggeber)
+	{
 		this.kontonummerauftraggeber = kontonummerauftraggeber;
 	}
-	public String getReferenznummer() {
+
+	public String getReferenznummer()
+	{
 		return referenznummer;
 	}
-	public void setReferenznummer(String referenznummer) {
+
+	public void setReferenznummer(String referenznummer)
+	{
 		this.referenznummer = referenznummer;
 	}
-	public String getTextschluessel() {
+
+	public String getTextschluessel()
+	{
 		return textschluessel;
 	}
-	public void setTextschluessel(String textschluessel) {
+
+	public void setTextschluessel(String textschluessel)
+	{
 		this.textschluessel = textschluessel;
 	}
-	public String getTextschluesselergaenzung() {
+
+	public String getTextschluesselergaenzung()
+	{
 		return textschluesselergaenzung;
 	}
-	public void setTextschluesselergaenzung(String textschluesselergaenzung) {
+
+	public void setTextschluesselergaenzung(String textschluesselergaenzung)
+	{
 		this.textschluesselergaenzung = textschluesselergaenzung;
 	}
-	public String getValuta() {
+
+	public String getValuta()
+	{
 		return valuta;
 	}
-	public void setValuta(String valuta) {
+
+	public void setValuta(String valuta)
+	{
 		this.valuta = valuta;
 	}
-	public String getVerwendungszweck() {
+
+	public String getVerwendungszweck()
+	{
 		return verwendungszweck;
 	}
-	public void setVerwendungszweck(String verwendungszweck) {
+
+	public void setVerwendungszweck(String verwendungszweck)
+	{
 		this.verwendungszweck = verwendungszweck;
 	}
-	public String getWaehrungskennzeichen() {
+
+	public String getWaehrungskennzeichen()
+	{
 		return waehrungskennzeichen;
 	}
-	public void setWaehrungskennzeichen(String waehrungskennzeichen) {
+
+	public void setWaehrungskennzeichen(String waehrungskennzeichen)
+	{
 		this.waehrungskennzeichen = waehrungskennzeichen;
 	}
 
-	public ArrayList<SatzCe> getSatzCe() { 
+	public ArrayList<SatzCe> getSatzCe()
+	{
 		return satzCe;
 	}
 
-	public void setSatzCe(ArrayList<SatzCe> satzCe) {
+	public void setSatzCe(ArrayList<SatzCe> satzCe)
+	{
 		this.satzCe = satzCe;
 	}
 }

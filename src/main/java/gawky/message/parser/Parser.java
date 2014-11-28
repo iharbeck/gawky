@@ -19,7 +19,9 @@ public class Parser
 	public static Parser getInstance()
 	{
 		if(instance == null)
+		{
 			instance = new Parser();
+		}
 		return instance;
 	}
 
@@ -70,7 +72,9 @@ public class Parser
 
 				// DISCUSS example - ID not in Importfile but later in DB
 				if(desc.skipparsing)
+				{
 					continue;
+				}
 
 				if(desc.delimiter == null) // fixed length
 				{
@@ -114,7 +118,9 @@ public class Parser
 						// am Ende der Zeile angekommen und weiteres nicht optionales feld
 						//if(i+1 < descs.length  && desc.code != Desc.CODE_O)
 						if(value.length() == 0 && desc.code != Desc.CODE_O)
+						{
 							throw new ParserException(ParserException.ERROR_LINE_TO_SHORT, desc, "");
+						}
 					}
 					else
 					{
@@ -129,24 +135,32 @@ public class Parser
 					}
 
 					if(desc.len > 0 && value.length() > desc.len)
+					{
 						throw new ParserException(ParserException.ERROR_FIELD_TO_LONG, desc, value);
-				
+					}
+
 				}
 
 				if(desc.code == Desc.CODE_R) // Required Field
 				{
 					if(value.length() == 0)
+					{
 						throw new ParserException(ParserException.ERROR_FIELD_REQUIRED, desc, value);
+					}
 				}
 
 				//else  // Inhaltlich prüfung
 				{
 					if(Parser.docheck)
+					{
 						typeCheck(desc, value);
+					}
 				}
 
-				if(!desc.nostore) // wenn store dann speichern
+				if(!desc.nostore)
+				{
 					storeValue(bean, i, desc, value);
+				}
 			}
 
 			return bean;
@@ -156,7 +170,9 @@ public class Parser
 			bean.afterFill();
 
 			if(doclone)
+			{
 				bean.doclone();
+			}
 		}
 	}
 
@@ -170,9 +186,13 @@ public class Parser
 		if(Parser.dotrim)
 		{
 			if(desc.format == Desc.FMT_DIGIT)
+			{
 				return lntrim(value, start, end);
+			}
 			else
+			{
 				return rtrim(value, start, end);
+			}
 		}
 
 		return value.substring(start, end);
@@ -202,13 +222,19 @@ public class Parser
 			char ch = value.charAt(start);
 
 			if(ch == '0' || ch == ' ')
+			{
 				start++;
+			}
 			else
+			{
 				break;
+			}
 		}
 
 		if(start == end)
+		{
 			return "0";
+		}
 
 		return value.substring(start, end);
 	}
@@ -226,7 +252,9 @@ public class Parser
 		}
 
 		if(start == end)
+		{
 			return "";
+		}
 
 		return value.substring(start, end);
 	}
@@ -234,57 +262,81 @@ public class Parser
 	public final void typeCheck(Desc desc, String value) throws ParserException
 	{
 		if(value.length() == 0)
+		{
 			return;
+		}
 
 		// Inhaltlich prüfung
 		switch(desc.format)
 		{
 			case Desc.FMT_ASCII:
 				if(!fmt_ascii(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_ASCII, desc, value);
+				}
 				break;
 			case Desc.FMT_DIGIT:
 				if(!fmt_digit(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_DIGIT, desc, value);
+				}
 				break;
 			case Desc.FMT_BLANK:
 				if(!fmt_blank(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_BLANK, desc, value);
+				}
 				break;
 			case Desc.FMT_BLANK_ZERO:
 				if(!fmt_blank_zero(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_BLANK_ZERO, desc, value);
+				}
 				break;
 			case Desc.FMT_BINARY:
 				if(!fmt_binary(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_BINARY, desc, value);
+				}
 				break;
 			case Desc.FMT_UPPER:
 				if(!fmt_upper(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_UPPER, desc, value);
+				}
 				break;
 			case Desc.FMT_LOWER:
 				if(!fmt_lower(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_LOWER, desc, value);
+				}
 				break;
 			case Desc.FMT_BLANK_LETTER:
 				if(!fmt_blank_letter(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_BLANK_LETTER, desc, value);
+				}
 				break;
 			case Desc.FMT_DATE:
 				if(!fmt_DATE(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_DATE, desc, value);
+				}
 				break;
 			case Desc.FMT_TIME:
 				if(!fmt_TIME(value))
+				{
 					throw new ParserException(ParserException.ERROR_TYPE_TIME, desc, value);
+				}
 				break;
 		}
 
 		if(desc.pattern != null)
 		{
 			if(!value.matches(desc.pattern))
+			{
 				throw new ParserException(ParserException.ERROR_TYPE_PATTERN, desc, value);
+			}
 		}
 	}
 
@@ -296,7 +348,9 @@ public class Parser
 		//			log.info("value " + pos + " : " + desc.name + " <" + value + ">");
 
 		if(desc.nostore)
+		{
 			return;
+		}
 
 		try
 		{
@@ -364,7 +418,9 @@ public class Parser
 	final boolean fmt_DATE(String value)
 	{
 		if(df_YYYYMMDD == null)
+		{
 			df_YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
+		}
 
 		try
 		{
@@ -380,7 +436,9 @@ public class Parser
 	final boolean fmt_TIME(String value)
 	{
 		if(df_HHMMSS == null)
+		{
 			df_HHMMSS = new SimpleDateFormat("HHmmss");
+		}
 
 		try
 		{

@@ -8,22 +8,27 @@ import gawky.message.part.Part;
  * @author Ingo Harbeck
  *
  */
-public class RequestPos extends Part {
-	
-	public Desc[] getDesc() {
+public class RequestPos extends Part
+{
+
+	@Override
+	public Desc[] getDesc()
+	{
 		return new Desc[] {
-			new DescC("POS00"),
-			new Desc(Desc.FMT_A, Desc.CODE_F, 4, "id")
+		        new DescC("POS00"),
+		        new Desc(Desc.FMT_A, Desc.CODE_F, 4, "id")
 		};
 	}
-	
+
 	String id;
-	
-	public void setId(String id) {
+
+	public void setId(String id)
+	{
 		this.id = id;
 	}
-	
-	public String getId() {
+
+	public String getId()
+	{
 		return id;
 	}
 }

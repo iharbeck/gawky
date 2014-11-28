@@ -1,6 +1,5 @@
 package gawky.xml.hybrid;
 
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class XMLReaderPull
 	{
 		XmlPullParserFactory pullfactory = XmlPullParserFactory.newInstance();
 		XmlPullParser parser = pullfactory.newPullParser();
-		
+
 		parser.setInput(in, encoding);
 
 		XMLStore store = new XMLStore();
@@ -47,7 +46,7 @@ public class XMLReaderPull
 					store.setLineStart(parser.getLineNumber());
 					handleRecord(store, parser, tagname, handler.buildDOM());
 					store.setLineEnd(parser.getLineNumber());
-					
+
 					handler.handle(store);
 				}
 			}
@@ -60,7 +59,6 @@ public class XMLReaderPull
 	{
 		return hshandler.get(tagname);
 	}
-
 
 	public void processAttributes(XMLStore store, XmlPullParser parser)
 	{
@@ -77,10 +75,12 @@ public class XMLReaderPull
 		processAttributes(store, parser);
 
 		if(!buildDOM)
+		{
 			return;
-		
+		}
+
 		int tagnamelen = 0;
-		
+
 		for(int event = parser.next(); event != XmlPullParser.END_DOCUMENT; event = parser.next())
 		{
 			switch(event)
@@ -88,15 +88,17 @@ public class XMLReaderPull
 				case XmlPullParser.START_TAG:
 					String name = parser.getName();
 					store.level += '/' + name;
-					
+
 					tagnamelen = name.length();
-					
+
 					processAttributes(store, parser);
 					break;
 				case XmlPullParser.END_TAG:
 					if(parser.getName().equals(tagname))
+					{
 						return;
-					
+					}
+
 					store.level = store.level.substring(0, store.level.length() - tagnamelen - 1);
 					break;
 				case XmlPullParser.TEXT:

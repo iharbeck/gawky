@@ -10,159 +10,177 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
-class ConnectionReaper extends Thread 
+class ConnectionReaper extends Thread
 {
 	private static Log log = LogFactory.getLog(ConnectionReaper.class);
 
-    private AConnectionPool pool;
-    private long delay;
+	private AConnectionPool pool;
+	private long delay;
 
-    ConnectionReaper(AConnectionPool pool, long delay)
-    {
-        this.pool = pool;
-        this.delay = delay;
-    }
+	ConnectionReaper(AConnectionPool pool, long delay)
+	{
+		this.pool = pool;
+		this.delay = delay;
+	}
 
-    public void run()
-    {
-        while(true)
-        {
-           try {
-              wait(delay);
-              log.info("Count==: " + pool.getConnectionCount());
-              pool.reapConnections();
-           } catch( Exception e) { 
-        	   return;
-           }
-        }
-    }
+	@Override
+	public void run()
+	{
+		while(true)
+		{
+			try
+			{
+				wait(delay);
+				log.info("Count==: " + pool.getConnectionCount());
+				pool.reapConnections();
+			}
+			catch(Exception e)
+			{
+				return;
+			}
+		}
+	}
 }
 
-public class AConnectionPool 
+public class AConnectionPool
 {
-   //private static Log log = LogFactory.getLog(AConnectionPool.class);
-	
-   private Vector<AConnection> connections;
-   private String url;
-   public String id;
-   private long timeout;
-   private ConnectionReaper reaper;
-   final private int poolsize=100;
-   
-   private boolean lock = false;
-   
-   Properties info = new java.util.Properties();
-   
-   public int getConnectionCount()
-   {
-     return connections.size();
-   }
+	//private static Log log = LogFactory.getLog(AConnectionPool.class);
 
-   public AConnectionPool(String id, String url, String user, String password, long timeout, Properties props)
-   {
-	  info.put ("user", user);
-	  info.put ("password", password);
-	  info.put ("defaultRowPrefetch", "15");
+	private Vector<AConnection> connections;
+	private String url;
+	public String id;
+	private long timeout;
+	private ConnectionReaper reaper;
+	final private int poolsize = 100;
 
-	  if(props != null)
-		  info.putAll(props);
-	  
-	  this.url = url;
-      this.id = id;
-      this.timeout = timeout;
-      connections = new Vector<AConnection>(poolsize);
-      reaper = new ConnectionReaper(this, timeout/5);
-      reaper.start();
-   }
+	private boolean lock = false;
 
-   public synchronized void reapConnections()
-   {
-      long stale = System.currentTimeMillis() - timeout;
-      Enumeration<AConnection> connlist = connections.elements();
+	Properties info = new java.util.Properties();
 
-      while((connlist != null) && (connlist.hasMoreElements()))
-      {
-          AConnection conn = (AConnection)connlist.nextElement();
-          if((!conn.inUse()) || (stale > conn.getLastUse()) || (!conn.validate())) {
-              removeConnection(conn);
-          }
-      }
-   }
+	public int getConnectionCount()
+	{
+		return connections.size();
+	}
 
-   public synchronized void closeConnections()
-   {
-      Enumeration<AConnection> connlist = connections.elements();
+	public AConnectionPool(String id, String url, String user, String password, long timeout, Properties props)
+	{
+		info.put("user", user);
+		info.put("password", password);
+		info.put("defaultRowPrefetch", "15");
 
-      while((connlist != null) && (connlist.hasMoreElements()))
-      {
-          AConnection conn = (AConnection)connlist.nextElement();
-          removeConnection(conn);
-      }
-   }
+		if(props != null)
+		{
+			info.putAll(props);
+		}
 
-   public synchronized void removeConnection(AConnection conn)
-   {
-       try {
-       	conn.finalclose();
-       } catch (Exception e) { e.printStackTrace(); };
+		this.url = url;
+		this.id = id;
+		this.timeout = timeout;
+		connections = new Vector<AConnection>(poolsize);
+		reaper = new ConnectionReaper(this, timeout / 5);
+		reaper.start();
+	}
 
-       connections.removeElement(conn);
-   }
+	public synchronized void reapConnections()
+	{
+		long stale = System.currentTimeMillis() - timeout;
+		Enumeration<AConnection> connlist = connections.elements();
 
-   public synchronized Connection getConnection() throws SQLException
-   {
-	  if(lock)
-		  throw new SQLException("Connectionpool is locked");
-	  
-      AConnection c = null;
+		while((connlist != null) && (connlist.hasMoreElements()))
+		{
+			AConnection conn = connlist.nextElement();
+			if((!conn.inUse()) || (stale > conn.getLastUse()) || (!conn.validate()))
+			{
+				removeConnection(conn);
+			}
+		}
+	}
 
-      do {
-         if(c != null)
-           removeConnection(c);
+	public synchronized void closeConnections()
+	{
+		Enumeration<AConnection> connlist = connections.elements();
 
-         c = (AConnection)getSubConnection();
-      }
-      while(!c.validate());
+		while((connlist != null) && (connlist.hasMoreElements()))
+		{
+			AConnection conn = connlist.nextElement();
+			removeConnection(conn);
+		}
+	}
 
-     return c;
-   }
+	public synchronized void removeConnection(AConnection conn)
+	{
+		try
+		{
+			conn.finalclose();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		;
 
-   public synchronized Connection getSubConnection() throws SQLException
-   {
-       AConnection c;
+		connections.removeElement(conn);
+	}
 
-       for(int i = 0; i < connections.size(); i++)
-       {
-           c = (AConnection)connections.elementAt(i);
-           if (c.lease()) {
-              return c;
-           }
-       }
+	public synchronized Connection getConnection() throws SQLException
+	{
+		if(lock)
+		{
+			throw new SQLException("Connectionpool is locked");
+		}
 
-       Connection conn = DriverManager.getConnection(url, info);
+		AConnection c = null;
 
-       System.out.println("create:  " + conn);
-       
-       c = new AConnection(conn, this);
-       c.lease();
-       connections.addElement(c);
-       
-       //log.debug("Count++: " + connections.size());
-       
-       return c;
-   }
+		do
+		{
+			if(c != null)
+			{
+				removeConnection(c);
+			}
 
-    public synchronized void returnConnection(AConnection conn)
-    {
-      conn.expireLease();
-    }
+			c = (AConnection)getSubConnection();
+		}
+		while(!c.validate());
+
+		return c;
+	}
+
+	public synchronized Connection getSubConnection() throws SQLException
+	{
+		AConnection c;
+
+		for(int i = 0; i < connections.size(); i++)
+		{
+			c = connections.elementAt(i);
+			if(c.lease())
+			{
+				return c;
+			}
+		}
+
+		Connection conn = DriverManager.getConnection(url, info);
+
+		System.out.println("create:  " + conn);
+
+		c = new AConnection(conn, this);
+		c.lease();
+		connections.addElement(c);
+
+		//log.debug("Count++: " + connections.size());
+
+		return c;
+	}
+
+	public synchronized void returnConnection(AConnection conn)
+	{
+		conn.expireLease();
+	}
 
 	public boolean isLock()
 	{
 		return lock;
 	}
-	
+
 	public void setLock(boolean lock)
 	{
 		this.lock = lock;

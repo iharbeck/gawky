@@ -1,11 +1,8 @@
 package example.mail;
 
-import gawky.mail.SMTPAuthenticator;
-
 import java.util.Properties;
 
 import javax.mail.AuthenticationFailedException;
-import javax.mail.Authenticator;
 import javax.mail.Folder;
 import javax.mail.FolderClosedException;
 import javax.mail.FolderNotFoundException;
@@ -49,21 +46,19 @@ public class TestIMAP
 
 		try
 		{
-			
-			java.util.Properties prop = new Properties(); // System.getProperties();
-//            prop.put("mail.transport.protocol", "smtp");
-//            prop.put("mail.smtp.host", "mail.ingoharbeck.de");
-//    	    prop.put("mail.smtp.auth", true);
-//    	    prop.put("mail.store.protocol", "imaps");
 
-    	    //Auth
-//            Authenticator auth = new SMTPAuthenticator(System.getProperties(), null);
-	            
-	            
+			java.util.Properties prop = new Properties(); // System.getProperties();
+			//            prop.put("mail.transport.protocol", "smtp");
+			//            prop.put("mail.smtp.host", "mail.ingoharbeck.de");
+			//    	    prop.put("mail.smtp.auth", true);
+			//    	    prop.put("mail.store.protocol", "imaps");
+
+			//Auth
+			//            Authenticator auth = new SMTPAuthenticator(System.getProperties(), null);
+
 			printData("--------------processing mails started-----------------");
 			session = Session.getDefaultInstance(System.getProperties(), null);
 
-			
 			printData("getting the session for accessing email.");
 			store = session.getStore("imap");
 
@@ -85,10 +80,10 @@ public class TestIMAP
 			messages = folder.getMessages();
 
 			// Loop over all of the messages
-			for(int messageNumber = 0; messageNumber < messages.length; messageNumber++)
+			for(Message message2 : messages)
 			{
 				// Retrieve the next message to be read
-				message = messages[messageNumber];
+				message = message2;
 
 				// Retrieve the message content
 				messagecontentObject = message.getContent();

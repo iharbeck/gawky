@@ -22,7 +22,7 @@ public class SimpleMailSender extends Mail
 	{
 		return new SimpleMailSender();
 	}
-	
+
 	public int send(SimpleMail mail) throws Exception
 	{
 		return Mail.sendMailMain(server, username, password, auth,

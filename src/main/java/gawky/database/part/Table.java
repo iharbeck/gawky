@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;   
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,9 +58,13 @@ public abstract class Table extends Part
 	private Connection getConnection() throws Exception
 	{
 		if(!loop)
+		{
 			return DB.getConnection(getStaticLocal().defaultconnection);
+		}
 		else
+		{
 			return this.conn;
+		}
 	}
 
 	static HashMap<String, Integer> hsConn = new HashMap<String, Integer>();
@@ -127,23 +131,30 @@ public abstract class Table extends Part
 		System.out.println(Generator.generateAlterSQL(this).toString());
 	}
 
+	@Override
 	public synchronized void descAfterInterceptor(Desc[] descs)
 	{
 		StaticLocal local = getStaticLocal();
 
-		if(local.descIds[0] != null) 
+		if(local.descIds[0] != null)
+		{
 			return;
-		
+		}
+
 		// Anzahl Prim�rfelder
 		int c = 0;
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc : descs)
 		{
-			if(descs[i].isPrimary())
+			if(desc.isPrimary())
+			{
 				c++;
+			}
 		}
 
 		if(c > 0)
+		{
 			local.primarydefined = true;
+		}
 
 		// Array mit ids erstellen
 		local.descIds = new Desc[c];
@@ -179,25 +190,27 @@ public abstract class Table extends Part
 	private final StaticLocal getStaticLocal()
 	{
 		if(staticlocal != null)
+		{
 			return staticlocal;
+		}
 
 		String key = getClass().getName();
-		
-		staticlocal = (StaticLocal)hmStaticLocal.get(key);
+
+		staticlocal = hmStaticLocal.get(key);
 
 		if(staticlocal == null)
 		{
-			synchronized (hmStaticLocal)
+			synchronized(hmStaticLocal)
 			{
 				if(!hmStaticLocal.containsKey(key))
-				{	
+				{
 					staticlocal = new StaticLocal();
 					hmStaticLocal.put(key, staticlocal);
 				}
 				else
 				{
-					staticlocal = (StaticLocal)hmStaticLocal.get(key);
-				}					
+					staticlocal = hmStaticLocal.get(key);
+				}
 			}
 		}
 
@@ -224,6 +237,7 @@ public abstract class Table extends Part
 		return getStaticLocal().parameter;
 	}
 
+	@Override
 	abstract protected Desc[] getDesc();
 
 	abstract public String getTableName();
@@ -243,7 +257,7 @@ public abstract class Table extends Part
 	protected final String getQuery(int type)
 	{
 		String sql = getQueries()[type];
-		
+
 		if(sql == null)
 		{
 			switch(type)
@@ -276,7 +290,9 @@ public abstract class Table extends Part
 	public final PreparedStatement getStmt(Connection conn, int type) throws Exception
 	{
 		if(loop && this.stmt[type] != null)
+		{
 			return this.stmt[type];
+		}
 
 		String sql = getQuery(type);
 
@@ -284,7 +300,9 @@ public abstract class Table extends Part
 
 		// Store statement in loop mode
 		if(loop)
+		{
 			this.stmt[type] = stmt;
+		}
 
 		return stmt;
 	}
@@ -333,7 +351,9 @@ public abstract class Table extends Part
 	public int store() throws Exception
 	{
 		if(isFound())
+		{
 			return update();
+		}
 
 		insert();
 
@@ -345,7 +365,9 @@ public abstract class Table extends Part
 	public int store(Connection conn) throws Exception
 	{
 		if(isFound())
+		{
 			return update(conn);
+		}
 
 		insert(conn);
 		return 1;
@@ -515,7 +537,7 @@ public abstract class Table extends Part
 
 			while(rset.next())
 			{
-				Table table = (Table)this.getClass().newInstance();
+				Table table = this.getClass().newInstance();
 
 				generator.fillPart(rset, table);
 
@@ -537,7 +559,9 @@ public abstract class Table extends Part
 	public Desc getPrimdesc()
 	{
 		if(primdesc == null && getDescIDs().length > 0)
+		{
 			primdesc = getDescIDs()[0];
+		}
 
 		return primdesc;
 	}
@@ -634,11 +658,15 @@ public abstract class Table extends Part
 	public void loop_exit(boolean close)
 	{
 		loop = false;
-		for(int i = 0; i < stmt.length; i++)
-			doClose(stmt[i]);
+		for(PreparedStatement element : stmt)
+		{
+			doClose(element);
+		}
 
 		if(close)
+		{
 			doClose(this.conn);
+		}
 	}
 
 	public void find(Connection conn, Object[] ids) throws Exception
@@ -646,7 +674,9 @@ public abstract class Table extends Part
 		PreparedStatement stmt = getStmt(conn, SQL_FIND);
 
 		if(!this.hasPrimary())
+		{
 			throw new NoPrimaryColumnException(this);
+		}
 
 		ResultSet rset = null;
 		try
@@ -850,7 +880,9 @@ public abstract class Table extends Part
 		String sql = inst.getQuery(SQL_SELECT);
 
 		if(where != null)
+		{
 			sql += " " + where;
+		}
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 
@@ -892,7 +924,9 @@ public abstract class Table extends Part
 		String sql = inst.getQuery(SQL_SELECT);
 
 		if(where != null)
+		{
 			sql += " " + where;
+		}
 
 		PreparedStatement stmt = conn.prepareStatement(sql); // getStmt(conn, sql, SQL_FIND);
 
@@ -942,12 +976,14 @@ public abstract class Table extends Part
 
 	public static <T extends Table> int delete(Class<T> clazz, Connection conn, Object[] ids) throws Exception
 	{
-		Table inst = (Table)clazz.newInstance();
+		Table inst = clazz.newInstance();
 
 		PreparedStatement stmt = inst.getStmt(conn, SQL_DELETE);
 
 		if(!inst.hasPrimary())
+		{
 			throw new NoPrimaryColumnException(inst);
+		}
 
 		try
 		{
@@ -988,9 +1024,13 @@ public abstract class Table extends Part
 			for(int i = 0; i < descs.length; i++)
 			{
 				if(descs[i].getValue(this) instanceof byte[])
+				{
 					stmt.setBytes(i + 1, (byte[])descs[i].getValue(this));
+				}
 				else
+				{
 					stmt.setObject(i + 1, descs[i].getValue(this));
+				}
 			}
 
 			return stmt.executeUpdate();
@@ -1023,7 +1063,9 @@ public abstract class Table extends Part
 		PreparedStatement stmt = getStmt(conn, SQL_UPDATE);
 
 		if(!this.hasPrimary())
+		{
 			throw new NoPrimaryColumnException(this);
+		}
 
 		try
 		{
@@ -1127,9 +1169,13 @@ public abstract class Table extends Part
 		for(int i = 0; params != null && i < params.length; i++)
 		{
 			if(params[i] instanceof byte[])
+			{
 				stmt.setBytes(i + 1, (byte[])params[i]);
+			}
 			else
+			{
 				stmt.setObject(i + 1, params[i]);
+			}
 		}
 	}
 
@@ -1202,8 +1248,7 @@ public abstract class Table extends Part
 	{
 		return getStaticLocal().nativevalues;
 	}
-	
-	
+
 	public static <T extends Table> void batchinsert(List<T> list, int batchsize) throws Exception
 	{
 		batchinsert(0, list, batchsize);
@@ -1223,7 +1268,9 @@ public abstract class Table extends Part
 		int size = list.size();
 
 		if(size == 0)
+		{
 			return;
+		}
 
 		Generator sqlGenerator = new Generator();
 
@@ -1232,13 +1279,13 @@ public abstract class Table extends Part
 		PreparedStatement batch_stmt = element.getStmt(conn, Table.SQL_INSERT);
 
 		boolean batchrows = false;
-		
+
 		for(int i = 0; i < size; i++)
 		{
 			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i));
 			batch_stmt.addBatch();
 			batchrows = true;
-			
+
 			if(i > 0 && i % batchsize == 0)
 			{
 				batch_stmt.executeBatch();
@@ -1250,10 +1297,10 @@ public abstract class Table extends Part
 		{
 			batch_stmt.executeBatch();
 		}
-		
+
 		batch_stmt.close();
 	}
-	
+
 	public static <T extends Table> void batchupdate(List<T> list, int batchsize) throws Exception
 	{
 		batchupdate(0, list, batchsize);
@@ -1273,7 +1320,9 @@ public abstract class Table extends Part
 		int size = list.size();
 
 		if(size == 0)
+		{
 			return;
+		}
 
 		Generator sqlGenerator = new Generator();
 
@@ -1282,14 +1331,14 @@ public abstract class Table extends Part
 		PreparedStatement batch_stmt = element.getStmt(conn, Table.SQL_UPDATE);
 
 		boolean batchrows = false;
-		
+
 		for(int i = 0; i < size; i++)
 		{
 			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i));
 			batch_stmt.addBatch();
 
 			batchrows = true;
-			
+
 			if(i > 0 && i % batchsize == 0)
 			{
 				batch_stmt.executeBatch();
@@ -1301,7 +1350,7 @@ public abstract class Table extends Part
 		{
 			batch_stmt.executeBatch();
 		}
-		
+
 		batch_stmt.close();
 	}
 }

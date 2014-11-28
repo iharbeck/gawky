@@ -14,98 +14,110 @@ import gawky.message.part.Part;
 
 public class Satz86 extends Part implements MTRecord
 {
-	public Desc[] getDesc() {
+	@Override
+	public Desc[] getDesc()
+	{
 		return new Desc[] {
-			new DescC(":86:"),     
-			new DescV(390, "all", Desc.ENDALL)
-// citibank
-//			new DescF(4,  "producttype"),
-//			new DescV(2,  "paymenttype", "/"),
-//			new DescV(2,  "furtherdescription", "/"),
-//			new DescV(382, "narrativedescription", Desc.END)
+		        new DescC(":86:"),
+		        new DescV(390, "all", Desc.ENDALL)
+		// citibank
+		//			new DescF(4,  "producttype"),
+		//			new DescV(2,  "paymenttype", "/"),
+		//			new DescV(2,  "furtherdescription", "/"),
+		//			new DescV(382, "narrativedescription", Desc.END)
 		};
 	}
-	
-	public static void main(String[] args) throws Exception 
+
+	public static void main(String[] args) throws Exception
 	{
 		PatternParser parser = new PatternParser();
-		
+
 		Satz86 bean = new Satz86();
-		
+
 		String str = ":86:/PT/DE/EI/EFT:XYZ LOCAL CORPORATION (ANDA20103H):      ADP PA\r\n" +
-					 "YROLL FEES,";
-			   
+		        "YROLL FEES,";
+
 		bean.parse(parser, str);
 		bean.echo();
-		
+
 	}
-	
+
 	public void echo()
 	{
 		System.out.println("MEHRZWECKFELD = [" + all + "]");
-//		System.out.println(this.producttype);
-//		System.out.println(this.paymenttype);
-//		System.out.println(this.furtherdescription);
-//		System.out.println(this.narrativedescription);
+		//		System.out.println(this.producttype);
+		//		System.out.println(this.paymenttype);
+		//		System.out.println(this.furtherdescription);
+		//		System.out.println(this.narrativedescription);
 	}
-	
-	
-	private String type=":86:";
+
+	private String type = ":86:";
 	private String all;
-	
+
 	private String producttype;
 	private String paymenttype;
 	private String furtherdescription;
 	private String narrativedescription;
-	
-	
-	public String getFurtherdescription() {
+
+	public String getFurtherdescription()
+	{
 		return furtherdescription;
 	}
 
-	public void setFurtherdescription(String furtherdescription) {
+	public void setFurtherdescription(String furtherdescription)
+	{
 		this.furtherdescription = furtherdescription;
 	}
 
-	public String getNarrativedescription() {
+	public String getNarrativedescription()
+	{
 		return narrativedescription;
 	}
 
-	public void setNarrativedescription(String narrativedescription) {
+	public void setNarrativedescription(String narrativedescription)
+	{
 		this.narrativedescription = narrativedescription;
 	}
 
-	public String getPaymenttype() {
+	public String getPaymenttype()
+	{
 		return paymenttype;
 	}
 
-	public void setPaymenttype(String paymenttype) {
+	public void setPaymenttype(String paymenttype)
+	{
 		this.paymenttype = paymenttype;
 	}
 
-	public String getProducttype() {
+	public String getProducttype()
+	{
 		return producttype;
 	}
 
-	public void setProducttype(String producttype) {
+	public void setProducttype(String producttype)
+	{
 		this.producttype = producttype;
 	}
 
-	public String getAll() {
+	public String getAll()
+	{
 		return all;
 	}
 
-	public void setAll(String all) {
+	public void setAll(String all)
+	{
 		this.all = all;
 	}
 
-	public String getType() {
+	@Override
+	public String getType()
+	{
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(String type)
+	{
 		this.type = type;
 	}
-	
-	
+
 }

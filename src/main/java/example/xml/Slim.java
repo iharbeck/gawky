@@ -2,19 +2,22 @@ package example.xml;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.xml.sax.helpers.AttributesImpl;
 
-public class Slim {
+public class Slim
+{
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception
+	{
 
 		StreamResult streamResult = new StreamResult(System.out);
-		SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory
-				.newInstance();
+		SAXTransformerFactory tf = (SAXTransformerFactory)TransformerFactory
+		        .newInstance();
 		// SAX2.0 ContentHandler.
 		TransformerHandler hd = tf.newTransformerHandler();
 		Transformer serializer = hd.getTransformer();
@@ -30,7 +33,8 @@ public class Slim {
 		String[] id = { "PWD122", "MX787", "A4Q45" };
 		String[] type = { "customer", "manager", "employee" };
 		String[] desc = { "Tim@Home", "Jack&Moud", "John D'oé" };
-		for (int i = 0; i < id.length; i++) {
+		for(int i = 0; i < id.length; i++)
+		{
 			atts.clear();
 			atts.addAttribute("", "", "ID", "CDATA", id[i]);
 			atts.addAttribute("", "", "TYPE", "CDATA", type[i]);

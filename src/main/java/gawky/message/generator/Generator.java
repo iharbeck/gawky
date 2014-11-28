@@ -15,7 +15,9 @@ public class Generator
 	public static Generator getInstance()
 	{
 		if(instance == null)
+		{
 			instance = new Generator();
+		}
 		return instance;
 	}
 
@@ -24,7 +26,9 @@ public class Generator
 	public String buildString(Part bean) throws Exception
 	{
 		if(bean == null)
+		{
 			return "";
+		}
 
 		//bean.beforeStore();
 
@@ -32,12 +36,14 @@ public class Generator
 		Desc descs[] = bean.getCachedDesc();
 		Desc desc;
 
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.nostring)
+			{
 				continue;
+			}
 
 			Object val = null;
 
@@ -53,26 +59,36 @@ public class Generator
 			{
 				str.append(Formatter.getStringN(desc.len, (String)val));
 				if(desc.delimiter != null)
+				{
 					str.append(desc.delimiter);
+				}
 			}
 			else if(desc.format == Desc.FMT_BINARY)
 			{ // von links mit null füllen
 				str.append(new String(Formatter.bpad(desc.len, (byte[])val)));
 				if(desc.delimiter != null)
+				{
 					str.append(desc.delimiter);
+				}
 			}
 			else
 			{
 				if(desc.delimiter != null)
+				{
 					str.append(Formatter.getStringV(desc.len, (String)val, desc.delimiter));
+				}
 				else
 				{
 					if(desc.format != Desc.FMT_CONSTANT)
 					{
 						if(desc.len != 0 && !(desc instanceof DescV))
+						{
 							str.append(Formatter.getStringC(desc.len, (String)val));
+						}
 						else
+						{
 							str.append(val);
+						}
 					}
 					else
 					{
@@ -88,7 +104,9 @@ public class Generator
 	public String buildDebugString(Part bean)
 	{
 		if(bean == null)
+		{
 			return "";
+		}
 
 		//bean.beforeStore();
 
@@ -98,15 +116,15 @@ public class Generator
 
 		try
 		{
-			for(int i = 0; i < descs.length; i++)
+			for(Desc desc2 : descs)
 			{
-				desc = descs[i];
+				desc = desc2;
 
 				Object val = null;
 
 				try
 				{
-					val = (String)desc.getValue(bean);
+					val = desc.getValue(bean);
 				}
 				catch(Exception e)
 				{
@@ -117,26 +135,36 @@ public class Generator
 				{
 					str.append(Formatter.getStringN(desc.len, (String)val));
 					if(desc.delimiter != null)
+					{
 						str.append(desc.delimiter);
+					}
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{ // von rechts mit null füllen
 					str.append(new String(Formatter.bpad(desc.len, (byte[])val)));
 					if(desc.delimiter != null)
+					{
 						str.append(desc.delimiter);
+					}
 				}
 				else
 				{
 					if(desc.delimiter != null)
+					{
 						str.append(Formatter.getStringV(desc.len, (String)val, desc.delimiter));
+					}
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0)
+							{
 								str.append(Formatter.getStringC(desc.len, (String)val));
+							}
 							else
+							{
 								str.append(val);
+							}
 						}
 						else
 						{

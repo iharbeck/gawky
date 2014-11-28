@@ -35,7 +35,7 @@ public class SVNClient
 {
 	static SafeDateFormat sdfSVN = new SafeDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	static SafeDateFormat SDFddmmyyyyHHmmss = new SafeDateFormat("dd.mm.yyyy HH:mm:ss");
-	
+
 	public static int REVISION_LATEST = -1;
 
 	private String root;
@@ -55,7 +55,6 @@ public class SVNClient
 		String user = "harb05";
 		String pass = "harb05";
 
-
 		SVNClient svn = new SVNClient(user, pass, root);
 
 		/*
@@ -63,11 +62,10 @@ public class SVNClient
 		 */
 
 		String filename = "filename.pdf";
-		
+
 		InputStream data = new FileInputStream("c:/ingo_2011-09-22_Protokoll_Projekt_Kick-off_BFS1-1.pdf");
 		svn.svnCommitFile(filename, data, "Txxxxx: file added 2");
 
-		
 		/**
 		 * Datei aus SVN holen
 		 */
@@ -142,14 +140,17 @@ public class SVNClient
 
 		repository.getFileRevisions(filePath, 0, lastrevision, false, new ISVNFileRevisionHandler()
 		{
+			@Override
 			public void applyTextDelta(String path, String baseChecksum) throws SVNException
 			{
 			}
 
+			@Override
 			public void closeRevision(String token) throws SVNException
 			{
 			}
 
+			@Override
 			public void openRevision(SVNFileRevision fileRevision) throws SVNException
 			{
 				String timestamp = fileRevision.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE).substring(0, 19);
@@ -164,11 +165,13 @@ public class SVNClient
 				}
 			}
 
+			@Override
 			public OutputStream textDeltaChunk(String path, SVNDiffWindow diffWindow) throws SVNException
 			{
 				return null;
 			}
 
+			@Override
 			public void textDeltaEnd(String path) throws SVNException
 			{
 			}
@@ -270,9 +273,13 @@ public class SVNClient
 		String checksum;
 
 		if(oldData != null)
+		{
 			checksum = deltaGenerator.sendDelta(filePath, oldData, 0, newData, editor, true);
+		}
 		else
+		{
 			checksum = deltaGenerator.sendDelta(filePath, newData, editor, true);
+		}
 
 		editor.closeFile(filePath, checksum);
 

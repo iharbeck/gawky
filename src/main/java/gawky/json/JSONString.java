@@ -1,4 +1,5 @@
 package gawky.json;
+
 /**
  * The <code>JSONString</code> interface allows a <code>toJSONString()</code>
  * method so that a class can change the behavior of
@@ -7,7 +8,8 @@ package gawky.json;
  * <code>toJSONString</code> method will be used instead of the default behavior
  * of using the Object's <code>toString()</code> method and quoting the result.
  */
-public interface JSONString {
+public interface JSONString
+{
 	/**
 	 * The <code>toJSONString</code> method allows a class to produce its own JSON
 	 * serialization.
