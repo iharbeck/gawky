@@ -25,38 +25,42 @@ public class SimpleSqlHolder
 	Map<String, StringBuffer> templates;
 
 	Map<String, String> map = null;
-	
+
 	public void setParameter(Map map)
 	{
 		this.map = map;
 	}
-	
+
 	public void addParameter(Map map)
 	{
 		if(map == null)
+		{
 			map = new HashMap<String, String>();
-		
+		}
+
 		this.map.putAll(map);
 	}
-	
+
 	public void addParameter(String key, String value)
 	{
 		if(map == null)
+		{
 			map = new HashMap<String, String>();
-		
+		}
+
 		map.put(key, value);
 	}
-	
+
 	public void clearParameter()
 	{
 		map = null;
 	}
-	
+
 	public SimpleSqlHolder()
 	{
 		this(CallerClass.getCallerClass(3));
 	}
-	
+
 	public SimpleSqlHolder(Class<?> clazz)
 	{
 		templates = lookupTemplates(clazz);
@@ -88,21 +92,25 @@ public class SimpleSqlHolder
 				{
 					String cline = line.trim();
 					if(cline.equals("") || cline.startsWith("#") || cline.startsWith("--"))
+					{
 						continue;
+					}
 
 					if(cline.matches("\\w*:"))
 					{
 						String id = line.replaceAll("[\\s:]", "");
-						
+
 						buf = new StringBuffer(5000);
 						templates.put(id, buf);
-						
+
 						System.out.println(">>" + id);
 						continue;
 					}
-					
+
 					if(buf != null)
+					{
 						buf.append(line).append("\n");
+					}
 				}
 				is.close();
 
@@ -122,10 +130,14 @@ public class SimpleSqlHolder
 		String content = templates.get(id).toString();
 
 		if(content == null)
+		{
 			throw new Exception("No SQL template available [" + id + "]");
+		}
 
 		if(map != null)
+		{
 			content = doParameter(content);
+		}
 
 		return content;
 	}
@@ -144,13 +156,15 @@ public class SimpleSqlHolder
 			String alias = content.substring(m.start() + 1, m.end());
 
 			buf.append(content.substring(start, m.start()));
-			String val = (String)map.get(alias);
-		
+			String val = map.get(alias);
+
 			// if(val == null)
 			// val = "\n--:" + alias + "\n";
-			
+
 			if(val != null)
+			{
 				buf.append(val);
+			}
 
 			start = m.end();
 		}

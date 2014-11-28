@@ -17,9 +17,13 @@ public class Validation
 		for(int i = 0; i < c; i++)
 		{
 			if(values[i] > 0)
+			{
 				start = true;
+			}
 			else if(start)
+			{
 				return false;
+			}
 		}
 
 		return true;
@@ -62,7 +66,9 @@ public class Validation
 	public static boolean isLength(String value, int min, int max)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		int len = value.length();
 		return len >= min && len <= max;
@@ -84,7 +90,9 @@ public class Validation
 	public static boolean isDate(String value, String pattern)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		SafeDateFormat df = new SafeDateFormat(pattern);
 		df.setLenient(false);
@@ -121,14 +129,18 @@ public class Validation
 	public static boolean isListvalue(String value, String list)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		String[] values = list.split(";");
 
-		for(int i = 0; i < values.length; i++)
+		for(String value2 : values)
 		{
-			if(values[i].equals(value))
+			if(value2.equals(value))
+			{
 				return true;
+			}
 		}
 		return false;
 	}
@@ -150,12 +162,16 @@ public class Validation
 	public static boolean isBetween(String value, double min, double max)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		double val = Format.getDouble(Locale.GERMAN, value);
 
 		if(min <= val && val <= max)
+		{
 			return true;
+		}
 
 		return false;
 	}
@@ -195,12 +211,16 @@ public class Validation
 	public static boolean isBigger(String value, double ref)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		double val = Format.getDouble(Locale.GERMAN, value);
 
 		if(val > ref)
+		{
 			return true;
+		}
 
 		return false;
 	}
@@ -223,12 +243,16 @@ public class Validation
 	public static boolean isSmaller(String value, double ref)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		double val = Format.getDouble(Locale.GERMAN, value);
 
 		if(val < ref)
+		{
 			return true;
+		}
 
 		return false;
 	}
@@ -267,7 +291,9 @@ public class Validation
 	public static boolean isInDBLookup(String value, int connid, String sql)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		Connection conn = null;
 

@@ -27,7 +27,9 @@ public class ByteGenerator extends Generator
 		Arrays.fill(str, (byte)0x40);
 
 		if(bean == null)
+		{
 			return str;
+		}
 
 		bean.beforeStore();
 
@@ -36,9 +38,9 @@ public class ByteGenerator extends Generator
 
 		int pos = 0;
 
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			Object val = null;
 
@@ -53,8 +55,10 @@ public class ByteGenerator extends Generator
 			if(desc.format == Desc.FMT_DIGIT)
 			{
 				if(!desc.isPacked())
+				{
 					System.arraycopy(Formatter.getStringN(desc.len, (String)val).getBytes(encoding), 0, str, pos, desc.len);
-				//System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+					//System.arraycopy(Ebcdic.toEbcdic( Formatter.getStringN(desc.len, val) ), 0, str, pos, desc.len);
+				}
 				else
 				// PACKED DECIMAL
 				{
@@ -66,7 +70,9 @@ public class ByteGenerator extends Generator
 					else
 					{
 						if(val == null)
+						{
 							val = "0";
+						}
 						System.arraycopy(
 						        PackedDecimal.writeNumberPacked(desc.len, Long.parseLong((String)val), true), 0, str, pos, desc.len);
 					}
@@ -115,10 +121,13 @@ public class ByteGenerator extends Generator
 		return str;
 	}
 
+	@Override
 	public String buildDebugString(Part bean)
 	{
 		if(bean == null)
+		{
 			return "";
+		}
 
 		bean.beforeStore();
 
@@ -128,9 +137,9 @@ public class ByteGenerator extends Generator
 
 		try
 		{
-			for(int i = 0; i < descs.length; i++)
+			for(Desc desc2 : descs)
 			{
-				desc = descs[i];
+				desc = desc2;
 
 				Object val = null;
 
@@ -147,26 +156,36 @@ public class ByteGenerator extends Generator
 				{
 					str.append(Formatter.getStringN(desc.len, (String)val));
 					if(desc.delimiter != null)
+					{
 						str.append(desc.delimiter);
+					}
 				}
 				else if(desc.format == Desc.FMT_BINARY)
 				{ // von rechts mit null füllen
 					str.append(Formatter.bpad(desc.len, (byte[])val));
 					if(desc.delimiter != null)
+					{
 						str.append(desc.delimiter);
+					}
 				}
 				else
 				{
 					if(desc.delimiter != null)
+					{
 						str.append(Formatter.getStringV(desc.len, (String)val, desc.delimiter));
+					}
 					else
 					{
 						if(desc.format != Desc.FMT_CONSTANT)
 						{
 							if(desc.len != 0)
+							{
 								str.append(Formatter.getStringC(desc.len, (String)val));
+							}
 							else
+							{
 								str.append(val);
+							}
 						}
 						else
 						{

@@ -13,6 +13,7 @@ public class SafeDateFormat
 
 	private static final ThreadLocal<Map<String, SimpleDateFormat>> mapformat = new ThreadLocal<Map<String, SimpleDateFormat>>()
 	{
+		@Override
 		public Map<String, SimpleDateFormat> initialValue()
 		{
 			return new HashMap<String, SimpleDateFormat>();
@@ -52,17 +53,17 @@ public class SafeDateFormat
 	{
 		return getDateFormat(format).parse(day);
 	}
-	
+
 	public String toPattern()
 	{
 		return getDateFormat(format).toPattern();
 	}
-	
+
 	public void setLenient(boolean lenient)
 	{
 		getDateFormat(format).setLenient(lenient);
 	}
-	
+
 	public void setTimeZone(TimeZone zone)
 	{
 		getDateFormat(format).setTimeZone(zone);

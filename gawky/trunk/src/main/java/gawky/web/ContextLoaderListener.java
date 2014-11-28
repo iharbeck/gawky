@@ -1,12 +1,9 @@
 package gawky.web;
 
-
 import gawky.global.Option;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
-
 
 /**
  * Add to web.xml Initialisiert Option parameter
@@ -19,18 +16,25 @@ import javax.servlet.ServletContextListener;
  *
  */
 
+public class ContextLoaderListener implements ServletContextListener
+{
 
-public class ContextLoaderListener implements ServletContextListener {
-
-	public void contextInitialized(ServletContextEvent arg0) {
-		try {
+	@Override
+	public void contextInitialized(ServletContextEvent arg0)
+	{
+		try
+		{
 			Option.init();
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			arg0.getServletContext().log("Init gawky failed", e);
 		}
 	}
 
-	public void contextDestroyed(ServletContextEvent arg0) {
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0)
+	{
 	}
-	
+
 }

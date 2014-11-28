@@ -63,14 +63,14 @@ public class DB
 			if(dbproperties != null)
 			{
 
-				for(int x = 0; x < dbproperties.length; x++)
+				for(String dbpropertie : dbproperties)
 				{
 					//					if(x == 0)
 					//						urladd += "?" + dbproperties[x];
 					//					else
 					//						urladd += "&" + dbproperties[x];
 
-					String[] val = dbproperties[x].split("=");
+					String[] val = dbpropertie.split("=");
 					props.put(val[0], val[1]);
 				}
 			}
@@ -91,7 +91,7 @@ public class DB
 			}
 
 			BoneCPConfig config = new BoneCPConfig();
-			
+
 			config.setJdbcUrl(dburl);
 			config.setUsername(dbuser);
 			config.setPassword(dbpass);
@@ -100,9 +100,11 @@ public class DB
 			config.setPartitionCount(dbconnpartitions);
 			config.setDriverProperties(props);
 			//config.setStatementsCacheSize(50);
-			
+
 			if(trigger != null)
-			    config.setInitSQL(trigger);
+			{
+				config.setInitSQL(trigger);
+			}
 
 			config.setLazyInit(true);
 
@@ -111,11 +113,15 @@ public class DB
 				BoneCP connectionPool = new BoneCP(config);
 
 				if(dbalias == null)
+				{
 					//new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, "pool" + i, 5000000, props);
 					dbpool.put(Integer.toString(i), new PoolWrapper(connectionPool));
+				}
 				else
+				{
 					//new gawky.database.dbpool.AConnectionDriver(dbdriver, dburl, dbuser, dbpass, dbalias, 5000000, props);
 					dbpool.put(dbalias, new PoolWrapper(connectionPool));
+				}
 			}
 			catch(Exception e)
 			{
@@ -128,32 +134,32 @@ public class DB
 	{
 		dbpool.get(Integer.toString(number)).enable();
 	}
-	
+
 	static public void enablePool(String alias)
 	{
 		dbpool.get(alias).enable();
 	}
-	
+
 	static public void enablePool()
 	{
 		dbpool.get("0").enable();
 	}
-	
+
 	static public void disablePool(int number)
 	{
 		dbpool.get(Integer.toString(number)).disable();
 	}
-	
+
 	static public void disablePool(String alias)
 	{
 		dbpool.get(alias).disable();
 	}
-	
+
 	static public void disablePool()
 	{
 		dbpool.get("0").disable();
 	}
-	
+
 	static public Connection getConnection(int number) throws SQLException
 	{
 		return getConnection(Integer.toString(number));
@@ -167,9 +173,9 @@ public class DB
 
 	static public Connection getConnection(String alias) throws SQLException
 	{
-//		if(log.isInfoEnabled())
-//			log.info("get connection");
-//		return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
+		//		if(log.isInfoEnabled())
+		//			log.info("get connection");
+		//		return DriverManager.getConnection(AConnectionDriver.URL_PREFIX + alias);
 
 		return dbpool.get(alias).getConnection();
 	}
@@ -216,9 +222,13 @@ public class DB
 	private static final String secString(String val)
 	{
 		if(val != null)
+		{
 			return val.trim();
+		}
 		else
+		{
 			return "";
+		}
 	}
 
 	public static String getString(String sql) throws Exception
@@ -275,9 +285,11 @@ public class DB
 
 				rset = ((PreparedStatement)stmt_select).executeQuery();
 			}
-			
+
 			if(rset.next())
+			{
 				return rset.getString(1);
+			}
 
 			return "";
 		}
@@ -336,10 +348,10 @@ public class DB
 			}
 			else
 			{
-    			stmt_select = conn.prepareStatement(sql);
+				stmt_select = conn.prepareStatement(sql);
 				fillParams((PreparedStatement)stmt_select, params);
-    
-    			return ((PreparedStatement)stmt_select).executeUpdate();
+
+				return ((PreparedStatement)stmt_select).executeUpdate();
 			}
 		}
 		finally
@@ -389,17 +401,17 @@ public class DB
 			}
 			else
 			{
-    			stmt_select = conn.prepareStatement(sql);
+				stmt_select = conn.prepareStatement(sql);
 				fillParams((PreparedStatement)stmt_select, params);
-    
-    			rset = ((PreparedStatement)stmt_select).executeQuery();
+
+				rset = ((PreparedStatement)stmt_select).executeQuery();
 			}
-			
+
 			if(rset.next())
 			{
 				ResultSetMetaData md = rset.getMetaData();
 				int columncount = md.getColumnCount();
-				
+
 				hs = new HashMap<String, String>(columncount);
 
 				for(int i = columncount; i > 0; i--)
@@ -466,25 +478,24 @@ public class DB
 
 				rset = ((PreparedStatement)stmt_select).executeQuery();
 			}
-			
+
 			ResultSetMetaData md = rset.getMetaData();
 			int columncount = md.getColumnCount();
-			
-			
+
 			String[] columnname = new String[columncount];
-			
+
 			for(int i = 0; i < columncount; i++)
 			{
-				columnname[i] = md.getColumnName(i+1);
+				columnname[i] = md.getColumnName(i + 1);
 			}
-			
+
 			while(rset.next())
 			{
 				Map<String, String> hs = new HashMap<String, String>(columncount);
 
 				for(int i = columncount; i > 0; i--)
 				{
-					hs.put(columnname[i-1], secString(rset.getString(i)));
+					hs.put(columnname[i - 1], secString(rset.getString(i)));
 				}
 
 				al.add(hs);
@@ -498,8 +509,7 @@ public class DB
 
 		return al;
 	}
-	
-	
+
 	public static Result getMemoryList(String sql, Object... params) throws Exception
 	{
 		return getMemoryList(0, sql, params);
@@ -526,7 +536,7 @@ public class DB
 		Statement stmt_select = null;
 
 		Result result;
-		
+
 		try
 		{
 			if(params == null)
@@ -541,24 +551,24 @@ public class DB
 
 				rset = ((PreparedStatement)stmt_select).executeQuery();
 			}
-			
+
 			ResultSetMetaData md = rset.getMetaData();
 			int columncount = md.getColumnCount();
 
 			result = new Result(columncount);
-			
+
 			for(int i = 0; i < columncount; i++)
 			{
-				result.add(md.getColumnName(i+1), i);
+				result.add(md.getColumnName(i + 1), i);
 			}
-			
+
 			while(rset.next())
 			{
 				result.insert();
 
 				for(int i = 0; i < columncount; i++)
 				{
-					result.put(i, secString(rset.getString(i+1)));
+					result.put(i, secString(rset.getString(i + 1)));
 				}
 			}
 		}
@@ -570,7 +580,6 @@ public class DB
 
 		return result;
 	}
-	
 
 	public static Map<String, String> getHash(String sql, Object... params) throws Exception
 	{
@@ -608,12 +617,12 @@ public class DB
 			}
 			else
 			{
-    			stmt_select = conn.prepareStatement(sql);
+				stmt_select = conn.prepareStatement(sql);
 				fillParams((PreparedStatement)stmt_select, params);
-    
-    			rset = ((PreparedStatement)stmt_select).executeQuery();
+
+				rset = ((PreparedStatement)stmt_select).executeQuery();
 			}
-			
+
 			while(rset.next())
 			{
 				hs.put(rset.getString(1), rset.getString(2));
@@ -670,12 +679,12 @@ public class DB
 			}
 			else
 			{
-    			stmt_select = conn.prepareStatement(sql);
+				stmt_select = conn.prepareStatement(sql);
 				fillParams((PreparedStatement)stmt_select, params);
-    
-    			rset = ((PreparedStatement)stmt_select).executeQuery();
+
+				rset = ((PreparedStatement)stmt_select).executeQuery();
 			}
-			
+
 			while(rset.next())
 			{
 				al.add(secString(rset.getString(1)));
@@ -693,16 +702,18 @@ public class DB
 	private static void fillParams(PreparedStatement stmt, Object... params) throws SQLException
 	{
 		int a = 1;
-		for(int i = 0; i < params.length; i++)
+		for(Object param : params)
 		{
-			stmt.setObject(a++, params[i]);
+			stmt.setObject(a++, param);
 		}
 	}
 
 	public static final void doClose(ResultSet o)
 	{
 		if(o == null)
+		{
 			return;
+		}
 		try
 		{
 			o.close();
@@ -715,7 +726,9 @@ public class DB
 	public static final void doClose(Statement o)
 	{
 		if(o == null)
+		{
 			return;
+		}
 		try
 		{
 			o.close();
@@ -728,7 +741,9 @@ public class DB
 	public static final void doClose(Connection o)
 	{
 		if(o == null)
+		{
 			return;
+		}
 		try
 		{
 			o.setAutoCommit(true);
@@ -742,7 +757,9 @@ public class DB
 	public static final void doRollback(Connection o)
 	{
 		if(o == null)
+		{
 			return;
+		}
 		try
 		{
 			o.rollback();

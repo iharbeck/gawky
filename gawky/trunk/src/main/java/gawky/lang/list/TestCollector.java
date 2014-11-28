@@ -1,6 +1,5 @@
 package gawky.lang.list;
 
-
 public class TestCollector
 {
 
@@ -26,7 +25,7 @@ public class TestCollector
 
 			System.out.printf(" Anzahl: %4s", collector.get("invoice_count"));
 			System.out.printf(" Betrag: %5s", collector.get("invoice_amount"));
-			System.out.printf(" Text: %s\n", collector.get("invoice_text"));  
+			System.out.printf(" Text: %s\n", collector.get("invoice_text"));
 		}
 
 		//		System.out.println(collector.get("/tom2/invoice_count"));

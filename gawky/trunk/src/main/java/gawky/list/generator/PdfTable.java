@@ -17,91 +17,98 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.Table;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class PdfTable extends AbstractTable 
+public class PdfTable extends AbstractTable
 {
 	Document document;
-	
-	float fontsize = (float)10;
-	float leading  = fontsize;
-	
+
+	float fontsize = 10;
+	float leading = fontsize;
+
 	Font courierfont = FontFactory.getFont(FontFactory.HELVETICA, fontsize);
 
-	float margin   = 25;
-	
+	float margin = 25;
+
 	Rectangle format = PageSize.A4;
-	
-	public void setFormatPortrait() {
+
+	public void setFormatPortrait()
+	{
 		format = PageSize.A4;
 	}
-	public void setFormatLandscape() {
+
+	public void setFormatLandscape()
+	{
 		format = PageSize.A4.rotate();
 	}
-	public void setMargin(float margin) {
+
+	public void setMargin(float margin)
+	{
 		this.margin = margin;
 	}
-	
+
 	public void generate(Datasource ds, String output) throws Exception
 	{
 		// create document
 		document = new Document(format);
 
 		document.setMargins(margin, margin, margin, margin);
-		
+
 		// output path
-        String path = Locator.findBinROOT() + "/" + output;
+		String path = Locator.findBinROOT() + "/" + output;
 
-        PdfWriter.getInstance(document, new FileOutputStream(path));
+		PdfWriter.getInstance(document, new FileOutputStream(path));
 
-        // open document
-        document.open();
+		// open document
+		document.open();
 
-        
-        Table table = new Table(ds.getColumns()-ds.getColumnsHidden()); 
-//        table.setBorderWidth(1); 
-//        table.setBorderColor(new Color(0, 0, 255)); 
-        
-        table.setPadding(2);
-        table.setSpacing(0);
-        
-        int headerwidths[] = new int[ds.getColumns()-ds.getColumnsHidden()];
-        
-        int x = 0;
-		for(int i=0; i < ds.getColumns(); i++)
+		Table table = new Table(ds.getColumns() - ds.getColumnsHidden());
+		//        table.setBorderWidth(1); 
+		//        table.setBorderColor(new Color(0, 0, 255)); 
+
+		table.setPadding(2);
+		table.setSpacing(0);
+
+		int headerwidths[] = new int[ds.getColumns() - ds.getColumnsHidden()];
+
+		int x = 0;
+		for(int i = 0; i < ds.getColumns(); i++)
 		{
 			if(ds.getWidth(i) == Column.HIDDEN)
+			{
 				continue;
-		
-	        Cell cell = new Cell(ds.getHead(i)); 
-	        cell.setHeader(true); 
-	        cell.setBackgroundColor(Color.GRAY);
-	        cell.setLeading(leading);
-	        table.addCell(cell); 
-	        
-	        headerwidths[x++] = ds.getWidth(i) == 0 ? 100 : ds.getWidth(i);
+			}
+
+			Cell cell = new Cell(ds.getHead(i));
+			cell.setHeader(true);
+			cell.setBackgroundColor(Color.GRAY);
+			cell.setLeading(leading);
+			table.addCell(cell);
+
+			headerwidths[x++] = ds.getWidth(i) == 0 ? 100 : ds.getWidth(i);
 		}
 
-        table.setWidths(headerwidths);
-        table.setWidth(100);
+		table.setWidths(headerwidths);
+		table.setWidth(100);
 
-        table.endHeaders();
-
+		table.endHeaders();
 
 		while(ds.nextRow())
 		{
-			for(int i=0; i < ds.getColumns(); i++)
+			for(int i = 0; i < ds.getColumns(); i++)
 			{
 				if(ds.getWidth(i) == Column.HIDDEN)
+				{
 					continue;
+				}
 				CellListener handler = getListener(ds, i);
-				
-				Cell cell = new Cell(handler.process(ds, i)); 
+
+				Cell cell = new Cell(handler.process(ds, i));
 				cell.setLeading(leading);
-				table.addCell(cell); 
+				table.addCell(cell);
 			}
 		}
 
-        document.add(table); 
-		
+		document.add(table);
+
 		document.close();
 	}
 }

@@ -7,47 +7,49 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-public class Processor 
+public class Processor
 {
 	static Parser ps;
-	
-	public Processor() {
+
+	public Processor()
+	{
 	}
-	
-	public Processor(String filename) throws Exception {
+
+	public Processor(String filename) throws Exception
+	{
 		initFile(filename);
 	}
-	
+
 	public byte[] readFile(String filename) throws Exception
 	{
-		File f = new File( filename ); 
-    	byte[] buffer = new byte[ (int) f.length() ]; 
-    	InputStream in = new FileInputStream( f ); 
-    	in.read( buffer ); 
-    	in.close();
-    	
-    	return buffer;
+		File f = new File(filename);
+		byte[] buffer = new byte[(int)f.length()];
+		InputStream in = new FileInputStream(f);
+		in.read(buffer);
+		in.close();
+
+		return buffer;
 	}
 
 	public void initFile(String filename) throws Exception
 	{
 		ps = new Parser(readFile(filename), Constant.ENCODE_UTF8);
 	}
-	
+
 	public static void main(String[] args) throws Exception
 	{
 		long start = System.currentTimeMillis();
 
 		Processor sp = new Processor("D:/20070706");
-	
+
 		BaseObjectI obj = new BaseObject();
 
 		/** produce by Factory !!! **/
 		ConsumerI consumer = new Report1060();
-		
+
 		consumer.open();
-		
-		while(ps.toTagEmpty("booking") != -1 )
+
+		while(ps.toTagEmpty("booking") != -1)
 		{
 			obj.setClientid(ps.getAttribut("clientid"));
 			obj.setDebtor_account(ps.getAttribut("debtor_account"));
@@ -93,41 +95,41 @@ public class Processor
 			obj.setCompanyname(ps.getAttribut("companyname"));
 			obj.setAccountnowner(ps.getAttribut("accountnowner"));
 			obj.setAuthtime(ps.getAttribut("authtime"));
-			
+
 			ps.setAttribut("tag", "1234");
-			
+
 			consumer.processline(obj);
 		}
-		
+
 		consumer.close();
 
-		System.out.println(" ms: " + (System.currentTimeMillis() -start));
-		
+		System.out.println(" ms: " + (System.currentTimeMillis() - start));
+
 	}
-	
-	public void cleanup () 
+
+	public void cleanup()
 	{
-//		char[] val = xml.toCharArray();
-		
-//		int len = val.length;
-//	
-//		char[] target = new char[len];
-//		int l = 0;
-//		
-//		boolean prevblank = false;
-//		
-//		for(int i=0; i < len; i++)
-//		{
-//			if(val[i] == ' ' && prevblank) 
-//				continue;
-//			else if(val[i] == ' ') 
-//				prevblank = true;
-//			else 
-//				prevblank = false;
-//			
-//			target[l++] = val[i]; 
-//		}
-		
-//		System.out.println(target);
+		//		char[] val = xml.toCharArray();
+
+		//		int len = val.length;
+		//	
+		//		char[] target = new char[len];
+		//		int l = 0;
+		//		
+		//		boolean prevblank = false;
+		//		
+		//		for(int i=0; i < len; i++)
+		//		{
+		//			if(val[i] == ' ' && prevblank) 
+		//				continue;
+		//			else if(val[i] == ' ') 
+		//				prevblank = true;
+		//			else 
+		//				prevblank = false;
+		//			
+		//			target[l++] = val[i]; 
+		//		}
+
+		//		System.out.println(target);
 	}
 }

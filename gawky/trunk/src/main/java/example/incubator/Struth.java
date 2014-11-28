@@ -1,5 +1,6 @@
 package example.incubator;
 
-public class Struth {
+public class Struth
+{
 
 }

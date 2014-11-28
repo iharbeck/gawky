@@ -31,6 +31,7 @@ public class Entry implements Comparable<Entry>
 		this.line = line;
 	}
 
+	@Override
 	public int compareTo(Entry o)
 	{
 		//val > o.getVal() ? 1 : -1;

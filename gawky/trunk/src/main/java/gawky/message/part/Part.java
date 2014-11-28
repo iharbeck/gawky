@@ -40,7 +40,9 @@ public abstract class Part implements Cloneable
 		for(Desc desc : descs)
 		{
 			if(desc.format != Desc.FMT_CONSTANT)
+			{
 				buf.append("private String " + desc.name + ";\n");
+			}
 		}
 
 		System.out.println(buf.toString());
@@ -134,10 +136,12 @@ public abstract class Part implements Cloneable
 	static Part factory(Class c)
 	{
 		String key = c.getName();
-		Part p = (Part)parts.get(key);
+		Part p = parts.get(key);
 
 		if(p != null)
+		{
 			return p;
+		}
 
 		try
 		{
@@ -154,7 +158,9 @@ public abstract class Part implements Cloneable
 				String fieldName = desc.name;
 
 				if(fieldName.equals(""))
+				{
 					continue;
+				}
 
 				CtField f = CtField.make("private String " + fieldName + ";", cc);
 				try
@@ -212,19 +218,25 @@ public abstract class Part implements Cloneable
 		}
 
 		int colnum = 1;
-		
+
 		// Prepare Attribute Access
 		for(Desc desc : descs)
 		{
 			if(!(desc.dbname == null || desc.nostore))
+			{
 				desc.colnum = colnum++;
-			
+			}
+
 			if(desc instanceof BColumn && (this instanceof Table))
+			{
 				((Table)this).setBinary(true);
+			}
 
 			// Constanten do not have an attribute
 			if(desc.format == Desc.FMT_CONSTANT)
+			{
 				continue;
+			}
 
 			try
 			{
@@ -261,7 +273,9 @@ public abstract class Part implements Cloneable
 					desc.accessor = (Accessor)cc.toClass().newInstance();
 
 					if(desc.accessor == null)
+					{
 						throw new Exception("Can't generate GetterSetterclass for [" + mname + "]");
+					}
 				}
 				else
 				{
@@ -289,10 +303,12 @@ public abstract class Part implements Cloneable
 	public final Desc[] getCachedDesc()
 	{
 		if(_desc != null)
+		{
 			return _desc;
+		}
 
 		String key = getClass().getName();
-		
+
 		_desc = hmDesc.get(key);
 
 		if(_desc != null)
@@ -313,14 +329,16 @@ public abstract class Part implements Cloneable
 
 		return _desc;
 	}
-	
+
 	public final HashMap<String, Desc> getCachedDescHash()
 	{
 		if(_hsdesc != null)
+		{
 			return _hsdesc;
+		}
 
 		String key = getClass().getName();
-		
+
 		_hsdesc = hmDescHash.get(key);
 
 		if(_hsdesc != null)
@@ -335,9 +353,9 @@ public abstract class Part implements Cloneable
 			if(_hsdesc == null)
 			{
 				Desc[] descs = getCachedDesc();
-				
+
 				_hsdesc = new HashMap<String, Desc>();
-				
+
 				for(Desc desc : descs)
 				{
 					_hsdesc.put(desc.name, desc);
@@ -376,14 +394,18 @@ public abstract class Part implements Cloneable
 	public final Generator getGenerator()
 	{
 		if(generator == null)
+		{
 			generator = Generator.getInstance();
+		}
 		return generator;
 	}
 
 	public final Parser getParser()
 	{
 		if(parser == null)
+		{
 			parser = Parser.getInstance();
+		}
 		return parser;
 	}
 
@@ -415,11 +437,12 @@ public abstract class Part implements Cloneable
 
 	}
 
+	@Override
 	public Object clone()
 	{
 		try
 		{
-			Object clone = (Object)super.clone();
+			Object clone = super.clone();
 			return clone;
 		}
 		catch(CloneNotSupportedException e)

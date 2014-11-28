@@ -11,34 +11,38 @@ import gawky.message.part.Part;
  */
 public class RequestBook extends Part
 {
-    public Desc[] getDesc() 
- 	{
+	@Override
+	public Desc[] getDesc()
+	{
 		return new Desc[] {
-			new DescC("BOOK"),	
-			new DescC("00"),
-			new DescF(Desc.FMT_A, Desc.CODE_R, 14,  "invoice_number"),          
-			new DescF(Desc.FMT_9, Desc.CODE_R, 14,  "amount")
-		}; 
+		        new DescC("BOOK"),
+		        new DescC("00"),
+		        new DescF(Desc.FMT_A, Desc.CODE_R, 14, "invoice_number"),
+		        new DescF(Desc.FMT_9, Desc.CODE_R, 14, "amount")
+		};
 	}
 
 	private String invoice_number = "";
-	private String amount     	  = "";
+	private String amount = "";
 
-	public String getAmount() {
+	public String getAmount()
+	{
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(String amount)
+	{
 		this.amount = amount;
 	}
 
-	public String getInvoice_number() {
+	public String getInvoice_number()
+	{
 		return invoice_number;
 	}
 
-	public void setInvoice_number(String invoice_number) {
+	public void setInvoice_number(String invoice_number)
+	{
 		this.invoice_number = invoice_number;
 	}
 
-    
 }

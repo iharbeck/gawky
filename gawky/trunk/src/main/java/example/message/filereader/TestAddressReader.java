@@ -10,29 +10,33 @@ import gawky.message.parser.ParserException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class TestAddressReader implements LineHandler 
+public class TestAddressReader implements LineHandler
 {
 	private static Log log = LogFactory.getLog(TestAddressReader.class);
-	
-	public void processLine(String line) throws CancelException 
+
+	@Override
+	public void processLine(String line) throws CancelException
 	{
-		try {
+		try
+		{
 			Address address = new Address();
 			address.parse(line);
-			
+
 			// do something
 			log.info(address.getVorname());
 			log.info(address.getNachname());
-		} catch (ParserException e) {
+		}
+		catch(ParserException e)
+		{
 		}
 	}
 
-	public static void main(String[] args) throws Exception 
+	public static void main(String[] args) throws Exception
 	{
 		Option.init();
-		
+
 		String filename = Locator.findPath("data.dat", TestAddressReader.class);
-	
+
 		LineReader.processFile(filename, new TestAddressReader());
 	}
 }

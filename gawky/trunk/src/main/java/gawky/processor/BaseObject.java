@@ -1,7 +1,7 @@
 package gawky.processor;
 
-
-public class BaseObject implements BaseObjectI {
+public class BaseObject implements BaseObjectI
+{
 
 	private String clientid;
 	private String debtor_account;
@@ -47,274 +47,533 @@ public class BaseObject implements BaseObjectI {
 	private String companyname;
 	private String accountnowner;
 	private String authtime;
-	
-	
-	public String getAccountnowner() {
+
+	@Override
+	public String getAccountnowner()
+	{
 		return accountnowner;
 	}
-	public void setAccountnowner(String accountnowner) {
+
+	@Override
+	public void setAccountnowner(String accountnowner)
+	{
 		this.accountnowner = accountnowner;
 	}
-	public String getAddressvalcode() {
+
+	@Override
+	public String getAddressvalcode()
+	{
 		return addressvalcode;
 	}
-	public void setAddressvalcode(String addressvalcode) {
+
+	@Override
+	public void setAddressvalcode(String addressvalcode)
+	{
 		this.addressvalcode = addressvalcode;
 	}
-	public String getAmount() {
+
+	@Override
+	public String getAmount()
+	{
 		return amount;
 	}
-	public void setAmount(String amount) {
+
+	@Override
+	public void setAmount(String amount)
+	{
 		this.amount = amount;
 	}
-	public String getAmount_org() {
+
+	@Override
+	public String getAmount_org()
+	{
 		return amount_org;
 	}
-	public void setAmount_org(String amount_org) {
+
+	@Override
+	public void setAmount_org(String amount_org)
+	{
 		this.amount_org = amount_org;
 	}
-	public String getAuthcode() {
+
+	@Override
+	public String getAuthcode()
+	{
 		return authcode;
 	}
-	public void setAuthcode(String authcode) {
+
+	@Override
+	public void setAuthcode(String authcode)
+	{
 		this.authcode = authcode;
 	}
-	public String getAuthcodelong() {
+
+	@Override
+	public String getAuthcodelong()
+	{
 		return authcodelong;
 	}
-	public void setAuthcodelong(String authcodelong) {
+
+	@Override
+	public void setAuthcodelong(String authcodelong)
+	{
 		this.authcodelong = authcodelong;
 	}
-	public String getAuthdate() {
+
+	@Override
+	public String getAuthdate()
+	{
 		return authdate;
 	}
-	public void setAuthdate(String authdate) {
+
+	@Override
+	public void setAuthdate(String authdate)
+	{
 		this.authdate = authdate;
 	}
-	public String getAuthtime() {
+
+	@Override
+	public String getAuthtime()
+	{
 		return authtime;
 	}
-	public void setAuthtime(String authtime) {
+
+	@Override
+	public void setAuthtime(String authtime)
+	{
 		this.authtime = authtime;
 	}
-	public String getBankaccount() {
+
+	@Override
+	public String getBankaccount()
+	{
 		return bankaccount;
 	}
-	public void setBankaccount(String bankaccount) {
+
+	@Override
+	public void setBankaccount(String bankaccount)
+	{
 		this.bankaccount = bankaccount;
 	}
-	public String getBanknumber() {
+
+	@Override
+	public String getBanknumber()
+	{
 		return banknumber;
 	}
-	public void setBanknumber(String banknumber) {
+
+	@Override
+	public void setBanknumber(String banknumber)
+	{
 		this.banknumber = banknumber;
 	}
-	public String getBanksortcode() {
+
+	@Override
+	public String getBanksortcode()
+	{
 		return banksortcode;
 	}
-	public void setBanksortcode(String banksortcode) {
+
+	@Override
+	public void setBanksortcode(String banksortcode)
+	{
 		this.banksortcode = banksortcode;
 	}
-	public String getBic() {
+
+	@Override
+	public String getBic()
+	{
 		return bic;
 	}
-	public void setBic(String bic) {
+
+	@Override
+	public void setBic(String bic)
+	{
 		this.bic = bic;
 	}
-	public String getBookcode() {
+
+	@Override
+	public String getBookcode()
+	{
 		return bookcode;
 	}
-	public void setBookcode(String bookcode) {
+
+	@Override
+	public void setBookcode(String bookcode)
+	{
 		this.bookcode = bookcode;
 	}
-	public String getBookdate() {
+
+	@Override
+	public String getBookdate()
+	{
 		return bookdate;
 	}
-	public void setBookdate(String bookdate) {
+
+	@Override
+	public void setBookdate(String bookdate)
+	{
 		this.bookdate = bookdate;
 	}
-	public String getBookingtext() {
+
+	@Override
+	public String getBookingtext()
+	{
 		return bookingtext;
 	}
-	public void setBookingtext(String bookingtext) {
+
+	@Override
+	public void setBookingtext(String bookingtext)
+	{
 		this.bookingtext = bookingtext;
 	}
-	public String getBooknumber() {
+
+	@Override
+	public String getBooknumber()
+	{
 		return booknumber;
 	}
-	public void setBooknumber(String booknumber) {
+
+	@Override
+	public void setBooknumber(String booknumber)
+	{
 		this.booknumber = booknumber;
 	}
-	public String getBooksubcode() {
+
+	@Override
+	public String getBooksubcode()
+	{
 		return booksubcode;
 	}
-	public void setBooksubcode(String booksubcode) {
+
+	@Override
+	public void setBooksubcode(String booksubcode)
+	{
 		this.booksubcode = booksubcode;
 	}
-	public String getCcexpiry() {
+
+	@Override
+	public String getCcexpiry()
+	{
 		return ccexpiry;
 	}
-	public void setCcexpiry(String ccexpiry) {
+
+	@Override
+	public void setCcexpiry(String ccexpiry)
+	{
 		this.ccexpiry = ccexpiry;
 	}
-	public String getCcid() {
+
+	@Override
+	public String getCcid()
+	{
 		return ccid;
 	}
-	public void setCcid(String ccid) {
+
+	@Override
+	public void setCcid(String ccid)
+	{
 		this.ccid = ccid;
 	}
-	public String getCcnumber() {
+
+	@Override
+	public String getCcnumber()
+	{
 		return ccnumber;
 	}
-	public void setCcnumber(String ccnumber) {
+
+	@Override
+	public void setCcnumber(String ccnumber)
+	{
 		this.ccnumber = ccnumber;
 	}
-	public String getCctype() {
+
+	@Override
+	public String getCctype()
+	{
 		return cctype;
 	}
-	public void setCctype(String cctype) {
+
+	@Override
+	public void setCctype(String cctype)
+	{
 		this.cctype = cctype;
 	}
-	public String getCity() {
+
+	@Override
+	public String getCity()
+	{
 		return city;
 	}
-	public void setCity(String city) {
+
+	@Override
+	public void setCity(String city)
+	{
 		this.city = city;
 	}
-	public String getClientid() {
+
+	@Override
+	public String getClientid()
+	{
 		return clientid;
 	}
-	public void setClientid(String clientid) {
+
+	@Override
+	public void setClientid(String clientid)
+	{
 		this.clientid = clientid;
 	}
-	public String getCompanyname() {
+
+	@Override
+	public String getCompanyname()
+	{
 		return companyname;
 	}
-	public void setCompanyname(String companyname) {
+
+	@Override
+	public void setCompanyname(String companyname)
+	{
 		this.companyname = companyname;
 	}
-	public String getCountrycode() {
+
+	@Override
+	public String getCountrycode()
+	{
 		return countrycode;
 	}
-	public void setCountrycode(String countrycode) {
+
+	@Override
+	public void setCountrycode(String countrycode)
+	{
 		this.countrycode = countrycode;
 	}
-	public String getCountryname() {
+
+	@Override
+	public String getCountryname()
+	{
 		return countryname;
 	}
-	public void setCountryname(String countryname) {
+
+	@Override
+	public void setCountryname(String countryname)
+	{
 		this.countryname = countryname;
 	}
-	public String getCurrency() {
+
+	@Override
+	public String getCurrency()
+	{
 		return currency;
 	}
-	public void setCurrency(String currency) {
+
+	@Override
+	public void setCurrency(String currency)
+	{
 		this.currency = currency;
 	}
-	public String getCurrency_org() {
+
+	@Override
+	public String getCurrency_org()
+	{
 		return currency_org;
 	}
-	public void setCurrency_org(String currency_org) {
+
+	@Override
+	public void setCurrency_org(String currency_org)
+	{
 		this.currency_org = currency_org;
 	}
-	public String getDc() {
+
+	@Override
+	public String getDc()
+	{
 		return dc;
 	}
-	public void setDc(String dc) {
+
+	@Override
+	public void setDc(String dc)
+	{
 		this.dc = dc;
 	}
-	public String getDebtor_account() {
+
+	@Override
+	public String getDebtor_account()
+	{
 		return debtor_account;
 	}
-	public void setDebtor_account(String debtor_account) {
+
+	@Override
+	public void setDebtor_account(String debtor_account)
+	{
 		this.debtor_account = debtor_account;
 	}
-	public String getFirstname() {
+
+	@Override
+	public String getFirstname()
+	{
 		return firstname;
 	}
-	public void setFirstname(String firstname) {
+
+	@Override
+	public void setFirstname(String firstname)
+	{
 		this.firstname = firstname;
 	}
-	public String getIban() {
+
+	@Override
+	public String getIban()
+	{
 		return iban;
 	}
-	public void setIban(String iban) {
+
+	@Override
+	public void setIban(String iban)
+	{
 		this.iban = iban;
 	}
-	public String getLastname() {
+
+	@Override
+	public String getLastname()
+	{
 		return lastname;
 	}
-	public void setLastname(String lastname) {
+
+	@Override
+	public void setLastname(String lastname)
+	{
 		this.lastname = lastname;
 	}
-	public String getMandate_id() {
+
+	@Override
+	public String getMandate_id()
+	{
 		return mandate_id;
 	}
-	public void setMandate_id(String mandate_id) {
+
+	@Override
+	public void setMandate_id(String mandate_id)
+	{
 		this.mandate_id = mandate_id;
 	}
-	public String getMandate_status() {
+
+	@Override
+	public String getMandate_status()
+	{
 		return mandate_status;
 	}
-	public void setMandate_status(String mandate_status) {
+
+	@Override
+	public void setMandate_status(String mandate_status)
+	{
 		this.mandate_status = mandate_status;
 	}
-	public String getPaymenttype() {
+
+	@Override
+	public String getPaymenttype()
+	{
 		return paymenttype;
 	}
-	public void setPaymenttype(String paymenttype) {
+
+	@Override
+	public void setPaymenttype(String paymenttype)
+	{
 		this.paymenttype = paymenttype;
 	}
-	public String getPaymenttype2() {
+
+	@Override
+	public String getPaymenttype2()
+	{
 		return paymenttype2;
 	}
-	public void setPaymenttype2(String paymenttype2) {
+
+	@Override
+	public void setPaymenttype2(String paymenttype2)
+	{
 		this.paymenttype2 = paymenttype2;
 	}
-	public String getRef_nr() {
+
+	@Override
+	public String getRef_nr()
+	{
 		return ref_nr;
 	}
-	public void setRef_nr(String ref_nr) {
+
+	@Override
+	public void setRef_nr(String ref_nr)
+	{
 		this.ref_nr = ref_nr;
 	}
-	public String getReferencetext() {
+
+	@Override
+	public String getReferencetext()
+	{
 		return referencetext;
 	}
-	public void setReferencetext(String referencetext) {
+
+	@Override
+	public void setReferencetext(String referencetext)
+	{
 		this.referencetext = referencetext;
 	}
-	public String getRibcode() {
+
+	@Override
+	public String getRibcode()
+	{
 		return ribcode;
 	}
-	public void setRibcode(String ribcode) {
+
+	@Override
+	public void setRibcode(String ribcode)
+	{
 		this.ribcode = ribcode;
 	}
-	public String getState() {
+
+	@Override
+	public String getState()
+	{
 		return state;
 	}
-	public void setState(String state) {
+
+	@Override
+	public void setState(String state)
+	{
 		this.state = state;
 	}
-	public String getStreet() {
+
+	@Override
+	public String getStreet()
+	{
 		return street;
 	}
-	public void setStreet(String street) {
+
+	@Override
+	public void setStreet(String street)
+	{
 		this.street = street;
 	}
-	public String getStreet2() {
+
+	@Override
+	public String getStreet2()
+	{
 		return street2;
 	}
-	public void setStreet2(String street2) {
+
+	@Override
+	public void setStreet2(String street2)
+	{
 		this.street2 = street2;
 	}
-	public String getZip() {
+
+	@Override
+	public String getZip()
+	{
 		return zip;
 	}
-	public void setZip(String zip) {
+
+	@Override
+	public void setZip(String zip)
+	{
 		this.zip = zip;
 	}
-			
 
-	
-	
 }

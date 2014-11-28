@@ -38,7 +38,7 @@ public class SimpleMail extends Mail
 
 	InternetAddress from;
 	InternetAddress notify;
-	
+
 	private ArrayList<InternetAddress> array_to = new ArrayList<InternetAddress>();
 	private ArrayList<InternetAddress> array_reply = new ArrayList<InternetAddress>();
 
@@ -50,7 +50,7 @@ public class SimpleMail extends Mail
 	{
 		return new SimpleMail();
 	}
-	
+
 	public SimpleMail setFrom(String from) throws Exception
 	{
 		return setFrom(from, from);
@@ -61,13 +61,13 @@ public class SimpleMail extends Mail
 		this.from = new InternetAddress(from, alias);
 		return this;
 	}
-	
+
 	public SimpleMail setNotify(String from) throws Exception
 	{
 		this.notify = new InternetAddress(from);
 		return this;
 	}
-	
+
 	public InternetAddress getNotify()
 	{
 		return notify;
@@ -78,7 +78,9 @@ public class SimpleMail extends Mail
 		String[] tos = to.split("\\s*;\\s*");
 
 		for(String t : tos)
+		{
 			addTo(t, t);
+		}
 
 		return this;
 	}
@@ -270,9 +272,13 @@ public class SimpleMail extends Mail
 		if(from == null)
 		{
 			if(def_fromalias.length() > 0)
+			{
 				setFrom(def_from, def_fromalias);
+			}
 			else
+			{
 				setFrom(def_from);
+			}
 		}
 		return from;
 	}

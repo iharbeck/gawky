@@ -27,7 +27,7 @@ public enum SampleEnum
 	{
 		this.id = id;
 	}
-	
+
 	public static SampleEnum lookupEnumById(String id) throws Exception
 	{
 		return EnumHandler.lookupEnumReverse(SampleEnum.class, "id", id);

@@ -2,7 +2,8 @@
 
 package gawky.incubator.antlr;
 
-public interface MyParserTokenTypes {
+public interface MyParserTokenTypes
+{
 	int EOF = 1;
 	int NULL_TREE_LOOKAHEAD = 3;
 	int NAME = 4;

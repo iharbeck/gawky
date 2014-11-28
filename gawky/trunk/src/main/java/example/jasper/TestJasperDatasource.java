@@ -2,15 +2,16 @@ package example.jasper;
 
 import gawky.jasper.JRBeanUtilDataSource;
 
-public class TestJasperDatasource 
+public class TestJasperDatasource
 {
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception
+	{
 
 		// Datenbean erstellen
 		Sample bean = new Sample();
-	
+
 		bean.setOwner("Meiermann");
-		
+
 		bean.getPos().add(new Sample("user1"));
 		bean.getPos().add(new Sample("user2"));
 		bean.getPos().add(new Sample("user3"));
@@ -21,8 +22,8 @@ public class TestJasperDatasource
 
 		while(ds.next())
 		{
-			System.out.println( ds.getFieldValue("owner") );
-			System.out.println( ds.getFieldValue("pos[x].name") );
+			System.out.println(ds.getFieldValue("owner"));
+			System.out.println(ds.getFieldValue("pos[x].name"));
 		}
 	}
 }

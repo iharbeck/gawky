@@ -1,6 +1,6 @@
 package gawky.service.mt940;
 
-
-public interface MTRecord {
+public interface MTRecord
+{
 	public String getType();
 }

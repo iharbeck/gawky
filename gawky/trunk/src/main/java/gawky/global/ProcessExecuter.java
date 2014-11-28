@@ -7,19 +7,21 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-public class ProcessExecuter {
+public class ProcessExecuter
+{
 
 	public static String run(String command) throws Exception
 	{
 		StringBuilder buf = new StringBuilder();
-		
+
 		String line;
 
 		Process p = Runtime.getRuntime().exec(command);
 
 		BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-		while ((line = input.readLine()) != null) {
+		while((line = input.readLine()) != null)
+		{
 			buf.append(line).append("\n");
 		}
 
@@ -27,34 +29,36 @@ public class ProcessExecuter {
 
 		return buf.toString();
 	}
-	
-	public static void main(String[] args) throws Exception {
-		System.out.println( 
-				ProcessExecuter.run("tree.com") +
-				ProcessExecuter.run(new String[] {"command.com", "/c", "dir"}, "c:/work/gawky/")
-		);
+
+	public static void main(String[] args) throws Exception
+	{
+		System.out.println(
+		        ProcessExecuter.run("tree.com") +
+		                ProcessExecuter.run(new String[] { "command.com", "/c", "dir" }, "c:/work/gawky/")
+		        );
 	}
-	
-	public static String run (String[] action, String folder) throws Exception
+
+	public static String run(String[] action, String folder) throws Exception
 	{
 		StringBuilder buf = new StringBuilder();
 
 		List command = Arrays.asList(action);
 
-        ProcessBuilder builder = new ProcessBuilder(command);
-        builder.directory(new File(folder));
+		ProcessBuilder builder = new ProcessBuilder(command);
+		builder.directory(new File(folder));
 
-        final Process process = builder.start();
-        
-        InputStream is = process.getInputStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(isr);
-        String line;
+		final Process process = builder.start();
 
-        while ((line = br.readLine()) != null) {
-          buf.append(line).append("\n");
-        }
-        
-        return buf.toString();
+		InputStream is = process.getInputStream();
+		InputStreamReader isr = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isr);
+		String line;
+
+		while((line = br.readLine()) != null)
+		{
+			buf.append(line).append("\n");
+		}
+
+		return buf.toString();
 	}
 }

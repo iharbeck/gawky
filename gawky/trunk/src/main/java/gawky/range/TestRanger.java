@@ -13,7 +13,6 @@ public class TestRanger
 		ranger.add(5, 10, "::1");
 		ranger.add(100, 200, "::2");
 
-		
 		System.out.println(ranger.freeRange(0, 1) == true);
 		System.out.println(ranger.freeRange(0, 3) == false);
 		System.out.println(ranger.freeRange(3, 4) == false);
@@ -26,7 +25,7 @@ public class TestRanger
 
 		System.out.println("lookup: " + ranger.lookup(110));
 	}
-	
+
 	@Test
 	public void check_string_range() throws Exception
 	{
@@ -43,7 +42,7 @@ public class TestRanger
 
 		System.out.println(ranger_str.lookup("AMPEL"));
 	}
-	
+
 	@Test
 	public void check_alpha_range() throws Exception
 	{

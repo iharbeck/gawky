@@ -12,8 +12,6 @@ public class TestSimpleHTMLMail
 
 		SimpleMail mail = new SimpleMail();
 
-		
-		
 		mail.addTo("to@domain.com")
 		        // .addImage("shit.gif", "shit.gif");
 		        .setBody("<b>Hello äöü 7ex</b><img src=\"cid:shit.gif\"/>")
@@ -26,7 +24,6 @@ public class TestSimpleHTMLMail
 		        .setUsername("from@domain.com")
 		        .setPassword("xxx");
 
-		
 		server.send(mail);
 
 		System.exit(0);

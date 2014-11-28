@@ -1,6 +1,5 @@
 package example.comm.server;
 
-
 import example.global.Session;
 import example.message.parser.MultitypeParser;
 import example.message.parser.ResponseRes;
@@ -19,72 +18,75 @@ import java.net.SocketTimeoutException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class TestServer implements ThreadWorker 
+public class TestServer implements ThreadWorker
 {
 	private static Log log = LogFactory.getLog(TestServer.class);
 
-	
+	@Override
 	public void execute(Server.Worker thread, Socket s) throws Exception
 	{
 		log.info("## IN WORKER");
-		
+
 		thread.setBatchmode(true);
 		//s.setSoTimeout(10000);
-	    
+
 		Session session = new Session();
-		
-		try {
+
+		try
+		{
 			// Read from Socket \n terminated line!
 			String line = IO.readLine(s, Constant.ENCODE_ISO);
-			
-			
+
 			// Sample Parsing
 			MultitypeParser.parse(session, line);
 
 			// Sample Olivarequest
 			ActionOliva.doSettlement(session);
-			
+
 			// Do some Action
 			session.setResponse("0000");
 			session.setDetails("bank <" + session.getHead().getSortcode() + ":" + session.getHead().getAccount() + ">");
-	    }
-		catch(SocketTimeoutException e) {
+		}
+		catch(SocketTimeoutException e)
+		{
 			log.error(e);
-	    }
-		catch(IOException e) {
+		}
+		catch(IOException e)
+		{
 			thread.setBatchmode(false);
 			log.info("Batch terminated unexpected");
-	    }
-		catch (ParserException e) {
+		}
+		catch(ParserException e)
+		{
 			log.error("response_code: " + e.getRetcode());
 			session.setResponse(Integer.toString(e.getRetcode()));
 			session.setDetails("PARSING ERROR ");
-		} 
-		finally {	
+		}
+		finally
+		{
 			// sendResponse
 			ResponseRes res = new ResponseRes();
 			res.setCode(session.getResponse());
 			res.setDetail(session.getDetails());
-			
+
 			String response = res.toString();
 			IO.writeLine(s, response);
 		}
 	}
-	
-	
-	public static void main(String[] args) throws Exception 
+
+	public static void main(String[] args) throws Exception
 	{
 		Option.init("properties.xml", "TestServer", args);
-		
+
 		// External configuration File
 		Server server = new Server(TestServer.class);
-		
+
 		// Secure Socket Server
-//	    new Server(port, keystore, storepass, keypass, class);
-		
-	    // Plain Socket Server
-//	    new Server(Option.getPort(), class);
-		
-    	server.start();
+		//	    new Server(port, keystore, storepass, keypass, class);
+
+		// Plain Socket Server
+		//	    new Server(Option.getPort(), class);
+
+		server.start();
 	}
 }

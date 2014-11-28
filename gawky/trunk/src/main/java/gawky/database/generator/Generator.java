@@ -71,19 +71,23 @@ public class Generator
 
 		Object val = null;
 
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.dbname == null || desc.nostore)
+			{
 				continue;
+			}
 
 			try
 			{
 				val = mapGetDBToObjectType(desc, rset, desc.colnum); //dbname
 
 				if(dotrim && val instanceof String)
+				{
 					val = Formatter.rtrim((String)val);
+				}
 
 				desc.setValue(part, val);
 			}
@@ -102,7 +106,9 @@ public class Generator
 		part.afterFill();
 
 		if(doclone)
+		{
 			part.doclone();
+		}
 
 		part.setFound(true);
 	}
@@ -190,8 +196,10 @@ public class Generator
 			{
 				val = mapGetDBToObjectType(desc, rset, name);
 
-				if(dotrim && val instanceof String) // studip
+				if(dotrim && val instanceof String)
+				{
 					val = Formatter.rtrim((String)val);
+				}
 
 				desc.setValue(part, val);
 
@@ -220,20 +228,26 @@ public class Generator
 		        .append(" ( ");
 
 		if(bean.lookupNativeColumns() != null)
+		{
 			sql.append(bean.lookupNativeColumns());
+		}
 
 		StringBuilder params = new StringBuilder(1000);
 
 		int par = 0;
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.dbname == null || desc.nostore)
+			{
 				continue;
+			}
 
-			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element �berspringen
+			if(desc.isPrimary())
+			{
 				continue;
+			}
 
 			sql.append(desc.dbname); // column name
 			params.append("?"); // parameter
@@ -254,14 +268,14 @@ public class Generator
 
 		if(descids.length > 0) // parameter
 		{
-			for(int i = 0; i < descids.length; i++)
+			for(Desc descid : descids)
 			{
 				if(par > 0)
 				{
 					sql.append(",");
 					params.append(",");
 				}
-				sql.append(descids[i].dbname);
+				sql.append(descid.dbname);
 				params.append("?"); // manuell
 				par++;
 			}
@@ -275,7 +289,9 @@ public class Generator
 
 		sql.append(" ) VALUES ( ");
 		if(bean.lookupNativeValues() != null)
+		{
 			sql.append(bean.lookupNativeValues());
+		}
 		sql.append(params);
 		sql.append(" ) ");
 
@@ -298,20 +314,26 @@ public class Generator
 		        .append(" ( ");
 
 		if(bean.lookupNativeColumns() != null)
+		{
 			sql.append(bean.lookupNativeColumns());
+		}
 
 		StringBuilder params = new StringBuilder(1000);
 
 		int par = 0;
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.dbname == null || desc.nostore)
+			{
 				continue;
+			}
 
-			if(desc.isPrimary()) // && bean.getIdgenerator() != null) // ID Element �berspringen
+			if(desc.isPrimary())
+			{
 				continue;
+			}
 
 			sql.append(desc.dbname); // column name
 			params.append("?"); // parameter
@@ -332,14 +354,14 @@ public class Generator
 
 		if(descids.length > 0) // parameter
 		{
-			for(int i = 0; i < descids.length; i++)
+			for(Desc descid : descids)
 			{
 				if(par > 0)
 				{
 					sql.append(",");
 					params.append(",");
 				}
-				sql.append(descids[i].dbname);
+				sql.append(descid.dbname);
 				params.append("?"); // manuell
 				par++;
 			}
@@ -354,7 +376,9 @@ public class Generator
 		sql.append(" ) VALUES ( ");
 
 		if(bean.lookupNativeValues() != null)
+		{
 			sql.append(bean.lookupNativeValues());
+		}
 
 		sql.append(params);
 
@@ -394,12 +418,14 @@ public class Generator
 		sql.append("(\n");
 
 		int par = 0;
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.dbname == null || desc.nostore)
+			{
 				continue;
+			}
 
 			sql.append(desc.dbname); // column name
 
@@ -416,16 +442,22 @@ public class Generator
 				case Desc.FMT_BLANK_LETTER:
 
 					if(len == 0)
+					{
 						len = 20;
+					}
 
 					sql.append(" VARCHAR2(").append(len).append(")");
 					break;
 				case Desc.FMT_DIGIT:
 
 					if(len > 0)
+					{
 						sql.append(" NUMBER(").append(desc.len).append(")");
+					}
 					else
+					{
 						sql.append(" NUMBER");
+					}
 					break;
 				case Desc.FMT_DATE:
 					sql.append(" DATE ");
@@ -443,7 +475,9 @@ public class Generator
 
 		// letztes Komma loeschen
 		if(par > 0)
+		{
 			sql.deleteCharAt(sql.length() - 2);
+		}
 
 		sql.append(" ) ");
 
@@ -465,12 +499,14 @@ public class Generator
 		sql.append("SELECT ");
 
 		int par = 0;
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.dbname == null || desc.nostore)
+			{
 				continue;
+			}
 
 			sql.append("a.").append(desc.dbname); // column name
 			sql.append(",");
@@ -478,7 +514,9 @@ public class Generator
 		}
 
 		if(par > 0)
+		{
 			sql.deleteCharAt(sql.length() - 1);
+		}
 
 		sql.append(" FROM ");
 		sql.append(bean.getTableName());
@@ -531,15 +569,19 @@ public class Generator
 		sql.append("UPDATE ").append(bean.getTableName()).append(" SET ");
 
 		int par = 0;
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.dbname == null || desc.nostore)
+			{
 				continue;
+			}
 
 			if(desc.isPrimary())
+			{
 				continue;
+			}
 
 			sql.append(desc.dbname).append("=?,"); // column name
 			par++;
@@ -575,7 +617,9 @@ public class Generator
 		StringBuilder sql = new StringBuilder(2000);
 
 		if(descids.length == 0)
+		{
 			return sql;
+		}
 
 		sql.append(" WHERE ");
 		sql.append("a.")
@@ -617,15 +661,19 @@ public class Generator
 
 		int setter = 1;
 
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			if(desc.dbname == null || desc.nostore)
+			{
 				continue;
+			}
 
-			if(desc.isPrimary()) // ID �berspringen
+			if(desc.isPrimary())
+			{
 				continue;
+			}
 
 			mapSetObjectToDBType(desc, stmt, setter++, desc.getValue(bean));
 		}
@@ -676,9 +724,13 @@ public class Generator
 		catch(Exception e)
 		{
 			if(desc.format == Desc.FMT_DIGIT)
+			{
 				stmt.setDouble(setter, 0);
+			}
 			else
+			{
 				stmt.setString(setter, "");
+			}
 		}
 	}
 

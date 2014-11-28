@@ -20,102 +20,108 @@ import com.lowagie.text.pdf.PdfWriter;
 
 class PDFFilter implements FilenameFilter
 {
-    public boolean accept(File dir, String name) {
-        return (name.endsWith(".pdf"));
-    }
+	@Override
+	public boolean accept(File dir, String name)
+	{
+		return(name.endsWith(".pdf"));
+	}
 }
 
 public class Concat
 {
 	private static final Log log = LogFactory.getLog(Concat.class);
 
-
 	public static void concatFiles(InputStream[] streamin, OutputStream target)
 	{
-		try 
+		try
 		{
-            Document document = null;
-            PdfCopy  writer = null;
-            
-            for(int i=0; i < streamin.length; i++)
-            {
-                PdfReader reader = new PdfReader(streamin[i]);
-                reader.consolidateNamedDestinations();
+			Document document = null;
+			PdfCopy writer = null;
 
-                // we retrieve the total number of pages
-                int numberofpages = reader.getNumberOfPages();
+			for(int i = 0; i < streamin.length; i++)
+			{
+				PdfReader reader = new PdfReader(streamin[i]);
+				reader.consolidateNamedDestinations();
 
-                if(i == 0) // create document writer
-                {
-                	document = new Document(reader.getPageSizeWithRotation(1));
-                	writer = new PdfCopy(document, target);
-                    document.open();
-                }
+				// we retrieve the total number of pages
+				int numberofpages = reader.getNumberOfPages();
 
-                // attach pages
-                PdfImportedPage page;
-                for(int x = 1; x <= numberofpages; x++) 
-                {
-                    page = writer.getImportedPage(reader, x);
-                    writer.addPage(page);
-                }
-                writer.freeReader(reader);
-            }
+				if(i == 0) // create document writer
+				{
+					document = new Document(reader.getPageSizeWithRotation(1));
+					writer = new PdfCopy(document, target);
+					document.open();
+				}
 
-            document.close();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+				// attach pages
+				PdfImportedPage page;
+				for(int x = 1; x <= numberofpages; x++)
+				{
+					page = writer.getImportedPage(reader, x);
+					writer.addPage(page);
+				}
+				writer.freeReader(reader);
+			}
+
+			document.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	
+
 	public static void concatFiles(String path, String target)
 	{
 		// Get list of *.pdf files in source folder
 		String[] files = new File(path).list(new PDFFilter());
 
-		try 
+		try
 		{
-            Document document = null;
-            PdfCopy  writer = null;
+			Document document = null;
+			PdfCopy writer = null;
 
-            for(int i=0; i < files.length; i++)
-            {
-                PdfReader reader = new PdfReader(path + files[i]);
-                reader.consolidateNamedDestinations();
+			for(int i = 0; i < files.length; i++)
+			{
+				PdfReader reader = new PdfReader(path + files[i]);
+				reader.consolidateNamedDestinations();
 
-                // we retrieve the total number of pages
-                int numberofpages = reader.getNumberOfPages();
+				// we retrieve the total number of pages
+				int numberofpages = reader.getNumberOfPages();
 
-                if(log.isDebugEnabled())
-                	log.debug("There are " + numberofpages + " pages in " + files[i]);
+				if(log.isDebugEnabled())
+				{
+					log.debug("There are " + numberofpages + " pages in " + files[i]);
+				}
 
-                if(i == 0) // create document writer
-                {
-                	document = new Document(reader.getPageSizeWithRotation(1));
-                	writer = new PdfCopy(document, new FileOutputStream(target));
-                    document.open();
-                }
+				if(i == 0) // create document writer
+				{
+					document = new Document(reader.getPageSizeWithRotation(1));
+					writer = new PdfCopy(document, new FileOutputStream(target));
+					document.open();
+				}
 
-                // attach pages
-                PdfImportedPage page;
-                for(int x = 1; x <= numberofpages; x++) 
-                {
-                    page = writer.getImportedPage(reader, x);
-                    writer.addPage(page);
-                    log.debug("Processed page " + x);
-                }
-                writer.freeReader(reader);
-            }
+				// attach pages
+				PdfImportedPage page;
+				for(int x = 1; x <= numberofpages; x++)
+				{
+					page = writer.getImportedPage(reader, x);
+					writer.addPage(page);
+					log.debug("Processed page " + x);
+				}
+				writer.freeReader(reader);
+			}
 
-            document.close();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+			document.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
-	public static Image getPDF(PdfWriter pdfWriter, String filename) throws Exception {
+	public static Image getPDF(PdfWriter pdfWriter, String filename) throws Exception
+	{
 
 		PdfReader pdfCoverReader = new PdfReader(filename);
 
@@ -126,71 +132,73 @@ public class Concat
 
 	public static void addBackground(String infile, String bgfile, String outfile)
 	{
-        try
-        {
-            PdfReader reader = new PdfReader(infile);
+		try
+		{
+			PdfReader reader = new PdfReader(infile);
 
-            int n = reader.getNumberOfPages();
+			int n = reader.getNumberOfPages();
 
-            // create a stamper that will copy the document to a new file
-            PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(outfile));
+			// create a stamper that will copy the document to a new file
+			PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(outfile));
 
-            // adding content to each page
-            int i = 0;
-            PdfContentByte under;
+			// adding content to each page
+			int i = 0;
+			PdfContentByte under;
 
-            Image img = getPDF(stamp.getWriter(), bgfile);
+			Image img = getPDF(stamp.getWriter(), bgfile);
 
-            img.setAbsolutePosition(0, 0);
+			img.setAbsolutePosition(0, 0);
 
-            while (i < n) {
-                i++;
+			while(i < n)
+			{
+				i++;
 
-                under = stamp.getUnderContent(i);
-                under.addImage(img);
-            }
+				under = stamp.getUnderContent(i);
+				under.addImage(img);
+			}
 
-            stamp.close();
-        }
-        catch (Exception de) {
-            de.printStackTrace();
-        }
-    }
-
+			stamp.close();
+		}
+		catch(Exception de)
+		{
+			de.printStackTrace();
+		}
+	}
 
 	public static void addBackground(InputStream instream, String bgfile, OutputStream outstream)
 	{
-		
-        try
-        {
-            PdfReader reader = new PdfReader(instream);
 
-            int n = reader.getNumberOfPages();
+		try
+		{
+			PdfReader reader = new PdfReader(instream);
 
-            // create a stamper that will copy the document to a new file
-            PdfStamper stamp = new PdfStamper(reader, outstream);
+			int n = reader.getNumberOfPages();
 
-            // adding content to each page
-            int i = 0;
-            PdfContentByte under;
+			// create a stamper that will copy the document to a new file
+			PdfStamper stamp = new PdfStamper(reader, outstream);
 
-            Image img = getPDF(stamp.getWriter(), bgfile);
+			// adding content to each page
+			int i = 0;
+			PdfContentByte under;
 
-            img.setAbsolutePosition(0, 0);
+			Image img = getPDF(stamp.getWriter(), bgfile);
 
-            while (i < n) {
-                i++;
+			img.setAbsolutePosition(0, 0);
 
-                under = stamp.getUnderContent(i);
-                under.addImage(img);
-            }
+			while(i < n)
+			{
+				i++;
 
-            stamp.close();
-        }
-        catch (Exception de) {
-            de.printStackTrace();
-        }
-    }
+				under = stamp.getUnderContent(i);
+				under.addImage(img);
+			}
 
+			stamp.close();
+		}
+		catch(Exception de)
+		{
+			de.printStackTrace();
+		}
+	}
 
 }

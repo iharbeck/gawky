@@ -11,10 +11,13 @@ public class PatternGenerator extends Generator
 {
 	private static Log log = LogFactory.getLog(PatternGenerator.class);
 
+	@Override
 	public String buildString(Part bean) throws Exception
 	{
 		if(bean == null)
+		{
 			return "";
+		}
 
 		bean.beforeStore();
 
@@ -22,14 +25,16 @@ public class PatternGenerator extends Generator
 		Desc descs[] = bean.getCachedDesc();
 		Desc desc;
 
-		for(int i = 0; i < descs.length; i++)
+		for(Desc desc2 : descs)
 		{
-			desc = descs[i];
+			desc = desc2;
 
 			String delimiter = desc.delimiter;
 
 			if(delimiter != null && delimiter.length() > 0 && (delimiter.charAt(0) == '#' || delimiter.charAt(0) == '%'))
+			{
 				delimiter = "";
+			}
 
 			String val = null;
 
@@ -45,26 +50,36 @@ public class PatternGenerator extends Generator
 			{
 				str.append(Formatter.getStringN(desc.len, val));
 				if(delimiter != null)
+				{
 					str.append(delimiter);
+				}
 			}
 			else if(desc.format == Desc.FMT_BINARY)
 			{ // von rechts mit null füllen
 				str.append(Formatter.getStringNL(desc.len, val));
 				if(delimiter != null)
+				{
 					str.append(delimiter);
+				}
 			}
 			else
 			{
 				if(delimiter != null)
+				{
 					str.append(Formatter.getStringV(desc.len, val, delimiter));
+				}
 				else
 				{
 					if(desc.format != Desc.FMT_CONSTANT)
 					{
 						if(desc.len != 0)
+						{
 							str.append(Formatter.getStringC(desc.len, val));
+						}
 						else
+						{
 							str.append(val);
+						}
 					}
 					else
 					{

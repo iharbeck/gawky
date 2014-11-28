@@ -6,9 +6,6 @@ import gawky.jasper.Html2PDF;
 import gawky.template.FreemarkerTemplate;
 import gawky.template.Template;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class TestTemplate2
 {
 
@@ -24,9 +21,9 @@ public class TestTemplate2
 		{
 			String str = _main(null);
 			System.out.println("#" + i);
-			Html2PDF.renderString(str, "c:/out/" + i +".pdf", Constant.ENCODE_UTF8, "");
+			Html2PDF.renderString(str, "c:/out/" + i + ".pdf", Constant.ENCODE_UTF8, "");
 		}
-		
+
 		System.out.println("DONE");
 
 	}

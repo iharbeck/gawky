@@ -1,6 +1,7 @@
 package gawky.service.mt940;
 
-public class Codes {
+public class Codes
+{
 
 	public static String BOE = "BOE"; // WECHSEL	Bill of exchange 
 	public static String BRF = "BRF"; // INFO	Brokerage fee

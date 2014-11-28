@@ -12,11 +12,12 @@ public class TestResult
 	{
 		Option.init();
 		Init.initLib();
-		
+
 		main_start(null);
 		main_start(null);
 		main_start(null);
 	}
+
 	public static void main_start(String[] args) throws Exception
 	{
 		String sql = "select id as key, id as value from proud_import_daily_status where rownum < 10 ";
@@ -25,24 +26,21 @@ public class TestResult
 
 		long start = System.currentTimeMillis();
 
-
 		for(int c = 0; c < 10; c++)
 		{
-    		ArrayList<Map<String, String>> old = DB.getRowList(sql);
-    
-    		for(Map<String, String> row : old)
-    		{
-    			row.get("KEY"); 
-    			row.get("VALUE");
-    		}
+			ArrayList<Map<String, String>> old = DB.getRowList(sql);
+
+			for(Map<String, String> row : old)
+			{
+				row.get("KEY");
+				row.get("VALUE");
+			}
 		}
 
 		long r1 = System.currentTimeMillis() - start;
 
 		start = System.currentTimeMillis();
 
-	
-		
 		for(int c = 0; c < 10; c++)
 		{
 			Result result = DB.getMemoryList(sql);
@@ -57,9 +55,7 @@ public class TestResult
 			}
 		}
 
-
 		System.out.println("start");
-		
 
 		long r2 = System.currentTimeMillis() - start;
 

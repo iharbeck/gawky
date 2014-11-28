@@ -3,16 +3,12 @@ package example.xml.hybrid.sample.tag;
 import gawky.xml.hybrid.XMLStore;
 import gawky.xml.hybrid.XMLTagHandler;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-
-import javax.xml.bind.annotation.XmlElement;
 
 public class TagRecord implements XMLTagHandler
 {
 	public static int count = 0;
-	
+
 	@Override
 	public String getTagName()
 	{
@@ -41,7 +37,7 @@ public class TagRecord implements XMLTagHandler
 		}
 
 		count++;
-		
+
 		store.clear();
 	}
 

@@ -23,14 +23,16 @@ public class HtmlTable extends AbstractTable
 
 		buffer.append("<TR>");
 
-		for(int i=0; i < ds.getColumns(); i++)
+		for(int i = 0; i < ds.getColumns(); i++)
 		{
 			if(ds.getWidth(i) == Column.HIDDEN)
+			{
 				continue;
+			}
 
 			buffer.append("<TH width='" + ds.getWidth(i) + "'>")
-				  .append(ds.getHead(i))
-				  .append("</TH>");
+			        .append(ds.getHead(i))
+			        .append("</TH>");
 		}
 		buffer.append("</TR>\n");
 
@@ -41,21 +43,21 @@ public class HtmlTable extends AbstractTable
 		int x = 0;
 		while(ds.nextRow())
 		{
-			buffer.append("<TR class='" + ((x%2==0) ? "secondline" : "firstline") + "'" + rollover + " " + rowlistener.process(ds, x) + ">");
-			for(int i=0; i < ds.getColumns(); i++)
+			buffer.append("<TR class='" + ((x % 2 == 0) ? "secondline" : "firstline") + "'" + rollover + " " + rowlistener.process(ds, x) + ">");
+			for(int i = 0; i < ds.getColumns(); i++)
 			{
 				if(ds.getWidth(i) == Column.HIDDEN)
+				{
 					continue;
+				}
 
 				// handler für spezielle Cell formatierungen
 				CellListener handler = getListener(ds, i);
 
-
-
 				buffer
-				  .append("<TD class='" + handler.getAttribute("class") + "'>")
-				  .append(handler.process(ds, i))
-				  .append("</TD>");
+				        .append("<TD class='" + handler.getAttribute("class") + "'>")
+				        .append(handler.process(ds, i))
+				        .append("</TD>");
 
 			}
 			buffer.append("</TR>\n");
@@ -67,12 +69,13 @@ public class HtmlTable extends AbstractTable
 		return buffer.toString();
 	}
 
-
-	public void setClass(String cssclass) {
+	public void setClass(String cssclass)
+	{
 		this.cssclass = cssclass;
 	}
 
-	public void setStyle(String style) {
+	public void setStyle(String style)
+	{
 		this.style = style;
 	}
 }

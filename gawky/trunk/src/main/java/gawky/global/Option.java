@@ -9,12 +9,9 @@ import gawky.regex.Replacer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Enumeration;
-import java.util.Formatter;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
@@ -25,15 +22,6 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.Priority;
-import org.apache.log4j.RollingFileAppender;
-import org.apache.log4j.xml.DOMConfigurator;
 
 public class Option
 {
@@ -72,11 +60,17 @@ public class Option
 		alias = processalias(alias);
 
 		if(cmd != null && cmd.hasOption(alias))
+		{
 			return cmd.getOptionValue(alias);
+		}
 		else if(config != null)
+		{
 			return config.getString(alias, def);
+		}
 		else
+		{
 			return def;
+		}
 	}
 
 	public static void enableXPath()
@@ -99,9 +93,13 @@ public class Option
 		alias = processalias(alias);
 
 		if(cmd != null && cmd.hasOption(alias))
+		{
 			return cmd.getOptionValues(alias);
+		}
 		else if(config != null)
+		{
 			return config.getStringArray(alias);
+		}
 
 		return new String[] {};
 	}
@@ -165,7 +163,9 @@ public class Option
 		catch(Exception e)
 		{
 			if(info != null)
+			{
 				log.info(info);
+			}
 			return false;
 		}
 	}
@@ -180,7 +180,9 @@ public class Option
 		catch(Exception e)
 		{
 			if(info != null)
+			{
 				log.info(info);
+			}
 			return false;
 		}
 	}
@@ -208,7 +210,9 @@ public class Option
 	public static void init(String propfile, String processname, String args[]) throws Exception
 	{
 		if(initdone)
+		{
 			return;
+		}
 
 		// Standard file encoding
 		System.setProperty("file.encoding", Constant.ENCODE_UTF8);
@@ -289,7 +293,9 @@ public class Option
 			}
 
 			if(cmd.hasOption(HELP))
+			{
 				printHelp(processname);
+			}
 		}
 
 		// DB initialisieren
@@ -308,7 +314,9 @@ public class Option
 	public static Options getOptions()
 	{
 		if(options == null)
+		{
 			options = new Options();
+		}
 
 		return options;
 	}

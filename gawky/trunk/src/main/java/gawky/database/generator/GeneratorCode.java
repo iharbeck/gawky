@@ -12,12 +12,12 @@ import java.sql.Types;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 public class GeneratorCode
 {
 	private static Log log = LogFactory.getLog(GeneratorCode.class);
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception
+	{
 		Option.init();
 		System.out.println(GeneratorCode.generateDesc("kunde"));
 	}
@@ -30,7 +30,8 @@ public class GeneratorCode
 		Statement stmt = null;
 		ResultSet rset = null;
 
-		try {
+		try
+		{
 			conn = DB.getConnection();
 
 			stmt = conn.createStatement();
@@ -46,31 +47,42 @@ public class GeneratorCode
 
 			descstr += "		return new Desc[]  {\n";
 
-			for(int i=1; i <= c; i++){
+			for(int i = 1; i <= c; i++)
+			{
 				System.out.println(i + " : " + md.getColumnType(i));
 				if(md.getColumnType(i) == Types.NUMERIC || md.getColumnType(i) == Types.INTEGER)
+				{
 					descstr += "			new NColumn(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
+				}
 				else
+				{
 					descstr += "			new Column(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
+				}
 			}
 
 			descstr += "		};\n";
 			descstr += "	}\n";
 
-			for(int i=1; i <= c; i++){
+			for(int i = 1; i <= c; i++)
+			{
 				descstr += "	private String " + md.getColumnName(i).toLowerCase() + ";\n";
 			}
 
 			descstr += "\n";
 
-			for(int i=1; i <= c; i++){
+			for(int i = 1; i <= c; i++)
+			{
 				descstr += buildGetter(md.getColumnName(i).toLowerCase());
 				descstr += "\n";
 			}
 
-		} catch(Exception e) {
+		}
+		catch(Exception e)
+		{
 			e.printStackTrace();
-		} finally {
+		}
+		finally
+		{
 			DB.doClose(rset);
 			DB.doClose(stmt);
 			DB.doClose(conn);
@@ -78,12 +90,12 @@ public class GeneratorCode
 		return descstr;
 	}
 
-	public static String buildGetter(String name) {
+	public static String buildGetter(String name)
+	{
 
 		String uname = name.substring(0, 1).toUpperCase() + name.substring(1);
 
-		String
-		buf =  "	public String get" + uname + "() {\n";
+		String buf = "	public String get" + uname + "() {\n";
 		buf += "		return " + name + ";\n";
 		buf += "	}\n\n";
 

@@ -13,17 +13,19 @@ import gawky.message.part.Part;
  */
 public class Satz6xSaldo extends Part implements MTRecord
 {
-	public Desc[] getDesc() {
+	@Override
+	public Desc[] getDesc()
+	{
 		return new Desc[] {
-			//new DescV(5,  "type", "%:[0-9]{0,2}.?:"),    // 60M&F 62F&M 64 65
-			new DescL("type", new String[] {":60M:", ":60F:", ":62F:", ":62M", ":64:", ":65:"}),
-			new DescF(1,  "dc"),
-			new DescF(6,  "bookingdate"),
-			new DescF(3,  "currencycode"),
-			new DescV(15, "amount", Desc.LF)
+		        //new DescV(5,  "type", "%:[0-9]{0,2}.?:"),    // 60M&F 62F&M 64 65
+		        new DescL("type", new String[] { ":60M:", ":60F:", ":62F:", ":62M", ":64:", ":65:" }),
+		        new DescF(1, "dc"),
+		        new DescF(6, "bookingdate"),
+		        new DescF(3, "currencycode"),
+		        new DescV(15, "amount", Desc.LF)
 		};
 	}
-	
+
 	public void echo()
 	{
 		System.out.println("DC = " + this.dc);
@@ -31,50 +33,61 @@ public class Satz6xSaldo extends Part implements MTRecord
 		System.out.println("Currencycode = " + this.currencycode);
 		System.out.println("Amount = " + this.amount);
 	}
-	
+
 	private String type;
 	private String dc;
 	private String bookingdate;
 	private String currencycode;
 	private String amount;
-	
-	public String getAmount() {
+
+	public String getAmount()
+	{
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(String amount)
+	{
 		this.amount = amount;
 	}
 
-	public String getBookingdate() {
+	public String getBookingdate()
+	{
 		return bookingdate;
 	}
 
-	public void setBookingdate(String bookingdate) {
+	public void setBookingdate(String bookingdate)
+	{
 		this.bookingdate = bookingdate;
 	}
 
-	public String getCurrencycode() {
+	public String getCurrencycode()
+	{
 		return currencycode;
 	}
 
-	public void setCurrencycode(String currencycode) {
+	public void setCurrencycode(String currencycode)
+	{
 		this.currencycode = currencycode;
 	}
 
-	public String getDc() {
+	public String getDc()
+	{
 		return dc;
 	}
 
-	public void setDc(String dc) {
+	public void setDc(String dc)
+	{
 		this.dc = dc;
 	}
 
-	public String getType() {
+	@Override
+	public String getType()
+	{
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(String type)
+	{
 		this.type = type;
 	}
 }

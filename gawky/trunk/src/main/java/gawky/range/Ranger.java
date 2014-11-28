@@ -19,18 +19,26 @@ public class Ranger<K extends Comparable<K>, V>
 
 		// linker Range ist kleiner als von
 		if(entryleft != null && range_start.compareTo(entryleft.getValue().range_end) <= 0)
+		{
 			return false;
+		}
 
 		Map.Entry<K, Range<K, V>> entryright;
 
 		if(entryleft == null)
+		{
 			entryright = map.firstEntry();
+		}
 		else
+		{
 			entryright = map.higherEntry(entryleft.getValue().range_end);
+		}
 
 		// rechter Range ist kleiner als bis
 		if(entryright != null && entryright.getKey().compareTo(range_end) <= 0)
+		{
 			return false;
+		}
 
 		return true;
 	}
@@ -45,11 +53,15 @@ public class Ranger<K extends Comparable<K>, V>
 		Map.Entry<K, Range<K, V>> entry = map.floorEntry(key);
 
 		if(entry == null)
+		{
 			return null;
+		}
 
 		// key ist innerhalb range
 		if(key.compareTo(entry.getValue().range_end) <= 0)
+		{
 			return entry.getValue().value;
+		}
 
 		return null;
 	}

@@ -2,8 +2,7 @@ package gawky.comm;
 
 import java.net.Socket;
 
-
-public interface ThreadWorker 
+public interface ThreadWorker
 {
 	/**
 	 * Process
@@ -11,5 +10,5 @@ public interface ThreadWorker
 	 * @return status
 	 */
 	public void execute(Server.Worker thread, Socket s) throws Exception;
- 
+
 }

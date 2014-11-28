@@ -30,55 +30,70 @@ import javax.servlet.http.HttpServletResponse;
  *
  */
 
-public class CompressionFilter implements Filter {
+public class CompressionFilter implements Filter
+{
 
-  private FilterConfig config = null;
+	private FilterConfig config = null;
 
-  protected int compressionThreshold;
+	protected int compressionThreshold;
 
-  public void init(FilterConfig filterConfig) {
-    config = filterConfig;
-    compressionThreshold = 0;
-    if (filterConfig != null) {
-      String str = filterConfig.getInitParameter("compressionThreshold");
-      if (str != null) {
-        compressionThreshold = Integer.parseInt(str);
-      }
-      else {
-        compressionThreshold = 0;
-      }
-    }
-  }
+	@Override
+	public void init(FilterConfig filterConfig)
+	{
+		config = filterConfig;
+		compressionThreshold = 0;
+		if(filterConfig != null)
+		{
+			String str = filterConfig.getInitParameter("compressionThreshold");
+			if(str != null)
+			{
+				compressionThreshold = Integer.parseInt(str);
+			}
+			else
+			{
+				compressionThreshold = 0;
+			}
+		}
+	}
 
-  public void destroy() {
-    this.config = null;
-  }
+	@Override
+	public void destroy()
+	{
+		this.config = null;
+	}
 
-  public void doFilter(ServletRequest request, ServletResponse response,
-                    FilterChain chain ) throws IOException, ServletException {
-    
-	boolean supportCompression = false;
-    
-	if (request instanceof HttpServletRequest) 
-    {
-      Enumeration e = ((HttpServletRequest)request).getHeaders("Accept-Encoding");
-      while (e.hasMoreElements()) {
-        String name = (String)e.nextElement();
-        if (name.indexOf("gzip") != -1) {
-          supportCompression = true;
-        }
-      }
-    }
-    if (!supportCompression) {
-      chain.doFilter(request, response);
-    }
-    else {
-      if (response instanceof HttpServletResponse) {
-        CompressionResponseWrapper wrappedResponse =
-          new CompressionResponseWrapper((HttpServletResponse)response);
-        wrappedResponse.setCompressionThreshold(compressionThreshold);
-        chain.doFilter(request, wrappedResponse);
-      }
-    }
-  }
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response,
+	        FilterChain chain) throws IOException, ServletException
+	{
+
+		boolean supportCompression = false;
+
+		if(request instanceof HttpServletRequest)
+		{
+			Enumeration e = ((HttpServletRequest)request).getHeaders("Accept-Encoding");
+			while(e.hasMoreElements())
+			{
+				String name = (String)e.nextElement();
+				if(name.indexOf("gzip") != -1)
+				{
+					supportCompression = true;
+				}
+			}
+		}
+		if(!supportCompression)
+		{
+			chain.doFilter(request, response);
+		}
+		else
+		{
+			if(response instanceof HttpServletResponse)
+			{
+				CompressionResponseWrapper wrappedResponse =
+				        new CompressionResponseWrapper((HttpServletResponse)response);
+				wrappedResponse.setCompressionThreshold(compressionThreshold);
+				chain.doFilter(request, wrappedResponse);
+			}
+		}
+	}
 }

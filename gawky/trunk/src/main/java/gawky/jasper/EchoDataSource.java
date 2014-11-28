@@ -1,8 +1,8 @@
 package gawky.jasper;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
-
 
 public class EchoDataSource implements JRDataSource
 {
@@ -18,29 +18,39 @@ public class EchoDataSource implements JRDataSource
 	{
 	}
 
+	@Override
 	public boolean next() throws JRException
 	{
 		index++;
 
-		return (index < size);
+		return(index < size);
 	}
 
+	@Override
 	public Object getFieldValue(JRField field) throws JRException
 	{
 		String fieldName = field.getName();
-		
-		try {
+
+		try
+		{
 			if(field.getValueClassName().equals("java.lang.String"))
+			{
 				return fieldName;
+			}
 			if(field.getValueClassName().equals("java.lang.Double"))
+			{
 				return new Double(0);
+			}
 			if(field.getValueClassName().equals("java.lang.Integer"))
+			{
 				return new Integer(0);
-			
+			}
+
 			return field.getValueClass().newInstance();
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			return null;
-		} 
+		}
 	}
 }
-

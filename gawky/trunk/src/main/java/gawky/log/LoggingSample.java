@@ -17,14 +17,14 @@ public class LoggingSample
 	public static void main(String[] args) throws Exception
 	{
 		Option.init();
-		
+
 		LoggingSample logger = new LoggingSample();
 		logger.writeLog();
-		
+
 		System.out.println("INGO OUT");
 		System.err.println("INGO ERR");
-		
+
 		throw new Exception("ALARM");
-		
+
 	}
 }

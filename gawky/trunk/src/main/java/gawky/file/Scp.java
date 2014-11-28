@@ -23,205 +23,237 @@ import com.jcraft.jsch.UserInfo;
 public class Scp implements URLInterface
 {
 	private static Log log = LogFactory.getLog(Scp.class);
-	
+
 	// 		ScpHandler.send("scp://ggcrm01:_@debmu464.server.arvato-systems.de:~", "c:/damdam/in*.txt");
 
-	public static void main__(String[] args) throws Exception {
-	
+	public static void main__(String[] args) throws Exception
+	{
+
 		Scp scp = new Scp();
 		scp.send("scp://user:pass@127.0.0.1:~", "c:/damdam/in*.txt");
 
 	}
-	
+
+	@Override
 	public void send(String url, String sourcepath) throws Exception
 	{
 		URLParser uparser = new URLParser(url);
-		
+
 		Scp.copytohost(uparser.getServer(), uparser.getUser(), uparser.getPass(), sourcepath, uparser.getServerpath());
 	}
-	
+
+	@Override
 	public String[] retrieve(String url, String targetpath) throws Exception
 	{
 		return retrieve(url, targetpath, false);
 	}
-	
+
+	@Override
 	public String[] retrieve(String url, String targetpath, boolean simulate) throws Exception
 	{
 		URLParser uparser = new URLParser(url);
 
 		return Scp.copyfromhost(uparser.getServer(), uparser.getUser(), uparser.getPass(), targetpath, uparser.getServerpath());
 	}
-	
+
 	public static void mkdirhost(String url) throws Exception
 	{
 		URLParser uparser = new URLParser(url);
-		
+
 		Scp.execute(uparser.getServer(), uparser.getUser(), uparser.getPass(), "mkdir -p " + uparser.getServerpath());
 	}
-	
+
 	static Thread thread;
-	
+
 	public static void execute(String host, String user, String pass, String command) throws Exception
 	{
-        JSch jsch = new JSch();
-        
-        // execute the command
-        Session session = jsch.getSession(user, host, 22);
-        
-        // username and password will be given via UserInfo interface.
+		JSch jsch = new JSch();
+
+		// execute the command
+		Session session = jsch.getSession(user, host, 22);
+
+		// username and password will be given via UserInfo interface.
 		UserInfo ui = new StaticUserInfo(pass);
 		session.setUserInfo(ui);
 
 		// disable Hostkey checking 
 		Hashtable<String, String> config = new Hashtable<String, String>();
-	    config.put("StrictHostKeyChecking", "no");
-        session.setConfig(config);
-      
+		config.put("StrictHostKeyChecking", "no");
+		session.setConfig(config);
+
 		session.connect();
-        
-        final ChannelExec channel = (ChannelExec) session.openChannel("exec");
-        channel.setCommand(command);
-        channel.setOutputStream(System.out);
-        channel.setExtOutputStream(System.out);
-        channel.connect();
 
-        // wait for it to finish
-        thread =
-            new Thread() {
-                public void run() {
-                    while (!channel.isEOF()) {
-                        if (thread == null) {
-                            return;
-                        }
-                        try {
-                            sleep(500);
-                        } catch (Exception e) {
-                            // ignored
-                        }
-                    }
-                }
-            };
+		final ChannelExec channel = (ChannelExec)session.openChannel("exec");
+		channel.setCommand(command);
+		channel.setOutputStream(System.out);
+		channel.setExtOutputStream(System.out);
+		channel.connect();
 
-        thread.start();
-        //thread.join(6000);
+		// wait for it to finish
+		thread =
+		        new Thread()
+		        {
+			        @Override
+			        public void run()
+			        {
+				        while(!channel.isEOF())
+				        {
+					        if(thread == null)
+					        {
+						        return;
+					        }
+					        try
+					        {
+						        sleep(500);
+					        }
+					        catch(Exception e)
+					        {
+						        // ignored
+					        }
+				        }
+			        }
+		        };
 
-        if (thread.isAlive()) {
-            // ran out of time
-            thread = null;
-        } else {
-            // completed successfully
-        }
-    }
+		thread.start();
+		//thread.join(6000);
+
+		if(thread.isAlive())
+		{
+			// ran out of time
+			thread = null;
+		}
+		else
+		{
+			// completed successfully
+		}
+	}
 
 	public static void copytohost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{
 		FileInputStream fis = null;
-		try 
+		try
 		{
 			JSch jsch = new JSch();
-			
+
 			Session session = jsch.getSession(user, host, 22);
-			
+
 			// username and password will be given via UserInfo interface.
 			UserInfo ui = new StaticUserInfo(pass);
 			session.setUserInfo(ui);
 
 			// disable Hostkey checking 
-			Hashtable<String, String> config=new Hashtable<String, String>();
-		    config.put("StrictHostKeyChecking", "no");
-  	        session.setConfig(config);
-  	      
+			Hashtable<String, String> config = new Hashtable<String, String>();
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+
 			session.connect();
 
 			boolean tofolder = rfile.endsWith("/") || rfile.endsWith("~");
-			
+
 			rfile = rfile.replaceFirst("~", "");
-			
+
 			ArrayList<String> list = Tool.getFiles(lfile);
 			Iterator<String> it = list.iterator();
-			
+
 			while(it.hasNext())
 			{
 				String lfilepath = it.next();
-				
+
 				// exec 'scp -t rfile' remotely
 				String command = "scp -p -t " + (tofolder ? rfile + Tool.getFilename(lfilepath) : rfile);
 				Channel channel = session.openChannel("exec");
-				((ChannelExec) channel).setCommand(command);
-	
+				((ChannelExec)channel).setCommand(command);
+
 				// get I/O streams for remote scp
 				OutputStream out = channel.getOutputStream();
 				InputStream in = channel.getInputStream();
-	
+
 				channel.connect();
-	
-				if (checkAck(in) != 0) {
+
+				if(checkAck(in) != 0)
+				{
 					return;
 				}
-	
+
 				// send "C0644 filesize filename", where filename should not include
 				// '/'
 				long filesize = (new File(lfilepath)).length();
 				command = "C0644 " + filesize + " ";
-				if (lfilepath.lastIndexOf('/') > 0) {
+				if(lfilepath.lastIndexOf('/') > 0)
+				{
 					command += lfilepath.substring(lfilepath.lastIndexOf('/') + 1);
-				} else {
+				}
+				else
+				{
 					command += lfilepath;
 				}
 				command += "\n";
 				out.write(command.getBytes());
 				out.flush();
-				if (checkAck(in) != 0) {
+				if(checkAck(in) != 0)
+				{
 					return;
 				}
-	
+
 				// send a content of lfile
 				fis = new FileInputStream(lfilepath);
 				byte[] buf = new byte[1024];
-				while (true) {
+				while(true)
+				{
 					int len = fis.read(buf, 0, buf.length);
-					if (len <= 0)
+					if(len <= 0)
+					{
 						break;
+					}
 					out.write(buf, 0, len); // out.flush();
 				}
 				fis.close();
 				fis = null;
-				
+
 				// send '\0'
 				buf[0] = 0;
 				out.write(buf, 0, 1);
 				out.flush();
-				if (checkAck(in) != 0) {
+				if(checkAck(in) != 0)
+				{
 					return;
 				}
-				
+
 				out.close();
-	
+
 				channel.disconnect();
 			}
 
 			session.disconnect();
 
 			return;
-		} finally {
-			try {
-				if (fis != null)
+		}
+		finally
+		{
+			try
+			{
+				if(fis != null)
+				{
 					fis.close();
-			} catch (Exception ee) {
+				}
+			}
+			catch(Exception ee)
+			{
 			}
 		}
 	}
-	
+
 	public static String[] copyfromhost(String host, String user, String pass, String lfile, String rfile) throws Exception
 	{
 		ArrayList<String> files = new ArrayList<String>();
-		
+
 		FileOutputStream fos = null;
-		
-		try 
+
+		try
 		{
 			String prefix = null;
-			if (new File(lfile).isDirectory()) {
+			if(new File(lfile).isDirectory())
+			{
 				prefix = lfile + File.separator;
 			}
 
@@ -236,7 +268,7 @@ public class Scp implements URLInterface
 			// exec 'scp -f rfile' remotely
 			String command = "scp -f " + rfile;
 			Channel channel = session.openChannel("exec");
-			((ChannelExec) channel).setCommand(command);
+			((ChannelExec)channel).setCommand(command);
 
 			// get I/O streams for remote scp
 			OutputStream out = channel.getOutputStream();
@@ -251,9 +283,11 @@ public class Scp implements URLInterface
 			out.write(buf, 0, 1);
 			out.flush();
 
-			while (true) {
+			while(true)
+			{
 				int c = checkAck(in);
-				if (c != 'C') {
+				if(c != 'C')
+				{
 					break;
 				}
 
@@ -261,20 +295,26 @@ public class Scp implements URLInterface
 				in.read(buf, 0, 5);
 
 				long filesize = 0L;
-				while (true) {
-					if (in.read(buf, 0, 1) < 0) {
+				while(true)
+				{
+					if(in.read(buf, 0, 1) < 0)
+					{
 						// error
 						break;
 					}
-					if (buf[0] == ' ')
+					if(buf[0] == ' ')
+					{
 						break;
-					filesize = filesize * 10L + (long) (buf[0] - '0');
+					}
+					filesize = filesize * 10L + buf[0] - '0';
 				}
 
 				String file = null;
-				for (int i = 0;; i++) {
+				for(int i = 0;; i++)
+				{
 					in.read(buf, i, 1);
-					if (buf[i] == (byte) 0x0a) {
+					if(buf[i] == (byte)0x0a)
+					{
 						file = new String(buf, 0, i);
 						break;
 					}
@@ -288,31 +328,40 @@ public class Scp implements URLInterface
 				// directory or individual file
 				// read a content of lfile
 				String filename = prefix == null ? lfile : prefix + file;
-				
+
 				files.add(filename);
-				
+
 				fos = new FileOutputStream(filename);
-				
+
 				int foo;
-				while (true) {
-					if (buf.length < filesize)
+				while(true)
+				{
+					if(buf.length < filesize)
+					{
 						foo = buf.length;
+					}
 					else
-						foo = (int) filesize;
+					{
+						foo = (int)filesize;
+					}
 					foo = in.read(buf, 0, foo);
-					if (foo < 0) {
+					if(foo < 0)
+					{
 						// error
 						break;
 					}
 					fos.write(buf, 0, foo);
 					filesize -= foo;
-					if (filesize == 0L)
+					if(filesize == 0L)
+					{
 						break;
+					}
 				}
 				fos.close();
 				fos = null;
 
-				if (checkAck(in) != 0) {
+				if(checkAck(in) != 0)
+				{
 					return files.toArray(new String[0]);
 				}
 
@@ -325,80 +374,112 @@ public class Scp implements URLInterface
 			session.disconnect();
 
 			return files.toArray(new String[0]);
-		} finally {
-			try {
-				if (fos != null)
+		}
+		finally
+		{
+			try
+			{
+				if(fos != null)
+				{
 					fos.close();
-			} catch (Exception ee) {
+				}
+			}
+			catch(Exception ee)
+			{
 			}
 
 		}
-		
+
 	}
-	
-	
-	static int checkAck(InputStream in) throws IOException {
+
+	static int checkAck(InputStream in) throws IOException
+	{
 		int b = in.read();
 		// b may be 0 for success,
 		// 1 for error,
 		// 2 for fatal error,
 		// -1
-		if (b == 0)
+		if(b == 0)
+		{
 			return b;
-		if (b == -1)
+		}
+		if(b == -1)
+		{
 			return b;
+		}
 
-		if (b == 1 || b == 2) {
+		if(b == 1 || b == 2)
+		{
 			StringBuilder sb = new StringBuilder();
 			int c;
-			do {
+			do
+			{
 				c = in.read();
-				sb.append((char) c);
-			} while (c != '\n');
-			if (b == 1) { // error
+				sb.append((char)c);
+			}
+			while(c != '\n');
+			if(b == 1)
+			{ // error
 				log.error(sb.toString());
 			}
-			if (b == 2) { // fatal error
+			if(b == 2)
+			{ // fatal error
 				log.error(sb.toString());
 			}
 		}
 		return b;
 	}
 
-	public static class StaticUserInfo implements UserInfo, UIKeyboardInteractive  {
+	public static class StaticUserInfo implements UserInfo, UIKeyboardInteractive
+	{
 
+		@Override
 		public String[] promptKeyboardInteractive(String destination,
-				String name, String instruction, String[] prompt, boolean[] echo) {
+		        String name, String instruction, String[] prompt, boolean[] echo)
+		{
 			return password.split("\n");
 		}
 
 		String password;
-		
-		public StaticUserInfo(String password) {
+
+		public StaticUserInfo(String password)
+		{
 			this.password = password;
 		}
-		
-		public String getPassphrase() {
+
+		@Override
+		public String getPassphrase()
+		{
 			return password;
 		}
 
-		public String getPassword() {
+		@Override
+		public String getPassword()
+		{
 			return password;
 		}
 
-		public boolean promptPassphrase(String arg0) {
+		@Override
+		public boolean promptPassphrase(String arg0)
+		{
 			return true;
 		}
 
-		public boolean promptPassword(String arg0) {
+		@Override
+		public boolean promptPassword(String arg0)
+		{
 			return true;
 		}
 
-		public boolean promptYesNo(String arg0) {
-			return true;  // accept all
+		@Override
+		public boolean promptYesNo(String arg0)
+		{
+			return true; // accept all
 		}
 
-		public void showMessage(String arg0) {
+		@Override
+		public void showMessage(String arg0)
+		{
 		}
 	}
 }

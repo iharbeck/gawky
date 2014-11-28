@@ -74,38 +74,42 @@ public class LOG
 		folder.setWritable(true, false);
 		folder.setReadable(true, false);
 		folder.setExecutable(true, false);
-		
+
 		String logfile = logfolder + "/default.log";
-		
+
 		// Permissions des Logfile setzen
 		File lf = new File(logfile);
-		
+
 		if(!lf.exists())
+		{
 			lf.createNewFile();
-		
+		}
+
 		lf.setWritable(true, false);
 		lf.setReadable(true, false);
 		lf.setExecutable(true, false);
-		
-		try {
+
+		try
+		{
 			root.addAppender(new RollingFileAppender(new PatternLayout(LOG_PATTERN), logfile)); //PatternLayout.TTCC_CONVERSION_PATTERN;
-		} catch (Exception e) {
 		}
-		
+		catch(Exception e)
+		{
+		}
+
 		log = Logger.getLogger(LOG.class);
 		log.setLevel(Level.INFO);
-		
+
 		PrintStream stream = new PrintStream(LOG.createLoggingProxy(), true);
 		System.setOut(stream); //System.out));
 		System.setErr(stream); //System.err));
-		
+
 		LOG.log("GAWKY INIT IN PROGRESS.\n****\n****\n****");
 		System.out.println("OUT: Console Output Redirect");
 		System.err.println("ERR: Console Output Redirect");
-		
 
 		// AUSGABE der LOG - SETTINGS
-		
+
 		Formatter formatter = new Formatter();
 
 		formatter.format(" > %-6s | %s\n", "LEVEL", "NAME");
@@ -118,49 +122,49 @@ public class LOG
 				formatter.format(" > %-6s . %s\n", logger.getLevel(), logger.getName());
 			}
 		}
-		
+
 		formatter.format("\n > %s\n", "APPENDER");
 
-		for(Enumeration<Appender> it = root.getAllAppenders(); it.hasMoreElements(); )
+		for(Enumeration<Appender> it = root.getAllAppenders(); it.hasMoreElements();)
 		{
 			Appender appender = it.nextElement();
-			
+
 			formatter.format(" > %s\n", appender.getClass().getName());
-			
+
 		}
 
 		LOG.log("Registered Logger:\n" + formatter.toString());
 	}
-	
+
 	public static void log(String message)
 	{
 		log.info(message);
 	}
-	
+
 	public static void log(String message, Throwable t)
 	{
 		log.info(message, t);
 	}
-	
+
 	public static Logger getLogger(Class clazz)
 	{
 		return Logger.getLogger(clazz);
 	}
-	
+
 	public static Logger getRootLogger()
 	{
 		return Logger.getRootLogger();
 	}
-	
+
 	public static Log getLog(Class clazz)
 	{
 		return LogFactory.getLog(Option.class);
 	}
-	
+
 	public static ByteArrayOutputStream createLoggingProxy()
 	{
 		final String linebreak = System.getProperty("line.separator");
-		
+
 		return new ByteArrayOutputStream()
 		{
 			@Override
@@ -169,37 +173,39 @@ public class LOG
 				super.flush();
 				String s = this.toString();
 				super.reset();
-				
+
 				if(s.length() == 0 || s.equals(linebreak))
+				{
 					return;
-				
+				}
+
 				LOG.log(s);
 			}
 		};
 	}
-	
-//	public static PrintStream createLoggingProxy(final PrintStream realPrintStream)
-//	{
-//		return new PrintStream(realPrintStream)
-//		{
-//			@Override
-//			public void flush()
-//			{
-//				super.flush();
-//				String s = this.toString();
-//				
-//				LOG.log(s);
-//				// TODO Auto-generated method stub
-//			}
-//			
-//			@Override
-//			public void println(final String string)
-//			{
-//				LOG.log(string);
-//				//realPrintStream.print(string);
-//			}
-//			
-//			
-//		};
+
+	//	public static PrintStream createLoggingProxy(final PrintStream realPrintStream)
+	//	{
+	//		return new PrintStream(realPrintStream)
+	//		{
+	//			@Override
+	//			public void flush()
+	//			{
+	//				super.flush();
+	//				String s = this.toString();
+	//				
+	//				LOG.log(s);
+	//				// TODO Auto-generated method stub
+	//			}
+	//			
+	//			@Override
+	//			public void println(final String string)
+	//			{
+	//				LOG.log(string);
+	//				//realPrintStream.print(string);
+	//			}
+	//			
+	//			
+	//		};
 
 }

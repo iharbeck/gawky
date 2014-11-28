@@ -1,4 +1,5 @@
 package gawky.incubator.smail;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -54,36 +55,33 @@ import org.bouncycastle.mail.smime.SMIMESignedGenerator;
  * @date 30/08/2004
  */
 
-public class Runner {
-	
-	public static void main(String[] args) {
-		Runner run = new Runner(null, 123, new String[] {"c:/test.dat"}, "ingo@ingoharbeck.de");
-	
-	
+public class Runner
+{
+
+	public static void main(String[] args)
+	{
+		Runner run = new Runner(null, 123, new String[] { "c:/test.dat" }, "ingo@ingoharbeck.de");
 
 		//prop.setProperty("SMTP_SERVER", "pmx.bertelsmann.de");
 		prop.setProperty("SMTP_SERVER", "bfslnxwall.bertelsmann.de");
 		prop.setProperty("SENDER", "ingo.harbeck@bertelsmann.de");
 		prop.setProperty("REPLY_TO", "ingo.harbeck@bertelsmann.de");
-		prop.setProperty("CERT", "D:/work/smail/cert/cert.pem");				
+		prop.setProperty("CERT", "D:/work/smail/cert/cert.pem");
 		prop.setProperty("P12", "D:/work/smail/cert/bff.store");
 		prop.setProperty("ALIAS", "mykey");
 		prop.setProperty("PRV_KEY_PASSWD", "passphrase");
-		
+
 		prop.setProperty("SMTP_USERNAME", "");
 		prop.setProperty("SMTP_PASSWORD", "");
-								
+
 		prop.setProperty("HTML_PATH", "c:/");
 		prop.setProperty("HTML_IMAGE", "test2.dat");
-								
-		
-		
+
 		run.setHtml("TESTWETESTETET");
-	
+
 		run.SendMail();
 	}
-	
-	
+
 	private PrivateKey senderKey = null;
 	private X509Certificate caCert = null;
 	private X509Certificate senderCert = null;
@@ -113,7 +111,8 @@ public class Runner {
 	DataOutputStream dos;
 
 	public Runner(String configFile, int merchantNo, String[] fileNames,
-			String merchantemail) {
+	        String merchantemail)
+	{
 		this.fileNames = fileNames;
 		prop = new Properties();
 		email = merchantemail;
@@ -126,11 +125,14 @@ public class Runner {
 	 * @return int -Status code to confirm the status of the email.
 	 */
 
-	public int SendMail() {
-	try {
+	public int SendMail()
+	{
+		try
+		{
 			Security.addProvider(new BouncyCastleProvider());
 
-			try {
+			try
+			{
 				sent = false;
 				noCert = false;
 				boolean isSigning = true;
@@ -147,7 +149,8 @@ public class Runner {
 				// be case sensitive
 				String tempMail = email.toLowerCase();
 
-				if (noCert) {
+				if(noCert)
+				{
 					return 2;
 				}
 
@@ -174,7 +177,7 @@ public class Runner {
 				msg.saveChanges();
 
 				MimeBodyPart plainMsg = createMessage(sender, rcpt, replyto); // files
-																				// attached
+				                                                              // attached
 
 				// //////-----------
 				// ***** -----SIGNING
@@ -203,33 +206,43 @@ public class Runner {
 				transport.close();
 
 			}// /end of inner try
-			catch (Exception mex) {
+			catch(Exception mex)
+			{
 
 				sent = false;
-				try {
+				try
+				{
 					transport.close();
 
-				} catch (Exception ex) {
+				}
+				catch(Exception ex)
+				{
 
 					Thread.sleep(5000);
 
 				}
-				if (mex instanceof java.net.SocketException) {
+				if(mex instanceof java.net.SocketException)
+				{
 					System.out.println("SOCKET EXCEPTION");
 					Thread.sleep(5000);
 				}
 			}
 
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 
 			e.printStackTrace();
 			System.exit(0); // ////TESTING WHICH CASE IT FAILS.
 		}
 
-		if (sent) {
+		if(sent)
+		{
 
 			return 1;
-		} else {
+		}
+		else
+		{
 			return 0;
 		}
 
@@ -244,8 +257,10 @@ public class Runner {
 	 *            Email Receiver
 	 * @return MimeBodyPart Required in the SendMail() method.
 	 */
-	private MimeBodyPart createMessage(String from, String to, String replyto) {
-		try {
+	private MimeBodyPart createMessage(String from, String to, String replyto)
+	{
+		try
+		{
 
 			MimeBodyPart m = null;
 
@@ -271,7 +286,8 @@ public class Runner {
 				String filenm;
 				MimeBodyPart mbp55;
 				DataSource src;
-				for (int i = 0; i < totalFiles; i++) {
+				for(int i = 0; i < totalFiles; i++)
+				{
 
 					filenm = fileNames[i];
 					System.out.println("FILE NAME IN SEND: " + filenm);
@@ -286,16 +302,16 @@ public class Runner {
 					System.out.println("FILE ATTACHED");
 				}
 				System.out.println("After the attaching");
-/*				
-				// content gif file for the html mail
-				mbp55 = new MimeBodyPart();
-				String ds = prop.getProperty("HTML_PATH") + prop.getProperty("HTML_IMAGE");
-				src = new FileDataSource(ds);
-				mbp55.setDataHandler(new DataHandler(src));
-				mbp55.setFileName(prop.getProperty("HTML_IMAGE"));
-				mbp55.setHeader("Content-ID", "<banner>");
-				mp.addBodyPart(mbp55);
-*/
+				/*				
+								// content gif file for the html mail
+								mbp55 = new MimeBodyPart();
+								String ds = prop.getProperty("HTML_PATH") + prop.getProperty("HTML_IMAGE");
+								src = new FileDataSource(ds);
+								mbp55.setDataHandler(new DataHandler(src));
+								mbp55.setFileName(prop.getProperty("HTML_IMAGE"));
+								mbp55.setHeader("Content-ID", "<banner>");
+								mp.addBodyPart(mbp55);
+				*/
 				m = new MimeBodyPart();
 
 				m.setContent(mp);
@@ -304,7 +320,9 @@ public class Runner {
 
 			System.out.println("returning from the create mail");
 			return m;
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			e.printStackTrace();
 
 			throw new RuntimeException("Unexpected error: " + e.toString());
@@ -318,9 +336,11 @@ public class Runner {
 	 * @return MimeMultipart Required format in the SendMail() method.
 	 */
 
-	private MimeMultipart sign(MimeBodyPart msg) {
+	private MimeMultipart sign(MimeBodyPart msg)
+	{
 
-		try {
+		try
+		{
 
 			ArrayList<X509Certificate> certList = new ArrayList<X509Certificate>();
 
@@ -331,7 +351,7 @@ public class Runner {
 			// in the signature
 			//
 			CertStore certsAndcrls = CertStore.getInstance("Collection",
-					new CollectionCertStoreParameters(certList), "BC");
+			        new CollectionCertStoreParameters(certList), "BC");
 
 			//
 			// create some smime capabilities in case someone wants to respond
@@ -356,8 +376,8 @@ public class Runner {
 			System.out.println(" Private Key :" + senderKey);
 			System.out.println("Sender Cert :" + senderCert);
 			gen.addSigner(senderKey, senderCert,
-					SMIMESignedGenerator.DIGEST_SHA1, new AttributeTable(
-							signedAttrs), null);
+			        SMIMESignedGenerator.DIGEST_SHA1, new AttributeTable(
+			                signedAttrs), null);
 
 			//
 			// pool of certs and cerls (if any) to go with the signature
@@ -368,7 +388,9 @@ public class Runner {
 
 			return mm;
 
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			e.printStackTrace();
 
 		}
@@ -383,9 +405,11 @@ public class Runner {
 	 * @return MimeBodyPart Required format in the SendMail() method.
 	 */
 
-	private MimeBodyPart encrypt(MimeMessage msg) {
+	private MimeBodyPart encrypt(MimeMessage msg)
+	{
 
-		try {
+		try
+		{
 
 			SMIMEEnvelopedGenerator genE = new SMIMEEnvelopedGenerator();
 
@@ -398,10 +422,12 @@ public class Runner {
 			genE.addKeyTransRecipient(rcptCert.getPublicKey(), dig.digest());
 
 			MimeBodyPart mpp = genE.generate(msg,
-					SMIMEEnvelopedGenerator.DES_EDE3_CBC, "BC");
+			        SMIMEEnvelopedGenerator.DES_EDE3_CBC, "BC");
 
 			return mpp;
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			e.printStackTrace();
 
 		}
@@ -418,8 +444,10 @@ public class Runner {
 	 * @return PrivateKey Extracted private key
 	 */
 
-	private PrivateKey getKey(String keyFile, String alias) {
-		try {
+	private PrivateKey getKey(String keyFile, String alias)
+	{
+		try
+		{
 			FileInputStream fis = new FileInputStream(keyFile);
 
 			//KeyStore ks = KeyStore.getInstance("PKCS12");
@@ -430,8 +458,10 @@ public class Runner {
 			ks.load(fis, pw);
 
 			char[] pw2 = prop.getProperty("PRV_KEY_PASSWD").toCharArray();
-			return (PrivateKey) ks.getKey(alias, pw2);
-		} catch (Exception e) {
+			return (PrivateKey)ks.getKey(alias, pw2);
+		}
+		catch(Exception e)
+		{
 			e.printStackTrace();
 
 			return null;
@@ -472,48 +502,62 @@ public class Runner {
 	 * @return X509Certificate Certificate.
 	 */
 
-	private X509Certificate getCert(String certFile, String rcptEmail) {
-		try {
+	private X509Certificate getCert(String certFile, String rcptEmail)
+	{
+		try
+		{
 			FileInputStream fis = new FileInputStream(certFile);
 			DataInputStream dis = new DataInputStream(fis);
 			byte[] data = new byte[dis.available()];
 			dis.readFully(data);
 			ByteArrayInputStream bais = new ByteArrayInputStream(data);
 			CertificateFactory fact = CertificateFactory.getInstance("X509");
-			X509Certificate cert = (X509Certificate) fact
-					.generateCertificate(bais);
+			X509Certificate cert = (X509Certificate)fact
+			        .generateCertificate(bais);
 			return cert;
-		} catch (FileNotFoundException e) {
+		}
+		catch(FileNotFoundException e)
+		{
 			e.printStackTrace();
 			noCert = true;
 			return null;
-		} catch (NullPointerException e) {
+		}
+		catch(NullPointerException e)
+		{
 			e.printStackTrace();
 			System.out.println("NULL POINTER");
 			noCert = true;
 			return null;
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			e.printStackTrace();
 			noCert = true;
 			return null;
 		}
 	}
 
-	public String extractFileName(String filename) {
+	public String extractFileName(String filename)
+	{
 		String temp = "";
 		String fl;
-		for (int i = 0; i < filename.length(); i++) {
+		for(int i = 0; i < filename.length(); i++)
+		{
 			fl = String.valueOf(filename.charAt(i));
-			if (fl.equals("/")) {
+			if(fl.equals("/"))
+			{
 				temp = "";
-			} else {
+			}
+			else
+			{
 				temp = temp + fl;
 			}
 		}
 		return temp;
 	}
 
-	public String getDate() {
+	public String getDate()
+	{
 
 		Calendar cal = Calendar.getInstance(TimeZone.getDefault());
 		String DATE_FORMAT = "yyyy-MM-dd--HH-mm-ss";
@@ -522,14 +566,16 @@ public class Runner {
 		return today;
 	}
 
-	public void setHtml(String data) {
+	public void setHtml(String data)
+	{
 		html1 = data;
 		html2 = html3 = html4 = html5 = "";
 
 	}
 
-	String getHtmlDate() {
-		return (DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
+	String getHtmlDate()
+	{
+		return(DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
 	}
 
 }

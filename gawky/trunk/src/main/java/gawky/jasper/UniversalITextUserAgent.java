@@ -37,16 +37,15 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 	private ITextOutputDevice _outputDevice;
 
 	private String _baseURL;
-	
+
 	protected LinkedHashMap _imageCache;
 	private int _imageCacheCapacity;
-	
 
 	public UniversalITextUserAgent(ITextRenderer renderer)
 	{
 		_outputDevice = renderer.getOutputDevice();
 		_sharedContext = renderer.getSharedContext();
-		
+
 		this._imageCacheCapacity = IMAGE_CACHE_CAPACITY;
 
 		// note we do *not* override removeEldestEntry() here--users of this class must call shrinkImageCache().
@@ -54,10 +53,13 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 		this._imageCache = new java.util.LinkedHashMap(_imageCacheCapacity, 0.75f, true);
 	}
 
+	@Override
 	public String resolveURI(String uri)
 	{
 		if(uri == null)
+		{
 			return null;
+		}
 
 		String ret = null;
 
@@ -153,6 +155,7 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 		return is;
 	}
 
+	@Override
 	public ImageResource getImageResource(String uri)
 	{
 		ImageResource resource = null;
@@ -169,9 +172,13 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 					URL url = null;
 
 					if(uri.startsWith("data:"))
+					{
 						url = new URL(null, uri, new Handler());
+					}
 					else
+					{
 						url = new URL(uri);
+					}
 
 					if(url.getPath() != null &&
 					        url.getPath().toLowerCase().endsWith(".pdf"))
@@ -199,10 +206,10 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 				{
 					XRLog.exception("Can't read image file; unexpected problem for URI '" + uri + "'", e);
 				}
-                catch(URISyntaxException e)
-                {
-                	XRLog.exception("Can't read image file; unexpected problem for URI '" + uri + "'", e);
-                }
+				catch(URISyntaxException e)
+				{
+					XRLog.exception("Can't read image file; unexpected problem for URI '" + uri + "'", e);
+				}
 				finally
 				{
 					try
@@ -238,30 +245,44 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 	{
 		_sharedContext = sharedContext;
 	}
-	
-	public String getBaseURL() {
-        return _baseURL;
-    }
 
-	public void documentStarted() {
+	@Override
+	public String getBaseURL()
+	{
+		return _baseURL;
+	}
+
+	@Override
+	public void documentStarted()
+	{
 		shrinkImageCache();
 	}
 
-	public void documentLoaded() { /* ignore*/ }
+	@Override
+	public void documentLoaded()
+	{ /* ignore*/
+	}
 
-	public void onLayoutException(Throwable t) { /* ignore*/ }
+	@Override
+	public void onLayoutException(Throwable t)
+	{ /* ignore*/
+	}
 
-	public void onRenderException(Throwable t) { /* ignore*/ }
-	
-	
+	@Override
+	public void onRenderException(Throwable t)
+	{ /* ignore*/
+	}
+
 	/**
 	 * If the image cache has more items than the limit specified for this class, the least-recently used will
 	 * be dropped from cache until it reaches the desired size.
 	 */
-	public void shrinkImageCache() {
+	public void shrinkImageCache()
+	{
 		int ovr = _imageCache.size() - _imageCacheCapacity;
 		Iterator it = _imageCache.keySet().iterator();
-		while (it.hasNext() && ovr-- > 0) {
+		while(it.hasNext() && ovr-- > 0)
+		{
 			it.next();
 			it.remove();
 		}
@@ -270,10 +291,11 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 	/**
 	 * Empties the image cache entirely.
 	 */
-	public void clearImageCache() {
+	public void clearImageCache()
+	{
 		_imageCache.clear();
 	}
-	
+
 	/**
 	 * Retrieves the CSS located at the given URI.  It's assumed the URI does point to a CSS file--the URI will
 	 * be accessed (using java.io or java.net), opened, read and then passed into the CSS parser.
@@ -282,45 +304,61 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 	 * @param uri Location of the CSS source.
 	 * @return A CSSResource containing the parsed CSS.
 	 */
-	public CSSResource getCSSResource(String uri) {
-        return new CSSResource(resolveAndOpenStream(uri));
-    }
-	
+	@Override
+	public CSSResource getCSSResource(String uri)
+	{
+		return new CSSResource(resolveAndOpenStream(uri));
+	}
+
 	/**
 	 * URL relative to which URIs are resolved.
 	 *
 	 * @param url A URI which anchors other, possibly relative URIs.
 	 */
-	public void setBaseURL(String url) {
-        _baseURL = url;
-    }
-	
-    public byte[] getBinaryResource(String uri) {
-        InputStream is = resolveAndOpenStream(uri);
-        try {
-            ByteArrayOutputStream result = new ByteArrayOutputStream();
-            byte[] buf = new byte[10240];
-            int i;
-            while ( (i = is.read(buf)) != -1) {
-                result.write(buf, 0, i);
-            }
-            is.close();
-            is = null;
+	@Override
+	public void setBaseURL(String url)
+	{
+		_baseURL = url;
+	}
 
-            return result.toByteArray();
-        } catch (IOException e) {
-            return null;
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-        }
-    }
-    
+	@Override
+	public byte[] getBinaryResource(String uri)
+	{
+		InputStream is = resolveAndOpenStream(uri);
+		try
+		{
+			ByteArrayOutputStream result = new ByteArrayOutputStream();
+			byte[] buf = new byte[10240];
+			int i;
+			while((i = is.read(buf)) != -1)
+			{
+				result.write(buf, 0, i);
+			}
+			is.close();
+			is = null;
+
+			return result.toByteArray();
+		}
+		catch(IOException e)
+		{
+			return null;
+		}
+		finally
+		{
+			if(is != null)
+			{
+				try
+				{
+					is.close();
+				}
+				catch(IOException e)
+				{
+					// ignore
+				}
+			}
+		}
+	}
+
 	/**
 	 * Retrieves the XML located at the given URI. It's assumed the URI does point to a XML--the URI will
 	 * be accessed (using java.io or java.net), opened, read and then passed into the XML parser (XMLReader)
@@ -329,28 +367,41 @@ public class UniversalITextUserAgent implements UserAgentCallback, DocumentListe
 	 * @param uri Location of the XML source.
 	 * @return An XMLResource containing the image.
 	 */
-    public XMLResource getXMLResource(String uri) {
-        InputStream inputStream = resolveAndOpenStream(uri);
-        XMLResource xmlResource;
-        try {
-            xmlResource = XMLResource.load(inputStream);
-        } finally {
-            if ( inputStream != null ) try {
-                inputStream.close();
-            } catch (IOException e) {
-                // swallow
-            }
-        }
-        return xmlResource;
-    }
-    
-    /**
-     * Returns true if the given URI was visited, meaning it was requested at some point since initialization.
-     *
-     * @param uri A URI which might have been visited.
-     * @return Always false; visits are not tracked in the NaiveUserAgent.
-     */
-    public boolean isVisited(String uri) {
-        return false;
-    }
+	@Override
+	public XMLResource getXMLResource(String uri)
+	{
+		InputStream inputStream = resolveAndOpenStream(uri);
+		XMLResource xmlResource;
+		try
+		{
+			xmlResource = XMLResource.load(inputStream);
+		}
+		finally
+		{
+			if(inputStream != null)
+			{
+				try
+				{
+					inputStream.close();
+				}
+				catch(IOException e)
+				{
+					// swallow
+				}
+			}
+		}
+		return xmlResource;
+	}
+
+	/**
+	 * Returns true if the given URI was visited, meaning it was requested at some point since initialization.
+	 *
+	 * @param uri A URI which might have been visited.
+	 * @return Always false; visits are not tracked in the NaiveUserAgent.
+	 */
+	@Override
+	public boolean isVisited(String uri)
+	{
+		return false;
+	}
 }

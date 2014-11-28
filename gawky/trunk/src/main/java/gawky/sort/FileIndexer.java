@@ -6,7 +6,6 @@ import gawky.global.Option;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
@@ -40,13 +39,17 @@ public class FileIndexer
 		System.out.println("START LESEN.");
 
 		if(binary)
+		{
 			process_binary(file_in, file_out, id_pos, id_len);
+		}
 		else
+		{
 			process_text(file_in, file_out, id_pos, id_len);
-			
+		}
+
 		System.out.println("DONE.");
 	}
-	
+
 	public static void process_text(String file_in, String file_out, int id_pos, int id_len) throws Exception
 	{
 		FileInputStream is = new FileInputStream(new File(file_in));
@@ -61,7 +64,9 @@ public class FileIndexer
 		int val = 0;
 
 		while((val = is.read()) != '\n' && val != '\r')
+		{
 			zeilenlaenge++;
+		}
 
 		if((val = is.read()) == '\n' || val == '\r')
 		{
@@ -79,7 +84,9 @@ public class FileIndexer
 			id_value.position(0);
 
 			if(fchannel.read(id_value) > 0)
+			{
 				index_store.add(new Entry(id_value.array(), i));
+			}
 		}
 
 		System.out.println("INDEX ERSTELLT: " + index_store.size());
@@ -89,8 +96,7 @@ public class FileIndexer
 		System.out.println("INDEX SORTIERT.");
 
 		FileOutputStream wr = new FileOutputStream(file_out);
-		
-		
+
 		MappedByteBuffer bytebuffer = fchannel.map(FileChannel.MapMode.READ_ONLY, 0, filesize);
 
 		int zeilenlaengenetto = zeilenlaenge - zeilenumbruch;
@@ -108,12 +114,16 @@ public class FileIndexer
 			bytebuffer.get(zeile, 0, zeilenlaengenetto);
 
 			wr.write(zeile);
-			
+
 			if(line_index % 1000 == 0)
+			{
 				wr.flush();
+			}
 
 			if(line_index % 100000 == 0)
+			{
 				System.out.println("" + line_index);
+			}
 
 			line_index++;
 		}
@@ -124,7 +134,7 @@ public class FileIndexer
 		fchannel.close();
 		is.close();
 	}
-	
+
 	public static void process_binary(String file_in, String file_out, int id_pos, int id_len) throws Exception
 	{
 		FileInputStream is = new FileInputStream(new File(file_in));
@@ -137,16 +147,16 @@ public class FileIndexer
 
 		fchannel.position(0);
 		fchannel.read(len_value);
-		
+
 		byte[] len_byte = new byte[2];
-		
+
 		len_value.position(1);
 		len_value.get(len_byte, 0, 1);
 		len_value.position(0);
 		len_value.get(len_byte, 1, 1);
 
 		int zeilenlaenge = new BigInteger(len_byte).intValue() + 2;
-		
+
 		// Index erstellen
 		ByteBuffer id_value = ByteBuffer.allocate(id_len);
 
@@ -157,7 +167,9 @@ public class FileIndexer
 			id_value.position(0);
 
 			if(fchannel.read(id_value) > 0)
+			{
 				index_store.add(new Entry(id_value.array(), i));
+			}
 		}
 
 		System.out.println("INDEX ERSTELLT: " + index_store.size());
@@ -167,7 +179,7 @@ public class FileIndexer
 		System.out.println("INDEX SORTIERT.");
 
 		FileOutputStream wr = new FileOutputStream(file_out);
-		
+
 		MappedByteBuffer bytebuffer = fchannel.map(FileChannel.MapMode.READ_ONLY, 0, filesize);
 
 		byte[] zeile = new byte[zeilenlaenge];
@@ -181,12 +193,16 @@ public class FileIndexer
 			bytebuffer.get(zeile, 0, zeilenlaenge);
 
 			wr.write(zeile);
-			
+
 			if(line_index % 1000 == 0)
+			{
 				wr.flush();
+			}
 
 			if(line_index % 100000 == 0)
+			{
 				System.out.println("" + line_index);
+			}
 
 			line_index++;
 		}

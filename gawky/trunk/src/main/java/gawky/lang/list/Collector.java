@@ -26,15 +26,16 @@ public class Collector implements Map<String, Object>
 		}
 	}
 
+	@Override
 	public Set<String> keySet()
 	{
 		Set<String> elements = new TreeSet<String>();
 
 		for(String element : map.keySet())
 		{
-				String el = element.split("/")[1];
+			String el = element.split("/")[1];
 
-				elements.add(el);
+			elements.add(el);
 		}
 
 		return elements;
@@ -45,6 +46,7 @@ public class Collector implements Map<String, Object>
 		return root + key;
 	}
 
+	@Override
 	public Object get(Object key)
 	{
 		if(((String)key).startsWith("/"))
@@ -77,7 +79,9 @@ public class Collector implements Map<String, Object>
 		Long v = (Long)map.get(_key);
 
 		if(v == null)
+		{
 			v = 0L;
+		}
 
 		v += value;
 		map.put(_key, v);
@@ -89,7 +93,9 @@ public class Collector implements Map<String, Object>
 		Double v = (Double)map.get(_key);
 
 		if(v == null)
+		{
 			v = 0D;
+		}
 
 		v += value;
 		map.put(_key, v);
@@ -102,30 +108,32 @@ public class Collector implements Map<String, Object>
 		String v = (String)map.get(_key);
 
 		if(v == null)
+		{
 			v = "";
+		}
 
 		v += value;
 		map.put(_key, v);
 	}
-	
+
 	private void addList()
 	{
-		
+
 	}
-	
+
 	private void getList()
 	{
-		
+
 	}
-	
+
 	private void putMin()
 	{
-		
+
 	}
-	
+
 	private void putMax()
 	{
-		
+
 	}
 
 	@Override

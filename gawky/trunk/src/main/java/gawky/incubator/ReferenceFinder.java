@@ -1,11 +1,13 @@
 package gawky.incubator;
 
-public class ReferenceFinder {
+public class ReferenceFinder
+{
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		/*
 		 * KND 621111 R AR-0441241    
 		 * B251100214763              KD-NR. 1100727776 
@@ -15,7 +17,7 @@ public class ReferenceFinder {
 		 * 
 		 * FREENET AG                 REFNR 323153829720         F144283174 31.14 1301      EZUE 100939839964   
 		 */
-		
+
 		/*
 		 * Level 1: n-digit				Suffix n-digit
 		 * Level 2: trim n-digit        trim Suffix n-digit

@@ -2,8 +2,6 @@ package gawky.message;
 
 import java.math.BigInteger;
 
-import gawky.global.Matcher;
-
 /*
  Generate Char and Number Format
  */
@@ -19,9 +17,13 @@ public class Formatter
 			for(int i = size, x = value.length; i > 0; i--, x--)
 			{
 				if(x <= 0)
+				{
 					target[i - 1] = (char)0;
+				}
 				else
+				{
 					target[i - 1] = value[x - 1];
+				}
 			}
 		}
 
@@ -38,7 +40,9 @@ public class Formatter
 			long start = System.currentTimeMillis();
 			String val = "";
 			for(int i = 1; i < 30000; i++)
+			{
 				val = ltrim("00000ingo    sjdkasjdklajdklasjdljsljlsdjklsajlsjad" + System.currentTimeMillis(), '0');
+			}
 
 			avg += System.currentTimeMillis() - start;
 			System.out.println(val);
@@ -113,38 +117,43 @@ public class Formatter
 		System.out.println(substr("123456", 2, 3));
 		System.out.println(substr("123456", 6, 3));
 
-		
 		System.out.println(makeDecimalnumber("123456", 2));
 		System.out.println(deleteChar("1234.56", '.'));
 	}
-	
+
 	public static String makeDecimalnumber(String value, int decs)
 	{
 		int len = value.length();
 
 		if(len <= decs)
+		{
 			return "0." + Formatter.lpad(decs, value, '0');
+		}
 		else
+		{
 			return value.substring(0, len - decs) + "." + value.substring(len - decs);
+		}
 	}
 
 	public static String deleteChar(String value, char sym)
 	{
 		int pos = value.lastIndexOf(sym);
-		return value.substring(0, pos) + value.substring(pos+1);
+		return value.substring(0, pos) + value.substring(pos + 1);
 	}
-	
+
 	public final static String lntrim(String value)
 	{
 		return lntrim(value, "0");
 	}
-	
+
 	public final static String lntrim(String value, String def)
 	{
 		int len = value.length();
 
 		if(len == 0)
+		{
 			return "";
+		}
 
 		int i = 0;
 		while((i < len) && (value.charAt(i) == '0'))
@@ -152,15 +161,19 @@ public class Formatter
 			i++;
 		}
 
-		if(i == len) // nichts bleibt über
+		if(i == len)
+		{
 			return def;
+		}
 
 		if(i > 0)
 		{
 			char ch = value.charAt(i); // letztes Zeichen decimal
 
 			if(ch == '.' || ch == ',')
+			{
 				i--;
+			}
 
 			return value.substring(i, len);
 		}
@@ -179,7 +192,9 @@ public class Formatter
 		}
 
 		if(i > 0)
+		{
 			return value.substring(i, len);
+		}
 
 		return value;
 	}
@@ -194,7 +209,9 @@ public class Formatter
 		int count = value.length();
 
 		if(count == 0)
+		{
 			return value;
+		}
 
 		int len = count;
 
@@ -204,7 +221,9 @@ public class Formatter
 		}
 
 		if(count == len)
+		{
 			return value;
+		}
 
 		return value.substring(0, len);
 	}
@@ -232,10 +251,14 @@ public class Formatter
 	                                                                     // binary)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		if(size == 0)
+		{
 			return value;
+		}
 
 		char[] target = new char[size];
 
@@ -245,7 +268,9 @@ public class Formatter
 		value.getChars(0, spos, target, size - spos);
 
 		for(int i = 0; i < size - spos; i++)
+		{
 			target[i] = filler;
+		}
 
 		// if(!binary)
 		{
@@ -260,14 +285,17 @@ public class Formatter
 		return new String(target);
 	}
 
-	
 	public final static String rpad(int size, String value, char filler)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		if(size == 0)
+		{
 			return value;
+		}
 
 		char[] target = new char[size];
 
@@ -277,7 +305,9 @@ public class Formatter
 		value.getChars(0, epos, target, 0);
 
 		for(int i = epos; i < size; i++)
+		{
 			target[i] = filler;
+		}
 
 		for(int i = 0; i < size; i++)
 		{
@@ -293,15 +323,17 @@ public class Formatter
 	public static String substr(String value, int start, int len)
 	{
 		if(start > value.length() || start < 1)
+		{
 			return "";
+		}
 
 		try
 		{
-			return value.substring(start-1, start-1 + len);
+			return value.substring(start - 1, start - 1 + len);
 		}
 		catch(Exception e)
 		{
-			return value.substring(start-1);
+			return value.substring(start - 1);
 		}
 	}
 
@@ -333,10 +365,14 @@ public class Formatter
 	public final static String getStringV(int size, String value, String delim)
 	{
 		if(value == null)
+		{
 			value = "";
+		}
 
 		if(value.length() > size && size > 0)
+		{
 			value = value.substring(0, size);
+		}
 
 		return(value + delim);
 	}
