@@ -525,6 +525,20 @@ public class Generator
 		return sql;
 	}
 
+	public StringBuilder generateExistsSQL(Table bean)
+	{
+		StringBuilder sql = new StringBuilder(200);
+
+		sql.append("SELECT 1 FROM ");
+		sql.append(bean.getTableName());
+		sql.append(" a ");
+		
+		sql.append(generateSelectWHERE(bean));
+
+		return sql;
+	}
+
+	
 	public StringBuilder generateFindSQL(Table bean)
 	{
 		StringBuilder sql = generateSelectSQL(bean);
