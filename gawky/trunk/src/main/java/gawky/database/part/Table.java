@@ -32,7 +32,7 @@ public abstract class Table extends Part
 
 	private final class StaticLocal
 	{
-		public String[] sql = new String[6];
+		public String[] sql = new String[7];
 		public boolean parameter = false;
 
 		public String nativecolumns;
@@ -176,6 +176,7 @@ public abstract class Table extends Part
 	public static final int SQL_DELETE = 3;
 	public static final int SQL_SELECT = 4;
 	public static final int SQL_MERGE = 5;
+	public static final int SQL_EXISTS = 6;
 
 	public static final int NO_ID = -1;
 
@@ -280,6 +281,9 @@ public abstract class Table extends Part
 				case SQL_MERGE:
 					sql = getMergeSQL();
 					break;
+				case SQL_EXISTS:
+					sql = getExistsSQL();
+					break;
 			}
 			getQueries()[type] = sql;
 		}
@@ -338,6 +342,11 @@ public abstract class Table extends Part
 		return getStaticLocal().generator.generateFindSQL(this).toString();
 	}
 
+	protected final String getExistsSQL()
+	{
+		return getStaticLocal().generator.generateExistsSQL(this).toString();
+	}
+	
 	protected final String getDeleteSQL()
 	{
 		return getStaticLocal().generator.generateDeleteSQL(this).toString();
@@ -632,6 +641,20 @@ public abstract class Table extends Part
 			doClose(conn);
 		}
 	}
+	
+	public boolean exists(Object ids[]) throws Exception
+	{
+		Connection conn = null;
+		try
+		{
+			conn = getConnection();
+			return exists(conn, ids);
+		}
+		finally
+		{
+			doClose(conn);
+		}
+	}
 
 	Connection conn = null;
 	PreparedStatement stmt[] = null;
@@ -669,6 +692,35 @@ public abstract class Table extends Part
 		}
 	}
 
+	public boolean exists(Connection conn, Object[] ids) throws Exception
+	{
+		PreparedStatement stmt = getStmt(conn, SQL_EXISTS);
+
+		if(!this.hasPrimary())
+		{
+			throw new NoPrimaryColumnException(this);
+		}
+
+		ResultSet rset = null;
+		try
+		{
+			// Find by IDs
+			fillParameter(stmt, ids);
+
+			rset = stmt.executeQuery();
+			rset.setFetchSize(1);
+
+			found = rset.next();
+
+			return found;
+		}
+		finally
+		{
+			doClose(rset);
+			doClose(stmt);
+		}
+	}
+	
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_FIND);
