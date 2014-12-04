@@ -15,7 +15,7 @@ public class DColumn extends Desc
 
 	public static String fill(Date date)
 	{
-		return Generator.df_YYYYMMDD.format(date);
+		return Generator.df_YYYYMMDD.print(date.getTime());
 	}
 
 	public DColumn(String name)

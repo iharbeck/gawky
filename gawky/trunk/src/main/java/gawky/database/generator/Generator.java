@@ -16,6 +16,8 @@ import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class Generator
 {
@@ -24,9 +26,12 @@ public class Generator
 	private static boolean dotrim = false;
 	private static boolean doclone = false;
 
-	public static SafeDateFormat df_YYYYMMDD = new SafeDateFormat("yyyyMMdd");
-	public static SafeDateFormat df_YYYYMMDDHHMMSS = new SafeDateFormat("yyyyMMddHHmmss");
+//	public static SafeDateFormat df_YYYYMMDD = new SafeDateFormat("yyyyMMdd");
+//	public static SafeDateFormat df_YYYYMMDDHHMMSS = new SafeDateFormat("yyyyMMddHHmmss");
 
+	public static DateTimeFormatter df_YYYYMMDD = DateTimeFormat.forPattern("yyyyMMdd");
+	public static DateTimeFormatter df_YYYYMMDDHHMMSS = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+	
 	Locale locale = new Locale("de", "DE");
 
 	NumberFormat fmt;
@@ -41,12 +46,12 @@ public class Generator
 
 	public void setDateFormat(String format)
 	{
-		df_YYYYMMDD = new SafeDateFormat(format);
+		df_YYYYMMDD = DateTimeFormat.forPattern(format);
 	}
 
 	public void setTimeFormat(String format)
 	{
-		df_YYYYMMDDHHMMSS = new SafeDateFormat(format);
+		df_YYYYMMDDHHMMSS = DateTimeFormat.forPattern(format);
 	}
 
 	public void setLocale(Locale locale)
@@ -132,10 +137,10 @@ public class Generator
 				//val = rset.getDouble(x);
 				break;
 			case Desc.FMT_DATE:
-				val = df_YYYYMMDD.format(rset.getDate(id));
+				val = df_YYYYMMDD.print(rset.getDate(id).getTime());
 				break;
 			case Desc.FMT_TIME:
-				val = df_YYYYMMDDHHMMSS.format(rset.getTimestamp(id));
+				val = df_YYYYMMDDHHMMSS.print(rset.getTimestamp(id).getTime());
 				break;
 			case Desc.FMT_BINARY:
 				val = rset.getBytes(id);
@@ -164,10 +169,10 @@ public class Generator
 				//val = rset.getDouble(name);
 				break;
 			case Desc.FMT_DATE:
-				val = df_YYYYMMDD.format(rset.getDate(name));
+				val = df_YYYYMMDD.print(rset.getDate(name).getTime()); 
 				break;
 			case Desc.FMT_TIME:
-				val = df_YYYYMMDDHHMMSS.format(rset.getTimestamp(name));
+				val = df_YYYYMMDDHHMMSS.print(rset.getTimestamp(name).getTime());
 				break;
 			case Desc.FMT_BINARY:
 				val = rset.getBytes(name);
@@ -725,10 +730,10 @@ public class Generator
 					stmt.setDouble(setter, parseNumber((String)val));
 					break;
 				case Desc.FMT_DATE:
-					stmt.setDate(setter, new Date(df_YYYYMMDD.parse((String)val).getTime()));
+					stmt.setDate(setter, new Date(df_YYYYMMDD.parseDateTime((String)val).getMillis()));
 					break;
 				case Desc.FMT_TIME:
-					stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parse((String)val).getTime()));
+					stmt.setTimestamp(setter, new Timestamp(df_YYYYMMDDHHMMSS.parseDateTime((String)val).getMillis()));
 					break;
 				case Desc.FMT_BINARY:
 					stmt.setBytes(setter, Formatter.bpad(desc.len, (byte[])val));

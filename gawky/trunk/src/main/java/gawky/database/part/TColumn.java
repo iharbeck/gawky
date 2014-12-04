@@ -10,7 +10,7 @@ public class TColumn extends Desc
 
 	public static String fill(Date date)
 	{
-		return Generator.df_YYYYMMDDHHMMSS.format(date);
+		return Generator.df_YYYYMMDDHHMMSS.print(date.getTime());
 	}
 
 	public static String fill()
