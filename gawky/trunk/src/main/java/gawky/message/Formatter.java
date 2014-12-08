@@ -99,6 +99,16 @@ public class Formatter
 		return ltrim(value, ' ');
 	}
 
+	public final static String toScreenFormat(String dbFormat)
+	{
+		return dbFormat.substring(6, 8) + "." + dbFormat.substring(4, 6) + "." + dbFormat.substring(0, 4);
+	}
+	
+	public final static String toDBFormat(String screenFormat)
+	{
+		return screenFormat.substring(6, 10) + screenFormat.substring(3, 5) + screenFormat.substring(0, 2);
+	}
+	
 	public static void main(String[] args)
 	{
 		System.out.println(rpad(10, "123456789", '*'));

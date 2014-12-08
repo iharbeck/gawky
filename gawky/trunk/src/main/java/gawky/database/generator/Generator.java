@@ -1,7 +1,6 @@
 package gawky.database.generator;
 
 import gawky.database.part.Table;
-import gawky.lang.SafeDateFormat;
 import gawky.message.Formatter;
 import gawky.message.part.Desc;
 
@@ -11,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Timestamp;
-import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
@@ -34,14 +32,15 @@ public class Generator
 	
 	Locale locale = new Locale("de", "DE");
 
-	NumberFormat fmt;
+	//DecimalFormat fmt;
 
 	boolean debug = false;
 
 	public Generator()
 	{
-		fmt = NumberFormat.getInstance(Locale.ENGLISH);
-		fmt.setGroupingUsed(false);
+		
+//		fmt = new DecimalFormat(); // NumberFormat.getInstance(Locale.ENGLISH);
+//		fmt.setGroupingUsed(false);
 	}
 
 	public void setDateFormat(String format)
@@ -64,10 +63,10 @@ public class Generator
 		return new BigDecimal(val).doubleValue();
 	}
 
-	public String formatNumber(double val) throws Exception
-	{
-		return fmt.format(val);
-	}
+//	public String formatNumber(double val) throws Exception
+//	{
+//		return fmt.format(val);
+//	}
 
 	public final void fillPart(ResultSet rset, Table part)
 	{
@@ -133,7 +132,8 @@ public class Generator
 				val = rset.getString(id);
 				break;
 			case Desc.FMT_DIGIT:
-				val = formatNumber(rset.getDouble(id));
+				val = rset.getString(id);
+				//val = formatNumber(rset.getDouble(id));
 				//val = rset.getDouble(x);
 				break;
 			case Desc.FMT_DATE:
@@ -165,7 +165,8 @@ public class Generator
 				val = rset.getString(name);
 				break;
 			case Desc.FMT_DIGIT:
-				val = formatNumber(rset.getDouble(name));
+				val = rset.getString(name);
+				//val = formatNumber(rset.getDouble(name));
 				//val = rset.getDouble(name);
 				break;
 			case Desc.FMT_DATE:
