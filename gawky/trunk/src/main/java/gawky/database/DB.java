@@ -21,8 +21,8 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.jolbox.bonecp.BoneCP;
-import com.jolbox.bonecp.BoneCPConfig;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author Ingo Harbeck
@@ -90,6 +90,28 @@ public class DB
 				System.out.println("No Suitable Driver: " + dbdriver);
 			}
 
+			HikariConfig config = new HikariConfig();
+			config.setJdbcUrl(dburl);
+			config.setUsername(dbuser);
+			config.setPassword(dbpass);
+			config.setMaxLifetime(0);
+			config.setMaximumPoolSize(30);
+			
+			if(trigger != null)
+			{
+				config.setConnectionInitSql(trigger);
+			}
+
+			config.setDataSourceProperties(props);
+			
+			if(!dburl.toLowerCase().contains("oracle") && !dburl.toLowerCase().contains("mysql") )
+			{
+				config.setConnectionTestQuery("select 1");
+			}
+			
+			HikariDataSource ds = new HikariDataSource(config);
+			
+			/*
 			BoneCPConfig config = new BoneCPConfig();
 
 			config.setJdbcUrl(dburl);
@@ -105,12 +127,14 @@ public class DB
 			{
 				config.setInitSQL(trigger);
 			}
-
 			config.setLazyInit(true);
-
+			*/
+		
 			try
 			{
-				BoneCP connectionPool = new BoneCP(config);
+				//BoneCP connectionPool = new BoneCP(config);
+				
+				HikariDataSource connectionPool = new HikariDataSource(config);
 
 				if(dbalias == null)
 				{
