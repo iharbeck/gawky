@@ -21,11 +21,14 @@ public class Sample extends Part
 		Parser.setDocheck(false);
 		Sample sample = new Sample();
 
+		long total = 0;
+		
 		for(int i = 1; i <= 999999; i++)
 		{
 			String val = "FOOT," + i + ",0030";
 			sample.parse(val);
 
+			total += sample.toString().length();
 			//System.out.print(sample.countrecords + "#");
 			//System.out.println(sample.sumamount);
 		}
@@ -34,6 +37,7 @@ public class Sample extends Part
 		System.out.println(sample.buildString());
 
 		System.out.println(System.currentTimeMillis() - start);
+		System.out.println(total);
 		//System.out.println(sample.toString());
 		//System.out.println(sample.toDebugString());
 	}
