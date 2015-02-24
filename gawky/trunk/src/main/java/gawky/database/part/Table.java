@@ -346,7 +346,7 @@ public abstract class Table extends Part
 	{
 		return getStaticLocal().generator.generateExistsSQL(this).toString();
 	}
-	
+
 	protected final String getDeleteSQL()
 	{
 		return getStaticLocal().generator.generateDeleteSQL(this).toString();
@@ -473,33 +473,34 @@ public abstract class Table extends Part
 		}
 	}
 
-	public void insert(Connection conn) throws Exception
+	public final void generateID(Connection conn)
 	{
-		PreparedStatement stmt = getStmt(conn, SQL_INSERT);
+		Desc prim = getPrimdesc();
 
-		try
+		if(prim != null)
 		{
-			Desc prim = getPrimdesc();
-			IDGenerator gen = null;
-
-			if(prim != null)
+			IDGenerator gen = prim.getIDGenerator();
+			
+			if(gen != null)
 			{
-				gen = prim.getIDGenerator();
-				if(gen != null)
+				try
 				{
-					try
-					{
-						prim.setValue(this, gen.nextVal(conn, this));
-					}
-					catch(Exception e)
-					{
-					}
+					prim.setValue(this, gen.nextVal(conn, this));
+				}
+				catch(Exception e)
+				{
 				}
 			}
+		}
+	}
 
-			fillPreparedStatement(stmt);
+	public final void lookupID(Connection conn)
+	{
+		Desc prim = getPrimdesc();
 
-			stmt.execute();
+		if(prim != null)
+		{
+			IDGenerator gen = prim.getIDGenerator();
 
 			if(gen instanceof IDGeneratorAUTO)
 			{
@@ -511,10 +512,22 @@ public abstract class Table extends Part
 				{
 				}
 			}
+		}
+	}
 
-			/*
-			 * try { // versuche to generierte ID zu ermitteln und im Object abzulegen if(getPrimdesc().getIDGenerator() != null) getPrimdesc().setValue(this, getPrimdesc().getIDGenerator().getGeneratedID(conn, this)); } catch (Exception e) { log.error("insert Record", e); }
-			 */
+	public void insert(Connection conn) throws Exception
+	{
+		PreparedStatement stmt = getStmt(conn, SQL_INSERT);
+
+		try
+		{
+			generateID(conn);
+
+			fillPreparedStatement(stmt);
+
+			stmt.execute();
+
+			lookupID(conn);
 
 			setFound(true);
 		}
@@ -641,7 +654,7 @@ public abstract class Table extends Part
 			doClose(conn);
 		}
 	}
-	
+
 	public boolean exists(Object ids[]) throws Exception
 	{
 		Connection conn = null;
@@ -720,7 +733,7 @@ public abstract class Table extends Part
 			doClose(stmt);
 		}
 	}
-	
+
 	public void find(Connection conn, Object[] ids) throws Exception
 	{
 		PreparedStatement stmt = getStmt(conn, SQL_FIND);
@@ -1148,6 +1161,16 @@ public abstract class Table extends Part
 
 	public void batch_add_insert() throws Exception
 	{
+		batch_add_insert(false);
+	}
+
+	public void batch_add_insert(boolean handlesequence) throws Exception
+	{
+		if(handlesequence)
+		{
+			generateID(batch_stmt.getConnection());
+		}
+
 		batch_add();
 	}
 
@@ -1156,7 +1179,7 @@ public abstract class Table extends Part
 		batch_add();
 	}
 
-	public void batch_add() throws Exception
+	private void batch_add() throws Exception
 	{
 		fillPreparedStatement(batch_stmt);
 		batch_stmt.addBatch();
@@ -1334,7 +1357,11 @@ public abstract class Table extends Part
 
 		for(int i = 0; i < size; i++)
 		{
-			sqlGenerator.fillPreparedStatement(batch_stmt, list.get(i));
+			Table table = list.get(i);
+			
+			table.generateID(conn);
+			
+			sqlGenerator.fillPreparedStatement(batch_stmt, table);
 			batch_stmt.addBatch();
 			batchrows = true;
 
