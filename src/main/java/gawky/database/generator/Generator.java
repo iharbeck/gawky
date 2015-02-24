@@ -675,16 +675,13 @@ public class Generator
 	public void fillPreparedStatement(PreparedStatement stmt, Table bean) throws Exception
 	{
 		Desc descs[] = bean.getCachedDesc();
-		Desc desc;
 
 		bean.beforeStore();
 
 		int setter = 1;
 
-		for(Desc desc2 : descs)
+		for(Desc desc : descs)
 		{
-			desc = desc2;
-
 			if(desc.dbname == null || desc.nostore)
 			{
 				continue;
