@@ -3,14 +3,14 @@ package gawky.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.jolbox.bonecp.BoneCP;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class PoolWrapper
 {
-	BoneCP pool;
+	HikariDataSource pool;
 	boolean active = true;
 
-	public PoolWrapper(BoneCP pool)
+	public PoolWrapper(HikariDataSource pool)
 	{
 		this.pool = pool;
 	}

@@ -4,7 +4,7 @@
 	<groupId>org.ogni</groupId>
 	<artifactId>gawky</artifactId>
 	<packaging>jar</packaging>
-	<version>1.01.012</version>
+	<version>1.01.014</version>
 
 	<build>
 
@@ -131,10 +131,17 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+<!--
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
-			<version>0.8.0.RELEASE</version>
+			<version>0.7.1.RELEASE</version>
+		</dependency>
+-->
+		<dependency>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP-java6</artifactId>
+		    <version>2.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jcraft</groupId>
