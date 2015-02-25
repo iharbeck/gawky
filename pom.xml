@@ -4,7 +4,7 @@
 	<groupId>org.ogni</groupId>
 	<artifactId>gawky</artifactId>
 	<packaging>jar</packaging>
-	<version>1.02.001</version>
+	<version>1.02.002</version>
 
 	<build>
 
@@ -142,6 +142,7 @@
 		    <groupId>com.zaxxer</groupId>
 		    <artifactId>HikariCP-java6</artifactId>
 		    <version>2.3.2</version>
+		    <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.jcraft</groupId>
@@ -222,6 +223,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>3.0-alpha-1</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
