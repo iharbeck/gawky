@@ -94,7 +94,6 @@ public class DB
 			config.setJdbcUrl(dburl);
 			config.setUsername(dbuser);
 			config.setPassword(dbpass);
-			config.setMaxLifetime(0);
 			config.setMaximumPoolSize(30);
 			
 			if(trigger != null)
