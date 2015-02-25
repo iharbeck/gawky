@@ -4,7 +4,7 @@
 	<groupId>org.ogni</groupId>
 	<artifactId>gawky</artifactId>
 	<packaging>jar</packaging>
-	<version>1.02.002</version>
+	<version>1.02.003</version>
 
 	<build>
 
