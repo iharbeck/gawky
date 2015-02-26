@@ -96,6 +96,7 @@ public class DB
 			config.setPassword(dbpass);
 			config.setMinimumIdle(dbconnmin);
 			config.setMaximumPoolSize(dbconnmax);
+			config.setInitializationFailFast(false);
 			
 			if(trigger != null)
 			{
