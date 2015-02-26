@@ -53,7 +53,7 @@ public class DB
 
 			String trigger = Option.getProperty("db_${staging}(" + i + ").trigger", null);
 
-			int dbconnmin = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmin", "10"));
+			int dbconnmin = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmin", "5"));
 			int dbconnmax = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmax", "30"));
 			int dbconnpartitions = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connpartitions", "1"));
 
