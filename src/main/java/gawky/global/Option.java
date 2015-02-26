@@ -70,6 +70,8 @@ public class Option
 	 */
 	public static String getProperty(String alias, String def)
 	{
+		alias = processalias(alias);
+
 		if(dynoption != null && dynoption.containsKey(alias))
 		{	
 			String val = dynoption.get(alias);
@@ -80,7 +82,6 @@ public class Option
 				return val;
 		}
 		
-		alias = processalias(alias);
 
 		if(cmd != null && cmd.hasOption(alias))
 		{
