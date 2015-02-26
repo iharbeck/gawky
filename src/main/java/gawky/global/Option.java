@@ -12,6 +12,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
@@ -52,11 +53,33 @@ public class Option
 		System.out.println(Option.processalias("db_${staging}"));
 	}
 
+	static HashMap<String, String> dynoption;
+	
+	public static void setProperty(String alias, String val)
+	{
+		if(dynoption == null)
+		{
+			dynoption = new HashMap<String, String>();
+		}
+		
+		dynoption.put(alias, val);
+	}
+	
 	/**
 	 * get Property from cmdline or configfile cmdline overwrites
 	 */
 	public static String getProperty(String alias, String def)
 	{
+		if(dynoption != null && dynoption.containsKey(alias))
+		{	
+			String val = dynoption.get(alias);
+			
+			if(val == null && def != null)
+				return def;
+			else
+				return val;
+		}
+		
 		alias = processalias(alias);
 
 		if(cmd != null && cmd.hasOption(alias))
