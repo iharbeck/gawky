@@ -53,8 +53,8 @@ public class DB
 
 			String trigger = Option.getProperty("db_${staging}(" + i + ").trigger", null);
 
-			int dbconnmin = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmin", "1"));
-			int dbconnmax = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmax", "100"));
+			int dbconnmin = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmin", "10"));
+			int dbconnmax = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmax", "30"));
 			int dbconnpartitions = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connpartitions", "1"));
 
 			Properties props = new Properties();
@@ -94,7 +94,8 @@ public class DB
 			config.setJdbcUrl(dburl);
 			config.setUsername(dbuser);
 			config.setPassword(dbpass);
-			config.setMaximumPoolSize(30);
+			config.setMinimumIdle(dbconnmin);
+			config.setMaximumPoolSize(dbconnmax);
 			
 			if(trigger != null)
 			{
