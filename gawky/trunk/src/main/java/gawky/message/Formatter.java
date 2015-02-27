@@ -265,14 +265,15 @@ public class Formatter
 			value = "";
 		}
 
-		if(size == 0)
+		int len = value.length();
+
+		if(size == len || size == 0)
 		{
 			return value;
 		}
 
 		char[] target = new char[size];
 
-		int len = value.length();
 		int spos = (len <= size) ? len : size;
 
 		value.getChars(0, spos, target, size - spos);
@@ -302,14 +303,15 @@ public class Formatter
 			value = "";
 		}
 
-		if(size == 0)
+		int len = value.length();
+
+		if(size == len || size == 0)
 		{
 			return value;
 		}
 
 		char[] target = new char[size];
 
-		int len = value.length();
 		int epos = (len <= size) ? len : size;
 
 		value.getChars(0, epos, target, 0);
