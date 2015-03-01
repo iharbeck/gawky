@@ -441,7 +441,7 @@ public class DB
 
 				for(int i = columncount; i > 0; i--)
 				{
-					hs.put(md.getColumnName(i), secString(rset.getString(i)));
+					hs.put(md.getColumnLabel(i), secString(rset.getString(i)));
 				}
 			}
 			else if(log.isWarnEnabled())
@@ -511,7 +511,7 @@ public class DB
 
 			for(int i = 0; i < columncount; i++)
 			{
-				columnname[i] = md.getColumnName(i + 1);
+				columnname[i] = md.getColumnLabel(i + 1);
 			}
 
 			while(rset.next())
@@ -584,7 +584,7 @@ public class DB
 
 			for(int i = 0; i < columncount; i++)
 			{
-				result.add(md.getColumnName(i + 1), i);
+				result.add(md.getColumnLabel(i + 1), i);
 			}
 
 			while(rset.next())
