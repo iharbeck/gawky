@@ -52,11 +52,11 @@ public class GeneratorCode
 				System.out.println(i + " : " + md.getColumnType(i));
 				if(md.getColumnType(i) == Types.NUMERIC || md.getColumnType(i) == Types.INTEGER)
 				{
-					descstr += "			new NColumn(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
+					descstr += "			new NColumn(\"" + md.getColumnLabel(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
 				}
 				else
 				{
-					descstr += "			new Column(\"" + md.getColumnName(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
+					descstr += "			new Column(\"" + md.getColumnLabel(i).toLowerCase() + "\"), //" + md.getPrecision(i) + "." + md.getScale(i) + "\n";
 				}
 			}
 
@@ -65,14 +65,14 @@ public class GeneratorCode
 
 			for(int i = 1; i <= c; i++)
 			{
-				descstr += "	private String " + md.getColumnName(i).toLowerCase() + ";\n";
+				descstr += "	private String " + md.getColumnLabel(i).toLowerCase() + ";\n";
 			}
 
 			descstr += "\n";
 
 			for(int i = 1; i <= c; i++)
 			{
-				descstr += buildGetter(md.getColumnName(i).toLowerCase());
+				descstr += buildGetter(md.getColumnLabel(i).toLowerCase());
 				descstr += "\n";
 			}
 

@@ -27,7 +27,7 @@ public class UtilGenerator
 
 		for(int i = 1; i <= md.getColumnCount(); i++)
 		{
-			System.out.println(md.getColumnName(i));
+			System.out.println(md.getColumnLabel(i));
 		}
 
 	}

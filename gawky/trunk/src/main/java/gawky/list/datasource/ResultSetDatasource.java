@@ -126,7 +126,7 @@ public class ResultSetDatasource implements Datasource
 	{
 		try
 		{
-			String name = rset.getMetaData().getColumnName(i + 1);
+			String name = rset.getMetaData().getColumnLabel(i + 1);
 			if(columns.get(name) == null)
 			{
 				return name;
@@ -217,7 +217,7 @@ public class ResultSetDatasource implements Datasource
 	{
 		try
 		{
-			String name = rset.getMetaData().getColumnName(i + 1);
+			String name = rset.getMetaData().getColumnLabel(i + 1);
 			if(columns.get(name) == null)
 			{
 				return 0;
@@ -308,7 +308,7 @@ public class ResultSetDatasource implements Datasource
 		String name;
 		try
 		{
-			name = rset.getMetaData().getColumnName(i + 1);
+			name = rset.getMetaData().getColumnLabel(i + 1);
 		}
 		catch(Exception e)
 		{

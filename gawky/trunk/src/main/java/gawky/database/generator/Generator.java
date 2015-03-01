@@ -193,7 +193,7 @@ public class Generator
 
 		for(int i = 1; i <= c; i++)
 		{
-			String name = meta.getColumnName(i).toLowerCase();
+			String name = meta.getColumnLabel(i).toLowerCase();
 			desc = part.getDescByName(name);
 
 			Object val = null;
