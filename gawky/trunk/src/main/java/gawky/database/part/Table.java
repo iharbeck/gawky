@@ -552,7 +552,8 @@ public abstract class Table extends Part
 		try
 		{
 			rset = stmt.executeQuery();
-
+			rset.setFetchSize(2000);
+			
 			byte endline = '\n';
 
 			Generator generator = getStaticLocal(this).generator;
@@ -721,7 +722,7 @@ public abstract class Table extends Part
 			fillParameter(stmt, ids);
 
 			rset = stmt.executeQuery();
-			rset.setFetchSize(1);
+			rset.setFetchSize(2000);
 
 			found = rset.next();
 
@@ -750,7 +751,7 @@ public abstract class Table extends Part
 			fillParameter(stmt, ids);
 
 			rset = stmt.executeQuery();
-			rset.setFetchSize(1);
+			rset.setFetchSize(2000);
 
 			found = rset.next();
 
@@ -792,7 +793,7 @@ public abstract class Table extends Part
 		try
 		{
 			rset = stmt.executeQuery();
-			rset.setFetchSize(1);
+			rset.setFetchSize(2000);
 
 			rset.next();
 
@@ -855,7 +856,8 @@ public abstract class Table extends Part
 		try
 		{
 			rset = stmt.executeQuery();
-
+			rset.setFetchSize(2000);
+			
 			found = rset.next();
 
 			if(found)
@@ -960,7 +962,7 @@ public abstract class Table extends Part
 		try
 		{
 			rset = stmt.executeQuery();
-			//rset.setFetchSize(100);
+			rset.setFetchSize(2000);
 
 			Generator generator = getStaticLocal(inst).generator;
 
@@ -1002,7 +1004,7 @@ public abstract class Table extends Part
 		try
 		{
 			rset = stmt.executeQuery();
-			//rset.setFetchSize(100);
+			rset.setFetchSize(2000);
 
 			Generator generator = getStaticLocal(inst).generator;
 
@@ -1267,7 +1269,8 @@ public abstract class Table extends Part
 		try
 		{
 			rset = stmt.executeQuery(sql);
-
+			rset.setFetchSize(2000);
+			
 			while(rset.next())
 			{
 				T row = clazz.newInstance();
