@@ -1,6 +1,0 @@
-commons-logging.jar
-log4j-1.2.11.jar
-
-gawky-file
-jasper
-beanutils
