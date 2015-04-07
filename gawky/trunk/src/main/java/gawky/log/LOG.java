@@ -51,6 +51,7 @@ public class LOG
 			Appender appender = it.nextElement();
 			if(appender instanceof ConsoleAppender)
 			{
+				System.out.println(appender);
 				consoleAppender = (ConsoleAppender)appender;
 				break;
 			}
@@ -101,9 +102,14 @@ public class LOG
 		log.setLevel(Level.INFO);
 
 		PrintStream stream = new PrintStream(LOG.createLoggingProxy(), true);
-		System.setOut(stream); //System.out));
-		System.setErr(stream); //System.err));
 
+		if("1".equals(System.getProperty("redirected")))
+		{
+			System.setOut(stream); //System.out));
+			System.setErr(stream); //System.err));
+			System.setProperty("redirected", "1");
+		}
+		
 		LOG.log("GAWKY INIT IN PROGRESS.\n****\n****\n****");
 		System.out.println("OUT: Console Output Redirect");
 		System.err.println("ERR: Console Output Redirect");

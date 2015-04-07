@@ -1,5 +1,0 @@
-commons-net-1.4.1.jar (ftp)
-jakarta-oro-2.0.7.jar
-log4j-1.2.11.jar
-
-jsch.jar (scp)
