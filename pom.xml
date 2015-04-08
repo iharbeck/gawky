@@ -4,7 +4,7 @@
 	<groupId>org.ogni</groupId>
 	<artifactId>gawky</artifactId>
 	<packaging>jar</packaging>
-	<version>1.02.010</version>
+	<version>1.02.011</version>
 
 	<build>
 
@@ -221,9 +221,9 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>3.0-alpha-1</version>
-			<scope>compile</scope>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
