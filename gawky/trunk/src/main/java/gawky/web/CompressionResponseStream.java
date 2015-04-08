@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 
 public class CompressionResponseStream extends ServletOutputStream
@@ -198,4 +199,17 @@ public class CompressionResponseStream extends ServletOutputStream
 	{
 		count = 0;
 	}
+
+	@Override
+    public boolean isReady()
+    {
+	    // TODO Auto-generated method stub
+	    return true;
+    }
+
+	@Override
+    public void setWriteListener(WriteListener arg0)
+    {
+	    // TODO Auto-generated method stub
+    }
 }
