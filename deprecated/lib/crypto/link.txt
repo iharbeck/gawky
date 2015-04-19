@@ -1,2 +1,0 @@
-http://cephas.net/blog/2004/04/01/pgp-encryption-using-bouncy-castle/
-http://cryptix.org/
