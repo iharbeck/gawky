@@ -1,3 +1,3 @@
-# gawky
+# GAWKY
 
 Tool Library
