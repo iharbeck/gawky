@@ -26,7 +26,6 @@ import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author Ingo Harbeck
- * 
  */
 
 public class DB
@@ -44,38 +43,31 @@ public class DB
 
 		for(int i = 0; i < dbc; i++)
 		{
-			String dburl = Option.getProperty("db_${staging}(" + i + ").url");
-			String dbpass = Option.getProperty("db_${staging}(" + i + ").password");
-			String dbuser = Option.getProperty("db_${staging}(" + i + ").user");
-			String dbdriver = Option.getProperty("db_${staging}(" + i + ").driver");
-			String dbalias = Option.getProperty("db_${staging}(" + i + ").alias", null);
-			String[] dbproperties = Option.getProperties("db_${staging}(" + i + ").property");
+			String base = "db_${staging}(" + i + ")";
+			String dburl = Option.getProperty(base + ".url");
+			String dbpass = Option.getProperty(base + ".password");
+			String dbuser = Option.getProperty(base + ".user");
+			String dbdriver = Option.getProperty(base + ".driver");
+			String dbalias = Option.getProperty(base + ".alias", null);
+			String[] dbproperties = Option.getProperties(base + ".property");
 
-			String trigger = Option.getProperty("db_${staging}(" + i + ").trigger", null);
+			String trigger = Option.getProperty(base + ".trigger", null);
 
-			int dbconnmin = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmin", "3"));
-			int dbconnmax = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connmax", "30"));
-			int dbconnpartitions = Format.getInt(Option.getProperty("db_${staging}(" + i + ").connpartitions", "1"));
+			int dbconnmin = Format.getInt(Option.getProperty(base + ".connmin", "3"));
+			int dbconnmax = Format.getInt(Option.getProperty(base + ".connmax", "30"));
+			//int dbconnpartitions = Format.getInt(Option.getProperty(base + ".connpartitions", "1"));
 
 			Properties props = new Properties();
 
-			//String urladd = "";
 			if(dbproperties != null)
 			{
 
 				for(String dbpropertie : dbproperties)
 				{
-					//					if(x == 0)
-					//						urladd += "?" + dbproperties[x];
-					//					else
-					//						urladd += "&" + dbproperties[x];
-
 					String[] val = dbpropertie.split("=");
 					props.put(val[0], val[1]);
 				}
 			}
-
-			//dburl += urladd;
 
 			System.out.println(dburl);
 
