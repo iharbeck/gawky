@@ -16,7 +16,7 @@ public class TestMail
 		        .setSubject("schon bezahlt?")
 		        .setBody("<h1>hello</h1>")
 
-		        .setStream(new FileInputStream("c:/export.txt"), "rechnung.pdf")
+		        .addStream(new FileInputStream("c:/export.txt"), "rechnung.pdf")
 
 		        .send();
 	}

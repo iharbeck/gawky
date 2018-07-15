@@ -117,13 +117,18 @@ public class SimpleMail extends Mail
 		return this;
 	}
 
-	public SimpleMail addAttachment(String path, String name, boolean zip) throws Exception
+	public SimpleMail addAttachment(InputStream stream, String name, boolean zip) throws Exception
 	{
-		streams.add(new FileInputStream(path));
+		streams.add(stream);
 		attachNames.add(name);
 		dozip = zip;
 
 		return this;
+	}
+
+	public SimpleMail addAttachment(String path, String name, boolean zip) throws Exception
+	{
+		return addAttachment(new FileInputStream(path), name, zip);
 	}
 
 	public SimpleMail addImage(String path, String cid)
@@ -210,7 +215,7 @@ public class SimpleMail extends Mail
 		return streams.get(index);
 	}
 
-	public SimpleMail setStream(InputStream stream, String attachname)
+	public SimpleMail addStream(InputStream stream, String attachname)
 	{
 		this.streams.add(stream);
 		this.attachNames.add(attachname);

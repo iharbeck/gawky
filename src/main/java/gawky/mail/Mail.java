@@ -201,8 +201,8 @@ public class Mail
 				}
 			}
 
-			//ATTACHMENT
 
+			//ATTACHMENTS
 
 			int i = 0;
 			for(InputStream stream : streams)
@@ -223,6 +223,8 @@ public class Mail
 				messageBodyPart.setDataHandler(new DataHandler(source));
 				messageBodyPart.setFileName(attachNames.get(i++));
 				multipart.addBodyPart(messageBodyPart);
+
+				stream.close();
 			}
 
 			message.setContent(multipart);
