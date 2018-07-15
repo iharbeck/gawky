@@ -3,13 +3,13 @@ package gawky.mail;
 import gawky.global.Constant;
 import gawky.global.Option;
 
+import javax.mail.internet.InternetAddress;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import javax.mail.internet.InternetAddress;
 
 /**
  * @author Ingo Harbeck
@@ -24,6 +24,10 @@ public class SimpleMail extends Mail
 	String def_from = Option.getProperty(DEFAULT_FROM, "");
 	String def_fromalias = Option.getProperty(DEFAULT_FROMALIAS, "");
 
+	public List<InputStream> getStreams() {
+		return streams;
+	}
+
 	boolean html = true;
 
 	String subject = Option.getProperty(DEFAULT_SUBJECT, "");
@@ -31,8 +35,8 @@ public class SimpleMail extends Mail
 	String altbody = "";
 
 	private boolean dozip = false;
-	private InputStream stream;
-	private String attachName;
+	private List<InputStream> streams = new ArrayList<InputStream>();
+	private List<String> attachNames = new ArrayList<String>();
 
 	private HashMap<String, String> cids = new HashMap<String, String>();
 
@@ -115,8 +119,8 @@ public class SimpleMail extends Mail
 
 	public SimpleMail addAttachment(String path, String name, boolean zip) throws Exception
 	{
-		stream = new FileInputStream(path);
-		attachName = name;
+		streams.add(new FileInputStream(path));
+		attachNames.add(name);
 		dozip = zip;
 
 		return this;
@@ -201,22 +205,22 @@ public class SimpleMail extends Mail
 		return parameter;
 	}
 
-	public InputStream getStream()
+	public InputStream getStream(int index)
 	{
-		return stream;
+		return streams.get(index);
 	}
 
 	public SimpleMail setStream(InputStream stream, String attachname)
 	{
-		this.stream = stream;
-		this.attachName = attachname;
+		this.streams.add(stream);
+		this.attachNames.add(attachname);
 
 		return this;
 	}
 
-	public String getAttachName()
+	public List<String> getAttachNames()
 	{
-		return attachName;
+		return attachNames;
 	}
 
 	public HashMap<String, String> getCids()

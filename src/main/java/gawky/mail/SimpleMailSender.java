@@ -31,7 +31,7 @@ public class SimpleMailSender extends Mail
 		        mail.getArray_reply(),
 		        mail.getBounce(),
 		        mail.getSubject(), mail.getBody(), mail.isHtml(),
-		        mail.getStream(), mail.getAttachName(),
+		        mail.getStreams(), mail.getAttachNames(),
 		        mail.isDozip(), mail.getParameter(), mail.getCids(),
 		        mail.getNotify());
 	}

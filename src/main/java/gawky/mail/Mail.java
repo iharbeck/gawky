@@ -15,10 +15,7 @@ import javax.mail.search.FlagTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -95,8 +92,8 @@ public class Mail
 	        ArrayList<InternetAddress> reply, String bounceaddress,
 	        String subject, String body,
 	        boolean html,
-	        InputStream stream,
-	        String attachName,
+			List<InputStream> streams,
+	        List<String> attachNames,
 	        boolean dozip,
 	        Map<String, String> templateparameter, Map<String, String> cids,
 	        InternetAddress notify
@@ -205,7 +202,10 @@ public class Mail
 			}
 
 			//ATTACHMENT
-			if(stream != null && stream.available() > 0)
+
+
+			int i = 0;
+			for(InputStream stream : streams)
 			{
 				messageBodyPart = new MimeBodyPart();
 
@@ -221,7 +221,7 @@ public class Mail
 				}
 
 				messageBodyPart.setDataHandler(new DataHandler(source));
-				messageBodyPart.setFileName(attachName);
+				messageBodyPart.setFileName(attachNames.get(i++));
 				multipart.addBodyPart(messageBodyPart);
 			}
 
